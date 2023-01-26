@@ -79,13 +79,13 @@ jobs:
           submodules: true
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.11.4
+        run: pip wheel .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: ./wheelhouse/*.whl
+          path: jdrones*.whl
 
   publish-github:
     name: Publish on GitHub

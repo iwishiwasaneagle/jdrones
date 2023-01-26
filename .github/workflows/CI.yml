@@ -67,9 +67,7 @@ jobs:
           submodules: recursive
 
       - name: Build wheels for ${{matrix.which}}_x86_64
-        uses: pypa/cibuildwheel@v2.11.4
-        env:
-          CIBW_BUILD: "*${{matrix.which}}_x86_64"
+        run: pip wheel .
 
   run-doc-tests:
     name: Build docs and test for issues
