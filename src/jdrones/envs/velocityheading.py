@@ -1,18 +1,17 @@
-from collections import namedtuple
-from typing import Optional, Tuple, Dict
+from typing import Dict
+from typing import Tuple
 
 import numpy as np
-from gymnasium.core import ObsType, ActType
+from gymnasium.core import ActType
 from gymnasium.vector.utils import spaces
-
-from jdrones.controllers import PID_antiwindup, PID
+from jdrones.controllers import PID
+from jdrones.controllers import PID_antiwindup
 from jdrones.envs.attitude import AttitudeAltitudeDroneEnv
 from jdrones.transforms import euler_to_rotmat
-from jdrones.types import (
-    AttitudeAltitudeAction,
-    VelHeadAltAction,
-    VEC3, Action, Observation,
-)
+from jdrones.types import Action
+from jdrones.types import Observation
+from jdrones.types import VEC3
+from jdrones.types import VelHeadAltAction
 
 
 class VelHeadAltDroneEnv(AttitudeAltitudeDroneEnv):
@@ -97,4 +96,3 @@ if __name__ == "__main__":
     while not (trunc or term):
         obs, _, term, trunc, info = env.step(setpoint)
         pbar.update(1)
-

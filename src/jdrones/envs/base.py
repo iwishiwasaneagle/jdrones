@@ -1,28 +1,30 @@
 import abc
 from copy import copy
-from typing import Tuple, Optional, Union, List
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 import gymnasium
 import numpy as np
 import pybullet as p
 import pybullet_data
 import pydantic
-from gymnasium.core import ObsType, ActType, RenderFrame
-from loguru import logger
-
+from gymnasium.core import ActType
+from gymnasium.core import ObsType
+from gymnasium.core import RenderFrame
 from jdrones.envs.dronemodels import DronePlus
-from jdrones.maths import clip_scalar, clip
-from jdrones.transforms import quat_to_euler, euler_to_quat
-from jdrones.types import (
-    State,
-    SimulationType,
-    URDFModel,
-    VEC4,
-    VEC3,
-    PropellerAction,
-    Action,
-    Observation,
-)
+from jdrones.maths import clip
+from jdrones.transforms import euler_to_quat
+from jdrones.transforms import quat_to_euler
+from jdrones.types import Action
+from jdrones.types import Observation
+from jdrones.types import PropellerAction
+from jdrones.types import SimulationType
+from jdrones.types import State
+from jdrones.types import URDFModel
+from jdrones.types import VEC3
+from jdrones.types import VEC4
 
 
 class PyBulletIds(pydantic.BaseModel):
@@ -44,7 +46,7 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
         model: URDFModel = DronePlus,
         initial_state: State = None,
         simulation_type: SimulationType = SimulationType.DIRECT,
-        dt: float = 1/240,
+        dt: float = 1 / 240,
     ):
         if initial_state is None:
             initial_state = State()

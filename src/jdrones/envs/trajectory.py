@@ -1,24 +1,23 @@
 import sys
 
+from jdrones.envs.dronemodels import DronePlus
+from jdrones.types import Action
+from jdrones.types import Observation
+from jdrones.types import SimulationType
+from jdrones.types import State
 from loguru import logger
 
-from jdrones.envs.dronemodels import DronePlus
-from jdrones.types import State, SimulationType, Action, Observation
-
 sys.setrecursionlimit(100000)
-from typing import Tuple, Dict, Optional
+from typing import Tuple, Optional
 
 import numpy as np
-from gymnasium.core import ObsType, ActType
+from gymnasium.core import ActType
 from gymnasium.vector.utils import spaces
 from gymnasium.wrappers import TimeLimit
 
-from jdrones.controllers import PID_antiwindup, PID
 from jdrones.envs.position import PositionDroneEnv
-from jdrones.envs.velocityheading import VelHeadAltDroneEnv
 from jdrones.maths import clip_scalar
 from jdrones.types import (
-    VelHeadAltAction,
     PositionVelAction,
     VEC3,
     PositionAction,
@@ -232,7 +231,6 @@ def main():
             break
 
     logger.info("Fin.")
-
 
 
 if __name__ == "__main__":

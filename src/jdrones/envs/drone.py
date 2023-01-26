@@ -1,10 +1,11 @@
 import numpy as np
-from gymnasium.core import ObsType, ActType
+from gymnasium.core import ActType
+from gymnasium.core import ObsType
 from gymnasium.vector.utils import spaces
-
 from jdrones.envs.base import BaseDroneEnv
-from jdrones.transforms import euler_to_rotmat, quat_to_rotmat
-from jdrones.types import VEC3, VEC4
+from jdrones.transforms import quat_to_rotmat
+from jdrones.types import VEC3
+from jdrones.types import VEC4
 
 
 class DroneEnv(BaseDroneEnv):
