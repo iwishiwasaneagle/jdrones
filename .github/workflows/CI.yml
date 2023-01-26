@@ -21,9 +21,15 @@ jobs:
     strategy:
       matrix:
         platform: [ubuntu-latest]
+        pytest-flags: ["--only-integration", ""]
         python-version:
             - "3.10"
             - "3.11"
+        codecov: [false]
+        include:
+          - python-version: "3.11"
+          - pytest-flags: ""
+          - codecov: true
     steps:
 
     - uses: actions/checkout@v3
@@ -53,10 +59,15 @@ jobs:
 
     # Don't use tox as caching does not work reliably. Maybe re-visit this in the future.
     - name: Run tests
-      run: pytest --cov-report=xml --cov-branch --cov jdrones --cov-report term-missing
+      run: pytest \
+              --cov-report=xml \
+              --cov-branch \
+              --cov jdrones \
+              --cov-report term-missing \
+              ${{ matrix.pytest-flags }}
 
     - uses: codecov/codecov-action@v3.1.1
-      if: ${{ github.actor != 'dependabot[bot]' }}
+      if: ${{ github.actor != 'dependabot[bot]' }} && ${{ matrix.codecov }}
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml,./coverage.info
