@@ -2,18 +2,22 @@ import pathlib
 
 import numpy as np
 import pytest
-
 from jdrones.envs import PositionDroneEnv
 from jdrones.envs.attitude import AttitudeAltitudeDroneEnv
 from jdrones.envs.drone import DroneEnv
 from jdrones.envs.trajectory import TrajectoryPositionDroneEnv
 from jdrones.envs.velocityheading import VelHeadAltDroneEnv
 from jdrones.transforms import euler_to_quat
-from jdrones.types import URDFModel, State, SimulationType, PropellerAction
+from jdrones.types import PropellerAction
+from jdrones.types import SimulationType
+from jdrones.types import State
+from jdrones.types import URDFModel
 
-@pytest.fixture(params=[1/240])
+
+@pytest.fixture(params=[1 / 240])
 def dt(request):
     return request.param
+
 
 @pytest.fixture(params=[8008])
 def seed(request):
@@ -149,12 +153,16 @@ def urdfmodel(
         mass=mass,
         filepath=str(filepath),
         mixing_matrix=mixing_matrix,
-        max_vel_ms=1
+        max_vel_ms=1,
     )
+
 
 @pytest.fixture
 def env_default_kwargs(urdfmodel, dt, state, simulation_type):
-    return dict(model=urdfmodel,initial_state=state,dt=dt, simulation_type=simulation_type)
+    return dict(
+        model=urdfmodel, initial_state=state, dt=dt, simulation_type=simulation_type
+    )
+
 
 @pytest.fixture
 def droneenv(env_default_kwargs):
@@ -162,11 +170,13 @@ def droneenv(env_default_kwargs):
     yield d
     d.close()
 
+
 @pytest.fixture
 def attaltdroneenv(env_default_kwargs):
     a = AttitudeAltitudeDroneEnv(**env_default_kwargs)
     yield a
     a.close()
+
 
 @pytest.fixture
 def velheadaltdroneenv(env_default_kwargs):
@@ -174,11 +184,13 @@ def velheadaltdroneenv(env_default_kwargs):
     yield a
     a.close()
 
+
 @pytest.fixture
 def posdroneenv(env_default_kwargs):
     a = PositionDroneEnv(**env_default_kwargs)
     yield a
     a.close()
+
 
 @pytest.fixture
 def trajposdroneenv(env_default_kwargs):

@@ -1,9 +1,11 @@
 import sys
 
-from loguru import logger
-
 from jdrones.envs.dronemodels import DronePlus
-from jdrones.types import State, SimulationType, Action, Observation
+from jdrones.types import Action
+from jdrones.types import Observation
+from jdrones.types import SimulationType
+from jdrones.types import State
+from loguru import logger
 
 sys.setrecursionlimit(100000)
 from typing import Tuple, Dict, Optional
@@ -232,7 +234,6 @@ def main():
             break
 
     logger.info("Fin.")
-
 
 
 if __name__ == "__main__":

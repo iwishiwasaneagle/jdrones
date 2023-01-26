@@ -1,17 +1,19 @@
-from typing import Tuple, Dict
+from typing import Dict
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-from gymnasium.core import ObsType, ActType
+from gymnasium.core import ActType
+from gymnasium.core import ObsType
 from gymnasium.vector.utils import spaces
 from gymnasium.wrappers import TimeLimit
-
-from jdrones.controllers import PID_antiwindup, PID
+from jdrones.controllers import PID
+from jdrones.controllers import PID_antiwindup
 from jdrones.envs.velocityheading import VelHeadAltDroneEnv
-from jdrones.types import (
-    VelHeadAltAction,
-    PositionVelAction, Action, Observation,
-)
+from jdrones.types import Action
+from jdrones.types import Observation
+from jdrones.types import PositionVelAction
+from jdrones.types import VelHeadAltAction
 
 
 class PositionDroneEnv(VelHeadAltDroneEnv):
@@ -24,18 +26,14 @@ class PositionDroneEnv(VelHeadAltDroneEnv):
     def _calc_dist_to_target(curpos, tgtpos):
         return np.linalg.norm(tgtpos - curpos)
 
-    def step(
-        self, action: Action
-    ) -> Tuple[Observation, float, bool, bool, dict]:
+    def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
         action = PositionVelAction(action)
         self._tgt_pos = action[:3]
         # Yaw to target point
         yaw = self._calc_target_yaw(self.state.pos, action)
         vx_b = action.vx_b
 
-        obs, _, term, trunc, info = super().step(
-            [vx_b, 0, yaw, action.z]
-        )
+        obs, _, term, trunc, info = super().step([vx_b, 0, yaw, action.z])
         reward = self.get_reward()
         return obs, reward, term, trunc, info
 
@@ -47,7 +45,6 @@ class PositionDroneEnv(VelHeadAltDroneEnv):
             high=act_bounds[:, 1],
             dtype=float,
         )
-
 
 
 if __name__ == "__main__":
@@ -94,14 +91,14 @@ if __name__ == "__main__":
     controller_errors = deque()
     rewards = deque()
 
-    setpoint = [*(env.state.pos + [0,1,0]),0.1]
+    setpoint = [*(env.state.pos + [0, 1, 0]), 0.1]
     print(f"\nCurrent goal is {setpoint}")
     setpoints.append(setpoint)
     while not (trunc or term):
         obs, reward, term, trunc, info = env.step(PositionVelAction(setpoint))
-        if (1/reward) < 0.1:
+        if (1 / reward) < 0.1:
             try:
-                setpoint = [*(env.state.pos + [1,0,0]),0.1]
+                setpoint = [*(env.state.pos + [1, 0, 0]), 0.1]
                 setpoints.append(setpoint)
                 print(f"\nNext goal is {setpoint}")
             except StopIteration:

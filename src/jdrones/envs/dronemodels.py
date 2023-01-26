@@ -1,5 +1,4 @@
 import numpy as np
-
 from jdrones.types import URDFModel
 
 
@@ -29,5 +28,5 @@ DronePlus = URDFModel(
     mass=1.4,
     I=(0.1, 0.1, 0.1),
     mixing_matrix=droneplus_mixing_matrix,
-    max_vel_ms=1
+    max_vel_ms=1,
 )

@@ -14,10 +14,10 @@
       <origin rpy="0 0 95" xyz="0 0 0"/>
       <geometry>
         <mesh filename="./drone.dae" scale=" 1 1 1"/>
-      </geometry> 
+      </geometry>
       <material name="grey">
         <color rgba="0 0 1 1"/>
-      </material> 
+      </material>
     </visual>
 
     <collision>
@@ -25,7 +25,7 @@
       <geometry>
         <cylinder radius=".2" length=".025"/>
       </geometry>
-    </collision>  
+    </collision>
 
   </link>
 

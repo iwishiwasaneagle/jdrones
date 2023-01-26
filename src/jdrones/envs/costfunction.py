@@ -1,7 +1,7 @@
-from typing import Callable, Tuple
+from typing import Callable
+from typing import Tuple
 
 from gymnasium.core import ObsType
-
 from jdrones.envs.trajectory import TrajectoryPositionDroneEnv
 from jdrones.types import PositionAction
 
