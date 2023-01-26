@@ -1,5 +1,4 @@
+hypothesis
+pytest
 pytest-cov
 pytest-mock
-hypothesis
-pytest-integration
-pytest

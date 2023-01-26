@@ -60,7 +60,7 @@ def test_calculate_propulsive_forces(droneenv, state, action, k_T, exp_t):
     assert np.allclose(act_t, exp_t)
 
 
-@pytest.mark.slow_integration_test
+@pytest.mark.integration
 @pytest.mark.parametrize(
     "pos,exp_final",
     [
@@ -81,7 +81,7 @@ def test_droneenv_zero_inp(seed, droneenv, action, exp_final):
     assert np.linalg.norm(obs.pos - exp_final) < 0.1
 
 
-@pytest.mark.integration_test
+@pytest.mark.integration
 @pytest.mark.parametrize(
     "vec_omega,k_Q,ang_vel_sign",
     [
