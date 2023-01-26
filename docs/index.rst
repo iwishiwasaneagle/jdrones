@@ -7,7 +7,7 @@ PyBullet models prepared for usage via the gymnasium environment
 Using this package
 ------------------
 
-:doc:`Overview <README>`
+:doc:`Overview <readme>`
     Overview of this package.
 
 :doc:`Module reference <api/jdrones>`
@@ -34,4 +34,4 @@ Using this package
 
    changelog
    license
-   Authors <AUTHORS>
+   authors
