@@ -26,21 +26,30 @@ jobs:
             - "3.9"
             - "3.10"
             - "3.11"
-        rabbitmq-version:
-            - "3"
-        redis-version:
-            - "7"
     steps:
 
     - uses: actions/checkout@v3
       with:
         submodules: true
 
+    - name: Cache conda
+      uses: actions/cache@v2
+      env:
+        # Increase this value to reset cache if etc/example-environment.yml has not changed
+        CACHE_NUMBER: 0
+      with:
+        path: ~/conda_pkgs_dir
+        key:
+          ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
+          hashFiles('etc/example-environment.yml') }}
+
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: jdrones
         environment-file: environment.yml
-        auto-activate-base: true
+        python-version: ${{ matrix.python-version }}
+        use-only-tar-bz2: true # important for caching
+
     - name: Install test dependencies
       run: pip install -r tests/requirements.txt
 
