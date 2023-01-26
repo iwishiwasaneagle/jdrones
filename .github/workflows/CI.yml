@@ -58,15 +58,12 @@ jobs:
   build-package:
     name: Build wheels
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        which:  ["manylinux","musllinux"]
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
 
-      - name: Build wheels for ${{matrix.which}}_x86_64
+      - name: Build wheels
         run: pip wheel .
 
   run-doc-tests:
