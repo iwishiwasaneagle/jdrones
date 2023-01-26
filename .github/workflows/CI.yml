@@ -22,8 +22,6 @@ jobs:
       matrix:
         platform: [ubuntu-latest]
         python-version:
-            - "3.8"
-            - "3.9"
             - "3.10"
             - "3.11"
     steps:
@@ -55,7 +53,7 @@ jobs:
 
     # Don't use tox as caching does not work reliably. Maybe re-visit this in the future.
     - name: Run tests
-      run: pytest --cov-report=xml --cov-branch --cov jpybullet_gymnasium_models --cov-report term-missing
+      run: pytest --cov-report=xml --cov-branch --cov jdrones --cov-report term-missing
 
     - uses: codecov/codecov-action@v3.1.1
       if: ${{ github.actor != 'dependabot[bot]' }}
