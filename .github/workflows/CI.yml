@@ -1,0 +1,117 @@
+name: CI
+
+on:
+    push:
+        branches: [master, dev]
+    pull_request:
+    workflow_dispatch:
+
+env:
+    TOXENVS: test,types
+    PYTHONPATH: /home/runner/work/jdrones/jdrones/src
+
+jobs:
+  run-tests:
+    name: Run tests
+    runs-on: ${{matrix.platform}}
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    strategy:
+      matrix:
+        platform: [ubuntu-latest]
+        python-version:
+            - "3.8"
+            - "3.9"
+            - "3.10"
+            - "3.11"
+        rabbitmq-version:
+            - "3"
+        redis-version:
+            - "7"
+    steps:
+
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: jdrones
+        environment-file: environment.yml
+        auto-activate-base: true
+    - name: Install test dependencies
+      run: pip install -r tests/requirements.txt
+
+    # Don't use tox as caching does not work reliably. Maybe re-visit this in the future.
+    - name: Run tests
+      run: pytest --cov-report=xml --cov-branch --cov jpybullet_gymnasium_models --cov-report term-missing
+
+    - uses: codecov/codecov-action@v3.1.1
+      if: ${{ github.actor != 'dependabot[bot]' }}
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml,./coverage.info
+        fail_ci_if_error: true
+
+  build-package:
+    name: Build wheels
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        which:  ["manylinux","musllinux"]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Build wheels for ${{matrix.which}}_x86_64
+        uses: pypa/cibuildwheel@v2.11.4
+        env:
+          CIBW_BUILD: "*${{matrix.which}}_x86_64"
+
+  run-doc-tests:
+    name: Build docs and test for issues
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        cache: "pip"
+        python-version: "3.11"
+        cache-dependency-path: |
+            requirements.txt
+            docs/requirements.txt
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt -r docs/requirements.txt
+    - name: Build docs and analyze output
+      run: |
+        sphinx-build \
+          -b html \
+          -d docs/_build/html/doctrees \
+          docs \
+          docs/_build/html/ \
+          >build.log 2>&1
+
+        IGNORE_PATTERN=$(cat docs/sphinx_warning_ignore.txt | \
+                         sed -e 's/#.*$//g'| \
+                         sed -re '/^\s*$/d' | \
+                         awk '{print}' ORS='\\|' | \
+                         sed -e 's/\\|$//g' \
+                      )
+
+        OUTPUT=$(grep -E "[\w\s]+\.py" build.log | grep -v "$IGNORE_PATTERN")
+
+        if [ "$OUTPUT" == "" ]; then
+          echo $OUTPUT
+          exit 1
+        else
+          echo "Everything is a-okay!"
+          exit 0
+        fi

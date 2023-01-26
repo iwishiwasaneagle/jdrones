@@ -1,0 +1,17 @@
+name: jdrones
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python>=3.9
+  - pip
+  - pip:
+    - numpy
+    - gymnasium
+    - pybullet
+    - loguru
+    - pydantic
+
+prefix: ./envs

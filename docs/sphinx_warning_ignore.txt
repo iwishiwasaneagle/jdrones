@@ -1,0 +1,8 @@
+# Libraries that don't use sphinx or don't have docs
+pydantic
+
+# Weird types
+types.ConstrainedListValue
+
+# Argparse functions that aren't linked with intersphinx
+py:exc reference target not found: argparse.ArgumentTypeError

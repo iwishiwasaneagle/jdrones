@@ -1,0 +1,19 @@
+[build-system]
+# AVOID CHANGING REQUIRES: IT WILL BE UPDATED BY PYSCAFFOLD!
+requires = [
+    "scikit-build",
+    "setuptools>=46.1.0",
+    "setuptools_scm>=6.2",
+    "cmake"
+]
+
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[tool.cibuildwheel]
+skip = ["pp*"]  #  no pypy
+archs = ["auto64"] # only 64bit
+
+manylinux-x86_64-image="manylinux_2_24"
+manylinux-i686-image="manylinux_2_24"

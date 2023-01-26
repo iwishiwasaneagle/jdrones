@@ -1,0 +1,140 @@
+name: CD
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  setup-envs:
+    name: Set up the build names and such
+    runs-on: ubuntu-20.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Version
+        id: version
+        shell: bash
+        run: |
+          v=${GITHUB_REF##*/}
+          echo "Version: $v"
+          echo "::set-output name=version::$v"
+
+      - name: Check version
+        shell: bash
+        run: |
+          rx='^v([0-9]+\.){0,2}(\*|[0-9]+)$'
+          VERSION=${{steps.version.outputs.version}}
+          if [[ $VERSION =~ $rx ]]; then
+            echo "INFO:<-->Version $VERSION"
+          else
+            echo "ERROR:<->Unable to validate package version: '$VERSION'"
+            exit 1
+          fi
+
+  generate-changelog:
+    name: Generate changelog
+    needs: setup-envs
+    runs-on: ubuntu-20.04
+    outputs:
+      release_body: ${{ steps.release.outputs.release_body }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Generate latest changelog
+        uses: orhun/git-cliff-action@v2
+        id: git-cliff-latest
+        with:
+          args: -vv --latest --strip header
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Set the release body
+        id: release
+        shell: bash
+        run: |
+          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+          r="$(printf "$r" | tail -n +3)"
+          r="${r//'%'/'%25'}"
+          r="${r//$'\n'/'%0A'}"
+          r="${r//$'\r'/'%0D'}"
+          echo "::set-output name=release_body::$r"
+
+  build-python:
+    name: Build python
+    needs: setup-envs
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.11.4
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ./wheelhouse/*.whl
+
+  publish-github:
+    name: Publish on GitHub
+    needs: [generate-changelog,build-python,setup-envs]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - name: Upload the release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          file: dist/**
+          file_glob: true
+          release_name: "Release ${{needs.setup-envs.outputs.version}}"
+          body: "${{ needs.generate-changelog.outputs.release_body }}"
+
+  publish-gh-page:
+    name: Publish to Github Pages
+    needs: setup-envs
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install tox -r requirements.txt -r docs/requirements.txt
+
+      - name: Build docs with tox
+        run: sphinx-build --color -b html -d docs/_build/html docs docs/_build/html
+
+      - name: Upload the docs
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        with:
+          branch: gh-pages
+          folder: docs/_build/html/
+          clean-exclude: |
+            .nojekyll
