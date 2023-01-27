@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        platform: [ ubuntu-latest ]
+        platform: ["ubuntu-latest"]
         pytest-flags: ["--only-integration", ""]
         python-version:
             - "3.10"
@@ -26,7 +26,7 @@ jobs:
           - python-version: "3.11"
             pytest-flags: ""
             codecov: true
-            platform: ubuntu-latest
+            platform: "ubuntu-latest"
 
     steps:
     - name: Checkout repo
