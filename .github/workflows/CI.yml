@@ -13,7 +13,7 @@ env:
 jobs:
   run-tests:
     name: Run tests
-    runs-on: ${{matrix.platform}}
+    runs-on: ${{ matrix.platform }}
     defaults:
       run:
         shell: bash -l {0}
