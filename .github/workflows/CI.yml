@@ -6,21 +6,17 @@ on:
     pull_request:
     workflow_dispatch:
 
-env:
-    TOXENVS: test,types
-    PYTHONPATH: /home/runner/work/jdrones/jdrones/src
-
 jobs:
   run-tests:
     name: Run tests
-    runs-on: ${{matrix.platform}}
+    runs-on: ${{ matrix.platform }}
     defaults:
       run:
         shell: bash -l {0}
 
     strategy:
       matrix:
-        platform: [ubuntu-latest]
+        platform: [ ubuntu-latest ]
         pytest-flags: ["--only-integration", ""]
         python-version:
             - "3.10"
@@ -28,46 +24,42 @@ jobs:
         codecov: [false]
         include:
           - python-version: "3.11"
-          - pytest-flags: ""
-          - codecov: true
-    steps:
+            pytest-flags: ""
+            codecov: true
+            platform: ubuntu-latest
 
-    - uses: actions/checkout@v3
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
       with:
         submodules: true
 
-    - name: Cache conda
-      uses: actions/cache@v2
-      env:
-        # Increase this value to reset cache if etc/example-environment.yml has not changed
-        CACHE_NUMBER: 0
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
-        path: ~/conda_pkgs_dir
-        key:
-          ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
-          hashFiles('etc/example-environment.yml') }}
-
-    - uses: conda-incubator/setup-miniconda@v2
-      with:
-        activate-environment: jdrones
-        environment-file: environment.yml
+        cache: "pip"
         python-version: ${{ matrix.python-version }}
-        use-only-tar-bz2: true # important for caching
+        cache-dependency-path: |
+            requirements.txt
+            tests/requirements.txt
 
-    - name: Install test dependencies
-      run: pip install -r tests/requirements.txt
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt -r tests/requirements.txt
 
-    # Don't use tox as caching does not work reliably. Maybe re-visit this in the future.
     - name: Run tests
-      run: pytest \
-              --cov-report=xml \
-              --cov-branch \
-              --cov jdrones \
-              --cov-report term-missing \
-              ${{ matrix.pytest-flags }}
+      run: |
+        PYTHONPATH=$PWD/src \
+        pytest tests \
+        --cov-report=xml \
+        --cov-branch \
+        --cov jdrones \
+        --cov-report term-missing \
+        ${{ matrix.pytest-flags }}
 
-    - uses: codecov/codecov-action@v3.1.1
-      if: ${{ github.actor != 'dependabot[bot]' }} && ${{ matrix.codecov }}
+    - name: Upload code test coverage report
+      uses: codecov/codecov-action@v3.1.1
+      if: ${{ (github.actor != 'dependabot[bot]') && ( matrix.codecov ) && ( !env.ACT ) }}
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml,./coverage.info
@@ -76,6 +68,7 @@ jobs:
   build-package:
     name: Build wheels
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -87,6 +80,7 @@ jobs:
   run-doc-tests:
     name: Build docs and test for issues
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
       with:
@@ -103,8 +97,10 @@ jobs:
 
     - name: Install dependencies
       run: pip install -r requirements.txt -r docs/requirements.txt
+
     - name: Build docs and analyze output
       run: |
+        PYTHONPATH=$PWD/src \
         sphinx-build \
           -b html \
           -d docs/_build/html/doctrees \

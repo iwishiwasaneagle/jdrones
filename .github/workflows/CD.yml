@@ -127,26 +127,18 @@ jobs:
         with:
           submodules: true
 
-      - name: Cache conda
-        uses: actions/cache@v2
-        env:
-          # Increase this value to reset cache if etc/example-environment.yml has not changed
-          CACHE_NUMBER: 0
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
-          path: ~/conda_pkgs_dir
-          key:
-            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
-            hashFiles('etc/example-environment.yml') }}
-
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          activate-environment: jdrones
-          environment-file: environment.yml
+          cache: "pip"
           python-version: ${{ matrix.python-version }}
-          use-only-tar-bz2: true # important for caching
+          cache-dependency-path: |
+            requirements.txt
+            tests/requirements.txt
 
-      - name: Install test dependencies
-        run: pip install -r tests/requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt -r tests/requirements.txt
 
       - name: Build docs with tox
         run: sphinx-build --color -b html -d docs/_build/html docs docs/_build/html
