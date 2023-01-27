@@ -138,11 +138,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache-dependency-path: |
             requirements.txt
-            tests/requirements.txt
+            docs/requirements.txt
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt -r tests/requirements.txt
+          pip install -r requirements.txt -r docs/requirements.txt
 
       - name: Build docs with tox
         run: sphinx-build --color -b html -d docs/_build/html docs docs/_build/html
