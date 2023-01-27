@@ -1,1 +1,5 @@
+gymnasium==0.27.1
+loguru==0.6.0
 numpy==1.24.1
+pybullet==3.2.5
+pydantic==1.10.4
