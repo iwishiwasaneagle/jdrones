@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        platform: [ubuntu-latest]
+        platform: ["ubuntu-latest"]
         pytest-flags: ["--only-integration", ""]
         python-version:
             - "3.10"
@@ -28,8 +28,9 @@ jobs:
         codecov: [false]
         include:
           - python-version: "3.11"
-          - pytest-flags: ""
-          - codecov: true
+            pytest-flags: ""
+            codecov: true
+            platform: "ubuntu-latest"
     steps:
 
     - uses: actions/checkout@v3
