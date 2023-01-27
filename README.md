@@ -28,6 +28,7 @@ PYTHONPATH=$PWD/src pytest tests
 - [ ] Better trajectory generation between waypoints
 - [ ] Examples
 - [ ] Proper integration testing
+- [ ] Higher fidelity motor models
 
 [gymnasium]: https://gymnasium.farama.org/
 [pybullet]: https://github.com/bulletphysics/bullet3
