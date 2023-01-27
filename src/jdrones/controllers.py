@@ -2,8 +2,8 @@ import functools
 from typing import Callable
 
 import numpy as np
-
-from jdrones.maths import clip, clip_scalar
+from jdrones.maths import clip
+from jdrones.maths import clip_scalar
 
 
 class PID:
@@ -77,4 +77,3 @@ class PID_antiwindup(PID):
     def _calc_I(self, e):
         self.I += clip(e * self.dt, -self.windup, self.windup)
         return self.I * self.Ki
-
