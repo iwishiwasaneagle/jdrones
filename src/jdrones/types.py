@@ -1,7 +1,6 @@
-import abc
 import enum
-from collections import UserList
-from typing import Tuple, Callable
+from typing import Callable
+from typing import Tuple
 
 import numpy as np
 import pybullet as p
@@ -27,8 +26,10 @@ class KLengthArray(np.ndarray):
                 raise ValueError(f"Incorrect shape {obj.shape}")
         return obj.view(cls)
 
+
 class Action(KLengthArray):
     pass
+
 
 class PropellerAction(Action):
     k: int = 4
@@ -82,11 +83,11 @@ class VelHeadAltAction(Action):
         return self[1]
 
     @property
-    def z(self):
+    def yaw(self):
         return self[2]
 
     @property
-    def yaw(self):
+    def z(self):
         return self[3]
 
 
@@ -113,8 +114,10 @@ class PositionVelAction(PositionAction):
     def vx_b(self):
         return self[3]
 
+
 class Observation(KLengthArray):
     pass
+
 
 class State(Observation):
     k: int = 20

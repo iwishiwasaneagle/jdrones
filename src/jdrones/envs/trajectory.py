@@ -1,29 +1,26 @@
 import sys
-
-from jdrones.envs.dronemodels import DronePlus
-from jdrones.types import Action
-from jdrones.types import Observation
-from jdrones.types import SimulationType
-from jdrones.types import State
-from loguru import logger
-
-sys.setrecursionlimit(100000)
-from typing import Tuple, Optional
+import time
+from collections import deque
+from itertools import count
+from typing import Optional
+from typing import Tuple
 
 import numpy as np
 from gymnasium.core import ActType
 from gymnasium.vector.utils import spaces
 from gymnasium.wrappers import TimeLimit
-
+from jdrones.envs.dronemodels import DronePlus
 from jdrones.envs.position import PositionDroneEnv
 from jdrones.maths import clip_scalar
-from jdrones.types import (
-    PositionVelAction,
-    VEC3,
-    PositionAction,
-    VEC4,
-)
-from collections import deque
+from jdrones.types import Action
+from jdrones.types import Observation
+from jdrones.types import PositionAction
+from jdrones.types import State
+from jdrones.types import VEC3
+from jdrones.types import VEC4
+from loguru import logger
+
+sys.setrecursionlimit(100000)
 
 
 class Trajectory:
@@ -168,35 +165,39 @@ class TrajectoryPositionDroneEnv(PositionDroneEnv):
         return np.linalg.norm(tgtpos - curpos)
 
     def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
-        action = PositionAction(action)
-        dist = self._calc_dist_to_target(self.state.pos, action)
+        x, y, z = action
+        dist = self._calc_dist_to_target(self.state.pos, (x, y, z))
         self.observations.clear()
-        while True:
+
+        t = time.time()
+        for i in count():
             new_vel = self.model.max_vel_ms * clip_scalar(dist, 0.1, 0.4)
-            obs, _, term, trunc, _ = super().step(PositionVelAction((*action, new_vel)))
+            obs, _, term, trunc, _ = super().step((x, y, z, new_vel))
             self.observations.append(obs)
             dist = self._calc_dist_to_target(self.state.pos, action)
             if dist <= 0.1:
                 break
-            if dist > 20:
-                trunc = True
+            if dist >= 20:
+                term = True
             if term or trunc:
                 break
-
-        reward = self.get_reward()
+        total_t = time.time() - t
+        logger.debug(f"Completed {i} steps in {total_t:.2f}s ({i/total_t:.2f} it/s)")
+        reward = self.trajectory_reward()
+        self.forces.clear()
         info = self.get_info()
         return self.observations, reward, term, trunc, info
 
     @property
     def action_space(self) -> ActType:
-        act_bounds = np.array([(-10, 10), (-10, 10), (10, 10)])
+        act_bounds = np.array([(-10, 10), (-10, 10), (9, 10)])
         return spaces.Box(
             low=act_bounds[:, 0],
             high=act_bounds[:, 1],
             dtype=float,
         )
 
-    def get_reward(self) -> float:
+    def trajectory_reward(self):
         return np.asarray(self.forces).sum() / self.dt
 
 
@@ -211,23 +212,24 @@ def main():
     env = TrajectoryPositionDroneEnv(
         model=model,
         initial_state=initial_state,
-        simulation_type=SimulationType.DIRECT,
         dt=dt,
     )
-    env = TimeLimit(env, max_episode_steps=2)
+    env = TimeLimit(env, max_episode_steps=20)
 
     env.reset()
 
     setpoints = deque()
     rewards = deque()
-
+    observations = deque()
     while True:
         setpoint = env.action_space.sample()
         obs, reward, term, trunc, info = env.step(PositionAction(setpoint))
+        observations.append(np.array(obs).copy())
         setpoints.append(setpoint)
         rewards.append(reward)
 
         if trunc or term:
+            print(f"{trunc=} {term=}")
             break
 
     logger.info("Fin.")
