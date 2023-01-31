@@ -33,5 +33,4 @@ Using this package
    :hidden:
 
    changelog
-   license
    authors
