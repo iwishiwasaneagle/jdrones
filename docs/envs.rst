@@ -1,6 +1,10 @@
 Environments
 ============
 
+.. autoclass:: jdrones.envs.BaseDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
 .. autoclass:: jdrones.envs.DroneEnv
    :members:
    :undoc-members:
