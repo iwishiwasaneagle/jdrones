@@ -68,6 +68,8 @@ repos:
   hooks:
     - id: rstcheck
       additional_dependencies: [sphinx]
+      exclude:
+        "license.rst"
       args: [
         --ignore-messages, "([dD]uplicate implicit|not referenced)"
       ]
