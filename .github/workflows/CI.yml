@@ -171,8 +171,3 @@ jobs:
           git diff --name-only $(git merge-base $BASE $HEAD) | \
           xargs docstr-coverage --accept-empty
         if: failure()
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: docstr-cov-badge
-          path: "*.svg"
