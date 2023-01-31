@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2023-01-31
+
+### Bug Fixes
+
+- Use different URLs for files that are hosted on gh-pages [(d84ccb3)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d84ccb37136503aa81f8c1b8ec446dd29b61e6c0)
+- Docstr-cov was failing whilst trying to get baseline [(49d2077)](https://github.com/iwishiwasaneagle/jpdmgen/commit/49d207739829f082ba04ad548004884753f0f2fc)
+- Hierarchy error in titles [(21ea9b7)](https://github.com/iwishiwasaneagle/jpdmgen/commit/21ea9b7546144286fdbc361bf5be74535ebcc350)
+
+### Documentation
+
+- Add controllers to docs [(856c336)](https://github.com/iwishiwasaneagle/jpdmgen/commit/856c336ab2a64cc35594d2041ac8114ab0577654)
+- Improve index.rst to act as the landing page for the hosted docs [(1091aed)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1091aed4ea211d706283a5affa9643670617a9e5)
+
+### Miscellaneous Tasks
+
+- Mock pybullet_data [(d858099)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d858099acad558b9fe0665b587fa062b6ac07ef9)
+- Remove -q from checkout [(f5493c6)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f5493c671f64fd533d1c04e85c68443de829af79)
+
+### Refactor
+
+- Speed up docstr build by only requireing docs/requirements.txt [(6d6cb64)](https://github.com/iwishiwasaneagle/jpdmgen/commit/6d6cb6401a33edb7ce3fa1eac218750f0e50e9ef)
+- Move PyBulletIds to types module [(b3ad632)](https://github.com/iwishiwasaneagle/jpdmgen/commit/b3ad632744045e7f411f6fcf1e10f2d660b8712e)
+- Remove license from docs [(e4a551d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e4a551dbe4b1ce761885c09058c3b7eb9d370a05)
+
 ## [0.1.1] - 2023-01-31
 
 ### Bug Fixes
@@ -33,6 +57,7 @@ All notable changes to this project will be documented in this file.
 - Add intersphinx mapping for gymnasium [(c0316f8)](https://github.com/iwishiwasaneagle/jpdmgen/commit/c0316f8ac8fada3d1022b7e4da9474469b216d64)
 - Don't upload badge as artifact. Can't currently use it [(6d9817b)](https://github.com/iwishiwasaneagle/jpdmgen/commit/6d9817b7cbea934cfb9c10a25de86693cbf35ccb)
 - Upload docstr-cov badge to gh-pages [(d7e923a)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d7e923aa0b44b813db5d4bb8b947f29a9d7a3e4a)
+- Update changelog for v0.1.1 [skip pre-commit.ci] [(066c6c3)](https://github.com/iwishiwasaneagle/jpdmgen/commit/066c6c3a9b3a432ae86bfb8c695314d55f9f80a2)
 
 ## [0.1.0] - 2023-01-27
 
