@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-
 from jdrones.envs.velocityheading import VelHeadAltDroneEnv
 
 

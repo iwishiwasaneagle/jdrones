@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
-
-from jdrones.types import State, PropellerAction
+from jdrones.types import PropellerAction
+from jdrones.types import State
 
 
 @pytest.fixture(params=[(0,) * 20])
