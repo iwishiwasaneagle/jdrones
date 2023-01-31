@@ -321,6 +321,7 @@ intersphinx_mapping = {
     "sqlalchemy": ("https://docs.sqlalchemy.org/", None),
     "shapely": ("https://shapely.readthedocs.io/en/stable/", None),
     "networkx": ("https://networkx.org/documentation/latest/", None),
+    "gymnasium":("https://gymnasium.farama.org/", None)
 }
 # Warn about all references where the target cannot be found
 nitpicky = True
