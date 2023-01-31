@@ -167,7 +167,7 @@ jobs:
       - name: Test $HEAD coverage
         run: |
           echo "$BASE coverage was: $BASE_COV%"
-          git checkout -q $HEAD
+          git checkout $HEAD
           docstr-coverage --fail-under=$BASE_COV
 
       - name: Blame
