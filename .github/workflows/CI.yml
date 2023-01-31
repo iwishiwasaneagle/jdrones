@@ -141,6 +141,7 @@ jobs:
 
       - name: Get SHAs
         run: |
+          git config advice.detachedHead false
           if [[ ${{ github.event_name }} == 'push' ]]; then
             echo "BASE=$(git rev-parse HEAD^)" >> $GITHUB_ENV
             echo "HEAD=$(git rev-parse HEAD)" >> $GITHUB_ENV
@@ -155,19 +156,22 @@ jobs:
 
       - name: Get $BASE coverage
         run: |
-          git checkout -q $BASE
-          P=$(docstr-coverage -p --accept-empty)
-          [ -z "$P" ] && P=0
+          git checkout $BASE
+          P=$(docstr-coverage -F0 -p)
+          if [ -z "$P" ]
+          then
+            P=0
+          fi
           echo "BASE_COV=$P" >> $GITHUB_ENV
 
       - name: Test $HEAD coverage
         run: |
           echo "$BASE coverage was: $BASE_COV%"
-          git checkout -q $HEAD
+          git checkout $HEAD
           docstr-coverage --fail-under=$BASE_COV
 
       - name: Blame
         run: |
           git diff --name-only $(git merge-base $BASE $HEAD) | \
-          xargs docstr-coverage --accept-empty
+          xargs docstr-coverage -F0 --accept-empty
         if: failure()

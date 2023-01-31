@@ -9,7 +9,6 @@ import gymnasium
 import numpy as np
 import pybullet as p
 import pybullet_data
-import pydantic
 from gymnasium.core import ActType
 from gymnasium.core import ObsType
 from gymnasium.core import RenderFrame
@@ -19,24 +18,12 @@ from jdrones.transforms import euler_to_quat
 from jdrones.transforms import quat_to_euler
 from jdrones.types import Observation
 from jdrones.types import PropellerAction
+from jdrones.types import PyBulletIds
 from jdrones.types import SimulationType
 from jdrones.types import State
 from jdrones.types import URDFModel
 from jdrones.types import VEC3
 from jdrones.types import VEC4
-
-
-class PyBulletIds(pydantic.BaseModel):
-    """
-    Container to hold the IDs of the various pybullet items
-    """
-
-    client: int = None
-    """Physical simulation client ID"""
-    plane: int = None
-    """The ground plane ID"""
-    drone: int = None
-    """The drone ID"""
 
 
 class BaseDroneEnv(gymnasium.Env, abc.ABC):

@@ -68,6 +68,4 @@ repos:
   hooks:
     - id: rstcheck
       additional_dependencies: [sphinx,tomli]
-      exclude:
-        "license.rst"
       args: [--config, pyproject.toml]

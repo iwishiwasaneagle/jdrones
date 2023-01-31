@@ -300,3 +300,16 @@ class URDFModel(pydantic.BaseModel):
 
     filepath: str
     """File path to URDF model"""
+
+
+class PyBulletIds(pydantic.BaseModel):
+    """
+    Container to hold the IDs of the various pybullet items
+    """
+
+    client: int = None
+    """Physical simulation client ID"""
+    plane: int = None
+    """The ground plane ID"""
+    drone: int = None
+    """The drone ID"""
