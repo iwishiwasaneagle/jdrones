@@ -46,7 +46,7 @@ def test_state_3vec(state, attr, value):
 
 @pytest.mark.parametrize("attr", ["quat", "prop_omega"])
 @pytest.mark.parametrize("value", [(1, 2, 3, 4)])
-def test_state_3vec(state, attr, value):
+def test_state_4vec(state, attr, value):
     assert np.allclose(getattr(state, attr), (0, 0, 0, 0))
 
     setattr(state, attr, value)

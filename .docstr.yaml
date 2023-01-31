@@ -1,0 +1,13 @@
+paths:
+  - src/jdrones
+badge: docstr-cov
+verbose: 2 # (0-4)
+skip_magic: True
+skip_file_doc: False
+skip_init: True
+skip_class_def: False
+skip_private: False
+follow_links: False
+accept_empty: False
+fail_under: 95
+percentage_only: False

@@ -17,7 +17,6 @@ from jdrones.envs.dronemodels import DronePlus
 from jdrones.maths import clip
 from jdrones.transforms import euler_to_quat
 from jdrones.transforms import quat_to_euler
-from jdrones.types import Action
 from jdrones.types import Observation
 from jdrones.types import PropellerAction
 from jdrones.types import SimulationType
@@ -28,18 +27,34 @@ from jdrones.types import VEC4
 
 
 class PyBulletIds(pydantic.BaseModel):
+    """
+    Container to hold the IDs of the various pybullet items
+    """
+
     client: int = None
+    """Physical simulation client ID"""
     plane: int = None
+    """The ground plane ID"""
     drone: int = None
+    """The drone ID"""
 
 
 class BaseDroneEnv(gymnasium.Env, abc.ABC):
+    """
+    Base drone environment. Handles pybullet loading, and application of forces.
+    Generalizes the physics to allow other models to be used.
+    """
+
     state: State
+    """Current drone state"""
     initial_state: State
+    """Initial drone state. Used for resettign the simulation"""
 
     model: URDFModel
+    """Model parameters"""
 
     ids: PyBulletIds
+    """PB IDs"""
 
     def __init__(
         self,
@@ -60,14 +75,40 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
     @property
     @abc.abstractmethod
     def observation_space(self) -> ObsType:
+        """
+        Returns the observation space required by gymnasium
+
+        Returns
+        -------
+        gymnasium.core.ObsType
+            Observation type describing the action space
+        """
         pass
 
     @property
     @abc.abstractmethod
     def action_space(self) -> ActType:
+        """
+        Returns the action space required by gymnasium
+
+        Returns
+        -------
+        gymnasium.core.ActType
+            Action type describing the action space
+        """
         pass
 
     def _init_simulation(self, simulation_type: SimulationType):
+        """
+        Initialise the simulation. Only ran once when the environment is instantiated.
+
+        ..warning::
+            Do not call this to reset the environment.
+
+        Parameters
+        ----------
+        simulation_type : SimulationType
+        """
         self.ids.client = p.connect(simulation_type)
         # PyBullet parameters
         p.setGravity(0, 0, -self.model.g, physicsClientId=self.ids.client)
@@ -100,6 +141,31 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
         seed: Optional[int] = None,
         options: Optional[dict] = None,
     ) -> Tuple[Observation, dict]:
+        """
+        Reset the simulation to the initial state.
+
+        .. seealso::
+            :func:`gymnasium.Env.reset`
+
+        Parameters
+        ----------
+        seed : int
+            Seed to pass to gymnasium RNG
+            (Default = None)
+        options : dict
+            Additional options to pass to gymnasium API
+            (Default = None)
+
+        Returns
+        -------
+        observation : Observation
+            Observation of the initial state. It should be analogous to the info
+            returned by :meth:`step`.
+        info : dict
+            This dictionary contains auxiliary information complementing observation.
+            It should be analogous to the info returned by :meth:`step`.
+        """
+
         super().reset(seed=seed, options=options)
         # Reset state
         self.state = copy(self.initial_state)
@@ -119,7 +185,42 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
     def render(self) -> Optional[Union[RenderFrame, List[RenderFrame]]]:
         pass
 
-    def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
+    def step(
+        self, action: PropellerAction
+    ) -> Tuple[Observation, float, bool, bool, dict]:
+        """
+        Run one timestep of the environment’s dynamics using the agent actions
+
+        .. seealso::
+            - :func:`gymnasium.Env.step`
+
+        .. note::
+            The physics are implemented in the following functions:
+
+            - :meth:`jdrones.envs.BaseDroneEnv.calculate_propulsive_forces`
+            - :meth:`jdrones.envs.BaseDroneEnv.calculate_aerodynamic_forces`
+            - :meth:`jdrones.envs.BaseDroneEnv.calculate_external_torques`
+
+        Parameters
+        ----------
+        action : PropellerAction
+            An action provided by the agent to update the environment state
+
+        Returns
+        -------
+        observation : Observation
+            Observation of the state
+        reward : float
+             The reward as a result of taking the action
+        terminated : bool
+             Whether the agent reaches the terminal state (as defined under the MDP of
+             the task)
+        truncated : bool
+             Whether the truncation condition outside the scope of the MDP is satisfied
+        info : dict
+            Contains auxiliary diagnostic information (helpful for debugging, learning,
+            and logging)
+        """
         propeller_action = clip(action, 0, np.inf)
         propulsive_forces = self.calculate_propulsive_forces(propeller_action)
         aerodynamic_forces = self.calculate_aerodynamic_forces(propeller_action)
@@ -166,6 +267,20 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
 
     @staticmethod
     def get_kinematic_data(ids: PyBulletIds) -> State:
+        """
+        Get the drones's :class:`~jdrones.types.State` from pybullet post
+        :meth:`step`
+
+        Parameters
+        ----------
+        ids : PyBulletIds
+            PB IDs to read from
+
+        Returns
+        -------
+        State
+            The current state of the drone
+        """
         state = State()
         # Cartesian world coordinates
         state.pos, state.quat = p.getBasePositionAndOrientation(

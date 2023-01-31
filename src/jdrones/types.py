@@ -120,10 +120,22 @@ class Observation(KLengthArray):
 
 
 class State(Observation):
+    """
+    Default state observation of the system
+    """
+
     k: int = 20
 
     @property
     def pos(self) -> VEC3:
+        """
+        Position
+
+        Returns
+        -------
+        float,float,float
+            :math:`(x,y,z)`
+        """
         return self[:3]
 
     @pos.setter
@@ -132,6 +144,14 @@ class State(Observation):
 
     @property
     def quat(self) -> VEC4:
+        """
+        Quaternion
+
+        Returns
+        -------
+        float,float,float,float
+            :math:`(x,y,z,w)`
+        """
         return self[3:7]
 
     @quat.setter
@@ -140,6 +160,14 @@ class State(Observation):
 
     @property
     def rpy(self) -> VEC3:
+        """
+        Roll, pitch, and yaw
+
+        Returns
+        -------
+        float,float,float
+             :math:`(\\phi,\\theta,\\psi)`
+        """
         return self[7:10]
 
     @rpy.setter
@@ -148,6 +176,14 @@ class State(Observation):
 
     @property
     def vel(self) -> VEC3:
+        """
+        Linear velocity
+
+        Returns
+        -------
+        float,float,float
+             :math:`(x,y,z)`
+        """
         return self[10:13]
 
     @vel.setter
@@ -156,6 +192,14 @@ class State(Observation):
 
     @property
     def ang_vel(self) -> VEC3:
+        """
+        Angular velocity
+
+        Returns
+        -------
+        float,float,float
+             :math:`(p,q,r)`
+        """
         return self[13:16]
 
     @ang_vel.setter
@@ -164,6 +208,14 @@ class State(Observation):
 
     @property
     def prop_omega(self) -> VEC4:
+        """
+        Propeller angular velocity
+
+        Returns
+        -------
+        float,float,float,float
+             :math:`(\\Omega_0,\\Omega_1,\\Omega_2,\\Omega_3)`
+        """
         return self[16:20]
 
     @prop_omega.setter
@@ -172,8 +224,12 @@ class State(Observation):
 
 
 class SimulationType(enum.IntEnum):
+    """Enum to handle the support pybullet simulation types"""
+
     DIRECT = p.DIRECT
+    """No GUI"""
     GUI = p.GUI
+    """With GUI"""
 
 
 class URDFModel(pydantic.BaseModel):
@@ -202,14 +258,41 @@ class URDFModel(pydantic.BaseModel):
     """Drag coefficients (x,y,z)"""
 
     max_vel_ms: float
+    """Maximum velocity of the drone (m/s)"""
 
     mixing_matrix: Callable
+    """Mixing matrix describing RPY + T to propeller RPM"""
 
     @property
     def weight(self) -> float:
+        """
+        Weight of the drone
+
+        Returns
+        -------
+        float
+            :math:`W=mg`
+        """
         return self.g * self.mass
 
-    def rpyT2rpm(self, roll, pitch, yaw, thrust) -> Tuple[float, float, float, float]:
+    def rpyT2rpm(
+        self, roll: float, pitch: float, yaw: float, thrust: float
+    ) -> Tuple[float, float, float, float]:
+        """
+        Apply the :meth:`mixing_matrix`.
+
+        Parameters
+        ----------
+        roll : float
+        pitch : float
+        yaw : float
+        thrust : float
+
+        Returns
+        -------
+        float,float,float,float
+            RPMs for P0,P1,P2,P3
+        """
         rpyT = np.array([roll, pitch, yaw, thrust])
         matrix_mul = self.mixing_matrix(self.l, self.k_T, self.k_Q) * rpyT
         matrix_mul_sum = np.sum(matrix_mul, axis=1)

@@ -17,3 +17,10 @@ archs = ["auto64"] # only 64bit
 
 manylinux-x86_64-image="manylinux_2_24"
 manylinux-i686-image="manylinux_2_24"
+
+[tool.rstcheck]
+ignore_directives = [
+    "automodule",
+    "autoclass",
+]
+ignore_messages = "([dD]uplicate implicit|not referenced)"
