@@ -67,9 +67,7 @@ repos:
   rev: v6.0.0
   hooks:
     - id: rstcheck
-      additional_dependencies: [sphinx]
+      additional_dependencies: [sphinx,tomli]
       exclude:
         "license.rst"
-      args: [
-        --ignore-messages, "([dD]uplicate implicit|not referenced)"
-      ]
+      args: [--config, pyproject.toml]
