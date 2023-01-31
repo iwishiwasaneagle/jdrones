@@ -155,13 +155,13 @@ jobs:
 
       - name: Get $BASE coverage
         run: |
-          git checkout $BASE
+          git checkout -q $BASE
           echo "BASE_COV=$(docstr-coverage -p)" >> $GITHUB_ENV
 
       - name: Test $HEAD coverage
         run: |
           echo "$BASE coverage was: $BASE_COV%"
-          git checkout $HEAD
+          git checkout -q $HEAD
           docstr-coverage --fail-under=$BASE_COV
 
       - name: Blame
