@@ -39,6 +39,7 @@ autodoc_mock_imports = [  # https://www.sphinx-doc.org/en/master/usage/extension
     "tqdm",
     "dynaconf",
     "pybullet",
+    "pybullet_data",
     "gymnasium"
 ]
 
