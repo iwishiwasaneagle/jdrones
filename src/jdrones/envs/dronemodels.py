@@ -2,10 +2,10 @@ import numpy as np
 from jdrones.types import URDFModel
 
 
-def droneplus_mixing_matrix(l, k_f, k_t):
+def droneplus_mixing_matrix(length, k_f, k_t):
     h = k_f
     i = k_t
-    j = l * h
+    j = length * h
 
     return np.array(
         [

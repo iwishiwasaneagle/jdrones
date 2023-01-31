@@ -1,9 +1,5 @@
-import functools
-from typing import Callable
-
 import numpy as np
 from jdrones.maths import clip
-from jdrones.maths import clip_scalar
 
 
 class PID:
@@ -20,11 +16,11 @@ class PID:
 
     def reset(self):
         self.e = 0
-        self.I = 0
+        self.Integration = 0
 
     def _calc_I(self, e):
-        self.I += self.Ki * e * self.dt
-        return self.I
+        self.Integration += self.Ki * e * self.dt
+        return self.Integration
 
     def _calc_P(self, e):
         return self.Kp * e
@@ -58,10 +54,10 @@ class PID:
             e = self.error(measured, setpoint)
 
         P = self._calc_P(e)
-        I = self._calc_I(e)
+        Integration = self._calc_I(e)
         D = self._calc_D(e)
 
-        return self.gain * (P + I + D)
+        return self.gain * (P + Integration + D)
 
 
 class PID_antiwindup(PID):
@@ -75,5 +71,5 @@ class PID_antiwindup(PID):
         super().__init__(*args, **kwargs)
 
     def _calc_I(self, e):
-        self.I += clip(e * self.dt, -self.windup, self.windup)
-        return self.I * self.Ki
+        self.Integration += clip(e * self.dt, -self.windup, self.windup)
+        return self.Integration * self.Ki

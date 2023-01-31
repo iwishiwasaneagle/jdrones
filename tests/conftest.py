@@ -80,12 +80,12 @@ def mass(request):
 
 
 @pytest.fixture(params=[0.1])
-def l(request):
+def length(request):
     return request.param
 
 
 @pytest.fixture(params=[(0.1, 0.1, 0.1)])
-def I(request):
+def Inertia(request):
     return request.param
 
 
@@ -125,10 +125,10 @@ def filepath(request):
 
 @pytest.fixture
 def mixing_matrix():
-    def droneplus_mixing_matrix(l, k_f, k_t):
+    def droneplus_mixing_matrix(length, k_f, k_t):
         h = k_f
         i = k_t
-        j = l * h
+        j = length * h
 
         return np.array(
             [
@@ -184,12 +184,22 @@ def simulation_type(request):
 
 @pytest.fixture
 def urdfmodel(
-    g, l, I, k_T, k_Q, tau_T, tau_Q, drag_coeffs, mass, filepath, mixing_matrix
+    g,
+    length,
+    Inertia,
+    k_T,
+    k_Q,
+    tau_T,
+    tau_Q,
+    drag_coeffs,
+    mass,
+    filepath,
+    mixing_matrix,
 ):
     return URDFModel(
         g=g,
-        l=l,
-        I=I,
+        l=length,
+        I=Inertia,
         k_T=k_T,
         k_Q=k_Q,
         tau_T=tau_T,
