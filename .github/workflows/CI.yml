@@ -32,7 +32,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
       with:
-        submodules: true
+        fetch-depth: 0
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -68,11 +68,10 @@ jobs:
   build-package:
     name: Build wheels
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: recursive
+          fetch-depth: 0
 
       - name: Build wheels
         run: pip wheel .
@@ -84,7 +83,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        submodules: recursive
+        fetch-depth: 0
 
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
@@ -124,3 +123,54 @@ jobs:
           echo "Everything is a-okay!"
           exit 0
         fi
+
+  docstr-cov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install docstr-coverage
+        run: pip install docstr-coverage==2.2.0
+
+      - name: Get SHAs
+        run: |
+          if [[ ${{ github.event_name }} == 'push' ]]; then
+            echo "BASE=$(git rev-parse HEAD^)" >> $GITHUB_ENV
+            echo "HEAD=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          elif [[ ${{ github.event_name }} == 'pull_request' ]]; then
+            echo "BASE=${{ github.event.pull_request.base.sha }}" >> $GITHUB_ENV
+            echo "HEAD=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+
+          else
+            echo "Unexpected event trigger"
+            exit 1
+          fi
+
+      - name: Get $BASE coverage
+        run: |
+          git checkout $BASE
+          echo "BASE_COV=$(docstr-coverage -p)" >> $GITHUB_ENV
+
+      - name: Test $HEAD coverage
+        run: |
+          echo "$BASE coverage was: $BASE_COV%"
+          git checkout $HEAD
+          docstr-coverage --fail-under=$BASE_COV
+
+      - name: Blame
+        run: |
+          git diff --name-only $(git merge-base $BASE $HEAD) | \
+          xargs docstr-coverage --accept-empty
+        if: failure()
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docstr-cov-badge
+          path: "*.svg"
