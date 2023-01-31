@@ -1,6 +1,4 @@
-import abc
 import enum
-from collections import UserList
 from typing import Callable
 from typing import Tuple
 
@@ -85,11 +83,11 @@ class VelHeadAltAction(Action):
         return self[1]
 
     @property
-    def z(self):
+    def yaw(self):
         return self[2]
 
     @property
-    def yaw(self):
+    def z(self):
         return self[3]
 
 

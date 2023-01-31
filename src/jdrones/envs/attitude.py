@@ -11,7 +11,6 @@ from jdrones.envs.drone import DroneEnv
 from jdrones.maths import clip
 from jdrones.maths import clip_scalar
 from jdrones.types import Action
-from jdrones.types import AttitudeAltitudeAction
 from jdrones.types import Observation
 
 
@@ -44,17 +43,17 @@ class AttitudeAltitudeDroneEnv(DroneEnv):
         return super().reset(seed=seed, options=options)
 
     def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
-        action = AttitudeAltitudeAction(action)
+        roll, pitch, yaw, z = action
+
         # Calculate control action
+        r_act = self.controllers["roll"](self.state.rpy[0], roll)
+        p_act = self.controllers["pitch"](self.state.rpy[1], pitch)
 
-        r_act = self.controllers["roll"](self.state.rpy[0], action.roll)
-        p_act = self.controllers["pitch"](self.state.rpy[1], action.pitch)
-
-        y_act = self.controllers["yaw"](self.state.rpy[2], action.yaw)
+        y_act = self.controllers["yaw"](self.state.rpy[2], yaw)
         y_act = clip_scalar(y_act, -2, 2)
         dy_act = self.controllers["dyaw"](self.state.ang_vel[2], y_act)
 
-        z_act = self.controllers["altitude"](self.state.pos[2], action.z)
+        z_act = self.controllers["altitude"](self.state.pos[2], z)
         z_act = clip_scalar(z_act, -10, 10)
         dz_act = self.controllers["daltitude"](self.state.vel[2], z_act)
 
@@ -137,7 +136,6 @@ if __name__ == "__main__":
     info = {}
     while not (trunc or term):
         t = next(c) * dt
-
         if t % 10 == 0:
             attalt_setpoint = env.action_space.sample()
         obs, _, term, trunc, info = env.step(attalt_setpoint)

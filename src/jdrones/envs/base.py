@@ -120,10 +120,10 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
         pass
 
     def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
-        action = PropellerAction(clip(action, 0, np.inf))
-        propulsive_forces = self.calculate_propulsive_forces(action)
-        aerodynamic_forces = self.calculate_aerodynamic_forces(action)
-        external_torques = self.calculate_external_torques(action)
+        propeller_action = clip(action, 0, np.inf)
+        propulsive_forces = self.calculate_propulsive_forces(propeller_action)
+        aerodynamic_forces = self.calculate_aerodynamic_forces(propeller_action)
+        external_torques = self.calculate_external_torques(propeller_action)
 
         for i in range(4):
             p.applyExternalForce(

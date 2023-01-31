@@ -11,7 +11,6 @@ from jdrones.transforms import euler_to_rotmat
 from jdrones.types import Action
 from jdrones.types import Observation
 from jdrones.types import VEC3
-from jdrones.types import VelHeadAltAction
 
 
 class VelHeadAltDroneEnv(AttitudeAltitudeDroneEnv):
@@ -28,14 +27,14 @@ class VelHeadAltDroneEnv(AttitudeAltitudeDroneEnv):
         return np.dot(vel, euler_to_rotmat(rpy))
 
     def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
-        action = VelHeadAltAction(action)
+        vx_b, vy_b, yaw, z = action
         # Convert x-y from inertial to body
         vx_b_m, vy_b_m, _ = self._vi_to_vb(self.state.vel, self.state.rpy)
         # Calculate control action
-        vx_act = self.controllers["vx_b"](vx_b_m, action.vx_b)
-        vy_act = self.controllers["vy_b"](vy_b_m, action.vy_b)
+        vx_act = self.controllers["vx_b"](vx_b_m, vx_b)
+        vy_act = self.controllers["vy_b"](vy_b_m, vy_b)
 
-        attalt_act = [vy_act, vx_act, action.vy_b, action.z]
+        attalt_act = [vy_act, vx_act, yaw, z]
         return super().step(attalt_act)
 
     @property
