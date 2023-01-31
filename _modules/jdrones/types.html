@@ -43,7 +43,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html#citations">Citations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -82,10 +84,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for jdrones.types</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">abc</span>
-<span class="kn">import</span> <span class="nn">enum</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserList</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
+<span></span><span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pybullet</span> <span class="k">as</span> <span class="nn">p</span>
@@ -111,8 +112,10 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Incorrect shape </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
 
+
 <div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../types.html#jdrones.types.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">KLengthArray</span><span class="p">):</span>
     <span class="k">pass</span></div>
+
 
 <div class="viewcode-block" id="PropellerAction"><a class="viewcode-back" href="../../types.html#jdrones.types.PropellerAction">[docs]</a><span class="k">class</span> <span class="nc">PropellerAction</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
     <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
@@ -166,11 +169,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">yaw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">yaw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span></div>
 
 
@@ -197,14 +200,28 @@
     <span class="k">def</span> <span class="nf">vx_b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span></div>
 
+
 <div class="viewcode-block" id="Observation"><a class="viewcode-back" href="../../types.html#jdrones.types.Observation">[docs]</a><span class="k">class</span> <span class="nc">Observation</span><span class="p">(</span><span class="n">KLengthArray</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
+
 <div class="viewcode-block" id="State"><a class="viewcode-back" href="../../types.html#jdrones.types.State">[docs]</a><span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="n">Observation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default state observation of the system</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VEC3</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Position</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float,float,float</span>
+<span class="sd">            :math:`(x,y,z)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
 
     <span class="nd">@pos</span><span class="o">.</span><span class="n">setter</span>
@@ -213,6 +230,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">quat</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VEC4</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Quaternion</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float,float,float,float</span>
+<span class="sd">            :math:`(x,y,z,w)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
 
     <span class="nd">@quat</span><span class="o">.</span><span class="n">setter</span>
@@ -221,6 +246,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">rpy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VEC3</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Roll, pitch, and yaw</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float,float,float</span>
+<span class="sd">             :math:`(\\phi,\\theta,\\psi)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
 
     <span class="nd">@rpy</span><span class="o">.</span><span class="n">setter</span>
@@ -229,6 +262,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">vel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VEC3</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Linear velocity</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float,float,float</span>
+<span class="sd">             :math:`(x,y,z)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span>
 
     <span class="nd">@vel</span><span class="o">.</span><span class="n">setter</span>
@@ -237,6 +278,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ang_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VEC3</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Angular velocity</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float,float,float</span>
+<span class="sd">             :math:`(p,q,r)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">13</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span>
 
     <span class="nd">@ang_vel</span><span class="o">.</span><span class="n">setter</span>
@@ -245,6 +294,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">prop_omega</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VEC4</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Propeller angular velocity</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float,float,float,float</span>
+<span class="sd">             :math:`(\\Omega_0,\\Omega_1,\\Omega_2,\\Omega_3)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">16</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span>
 
     <span class="nd">@prop_omega</span><span class="o">.</span><span class="n">setter</span>
@@ -253,8 +310,12 @@
 
 
 <div class="viewcode-block" id="SimulationType"><a class="viewcode-back" href="../../types.html#jdrones.types.SimulationType">[docs]</a><span class="k">class</span> <span class="nc">SimulationType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">IntEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to handle the support pybullet simulation types&quot;&quot;&quot;</span>
+
     <span class="n">DIRECT</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">DIRECT</span>
-    <span class="n">GUI</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">GUI</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No GUI&quot;&quot;&quot;</span>
+    <span class="n">GUI</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">GUI</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;With GUI&quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="URDFModel"><a class="viewcode-back" href="../../types.html#jdrones.types.URDFModel">[docs]</a><span class="k">class</span> <span class="nc">URDFModel</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -283,14 +344,41 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Drag coefficients (x,y,z)&quot;&quot;&quot;</span>
 
     <span class="n">max_vel_ms</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum velocity of the drone (m/s)&quot;&quot;&quot;</span>
 
     <span class="n">mixing_matrix</span><span class="p">:</span> <span class="n">Callable</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixing matrix describing RPY + T to propeller RPM&quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Weight of the drone</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            :math:`W=mg`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mass</span>
 
-<div class="viewcode-block" id="URDFModel.rpyT2rpm"><a class="viewcode-back" href="../../types.html#jdrones.types.URDFModel.rpyT2rpm">[docs]</a>    <span class="k">def</span> <span class="nf">rpyT2rpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">thrust</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="URDFModel.rpyT2rpm"><a class="viewcode-back" href="../../types.html#jdrones.types.URDFModel.rpyT2rpm">[docs]</a>    <span class="k">def</span> <span class="nf">rpyT2rpm</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">roll</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pitch</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">yaw</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">thrust</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the :meth:`mixing_matrix`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        roll : float</span>
+<span class="sd">        pitch : float</span>
+<span class="sd">        yaw : float</span>
+<span class="sd">        thrust : float</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float,float,float,float</span>
+<span class="sd">            RPMs for P0,P1,P2,P3</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rpyT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">roll</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">thrust</span><span class="p">])</span>
         <span class="n">matrix_mul</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixing_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_Q</span><span class="p">)</span> <span class="o">*</span> <span class="n">rpyT</span>
         <span class="n">matrix_mul_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">matrix_mul</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

@@ -43,7 +43,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#citations">Citations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -85,6 +87,7 @@
 
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
@@ -116,6 +119,8 @@
       <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.action_space">action_space (jdrones.envs.AttitudeAltitudeDroneEnv property)</a>
 
       <ul>
+        <li><a href="envs.html#jdrones.envs.BaseDroneEnv.action_space">(jdrones.envs.BaseDroneEnv property)</a>
+</li>
         <li><a href="envs.html#jdrones.envs.DroneEnv.action_space">(jdrones.envs.DroneEnv property)</a>
 </li>
         <li><a href="envs.html#jdrones.envs.PositionDroneEnv.action_space">(jdrones.envs.PositionDroneEnv property)</a>
@@ -136,21 +141,41 @@
   </ul></td>
 </tr></table>
 
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv">BaseDroneEnv (class in jdrones.envs)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_aerodynamic_forces">calculate_aerodynamic_forces() (jdrones.envs.DroneEnv method)</a>
-</li>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_external_torques">calculate_external_torques() (jdrones.envs.DroneEnv method)</a>
-</li>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_propulsive_forces">calculate_propulsive_forces() (jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.calculate_aerodynamic_forces">calculate_aerodynamic_forces() (jdrones.envs.BaseDroneEnv method)</a>
 
       <ul>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_aerodynamic_forces">(jdrones.envs.DroneEnv method)</a>
+</li>
+      </ul></li>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.calculate_external_torques">calculate_external_torques() (jdrones.envs.BaseDroneEnv method)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_external_torques">(jdrones.envs.DroneEnv method)</a>
+</li>
+      </ul></li>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.calculate_propulsive_forces">calculate_propulsive_forces() (jdrones.envs.BaseDroneEnv method)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_propulsive_forces">(jdrones.envs.DroneEnv method)</a>
+</li>
         <li><a href="envs.html#jdrones.envs.TrajectoryPositionDroneEnv.calculate_propulsive_forces">(jdrones.envs.TrajectoryPositionDroneEnv method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.close">close() (jdrones.envs.BaseDroneEnv method)</a>
+</li>
       <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.controllers">controllers (jdrones.envs.AttitudeAltitudeDroneEnv attribute)</a>
 </li>
       <li><a href="envs.html#jdrones.envs.CustomCostFunctionTrajectoryDroneEnv">CustomCostFunctionTrajectoryDroneEnv (class in jdrones.envs)</a>
@@ -161,10 +186,12 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.drag_coeffs">drag_coeffs (jdrones.types.URDFModel attribute)</a>
+      <li><a href="types.html#jdrones.types.SimulationType.DIRECT">DIRECT (jdrones.types.SimulationType attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="types.html#jdrones.types.URDFModel.drag_coeffs">drag_coeffs (jdrones.types.URDFModel attribute)</a>
+</li>
       <li><a href="envs.html#jdrones.envs.DroneEnv">DroneEnv (class in jdrones.envs)</a>
 </li>
   </ul></td>
@@ -186,22 +213,40 @@
       <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.get_info">get_info() (jdrones.envs.AttitudeAltitudeDroneEnv method)</a>
 
       <ul>
+        <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_info">(jdrones.envs.BaseDroneEnv method)</a>
+</li>
         <li><a href="envs.html#jdrones.envs.DroneEnv.get_info">(jdrones.envs.DroneEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.get_observation">get_observation() (jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_kinematic_data">get_kinematic_data() (jdrones.envs.BaseDroneEnv static method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.get_reward">get_reward() (jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_observation">get_observation() (jdrones.envs.BaseDroneEnv method)</a>
 
       <ul>
-        <li><a href="envs.html#jdrones.envs.TrajectoryPositionDroneEnv.get_reward">(jdrones.envs.TrajectoryPositionDroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.get_observation">(jdrones.envs.DroneEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.get_terminated">get_terminated() (jdrones.envs.DroneEnv method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_reward">get_reward() (jdrones.envs.BaseDroneEnv method)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.get_reward">(jdrones.envs.DroneEnv method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.get_truncated">get_truncated() (jdrones.envs.DroneEnv method)</a>
+      </ul></li>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_terminated">get_terminated() (jdrones.envs.BaseDroneEnv method)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.get_terminated">(jdrones.envs.DroneEnv method)</a>
+</li>
+      </ul></li>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_truncated">get_truncated() (jdrones.envs.BaseDroneEnv method)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.get_truncated">(jdrones.envs.DroneEnv method)</a>
+</li>
+      </ul></li>
+      <li><a href="types.html#jdrones.types.SimulationType.GUI">GUI (jdrones.types.SimulationType attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -210,6 +255,12 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="types.html#jdrones.types.URDFModel.I">I (jdrones.types.URDFModel attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.ids">ids (jdrones.envs.BaseDroneEnv attribute)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.initial_state">initial_state (jdrones.envs.BaseDroneEnv attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -272,9 +323,11 @@
 </li>
       <li><a href="types.html#jdrones.types.URDFModel.max_vel_ms">max_vel_ms (jdrones.types.URDFModel attribute)</a>
 </li>
+      <li><a href="types.html#jdrones.types.URDFModel.mixing_matrix">mixing_matrix (jdrones.types.URDFModel attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.mixing_matrix">mixing_matrix (jdrones.types.URDFModel attribute)</a>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.model">model (jdrones.envs.BaseDroneEnv attribute)</a>
 </li>
       <li>
     module
@@ -291,9 +344,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="types.html#jdrones.types.Observation">Observation (class in jdrones.types)</a>
 </li>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.observation_space">observation_space (jdrones.envs.BaseDroneEnv property)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.DroneEnv.observation_space">(jdrones.envs.DroneEnv property)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.observation_space">observation_space (jdrones.envs.DroneEnv property)</a>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.on_ground_plane">on_ground_plane (jdrones.envs.BaseDroneEnv property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -339,9 +398,13 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.render">render() (jdrones.envs.BaseDroneEnv method)</a>
+</li>
       <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.reset">reset() (jdrones.envs.AttitudeAltitudeDroneEnv method)</a>
 
       <ul>
+        <li><a href="envs.html#jdrones.envs.BaseDroneEnv.reset">(jdrones.envs.BaseDroneEnv method)</a>
+</li>
         <li><a href="envs.html#jdrones.envs.TrajectoryPositionDroneEnv.reset">(jdrones.envs.TrajectoryPositionDroneEnv method)</a>
 </li>
       </ul></li>
@@ -363,9 +426,13 @@
 </li>
       <li><a href="types.html#jdrones.types.State">State (class in jdrones.types)</a>
 </li>
+      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.state">state (jdrones.envs.BaseDroneEnv attribute)</a>
+</li>
       <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.step">step() (jdrones.envs.AttitudeAltitudeDroneEnv method)</a>
 
       <ul>
+        <li><a href="envs.html#jdrones.envs.BaseDroneEnv.step">(jdrones.envs.BaseDroneEnv method)</a>
+</li>
         <li><a href="envs.html#jdrones.envs.CustomCostFunctionTrajectoryDroneEnv.step">(jdrones.envs.CustomCostFunctionTrajectoryDroneEnv method)</a>
 </li>
         <li><a href="envs.html#jdrones.envs.PositionDroneEnv.step">(jdrones.envs.PositionDroneEnv method)</a>
@@ -383,9 +450,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="types.html#jdrones.types.URDFModel.tau_Q">tau_Q (jdrones.types.URDFModel attribute)</a>
 </li>
+      <li><a href="types.html#jdrones.types.URDFModel.tau_T">tau_T (jdrones.types.URDFModel attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.tau_T">tau_T (jdrones.types.URDFModel attribute)</a>
+      <li><a href="envs.html#jdrones.envs.TrajectoryPositionDroneEnv.trajectory_reward">trajectory_reward() (jdrones.envs.TrajectoryPositionDroneEnv method)</a>
 </li>
       <li><a href="envs.html#jdrones.envs.TrajectoryPositionDroneEnv">TrajectoryPositionDroneEnv (class in jdrones.envs)</a>
 </li>

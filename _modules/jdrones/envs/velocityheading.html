@@ -43,7 +43,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#citations">Citations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -95,7 +97,6 @@
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">Action</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">Observation</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">VEC3</span>
-<span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">VelHeadAltAction</span>
 
 
 <div class="viewcode-block" id="VelHeadAltDroneEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.VelHeadAltDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">VelHeadAltDroneEnv</span><span class="p">(</span><span class="n">AttitudeAltitudeDroneEnv</span><span class="p">):</span>
@@ -112,14 +113,14 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">euler_to_rotmat</span><span class="p">(</span><span class="n">rpy</span><span class="p">))</span>
 
 <div class="viewcode-block" id="VelHeadAltDroneEnv.step"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.VelHeadAltDroneEnv.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Action</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Observation</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">VelHeadAltAction</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">vx_b</span><span class="p">,</span> <span class="n">vy_b</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">action</span>
         <span class="c1"># Convert x-y from inertial to body</span>
         <span class="n">vx_b_m</span><span class="p">,</span> <span class="n">vy_b_m</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vi_to_vb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">vel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">rpy</span><span class="p">)</span>
         <span class="c1"># Calculate control action</span>
-        <span class="n">vx_act</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span><span class="p">[</span><span class="s2">&quot;vx_b&quot;</span><span class="p">](</span><span class="n">vx_b_m</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">vx_b</span><span class="p">)</span>
-        <span class="n">vy_act</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span><span class="p">[</span><span class="s2">&quot;vy_b&quot;</span><span class="p">](</span><span class="n">vy_b_m</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">vy_b</span><span class="p">)</span>
+        <span class="n">vx_act</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span><span class="p">[</span><span class="s2">&quot;vx_b&quot;</span><span class="p">](</span><span class="n">vx_b_m</span><span class="p">,</span> <span class="n">vx_b</span><span class="p">)</span>
+        <span class="n">vy_act</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span><span class="p">[</span><span class="s2">&quot;vy_b&quot;</span><span class="p">](</span><span class="n">vy_b_m</span><span class="p">,</span> <span class="n">vy_b</span><span class="p">)</span>
 
-        <span class="n">attalt_act</span> <span class="o">=</span> <span class="p">[</span><span class="n">vy_act</span><span class="p">,</span> <span class="n">vx_act</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">vy_b</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">z</span><span class="p">]</span>
+        <span class="n">attalt_act</span> <span class="o">=</span> <span class="p">[</span><span class="n">vy_act</span><span class="p">,</span> <span class="n">vx_act</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">z</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">attalt_act</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>

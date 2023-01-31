@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jDrones &mdash; jdrones unknown documentation</title>
+  <title>Why &mdash; jdrones unknown documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -46,8 +46,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#development">Development</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#citations">Citations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#future-work">Future Work</a></li>
 </ul>
 </li>
 </ul>
@@ -77,7 +79,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">jDrones</li>
+      <li class="breadcrumb-item active">Why</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/readme.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -111,16 +113,38 @@
     text-align: unset;
 }
 </style>
-<section id="jdrones">
-<h1>jDrones<a class="headerlink" href="#jdrones" title="Permalink to this heading"></a></h1>
+<p><img alt="jDrones Logo" src="docs/_static/banner.svg" />
+<a class="reference external" href="https://codecov.io/gh/iwishiwasaneagle/jdrones"><img alt="codecov" src="https://codecov.io/gh/iwishiwasaneagle/jdrones/branch/master/graph/badge.svg?token=ZILBLXACL6" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml"><img alt="CD" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml/badge.svg" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml"><img alt="CI" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml/badge.svg" /></a></p>
+<section id="why">
+<h1>Why<a class="headerlink" href="#why" title="Permalink to this heading"></a></h1>
+<p>Provide a <a class="reference external" href="https://gymnasium.farama.org/">gymnasium</a> style interface using a physics simulation engine (<a class="reference external" href="https://github.com/bulletphysics/bullet3">pybullet</a> in this case) to drone models. This in-turn enables faster prototyping of controllers, and reinforcement models. I’m maintaining this particular repo for my own research which is focused on waypoint generation, hence my priority is the trajectory drone environment. However, any upgrades and updates on the others would be hugely appreciated.</p>
+</section>
 <section id="development">
-<h2>Development<a class="headerlink" href="#development" title="Permalink to this heading"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span><span class="o">[</span>NAME<span class="o">]</span><span class="w"> </span>--file<span class="w"> </span>requirements.txt
-
-conda<span class="w"> </span>install<span class="w"> </span>conda-develop
-conda<span class="w"> </span>develop<span class="w"> </span><span class="nv">$PWD</span>/src
+<h1>Development<a class="headerlink" href="#development" title="Permalink to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>jdrones
+conda<span class="w"> </span>activate<span class="w"> </span>jdrones
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>-r<span class="w"> </span>tests/requirements.txt
+<span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$PWD</span>/src<span class="w"> </span>pytest<span class="w"> </span>tests
 </pre></div>
 </div>
+</section>
+<section id="citations">
+<h1>Citations<a class="headerlink" href="#citations" title="Permalink to this heading"></a></h1>
+<blockquote>
+<div><p>[1] J. Panerati, H. Zheng, S. Zhou, J. Xu, A. Prorok, and A. P. Schoellig, ‘Learning to Fly – a Gym Environment with PyBullet Physics for Reinforcement Learning of Multi-agent Quadcopter Control’. arXiv, Jul. 25, 2021. doi: 10.48550/arXiv.2103.02142.</p>
+<p>[2] J. Meyer, A. Sendobry, S. Kohlbrecher, U. Klingauf, and O. von Stryk, ‘Comprehensive Simulation of Quadrotor UAVs Using ROS and Gazebo’, in Simulation, Modeling, and Programming for Autonomous Robots, Berlin, Heidelberg, 2012, pp. 400–411. doi: 10.1007/978-3-642-34327-8_36.</p>
+</div></blockquote>
+<section id="future-work">
+<h2>Future Work<a class="headerlink" href="#future-work" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>[ ] Better sensor modelling and kalman filters</p></li>
+<li><p>[ ] Performance improvements of simulation using either compiled code or a JIT</p></li>
+<li><p>[ ] Better controllers</p></li>
+<li><p>[ ] Better trajectory generation between waypoints</p></li>
+<li><p>[ ] Examples</p></li>
+<li><p>[ ] Proper integration testing</p></li>
+<li><p>[ ] Higher fidelity motor models</p></li>
+</ul>
 </section>
 </section>
 
