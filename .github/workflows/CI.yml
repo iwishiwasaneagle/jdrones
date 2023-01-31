@@ -156,7 +156,7 @@ jobs:
       - name: Get $BASE coverage
         run: |
           git checkout -q $BASE
-          P=$(docstr-coverage -p)
+          P=$(docstr-coverage -p --accept-empty)
           [ -z "$P" ] && P=0
           echo "BASE_COV=$P" >> $GITHUB_ENV
 
