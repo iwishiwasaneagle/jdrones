@@ -28,18 +28,34 @@ from jdrones.types import VEC4
 
 
 class PyBulletIds(pydantic.BaseModel):
+    """
+    Container to hold the IDs of the various pybullet items
+    """
+
     client: int = None
+    """Physical simulation client ID"""
     plane: int = None
+    """The ground plane ID"""
     drone: int = None
+    """The drone ID"""
 
 
 class BaseDroneEnv(gymnasium.Env, abc.ABC):
+    """
+    Base drone environment. Handles pybullet loading, and application of forces.
+    Generalizes the physics to allow other models to be used.
+    """
+
     state: State
+    """Current drone state"""
     initial_state: State
+    """Initial drone state. Used for resettign the simulation"""
 
     model: URDFModel
+    """Model parameters"""
 
     ids: PyBulletIds
+    """PB IDs"""
 
     def __init__(
         self,
@@ -60,6 +76,13 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
     @property
     @abc.abstractmethod
     def observation_space(self) -> ObsType:
+        """
+        Returns the observation space required by gymnasium
+
+        Returns
+        -------
+
+        """
         pass
 
     @property
