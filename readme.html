@@ -48,20 +48,18 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Why</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#citations">Citations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#future-work">Future Work</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="#citations">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#future-work">Future Work</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="envs.html">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.html">Controllers</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Contributors</a></li>
 </ul>
 
@@ -113,8 +111,9 @@
     text-align: unset;
 }
 </style>
-<p><img alt="jDrones Logo" src="docs/_static/banner.svg" />
-<a class="reference external" href="https://codecov.io/gh/iwishiwasaneagle/jdrones"><img alt="codecov" src="https://codecov.io/gh/iwishiwasaneagle/jdrones/branch/master/graph/badge.svg?token=ZILBLXACL6" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml"><img alt="CD" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml/badge.svg" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml"><img alt="CI" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml/badge.svg" /></a></p>
+<p><img alt="jDrones Logo" src="https://jdrones.janhendrikewers.uk/_static/banner.svg" />
+<a class="reference external" href="https://codecov.io/gh/iwishiwasaneagle/jdrones"><img alt="codecov" src="https://codecov.io/gh/iwishiwasaneagle/jdrones/branch/master/graph/badge.svg?token=ZILBLXACL6" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml"><img alt="CD" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml/badge.svg" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml"><img alt="CI" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml/badge.svg" /></a>
+<img alt="docstring coverage" src="https://jdrones.janhendrikewers.uk/_static/docstr-cov.svg" /></p>
 <section id="why">
 <h1>Why<a class="headerlink" href="#why" title="Permalink to this heading"></a></h1>
 <p>Provide a <a class="reference external" href="https://gymnasium.farama.org/">gymnasium</a> style interface using a physics simulation engine (<a class="reference external" href="https://github.com/bulletphysics/bullet3">pybullet</a> in this case) to drone models. This in-turn enables faster prototyping of controllers, and reinforcement models. I’m maintaining this particular repo for my own research which is focused on waypoint generation, hence my priority is the trajectory drone environment. However, any upgrades and updates on the others would be hugely appreciated.</p>
@@ -134,8 +133,9 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div><p>[1] J. Panerati, H. Zheng, S. Zhou, J. Xu, A. Prorok, and A. P. Schoellig, ‘Learning to Fly – a Gym Environment with PyBullet Physics for Reinforcement Learning of Multi-agent Quadcopter Control’. arXiv, Jul. 25, 2021. doi: 10.48550/arXiv.2103.02142.</p>
 <p>[2] J. Meyer, A. Sendobry, S. Kohlbrecher, U. Klingauf, and O. von Stryk, ‘Comprehensive Simulation of Quadrotor UAVs Using ROS and Gazebo’, in Simulation, Modeling, and Programming for Autonomous Robots, Berlin, Heidelberg, 2012, pp. 400–411. doi: 10.1007/978-3-642-34327-8_36.</p>
 </div></blockquote>
+</section>
 <section id="future-work">
-<h2>Future Work<a class="headerlink" href="#future-work" title="Permalink to this heading"></a></h2>
+<h1>Future Work<a class="headerlink" href="#future-work" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p>[ ] Better sensor modelling and kalman filters</p></li>
 <li><p>[ ] Performance improvements of simulation using either compiled code or a JIT</p></li>
@@ -145,7 +145,6 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <li><p>[ ] Proper integration testing</p></li>
 <li><p>[ ] Higher fidelity motor models</p></li>
 </ul>
-</section>
 </section>
 
 

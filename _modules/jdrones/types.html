@@ -46,16 +46,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Why</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html#development">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html#citations">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html#future-work">Future Work</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../envs.html">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../controllers.html">Controllers</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../authors.html">Contributors</a></li>
 </ul>
 
@@ -386,6 +387,19 @@
 
     <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;File path to URDF model&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="PyBulletIds"><a class="viewcode-back" href="../../types.html#jdrones.types.PyBulletIds">[docs]</a><span class="k">class</span> <span class="nc">PyBulletIds</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Container to hold the IDs of the various pybullet items</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">client</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Physical simulation client ID&quot;&quot;&quot;</span>
+    <span class="n">plane</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The ground plane ID&quot;&quot;&quot;</span>
+    <span class="n">drone</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The drone ID&quot;&quot;&quot;</span></div>
 </pre></div>
 
            </div>

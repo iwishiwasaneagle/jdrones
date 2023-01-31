@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
-    <link rel="prev" title="Types" href="types.html" /> 
+    <link rel="next" title="Contributors" href="authors.html" />
+    <link rel="prev" title="Controllers" href="controllers.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,33 +49,41 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Why</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#development">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#citations">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#future-work">Future Work</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="envs.html">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.html">Controllers</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">[0.1.1] - 2023-01-31</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">[0.1.2] - 2023-01-31</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#miscellaneous-tasks">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#refactor">Refactor</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">[0.1.0] - 2023-01-27</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">[0.1.1] - 2023-01-31</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id3">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id5">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#refactor">Refactor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">[0.1.0] - 2023-01-27</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Refactor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Contributors</a></li>
 </ul>
 
@@ -131,9 +139,42 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading"></a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <section id="id1">
-<h2>[0.1.1] - 2023-01-31<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h2>[0.1.2] - 2023-01-31<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <section id="bug-fixes">
 <h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use different URLs for files that are hosted on gh-pages <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d84ccb37136503aa81f8c1b8ec446dd29b61e6c0">(d84ccb3)</a></p></li>
+<li><p>Docstr-cov was failing whilst trying to get baseline <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/49d207739829f082ba04ad548004884753f0f2fc">(49d2077)</a></p></li>
+<li><p>Hierarchy error in titles <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/21ea9b7546144286fdbc361bf5be74535ebcc350">(21ea9b7)</a></p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add controllers to docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/856c336ab2a64cc35594d2041ac8114ab0577654">(856c336)</a></p></li>
+<li><p>Improve index.rst to act as the landing page for the hosted docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1091aed4ea211d706283a5affa9643670617a9e5">(1091aed)</a></p></li>
+</ul>
+</section>
+<section id="miscellaneous-tasks">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#miscellaneous-tasks" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Mock pybullet_data <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d858099acad558b9fe0665b587fa062b6ac07ef9">(d858099)</a></p></li>
+<li><p>Remove -q from checkout <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f5493c671f64fd533d1c04e85c68443de829af79">(f5493c6)</a></p></li>
+</ul>
+</section>
+<section id="refactor">
+<h3>Refactor<a class="headerlink" href="#refactor" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Speed up docstr build by only requireing docs/requirements.txt <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6d6cb6401a33edb7ce3fa1eac218750f0e50e9ef">(6d6cb64)</a></p></li>
+<li><p>Move PyBulletIds to types module <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/b3ad632744045e7f411f6fcf1e10f2d660b8712e">(b3ad632)</a></p></li>
+<li><p>Remove license from docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e4a551dbe4b1ce761885c09058c3b7eb9d370a05">(e4a551d)</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.1.1] - 2023-01-31<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<section id="id3">
+<h3>Bug Fixes<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Running very slow because of np.asarray <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6e193445972e9aa307bb648cf01d512ffbf3fa16">(6e19344)</a></p></li>
 <li><p>Reused function name <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/2690f4ebc6f16445502014dcf6438ed3acccbdb8">(2690f4e)</a></p></li>
@@ -143,8 +184,8 @@
 <li><p>Allow –accept-empty in case there’s no python files <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1714bbfcbb494225aa0b51b6b3beb353eec4861e">(1714bbf)</a></p></li>
 </ul>
 </section>
-<section id="documentation">
-<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<section id="id4">
+<h3>Documentation<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Start of BaseDroneEnv docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/7b9553fe5d68e92fc78e4c9b594c4cac55101db8">(7b9553f)</a></p></li>
 <li><p>Do most of the types docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/c3e3a18e178a60e5f5ee8c85ed141d305b48e2c3">(c3e3a18)</a></p></li>
@@ -158,8 +199,8 @@
 <li><p>Check docstr coverage isn’t being reduced <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/a4be21b1a618060c360cdff4c0f32b828117f1e2">(a4be21b)</a></p></li>
 </ul>
 </section>
-<section id="miscellaneous-tasks">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#miscellaneous-tasks" title="Permalink to this heading"></a></h3>
+<section id="id5">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Improve readme <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f9095111c7fbc999cab9a9a45d2f8d1d3ae4ac4f">(f909511)</a></p></li>
 <li><p>Add future work on motor modelling <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9307e91da249088486242203515f0ff98a985c58">(9307e91)</a></p></li>
@@ -168,13 +209,14 @@
 <li><p>Add intersphinx mapping for gymnasium <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/c0316f8ac8fada3d1022b7e4da9474469b216d64">(c0316f8)</a></p></li>
 <li><p>Don’t upload badge as artifact. Can’t currently use it <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6d9817b7cbea934cfb9c10a25de86693cbf35ccb">(6d9817b)</a></p></li>
 <li><p>Upload docstr-cov badge to gh-pages <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d7e923aa0b44b813db5d4bb8b947f29a9d7a3e4a">(d7e923a)</a></p></li>
+<li><p>Update changelog for v0.1.1 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/066c6c3a9b3a432ae86bfb8c695314d55f9f80a2">(066c6c3)</a></p></li>
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2>[0.1.0] - 2023-01-27<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<section id="id3">
-<h3>Bug Fixes<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<section id="id6">
+<h2>[0.1.0] - 2023-01-27<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<section id="id7">
+<h3>Bug Fixes<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Updates to setup since there’s no CPP <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6e489fb22f5aa2edf54887734eae587d649b61bc">(6e489fb)</a></p></li>
 <li><p>Use pip wheel rather than cibuildwheel as it’s currently a pure python package <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/94a0837ee37f26784de4231afd42b5258e44f09a">(94a0837)</a></p></li>
@@ -188,15 +230,15 @@
 <li><p>Revert permissions, as this is done through settings console <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/07b9198b677288b2a15ef73e1c315fb09af12113">(07b9198)</a></p></li>
 </ul>
 </section>
-<section id="id4">
-<h3>Features<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<section id="id8">
+<h3>Features<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Initial commit <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/2b2928c2901d69e5954e0558ba9e2cd204b2a48c">(2b2928c)</a></p></li>
 <li><p>Move back to pip as conda wasn’t required <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/071ae4b8f5ecb21e82fa4263611e0012c520271a">(071ae4b)</a></p></li>
 </ul>
 </section>
-<section id="id5">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<section id="id9">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Update changelog for v0.2.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e4b25d479669a2fa7301dd51f1090d5e378655c2">(e4b25d4)</a></p></li>
 <li><p>Update changelog for v0.1.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9b402385ae225dca824639154dbdb241394c1592">(9b40238)</a></p></li>
@@ -209,8 +251,8 @@
 <li><p>Update changelog for v0.1.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d3dc7686ca804b005aa050f14521381a74cae501">(d3dc768)</a></p></li>
 </ul>
 </section>
-<section id="refactor">
-<h3>Refactor<a class="headerlink" href="#refactor" title="Permalink to this heading"></a></h3>
+<section id="id10">
+<h3>Refactor<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Docs filenames and symlink names <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/64aba9a8b773d72df807f4177ca34b068e4de8c0">(64aba9a)</a></p></li>
 </ul>
@@ -229,8 +271,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="types.html" class="btn btn-neutral float-left" title="Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="controllers.html" class="btn btn-neutral float-left" title="Controllers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="authors.html" class="btn btn-neutral float-right" title="Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

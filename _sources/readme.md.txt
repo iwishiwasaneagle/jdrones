@@ -1,5 +1,6 @@
-![jDrones Logo](docs/_static/banner.svg)
+![jDrones Logo](https://jdrones.janhendrikewers.uk/_static/banner.svg)
 [![codecov](https://codecov.io/gh/iwishiwasaneagle/jdrones/branch/master/graph/badge.svg?token=ZILBLXACL6)](https://codecov.io/gh/iwishiwasaneagle/jdrones)[![CD](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml/badge.svg)](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml)[![CI](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml/badge.svg)](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml)
+![docstring coverage](https://jdrones.janhendrikewers.uk/_static/docstr-cov.svg)
 
 ## Why
 
@@ -20,7 +21,7 @@ PYTHONPATH=$PWD/src pytest tests
 > [2] J. Meyer, A. Sendobry, S. Kohlbrecher, U. Klingauf, and O. von Stryk, ‘Comprehensive Simulation of Quadrotor UAVs Using ROS and Gazebo’, in Simulation, Modeling, and Programming for Autonomous Robots, Berlin, Heidelberg, 2012, pp. 400–411. doi: 10.1007/978-3-642-34327-8_36.
 
 
-### Future Work
+## Future Work
 
 - [ ] Better sensor modelling and kalman filters
 - [ ] Performance improvements of simulation using either compiled code or a JIT

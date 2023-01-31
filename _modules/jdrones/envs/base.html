@@ -46,16 +46,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Why</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html#development">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html#citations">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#future-work">Future Work</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../envs.html">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../controllers.html">Controllers</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Contributors</a></li>
 </ul>
 
@@ -95,7 +96,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pybullet</span> <span class="k">as</span> <span class="nn">p</span>
 <span class="kn">import</span> <span class="nn">pybullet_data</span>
-<span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">gymnasium.core</span> <span class="kn">import</span> <span class="n">ActType</span>
 <span class="kn">from</span> <span class="nn">gymnasium.core</span> <span class="kn">import</span> <span class="n">ObsType</span>
 <span class="kn">from</span> <span class="nn">gymnasium.core</span> <span class="kn">import</span> <span class="n">RenderFrame</span>
@@ -105,24 +105,12 @@
 <span class="kn">from</span> <span class="nn">jdrones.transforms</span> <span class="kn">import</span> <span class="n">quat_to_euler</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">Observation</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">PropellerAction</span>
+<span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">PyBulletIds</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">SimulationType</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">State</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">URDFModel</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">VEC3</span>
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">VEC4</span>
-
-
-<span class="k">class</span> <span class="nc">PyBulletIds</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Container to hold the IDs of the various pybullet items</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">client</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Physical simulation client ID&quot;&quot;&quot;</span>
-    <span class="n">plane</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The ground plane ID&quot;&quot;&quot;</span>
-    <span class="n">drone</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The drone ID&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="BaseDroneEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.BaseDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">BaseDroneEnv</span><span class="p">(</span><span class="n">gymnasium</span><span class="o">.</span><span class="n">Env</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>

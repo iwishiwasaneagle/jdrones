@@ -23,7 +23,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="next" title="Controllers" href="controllers.html" />
     <link rel="prev" title="Environments" href="envs.html" /> 
 </head>
 
@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Why</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#development">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#citations">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#future-work">Future Work</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
@@ -88,6 +89,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.types.PropellerAction.P2"><code class="docutils literal notranslate"><span class="pre">PropellerAction.P2</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.types.PropellerAction.P3"><code class="docutils literal notranslate"><span class="pre">PropellerAction.P3</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.types.PropellerAction.k"><code class="docutils literal notranslate"><span class="pre">PropellerAction.k</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#jdrones.types.PyBulletIds"><code class="docutils literal notranslate"><span class="pre">PyBulletIds</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.types.PyBulletIds.client"><code class="docutils literal notranslate"><span class="pre">PyBulletIds.client</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.types.PyBulletIds.drone"><code class="docutils literal notranslate"><span class="pre">PyBulletIds.drone</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.types.PyBulletIds.plane"><code class="docutils literal notranslate"><span class="pre">PyBulletIds.plane</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#jdrones.types.SimulationType"><code class="docutils literal notranslate"><span class="pre">SimulationType</span></code></a><ul>
@@ -132,11 +139,11 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="controllers.html">Controllers</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Contributors</a></li>
 </ul>
 
@@ -314,6 +321,31 @@
 <dt class="sig sig-object py" id="jdrones.types.PropellerAction.k">
 <span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#jdrones.types.PropellerAction.k" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jdrones.types.PyBulletIds">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.types.</span></span><span class="sig-name descname"><span class="pre">PyBulletIds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/types.html#PyBulletIds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.types.PyBulletIds" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Container to hold the IDs of the various pybullet items</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.types.PyBulletIds.client">
+<span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#jdrones.types.PyBulletIds.client" title="Permalink to this definition"></a></dt>
+<dd><p>Physical simulation client ID</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.types.PyBulletIds.drone">
+<span class="sig-name descname"><span class="pre">drone</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#jdrones.types.PyBulletIds.drone" title="Permalink to this definition"></a></dt>
+<dd><p>The drone ID</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.types.PyBulletIds.plane">
+<span class="sig-name descname"><span class="pre">plane</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#jdrones.types.PyBulletIds.plane" title="Permalink to this definition"></a></dt>
+<dd><p>The ground plane ID</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -584,7 +616,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="envs.html" class="btn btn-neutral float-left" title="Environments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="controllers.html" class="btn btn-neutral float-right" title="Controllers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
