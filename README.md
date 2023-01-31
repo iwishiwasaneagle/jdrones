@@ -1,5 +1,6 @@
-![jDrones Logo](docs/_static/banner.svg)
+![jDrones Logo](https://jdrones.janhendrikewers.uk/_static/banner.svg)
 [![codecov](https://codecov.io/gh/iwishiwasaneagle/jdrones/branch/master/graph/badge.svg?token=ZILBLXACL6)](https://codecov.io/gh/iwishiwasaneagle/jdrones)[![CD](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml/badge.svg)](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml)[![CI](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml/badge.svg)](https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml)
+![docstring coverage](https://jdrones.janhendrikewers.uk/_static/docstr-cov.svg)
 
 ## Why
 
