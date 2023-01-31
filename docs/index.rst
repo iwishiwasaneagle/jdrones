@@ -27,6 +27,7 @@ Using this package
 
    Environments <envs>
    Data Models <types>
+   Controllers <controllers>
 
 .. toctree::
    :caption: Misc.
