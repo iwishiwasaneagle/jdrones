@@ -1,17 +1,11 @@
 import numpy as np
 import pytest
-from jdrones.types import PropellerAction
 from jdrones.types import State
 
 
 @pytest.fixture(params=[(0,) * 20])
 def state(request):
     return State(request.param)
-
-
-@pytest.fixture(params=[(0,) * 4])
-def action(request):
-    return PropellerAction(request.param)
 
 
 def test_state_from_empty():
@@ -22,16 +16,6 @@ def test_state_from_empty():
 def test_state_incorrect_shape(n):
     with pytest.raises(ValueError):
         State((0,) * n)
-
-
-def test_action_from_empty():
-    assert np.allclose(PropellerAction(), (0,) * 4)
-
-
-@pytest.mark.parametrize("n", [3, 5])
-def test_action_incorrect_shape(n):
-    with pytest.raises(ValueError):
-        PropellerAction((0,) * n)
 
 
 @pytest.mark.parametrize("attr", ["pos", "rpy", "vel", "ang_vel"])
