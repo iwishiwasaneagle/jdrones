@@ -1,5 +1,6 @@
 import abc
 from copy import copy
+from typing import Any
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -16,7 +17,6 @@ from jdrones.envs.dronemodels import DronePlus
 from jdrones.maths import clip
 from jdrones.transforms import euler_to_quat
 from jdrones.transforms import quat_to_euler
-from jdrones.types import Observation
 from jdrones.types import PropellerAction
 from jdrones.types import PyBulletIds
 from jdrones.types import SimulationType
@@ -43,6 +43,12 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
     ids: PyBulletIds
     """PB IDs"""
 
+    info: dict[str, Any]
+    """Information dictionary to return"""
+
+    simulation_type: SimulationType
+    """Simulation type to run"""
+
     def __init__(
         self,
         model: URDFModel = DronePlus,
@@ -57,7 +63,9 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
         self.model = model
         self.dt = dt
         self.ids = PyBulletIds()
-        self._init_simulation(simulation_type)
+        self.info = {}
+        self.simulation_type = simulation_type
+        self._init_simulation()
 
     @property
     @abc.abstractmethod
@@ -85,18 +93,15 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
         """
         pass
 
-    def _init_simulation(self, simulation_type: SimulationType):
+    def _init_simulation(self):
         """
         Initialise the simulation. Only ran once when the environment is instantiated.
 
         ..warning::
             Do not call this to reset the environment.
 
-        Parameters
-        ----------
-        simulation_type : SimulationType
         """
-        self.ids.client = p.connect(simulation_type)
+        self.ids.client = p.connect(self.simulation_type)
         # PyBullet parameters
         p.setGravity(0, 0, -self.model.g, physicsClientId=self.ids.client)
         p.setTimeStep(self.dt, physicsClientId=self.ids.client)
@@ -127,7 +132,7 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
         *,
         seed: Optional[int] = None,
         options: Optional[dict] = None,
-    ) -> Tuple[Observation, dict]:
+    ) -> Tuple[State, dict]:
         """
         Reset the simulation to the initial state.
 
@@ -164,7 +169,8 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
             self.state.quat,
             physicsClientId=self.ids.client,
         )
-        return self.get_observation(), self.get_info()
+        self.info = {}
+        return self.get_observation(), self.info
 
     def close(self):
         p.disconnect(physicsClientId=self.ids.client)
@@ -172,9 +178,7 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
     def render(self) -> Optional[Union[RenderFrame, List[RenderFrame]]]:
         pass
 
-    def step(
-        self, action: PropellerAction
-    ) -> Tuple[Observation, float, bool, bool, dict]:
+    def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
         """
         Run one timestep of the environment’s dynamics using the agent actions
 
@@ -249,7 +253,7 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
             self.get_reward(),
             self.get_terminated(),
             self.get_truncated(),
-            self.get_info(),
+            self.info,
         )
 
     @staticmethod
@@ -294,7 +298,7 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_observation(self, *args, **kwargs) -> Observation:
+    def get_observation(self, *args, **kwargs) -> State:
         pass
 
     @abc.abstractmethod
@@ -307,10 +311,6 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
 
     @abc.abstractmethod
     def get_truncated(self, *args, **kwargs) -> bool:
-        pass
-
-    @abc.abstractmethod
-    def get_info(self, *args, **kwargs) -> dict:
         pass
 
     @property

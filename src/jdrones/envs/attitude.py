@@ -63,6 +63,10 @@ class AttitudeAltitudeDroneEnv(DroneEnv):
             3 * self.model.weight / self.model.k_T,
         )
 
+        self.info["control"] = dict(
+            errors={name: ctrl.e for name, ctrl in self.controllers.items()}
+        )
+
         return super().step(propellerAction)
 
     @property
@@ -81,12 +85,6 @@ class AttitudeAltitudeDroneEnv(DroneEnv):
             dtype=float,
         )
 
-    def get_info(self) -> dict:
-        info = super().get_info()
-        info["control"] = dict(
-            errors={name: ctrl.e for name, ctrl in self.controllers.items()}
-        )
-        return info
 
 
 if __name__ == "__main__":
