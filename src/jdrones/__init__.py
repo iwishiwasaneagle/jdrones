@@ -10,14 +10,6 @@ register(
     entry_point="jdrones.envs:VelHeadAltDroneEnv",
 )
 register(
-    "PositionDroneEnv-v0",
-    entry_point="jdrones.envs:PositionDroneEnv",
-)
-register(
-    "TrajectoryPositionDroneEnv-v0",
-    entry_point="jdrones.envs:TrajectoryPositionDroneEnv",
-)
-register(
-    "CustomCostFunctionTrajectoryDroneEnv-v0",
-    entry_point="jdrones.envs:CustomCostFunctionTrajectoryDroneEnv",
+    "PIDTrajectoryDroneEnv-v0",
+    entry_point="jdrones.envs:PIDTrajectoryDroneEnv",
 )

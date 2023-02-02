@@ -10,9 +10,7 @@ from gymnasium.utils.env_checker import check_env
         ("DroneEnv-v0", {}),
         ("AttitudeAltitudeDroneEnv-v0", {}),
         ("VelHeadAltDroneEnv-v0", {}),
-        ("PositionDroneEnv-v0", {}),
-        ("TrajectoryPositionDroneEnv-v0", {}),
-        ("CustomCostFunctionTrajectoryDroneEnv-v0", {"cost_func": lambda s: 0}),
+        ("PIDTrajectoryDroneEnv-v0", {}),
     ],
 )
 def test_make(env, kwargs):
@@ -35,10 +33,5 @@ def test_VelHeadAltDroneEnv(velheadaltdroneenv):
 
 
 @pytest.mark.integration
-def test_PositionDroneEnv(posdroneenv):
-    check_env(posdroneenv)
-
-
-@pytest.mark.integration
-def test_TrajectoryPositionDroneEnv(trajposdroneenv):
-    check_env(trajposdroneenv)
+def test_PIDTrajectoryDroneEnv(pidtrajposdroneenv):
+    check_env(pidtrajposdroneenv)
