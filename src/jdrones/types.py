@@ -179,8 +179,6 @@ class URDFModel(pydantic.BaseModel):
 
     max_vel_ms: float
     """Maximum velocity of the drone (m/s)"""
-    max_acc_mss: float
-    """Maximum acceleration of the drone (m/s/s)"""
 
     mixing_matrix: Callable
     """Mixing matrix describing RPY + T to propeller RPM"""
