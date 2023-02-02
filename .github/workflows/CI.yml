@@ -7,9 +7,43 @@ on:
     workflow_dispatch:
 
 jobs:
+  cache-pybullet:
+    name: Cache pybullet
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+            - "3.10"
+            - "3.11"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          cache: "pip"
+          python-version: ${{ matrix.python-version }}
+          cache-dependency-path: |
+            **/requirements*.txt
+
+      - name: Get pybullet version
+        id: pb-version
+        run: |
+          PBV=$(grep "pybullet" requirements.txt | grep -oE "[0-9]+\.[0-9]+\.[0-9]+$")
+          echo "pbv=$PBV" >> $GITHUB_OUTPUT
+
+      - name: Install pybullet
+        run: |
+          pip install wheel
+          pip install pybullet==${{ steps.pb-version.outputs.pbv }}
+
   run-tests:
     name: Run tests
     runs-on: ${{ matrix.platform }}
+    needs: cache-pybullet
     defaults:
       run:
         shell: bash -l {0}
@@ -40,8 +74,10 @@ jobs:
         cache: "pip"
         python-version: ${{ matrix.python-version }}
         cache-dependency-path: |
-            requirements.txt
-            tests/requirements.txt
+          **/requirements*.txt
+
+    - name: Install wheel
+      run: pip install wheel
 
     - name: Install dependencies
       run: |
@@ -64,17 +100,6 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml,./coverage.info
         fail_ci_if_error: true
-
-  build-package:
-    name: Build wheels
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Build wheels
-        run: pip wheel .
 
   run-doc-tests:
     name: Build docs and test for issues
