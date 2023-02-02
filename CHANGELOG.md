@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2023-02-02
+
+### Bug Fixes
+
+- Unused variable in the URDFModel from refactoring [(95ae8b1)](https://github.com/iwishiwasaneagle/jpdmgen/commit/95ae8b184ea1c5779dae65b7b06e3164c2129328)
+
+### Features
+
+- Move yaw and rpy transform calculations into maths module [(99e6532)](https://github.com/iwishiwasaneagle/jpdmgen/commit/99e65324a517e07a9feff84097b432bb6f2f1950)
+- Move poly traj into own module and fully test [(a727658)](https://github.com/iwishiwasaneagle/jpdmgen/commit/a727658c41fc53ddd20d58b22eb60d868efcf799)
+- Use nptyping library to define shapes of data [(d824d27)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d824d271a8314a3930cad0c85fafaeb0dea44607)
+- Trajectory env refactored [(2aeeb96)](https://github.com/iwishiwasaneagle/jpdmgen/commit/2aeeb96af850c67a535d3dc264ac37d73d083883)
+- Cache pybullet by installing in empty workflow [(15e4a88)](https://github.com/iwishiwasaneagle/jpdmgen/commit/15e4a888fc26856304c582cdd71bd77484438820)
+- Properly handle asset paths [(583c600)](https://github.com/iwishiwasaneagle/jpdmgen/commit/583c6006dbf07b5f1c6b01b82ba6a4bf6949f92c)
+
+### Miscellaneous Tasks
+
+- Use more appropriate clip_scalar [(e288313)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e288313a97f4818f7644d12cc02bfe5326a2b396)
+- Deal with refactoring of drone envs [(05fe4c5)](https://github.com/iwishiwasaneagle/jpdmgen/commit/05fe4c5db17d3e626c4268efe83572d4a5eabdca)
+- Give ground plane collision data in info dict [(417de31)](https://github.com/iwishiwasaneagle/jpdmgen/commit/417de315f390125fe163231629594e022538efa9)
+- Deal with the various refactors [(0455adb)](https://github.com/iwishiwasaneagle/jpdmgen/commit/0455adb6254d79fef835a87562d4984494d51c78)
+- Deal with the various refactors [(76d4715)](https://github.com/iwishiwasaneagle/jpdmgen/commit/76d47153ae65c6d96a9271e14f125f1d461921eb)
+- Add nptyping to requirements [(c0a45f6)](https://github.com/iwishiwasaneagle/jpdmgen/commit/c0a45f62bfa0b7c34a2e72a9d0e4724a84abad58)
+- Export DronePlus from envs [(7860f19)](https://github.com/iwishiwasaneagle/jpdmgen/commit/7860f19cd6a1a85fb6fb37f94ed62d93fedd4b82)
+
+### Refactor
+
+- Remove custom action types and remodel them as types [(025ca4e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/025ca4e7bef6a8099d9e1e34f9e3db88eb90a896)
+- Alter way the info dict is manipulated [(a17a9a4)](https://github.com/iwishiwasaneagle/jpdmgen/commit/a17a9a4adb3c2164658f75cdf9907e0bec6e5413)
+- Merge postion alt drone env into trajectory control commands [(4f931bd)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4f931bdfa6e33fdcf1a0358e84b251d3ec76a44b)
+- Move into own module [(1244c96)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1244c967e0c8c624d3b9e3f4789a58fab5ceb2fd)
+- Use apply_rpy from maths module [(b7182dc)](https://github.com/iwishiwasaneagle/jpdmgen/commit/b7182dca4ae1ccd1c49f56d1b0857a1d5dd40ba0)
+- Merged with trajectory env API [(a0c30c3)](https://github.com/iwishiwasaneagle/jpdmgen/commit/a0c30c3dbd62e2f840ebb443c358d4f27c754e93)
+
+### Testing
+
+- Fully test PID controllers [(94862d4)](https://github.com/iwishiwasaneagle/jpdmgen/commit/94862d4d8247dbcf4b13290cfc6a511275126cad)
+
 ## [0.1.2] - 2023-01-31
 
 ### Bug Fixes
@@ -19,6 +57,7 @@ All notable changes to this project will be documented in this file.
 
 - Mock pybullet_data [(d858099)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d858099acad558b9fe0665b587fa062b6ac07ef9)
 - Remove -q from checkout [(f5493c6)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f5493c671f64fd533d1c04e85c68443de829af79)
+- Update changelog for v0.1.2 [skip pre-commit.ci] [(0495c56)](https://github.com/iwishiwasaneagle/jpdmgen/commit/0495c5663b11d65370a22533b63f43361d7eba51)
 
 ### Refactor
 
