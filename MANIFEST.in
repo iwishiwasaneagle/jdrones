@@ -1,4 +1,5 @@
 include pyproject.toml requirements.txt setup.cfg setup.py LICENSE.txt README.md
+include src/jdrones/envs/drone.dae src/jdrones/envs/drone.urdf
 recursive-include src/jdrones *.py
 recursive-include tests/ *.py
 
