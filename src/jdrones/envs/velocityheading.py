@@ -7,10 +7,9 @@ from gymnasium.vector.utils import spaces
 from jdrones.controllers import PID
 from jdrones.controllers import PID_antiwindup
 from jdrones.envs.attitude import AttitudeAltitudeDroneEnv
-from jdrones.transforms import euler_to_rotmat
-from jdrones.types import Action
-from jdrones.types import Observation
-from jdrones.types import VEC3
+from jdrones.maths import apply_rpy
+from jdrones.types import State
+from jdrones.types import VelHeadAltAction
 
 
 class VelHeadAltDroneEnv(AttitudeAltitudeDroneEnv):
@@ -22,19 +21,16 @@ class VelHeadAltDroneEnv(AttitudeAltitudeDroneEnv):
 
         return {**ctrls, "vx_b": vx_b, "vy_b": vy_b}
 
-    @staticmethod
-    def _vi_to_vb(vel: VEC3, rpy: VEC3) -> VEC3:
-        return np.dot(vel, euler_to_rotmat(rpy))
-
-    def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
+    def step(self, action: VelHeadAltAction) -> Tuple[State, float, bool, bool, dict]:
         vx_b, vy_b, yaw, z = action
         # Convert x-y from inertial to body
-        vx_b_m, vy_b_m, _ = self._vi_to_vb(self.state.vel, self.state.rpy)
+        vx_b_m, vy_b_m, _ = apply_rpy(self.state.vel, self.state.rpy)
+
         # Calculate control action
         vx_act = self.controllers["vx_b"](vx_b_m, vx_b)
         vy_act = self.controllers["vy_b"](vy_b_m, vy_b)
 
-        attalt_act = [vy_act, vx_act, yaw, z]
+        attalt_act = np.array((vy_act, vx_act, yaw, z))
         return super().step(attalt_act)
 
     @property

@@ -84,7 +84,10 @@ class DroneEnv(BaseDroneEnv):
         return 0
 
     def get_terminated(self) -> bool:
-        return self.on_ground_plane
+        term = self.on_ground_plane
+        if term:
+            self.info["collision"] = f"On ground plane at {self.state.pos}"
+        return term
 
     def get_truncated(self) -> bool:
         return False

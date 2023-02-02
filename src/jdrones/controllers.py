@@ -1,5 +1,5 @@
 import numpy as np
-from jdrones.maths import clip
+from jdrones.maths import clip_scalar
 
 
 class PID:
@@ -71,5 +71,5 @@ class PID_antiwindup(PID):
         super().__init__(*args, **kwargs)
 
     def _calc_I(self, e):
-        self.Integration += clip(e * self.dt, -self.windup, self.windup)
+        self.Integration += clip_scalar(e * self.dt, -self.windup, self.windup)
         return self.Integration * self.Ki

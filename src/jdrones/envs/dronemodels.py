@@ -1,3 +1,5 @@
+from importlib.resources import files
+
 import numpy as np
 from jdrones.types import URDFModel
 
@@ -24,7 +26,7 @@ DronePlus = URDFModel(
     tau_T=0.1,
     tau_Q=0.1,
     drag_coeffs=(9.1785e-7, 9.1785e-7, 10.311e-7),
-    filepath="src/jdrones/envs/droneplus.urdf",
+    filepath=str(files("jdrones.envs").joinpath("droneplus.urdf")),
     mass=1.4,
     I=(0.1, 0.1, 0.1),
     mixing_matrix=droneplus_mixing_matrix,

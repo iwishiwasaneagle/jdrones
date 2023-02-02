@@ -1,15 +1,27 @@
 import enum
+from typing import Any
 from typing import Callable
 from typing import Tuple
 
+import nptyping as npt
 import numpy as np
 import pybullet as p
 import pydantic
 
-VEC3 = Tuple[float, float, float]
-VEC4 = Tuple[float, float, float, float]
-MAT3X3 = Tuple[VEC3, VEC3, VEC3]
-MAT4X3 = Tuple[VEC4, VEC4, VEC4]
+VEC3 = npt.NDArray[npt.Shape["1, 3"], npt.Double]
+VEC4 = npt.NDArray[npt.Shape["1, 4"], npt.Double]
+MAT3X3 = npt.NDArray[npt.Shape["3, 3"], npt.Double]
+MAT4X3 = npt.NDArray[npt.Shape["4, 4"], npt.Double]
+Action = npt.NDArray[Any, npt.Double]
+Length3Action = VEC3
+Length4Action = VEC4
+PropellerAction = Length4Action
+AttitudeAltitudeAction = Length4Action
+VelHeadAltAction = Length4Action
+PositionAction = Length3Action
+PositionVelAction = Length4Action
+
+States = npt.NDArray[npt.Shape["1, 20"], npt.Double]
 
 
 class KLengthArray(np.ndarray):
@@ -27,99 +39,7 @@ class KLengthArray(np.ndarray):
         return obj.view(cls)
 
 
-class Action(KLengthArray):
-    pass
-
-
-class PropellerAction(Action):
-    k: int = 4
-
-    @property
-    def P0(self):
-        return self[0]
-
-    @property
-    def P1(self):
-        return self[1]
-
-    @property
-    def P2(self):
-        return self[2]
-
-    @property
-    def P3(self):
-        return self[3]
-
-
-class AttitudeAltitudeAction(Action):
-    k: int = 4
-
-    @property
-    def roll(self):
-        return self[0]
-
-    @property
-    def pitch(self):
-        return self[1]
-
-    @property
-    def yaw(self):
-        return self[2]
-
-    @property
-    def z(self):
-        return self[3]
-
-
-class VelHeadAltAction(Action):
-    k: int = 4
-
-    @property
-    def vx_b(self):
-        return self[0]
-
-    @property
-    def vy_b(self):
-        return self[1]
-
-    @property
-    def yaw(self):
-        return self[2]
-
-    @property
-    def z(self):
-        return self[3]
-
-
-class PositionAction(Action):
-    k: int = 3
-
-    @property
-    def x(self):
-        return self[0]
-
-    @property
-    def y(self):
-        return self[1]
-
-    @property
-    def z(self):
-        return self[2]
-
-
-class PositionVelAction(PositionAction):
-    k: int = 4
-
-    @property
-    def vx_b(self):
-        return self[3]
-
-
-class Observation(KLengthArray):
-    pass
-
-
-class State(Observation):
+class State(KLengthArray):
     """
     Default state observation of the system
     """
