@@ -2,13 +2,11 @@ import pathlib
 
 import numpy as np
 import pytest
-from jdrones.envs import PositionDroneEnv
 from jdrones.envs.attitude import AttitudeAltitudeDroneEnv
 from jdrones.envs.drone import DroneEnv
-from jdrones.envs.trajectory import TrajectoryPositionDroneEnv
+from jdrones.envs.trajectory import PIDTrajectoryDroneEnv
 from jdrones.envs.velocityheading import VelHeadAltDroneEnv
 from jdrones.transforms import euler_to_quat
-from jdrones.types import PropellerAction
 from jdrones.types import SimulationType
 from jdrones.types import State
 from jdrones.types import URDFModel
@@ -174,7 +172,7 @@ def vec_omega(request):
 
 @pytest.fixture
 def action(vec_omega):
-    return PropellerAction(vec_omega)
+    return np.array(vec_omega)
 
 
 @pytest.fixture(params=[SimulationType.DIRECT])
@@ -241,14 +239,7 @@ def velheadaltdroneenv(env_default_kwargs):
 
 
 @pytest.fixture
-def posdroneenv(env_default_kwargs):
-    a = PositionDroneEnv(**env_default_kwargs)
-    yield a
-    a.close()
-
-
-@pytest.fixture
-def trajposdroneenv(env_default_kwargs):
-    a = TrajectoryPositionDroneEnv(**env_default_kwargs)
+def pidtrajposdroneenv(env_default_kwargs):
+    a = PIDTrajectoryDroneEnv(**env_default_kwargs)
     yield a
     a.close()
