@@ -10,8 +10,8 @@ from jdrones.controllers import PID_antiwindup
 from jdrones.envs.drone import DroneEnv
 from jdrones.maths import clip
 from jdrones.maths import clip_scalar
-from jdrones.types import Action
-from jdrones.types import Observation
+from jdrones.types import AttitudeAltitudeAction
+from jdrones.types import State
 
 
 class AttitudeAltitudeDroneEnv(DroneEnv):
@@ -37,12 +37,14 @@ class AttitudeAltitudeDroneEnv(DroneEnv):
         *,
         seed: Optional[int] = None,
         options: Optional[dict] = None,
-    ) -> Tuple[Observation, dict]:
+    ) -> Tuple[State, dict]:
         for controller in self.controllers.values():
             controller.reset()
         return super().reset(seed=seed, options=options)
 
-    def step(self, action: Action) -> Tuple[Observation, float, bool, bool, dict]:
+    def step(
+        self, action: AttitudeAltitudeAction
+    ) -> Tuple[State, float, bool, bool, dict]:
         roll, pitch, yaw, z = action
 
         # Calculate control action
@@ -84,7 +86,6 @@ class AttitudeAltitudeDroneEnv(DroneEnv):
             high=act_bounds[:, 1],
             dtype=float,
         )
-
 
 
 if __name__ == "__main__":
