@@ -143,7 +143,7 @@ jobs:
 
         OUTPUT=$(grep -E "[\w\s]+\.py" build.log | grep -v "$IGNORE_PATTERN")
 
-        if [ "$OUTPUT" == "" ]; then
+        if [ -z "$OUTPUT" ]; then
           echo $OUTPUT
           exit 1
         else
