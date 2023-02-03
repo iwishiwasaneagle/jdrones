@@ -17,15 +17,7 @@ Environments
    :members:
    :undoc-members:
    :show-inheritance:
-.. autoclass:: jdrones.envs.PositionDroneEnv
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. autoclass:: jdrones.envs.TrajectoryPositionDroneEnv
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. autoclass:: jdrones.envs.CustomCostFunctionTrajectoryDroneEnv
+.. autoclass:: jdrones.envs.PIDTrajectoryDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
