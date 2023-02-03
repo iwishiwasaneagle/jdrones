@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2023-02-03
+
+### Bug Fixes
+
+- Install pandoc in CD pipeline [(8ede886)](https://github.com/iwishiwasaneagle/jpdmgen/commit/8ede88665934c84b9854f2a9af9a9bb48be49074)
+
 ## [0.3.0] - 2023-02-03
 
 ### Bug Fixes
@@ -18,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Fix building of docs [(4b6fffc)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4b6fffc6358508d7a05e3bb7f29747a5d7535a8b)
 - Mock nbtyping for docs [(9f9f88f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/9f9f88f8ccbae2c965b502ddeff3f74f10d6c1e7)
 - Check for empty properly [(4a6e034)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4a6e034e307b3bac057715fc92dc3c3d568cf781)
+- Update changelog for v0.3.0 [skip pre-commit.ci] [(40cfe19)](https://github.com/iwishiwasaneagle/jpdmgen/commit/40cfe197437323d09def72258aa7cad500489f8d)
 
 ## [0.2.0] - 2023-02-02
 
