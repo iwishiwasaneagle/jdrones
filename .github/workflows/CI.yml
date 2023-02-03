@@ -120,7 +120,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        apt-get update && apt-get -y install pandoc
+        sudo apt-get update && sudo apt-get -y install pandoc
         python -m pip install -r docs/requirements.txt
 
     - name: Build docs and analyze output
