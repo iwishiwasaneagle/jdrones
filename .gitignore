@@ -264,7 +264,6 @@ instance/
 # Sphinx documentation
 docs/_build/
 docs/api/*
-docs/examples/*
 docs/_rst/*
 docs/_build/*
 

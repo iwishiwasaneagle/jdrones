@@ -27,7 +27,7 @@ PYTHONPATH=$PWD/src pytest tests
 - [ ] Performance improvements of simulation using either compiled code or a JIT
 - [ ] Better controllers
 - [ ] Better trajectory generation between waypoints
-- [ ] Examples
+- [x] Examples
 - [ ] Proper integration testing
 - [ ] Higher fidelity motor models
 
