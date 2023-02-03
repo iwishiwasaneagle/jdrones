@@ -135,9 +135,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update && sudo apt-get install -y pandoc
           pip install docstr-coverage -r docs/requirements.txt
 
-      - name: Build docs with tox
+      - name: Build docs
         run: |
           PYTHONPATH=$PWD/src \
           sphinx-build --color \
