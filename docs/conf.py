@@ -128,7 +128,7 @@ copyright = "2023, Jan-Hendrik Ewers"
 # just set them both to the same value.
 try:
     from jdrones import __version__ as version
-except ImportError:
+except ImportError or ModuleNotFoundError:
     from setuptools_scm import get_version
     version = get_version(root='..', relative_to=__file__)
 
