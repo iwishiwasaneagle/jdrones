@@ -2,11 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2023-02-09
+
+### Bug Fixes
+
+- Getting versions via setuptools_scm.get_version in docs [(9355812)](https://github.com/iwishiwasaneagle/jpdmgen/commit/93558120b3de774f16cfa618752cc2e1285158f8)
+- Import errors when getting version for docs [(0366a1f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/0366a1f782f987c2c9ffead3acc81f1ca7b67c95)
+
+### Documentation
+
+- PID trajectory env documentation to explain the control logic [(f9568f0)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f9568f09250fc4ed3e027362939cbb07559ab127)
+- Improve envs page readability through headings which now show up in toctree [(cedc2cc)](https://github.com/iwishiwasaneagle/jpdmgen/commit/cedc2cc379ce62b41f0f4bfe83d7af42f75ea343)
+
+### Features
+
+- Add GPL3 headers to all project files [(737214c)](https://github.com/iwishiwasaneagle/jpdmgen/commit/737214c61f2ee894e2109e9a36032941062253a4)
+
+### Miscellaneous Tasks
+
+- Bump numpy from 1.24.1 to 1.24.2 [(55af72e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/55af72e03ab7d1eb0de8276b607d94dba407ce6c)
+- MathJax configurations [(53fef7e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/53fef7e0d971034f0dc7466405cd8179957f9652)
+- Add warning about this being in alpha [(dbcb855)](https://github.com/iwishiwasaneagle/jpdmgen/commit/dbcb855046442ff874e836cc36a4c2cc47b036f5)
+
 ## [0.3.1] - 2023-02-03
 
 ### Bug Fixes
 
 - Install pandoc in CD pipeline [(8ede886)](https://github.com/iwishiwasaneagle/jpdmgen/commit/8ede88665934c84b9854f2a9af9a9bb48be49074)
+
+### Miscellaneous Tasks
+
+- Update changelog for v0.3.1 [skip pre-commit.ci] [(98c3597)](https://github.com/iwishiwasaneagle/jpdmgen/commit/98c35970785ad5942496eec865da5aba022d1de9)
 
 ## [0.3.0] - 2023-02-03
 

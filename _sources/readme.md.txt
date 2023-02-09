@@ -6,6 +6,8 @@
 
 Provide a [gymnasium] style interface using a physics simulation engine ([pybullet] in this case) to drone models. This in-turn enables faster prototyping of controllers, and reinforcement models. I'm maintaining this particular repo for my own research which is focused on waypoint generation, hence my priority is the trajectory drone environment. However, any upgrades and updates on the others would be hugely appreciated.
 
+> :warning: This code is still in alpha and **will** change over time as I use it :warning:
+
 ## Development
 
 ```bash
