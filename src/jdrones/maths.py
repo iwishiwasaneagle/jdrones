@@ -1,3 +1,5 @@
+#  Copyright 2023 Jan-Hendrik Ewers
+#  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import numpy.typing as npt
 from jdrones.transforms import euler_to_rotmat

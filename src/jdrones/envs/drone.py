@@ -1,3 +1,5 @@
+#  Copyright 2023 Jan-Hendrik Ewers
+#  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 from gymnasium.core import ActType
 from gymnasium.core import ObsType

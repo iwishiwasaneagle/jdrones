@@ -1,3 +1,6 @@
+#  Copyright 2023 Jan-Hendrik Ewers
+#  SPDX-License-Identifier: GPL-3.0-only
+
 # This file is execfile()direction with the current directory set to its containing dir.
 #
 # This file only contains a selection of the most common options. For a full
