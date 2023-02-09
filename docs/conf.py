@@ -337,3 +337,16 @@ print(f"loading configurations for {project} {version} ...", file=sys.stderr)
 
 autodoc_pydantic_model_show_json = False
 autodoc_pydantic_settings_show_json = False
+
+# -- MathJax ----------------------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/math.html#confval-mathjax_config
+mathjax3_config = {
+  "tex": {
+    "macros": {
+      "vec": ['\\textbf{#1}', 1],
+      "m": "\\text{m}",
+      "ms": "\\text{m}\\text{s}^-1",
+      "mss": "\\text{m}\\text{s}^-2",
+    },
+  }
+}
