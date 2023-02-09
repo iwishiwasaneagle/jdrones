@@ -1,3 +1,5 @@
+#  Copyright 2023 Jan-Hendrik Ewers
+#  SPDX-License-Identifier: GPL-3.0-only
 from importlib.resources import files
 
 import numpy as np

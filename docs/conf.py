@@ -1,3 +1,6 @@
+#  Copyright 2023 Jan-Hendrik Ewers
+#  SPDX-License-Identifier: GPL-3.0-only
+
 # This file is execfile()direction with the current directory set to its containing dir.
 #
 # This file only contains a selection of the most common options. For a full
@@ -125,8 +128,9 @@ copyright = "2023, Jan-Hendrik Ewers"
 # just set them both to the same value.
 try:
     from jdrones import __version__ as version
-except ImportError:
-    version = ""
+except ImportError or ModuleNotFoundError:
+    from setuptools_scm import get_version
+    version = get_version(root='..', relative_to=__file__)
 
 if not version or version.lower() == "unknown":
     version = os.getenv("READTHEDOCS_VERSION", "unknown")  # automatically set by RTD
@@ -334,3 +338,16 @@ print(f"loading configurations for {project} {version} ...", file=sys.stderr)
 
 autodoc_pydantic_model_show_json = False
 autodoc_pydantic_settings_show_json = False
+
+# -- MathJax ----------------------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/math.html#confval-mathjax_config
+mathjax3_config = {
+  "tex": {
+    "macros": {
+      "vec": ['\\textbf{#1}', 1],
+      "m": "\\text{m}",
+      "ms": "\\text{m}\\text{s}^-1",
+      "mss": "\\text{m}\\text{s}^-2",
+    },
+  }
+}

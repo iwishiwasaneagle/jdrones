@@ -1,6 +1,7 @@
 myst-parser
 nbsphinx
 recommonmark
+setuptools_scm
 sphinx>=3.2.1
 sphinx-pydantic
 sphinx_rtd_theme
