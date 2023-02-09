@@ -129,7 +129,8 @@ copyright = "2023, Jan-Hendrik Ewers"
 try:
     from jdrones import __version__ as version
 except ImportError:
-    version = ""
+    from setuptools_scm import get_version
+    version = get_version(root='..', relative_to=__file__)
 
 if not version or version.lower() == "unknown":
     version = os.getenv("READTHEDOCS_VERSION", "unknown")  # automatically set by RTD
