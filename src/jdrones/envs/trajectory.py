@@ -13,7 +13,6 @@ import gymnasium
 import numpy as np
 from gymnasium.core import ActType
 from gymnasium.vector.utils import spaces
-from gymnasium.wrappers import TimeLimit
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.envs.velocityheading import VelHeadAltDroneEnv
 from jdrones.maths import clip_scalar
@@ -31,11 +30,18 @@ sys.setrecursionlimit(100000)
 
 
 class PIDTrajectoryDroneEnv(gymnasium.Env):
+    """
+    Fly the drone to a waypoint using a PID trajectory
+    """
 
     cost_func: Callable[["PIDTrajectoryDroneEnv"], float]
+    """Custom cost function to evaluate at the end of every episode"""
+
     env: VelHeadAltDroneEnv
+    """Base drone environment"""
 
     observations: Deque[State]
+    """Log of observations over episode"""
 
     def __init__(
         self,
@@ -64,11 +70,80 @@ class PIDTrajectoryDroneEnv(gymnasium.Env):
         seed: Optional[int] = None,
         options: Optional[dict] = None,
     ) -> Tuple[States, dict]:
+        """
+        Reset the simulation to the initial state.
+
+        .. seealso::
+            :func:`gymnasium.Env.reset`
+
+        Parameters
+        ----------
+        seed : int
+            Seed to pass to gymnasium RNG
+            (Default = None)
+        options : dict
+            Additional options to pass to gymnasium API
+            (Default = None)
+
+        Returns
+        -------
+        observation : Observation
+            Observation of the initial state. It should be analogous to the info
+            returned by :meth:`step`.
+        info : dict
+            This dictionary contains auxiliary information complementing observation.
+            It should be analogous to the info returned by :meth:`step`.
+        """
         self.observations.clear()
         super().reset(seed=seed, options=options)
         return self.env.reset(seed=seed)
 
     def step(self, action: PositionAction) -> Tuple[States, float, bool, bool, dict]:
+        """
+        Run one episode of the environment’s dynamics using the agent actions. The
+        episode terminates if the drone gets within :math:`0.1\\m` of the target
+        waypoint, or the base env returns :code:`term` or :code:`trunc`.
+
+        - Yaw error is the difference between target and current yaw to the normal
+        - :math:`v^b_x` (the body :math:`x` velocity) is set as follows:
+
+        .. math::
+            v_{tgt} &= ||\\vec x - \\vec x_{tgt}|| \\\\
+            v^b_x &=
+            \\begin{cases}
+            0.1&v_{tgt}\\leq0.1 \\\\
+            0.4&v_{tgt}\\geq0.4 \\\\
+            v_{tgt}&else
+            \\end{cases} \\\\
+            v^b_y &= 0
+
+
+        .. seealso::
+            - :func:`gymnasium.Env.step`
+
+        Parameters
+        ----------
+        action : PositionAction
+            A waypoint action provided by the top-level flight controller in the form
+            :math:`(x,y,z)`
+
+        Returns
+        -------
+        observation : Deque[Observation]
+            Observation of the states over the flight from initial position to the
+            target position
+        reward : float
+             The reward as a result of taking the action, calculated by
+             :attr:`PIDTrajectoryDroneEnv.cost_func`
+        terminated : bool
+             Whether the agent reaches the terminal state (as defined under the MDP of
+             the task)
+        truncated : bool
+             Whether the truncation condition outside the scope of the MDP is satisfied
+        info : dict
+            Contains auxiliary diagnostic information (helpful for debugging, learning,
+            and logging)
+        """
 
         self.observations.clear()
 
@@ -108,39 +183,3 @@ class PIDTrajectoryDroneEnv(gymnasium.Env):
             high=act_bounds[:, 1],
             dtype=float,
         )
-
-
-def pid_main():
-    dt = 1 / 240
-    model = DronePlus
-    logger.debug(model)
-
-    initial_state = State()
-    initial_state.pos = [0, 0, 2]
-
-    env = PIDTrajectoryDroneEnv(
-        model=model,
-        initial_state=initial_state,
-        simulation_type=SimulationType.DIRECT,
-        dt=dt,
-    )
-    env = TimeLimit(env, max_episode_steps=5)
-
-    env.reset()
-
-    setpoints = deque()
-    rewards = deque()
-    observations = deque()
-    while True:
-        setpoint: PositionAction = env.action_space.sample()
-        obs, reward, term, trunc, info = env.step(setpoint)
-        observations.append(np.array(obs).copy())
-        setpoints.append(setpoint)
-        rewards.append(reward)
-        if trunc or term:
-            print(f"{trunc=} {term=} {info=}")
-            break
-
-
-if __name__ == "__main__":
-    pid_main()
