@@ -159,10 +159,13 @@ class PIDTrajectoryDroneEnv(gymnasium.Env):
         term, trunc = False, False
         for i in count():
             cur_pos = self.env.state.pos
-            new_vel_mag = self.env.model.max_vel_ms * clip_scalar(dist, 0.1, 0.4)
+            cur_yaw = self.env.state.rpy[2]
+            new_yaw = yaw(*cur_pos[:2], *action[:2])
+            err_yaw = new_yaw - cur_yaw
+            new_vel_mag = (1 - np.abs(err_yaw / np.pi)) * clip_scalar(dist, 0.1, 0.3)
 
             new_action: VelHeadAltAction = np.array(
-                (new_vel_mag, 0, yaw(*cur_pos[:2], *action[:2]), action[2])
+                (new_vel_mag, 0, new_yaw, action[2])
             )
             obs, _, term, trunc, _ = self.env.step(new_action)
 
