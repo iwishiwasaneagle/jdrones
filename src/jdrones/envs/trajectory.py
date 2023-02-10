@@ -6,6 +6,7 @@ from collections import deque
 from itertools import count
 from typing import Callable
 from typing import Deque
+from typing import List
 from typing import Optional
 from typing import Tuple
 
@@ -14,7 +15,7 @@ import numpy as np
 from gymnasium.core import ActType
 from gymnasium.vector.utils import spaces
 from jdrones.envs.dronemodels import DronePlus
-from jdrones.envs.velocityheading import VelHeadAltDroneEnv
+from jdrones.envs.velocity import VelHeadAltDroneEnv
 from jdrones.maths import clip_scalar
 from jdrones.maths import euclidean_distance
 from jdrones.maths import yaw
@@ -50,6 +51,7 @@ class PIDTrajectoryDroneEnv(gymnasium.Env):
         simulation_type: SimulationType = SimulationType.DIRECT,
         dt: float = 1 / 240,
         cost_func: Callable[["PIDTrajectoryDroneEnv"], float] = None,
+        wrappers: List[gymnasium.Wrapper] = None,
     ):
         self.env = VelHeadAltDroneEnv(
             model=model,
@@ -57,6 +59,10 @@ class PIDTrajectoryDroneEnv(gymnasium.Env):
             simulation_type=simulation_type,
             dt=dt,
         )
+        if wrappers is not None:
+            for wrapper in wrappers:
+                logger.debug(f"Applying {wrapper=} to env")
+                self.env = wrapper(self.env)
         self.observation_space = self.env.observation_space
 
         if cost_func is None:
