@@ -9,7 +9,6 @@ from jdrones.types import VEC3
 
 
 class Trajectory:
-
     coeffs: Dict[str, nptyping.NDArray[nptyping.Shape["1,6"], nptyping.Double]]
 
     def __init__(
@@ -22,7 +21,6 @@ class Trajectory:
         start_acc: VEC3 = (0, 0, 0),
         dest_acc: VEC3 = (0, 0, 0),
     ):
-
         self.start_pos = start_pos
         self.dest_pos = dest_pos
 
