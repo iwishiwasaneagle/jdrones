@@ -244,11 +244,11 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
             physicsClientId=self.ids.client,
         )
 
+        p.stepSimulation(physicsClientId=self.ids.client)
+
         # Cartesian world coordinates
         self.state = self.get_kinematic_data(self.ids)
         self.state.prop_omega = action
-
-        p.stepSimulation(physicsClientId=self.ids.client)
 
         return (
             self.get_observation(),
