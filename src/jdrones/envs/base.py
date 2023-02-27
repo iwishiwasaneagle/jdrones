@@ -230,14 +230,14 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
             )
         p.applyExternalTorque(
             self.ids.drone,
-            4,
+            -1,
             torqueObj=external_torques,
             flags=p.LINK_FRAME,
             physicsClientId=self.ids.client,
         )
         p.applyExternalForce(
             self.ids.drone,
-            4,
+            -1,
             forceObj=aerodynamic_forces,
             posObj=[0, 0, 0],
             flags=p.LINK_FRAME,
