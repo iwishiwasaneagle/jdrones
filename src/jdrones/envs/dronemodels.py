@@ -6,17 +6,13 @@ import numpy as np
 from jdrones.types import URDFModel
 
 
-def droneplus_mixing_matrix(length, k_f, k_t):
-    h = k_f
-    i = k_t
-    j = length * h
-
+def droneplus_mixing_matrix(*, length, k_Q, k_T):
     return np.array(
         [
-            [0, 1 / (2 * j), i / 4, 1 / (4 * h)],
-            [1 / (2 * j), 0, -i / 4, 1 / (4 * h)],
-            [0, -1 / (2 * j), i / 4, 1 / (4 * h)],
-            [-1 / (2 * j), 0, -i / 4, 1 / (4 * h)],
+            [0, -k_T * length, 0, k_T * length],
+            [k_T * length, 0, -k_T * length, 0],
+            [-k_Q, k_Q, -k_Q, k_Q],
+            [k_T, k_T, k_T, k_T],
         ]
     )
 
@@ -27,7 +23,7 @@ DronePlus = URDFModel(
     k_Q=0.05,
     tau_T=0.1,
     tau_Q=0.1,
-    drag_coeffs=(9.1785e-7, 9.1785e-7, 10.311e-7),
+    drag_coeffs=(0.1, 0.1, 0.1),
     filepath=str(files("jdrones.envs").joinpath("droneplus.urdf")),
     mass=1.4,
     I=(0.1, 0.1, 0.1),
