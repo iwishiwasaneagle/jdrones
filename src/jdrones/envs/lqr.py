@@ -3,6 +3,7 @@
 from typing import Any
 from typing import Optional
 
+import numpy as np
 from gymnasium import spaces
 from jdrones.controllers import Controller
 from jdrones.controllers import LQR
@@ -33,18 +34,18 @@ class LQRDroneEnv(BaseControlledEnv):
         if Q is None:
             self.Q = np.diag(
                 [
-                    9.768989735669289e-05,
-                    9.444421476421382e-05,
-                    9.789514525561369e-05,
-                    3.35821832460578e-05,
-                    4.052389116077415e-06,
-                    1.595130341289932e-05,
-                    6.911740981931737e-05,
-                    5.015660973536344e-05,
-                    2.111719395526697e-05,
-                    7.727513665387055e-05,
-                    8.66706541856067e-05,
-                    2.067392803327437e-05,
+                    8.991192078204383e-05,
+                    8.806431753269343e-05,
+                    8.091799938753304e-05,
+                    3.632257365747144e-05,
+                    6.764156497790077e-06,
+                    2.328062112946342e-05,
+                    3.28709705868307e-05,
+                    3.238878003477344e-05,
+                    4.672184058816576e-05,
+                    8.04579280110124e-05,
+                    7.189365004554992e-05,
+                    8.188944953864152e-05,
                 ]
             )
         else:
@@ -53,10 +54,10 @@ class LQRDroneEnv(BaseControlledEnv):
         if R is None:
             self.R = np.diag(
                 [
-                    1.0645510303404018,
-                    19.968120270505626,
-                    16.86171231979435,
-                    7.1709871974577905e-06,
+                    2.094619920797816,
+                    4.1435633102757645,
+                    42.47949524890384,
+                    4.854927340822368e-05,
                 ]
             )
         else:
@@ -109,7 +110,6 @@ if __name__ == "__main__":
     from collections import deque
 
     import matplotlib.pyplot as plt
-    import numpy as np
     import seaborn as sns
     from jdrones.types import State, States
     from tqdm.auto import trange
