@@ -32,16 +32,10 @@ jobs:
           cache-dependency-path: |
             **/requirements*.txt
 
-      - name: Get pybullet version
-        id: pb-version
-        run: |
-          PBV=$(grep "pybullet" requirements.txt | grep -oE "[0-9]+\.[0-9]+\.[0-9]+$")
-          echo "pbv=$PBV" >> $GITHUB_OUTPUT
-
       - name: Install pybullet
         run: |
           pip install wheel
-          pip install pybullet==${{ steps.pb-version.outputs.pbv }}
+          pip install -r requirements
 
   run-tests:
     name: Run tests
