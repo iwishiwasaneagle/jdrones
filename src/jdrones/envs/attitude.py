@@ -1,84 +1,79 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
 from typing import Dict
-from typing import Optional
 from typing import Tuple
 
-import numpy as np
 from gymnasium.core import ActType
 from gymnasium.vector.utils import spaces
 from jdrones.controllers import PID
 from jdrones.controllers import PID_antiwindup
-from jdrones.envs.drone import DroneEnv
+from jdrones.envs.base import BaseControlledEnv
+from jdrones.envs.base import PyBulletDroneEnv
+from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.maths import clip
-from jdrones.maths import clip_scalar
 from jdrones.types import AttitudeAltitudeAction
 from jdrones.types import State
 
 
-class AttitudeAltitudeDroneEnv(DroneEnv):
-    controllers: Dict[str, PID]
+class AttitudeAltitudeDroneEnv(BaseControlledEnv):
+    def __init__(self, *args, env: BaseDroneEnv = None, dt: float = 1 / 240, **kwargs):
+        if env is None:
+            env = PyBulletDroneEnv(*args, dt=dt, **kwargs)
+        super(AttitudeAltitudeDroneEnv, self).__init__(env=env, dt=dt)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.controllers = self._init_controllers()
+    @staticmethod
+    def _init_controllers(dt: float) -> Dict[str, PID]:
+        y = PID_antiwindup(10, 0.1, 0.2, dt, angle=True)
+        dy = PID_antiwindup(15, 0.01, 7, dt, gain=-10000)
+        # p = PID_antiwindup(6, 0.1, 0.3, dt, angle=True, gain=1000)
+        p = PID_antiwindup(6, 0.1, 2, dt, angle=True, gain=-1000)
+        # r = PID_antiwindup(6, 0.1, 0.3, dt, angle=True, gain=1000)
+        r = PID_antiwindup(6, 0.1, 2, dt, angle=True, gain=1000)
 
-    def _init_controllers(self) -> Dict[str, PID]:
-        y = PID_antiwindup(10, 0.1, 0.2, self.dt, angle=True)
-        dy = PID_antiwindup(15, 0.01, 7, self.dt, gain=-10000)
-        p = PID_antiwindup(6, 0.1, 0.3, self.dt, angle=True, gain=-1000)
-        r = PID_antiwindup(6, 0.1, 0.3, self.dt, angle=True, gain=1000)
-
-        z = PID_antiwindup(15, 3, 0.1, self.dt, gain=0.1)
-        dz = PID_antiwindup(2, 0, 0.00001, self.dt, gain=100000)
+        z = PID_antiwindup(15, 3, 0.1, dt, gain=0.1)
+        dz = PID_antiwindup(2, 0, 0.00001, dt, gain=100000)
 
         return dict(yaw=y, pitch=p, roll=r, daltitude=dz, dyaw=dy, altitude=z)
-
-    def reset(
-        self,
-        *,
-        seed: Optional[int] = None,
-        options: Optional[dict] = None,
-    ) -> Tuple[State, dict]:
-        for controller in self.controllers.values():
-            controller.reset()
-        return super().reset(seed=seed, options=options)
 
     def step(
         self, action: AttitudeAltitudeAction
     ) -> Tuple[State, float, bool, bool, dict]:
         roll, pitch, yaw, z = action
 
+        spos = self.env.state.pos
+        srpy = self.env.state.rpy
+        sang_vel = self.env.state.ang_vel
+        svel = self.env.state.vel
+
         # Calculate control action
-        r_act = self.controllers["roll"](self.state.rpy[0], roll)
-        p_act = self.controllers["pitch"](self.state.rpy[1], pitch)
+        r_act = self.controllers["roll"](srpy[0], roll)
 
-        y_act = self.controllers["yaw"](self.state.rpy[2], yaw)
-        y_act = clip_scalar(y_act, -2, 2)
-        dy_act = self.controllers["dyaw"](self.state.ang_vel[2], y_act)
+        p_act = self.controllers["pitch"](srpy[1], pitch)
 
-        z_act = self.controllers["altitude"](self.state.pos[2], z)
-        z_act = clip_scalar(z_act, -10, 10)
-        dz_act = self.controllers["daltitude"](self.state.vel[2], z_act)
+        y_act = self.controllers["yaw"](srpy[2], yaw)
+        dy_act = self.controllers["dyaw"](sang_vel[2], y_act)
+
+        z_act = self.controllers["altitude"](spos[2], z)
+        dz_act = self.controllers["daltitude"](svel[2], z_act)
 
         propellerAction = clip(
-            self.model.rpyT2rpm(r_act, p_act, dy_act, dz_act),
+            self.env.model.rpyT2rpm(r_act, p_act, dy_act, dz_act),
             0,
-            3 * self.model.weight / self.model.k_T,
+            np.inf,  # 3 * self.env.model.weight / self.env.model.k_T,
         )
 
-        self.info["control"] = dict(
+        self.env.info["control"] = dict(
             errors={name: ctrl.e for name, ctrl in self.controllers.items()}
         )
 
-        return super().step(propellerAction)
+        return self.env.step(propellerAction)
 
     @property
     def action_space(self) -> ActType:
         act_bounds = np.array(
             [
-                (-0.1, 0.1),  # Roll
-                (-0.1, 0.1),  # Pitch
+                (-0.2, 0.2),  # Roll
+                (-0.2, 0.2),  # Pitch
                 (-np.pi, np.pi),  # Yaw
                 (1, np.inf),  # Altitude
             ]
@@ -91,59 +86,149 @@ class AttitudeAltitudeDroneEnv(DroneEnv):
 
 
 if __name__ == "__main__":
-    import copy
-    from collections import deque
-    from itertools import count
+    import gymnasium
 
-    from gymnasium.wrappers import TimeLimit
-    import sys
+    import pandas as pd
+    import numpy as np
 
-    from loguru import logger
     from tqdm.auto import tqdm
 
-    from jdrones.envs.dronemodels import DronePlus
-    from jdrones.types import State, SimulationType
+    # In[4]:
 
-    sys.setrecursionlimit(100000)
+    import seaborn as sns
+    import matplotlib.pyplot as plt
 
-    T = 100
-    dt = 1 / 500
-    model = DronePlus
-    logger.debug(model)
+    # In[5]:
 
-    initial_state = State()
-    initial_state.pos = [0, 0, 10]
-    initial_state.rpy = [0, 0, 0]
+    from collections import deque
 
-    env = AttitudeAltitudeDroneEnv(
-        model=model,
-        initial_state=initial_state,
-        simulation_type=SimulationType.DIRECT,
-        dt=dt,
-    )
-    env = TimeLimit(env, max_episode_steps=int(T / dt))
+    # In[6]:
 
-    env.reset()
+    T = 40
+    dt = 1 / 240
+    seed = 1337
 
-    trunc, term = (False,) * 2
-    c = count()
+    # In[7]:
 
-    pbar = tqdm(range(int(T / dt)), desc="Running simulation")
+    env = gymnasium.make("AttitudeAltitudeDroneEnv-v0", dt=dt)
+    env = gymnasium.wrappers.TimeLimit(env, max_episode_steps=int(T / dt))
+
+    # In[8]:
+
     observations = deque()
-    controller_errors = deque()
 
-    attalt_setpoint = None
-    t = 0
-    info = {}
-    while not (trunc or term):
-        t = next(c) * dt
-        if t % 10 == 0:
-            attalt_setpoint = env.action_space.sample()
-        obs, _, term, trunc, info = env.step(attalt_setpoint)
+    obs, info = env.reset(seed=seed)
+    setpoint = env.action_space.sample()
+    trunc, term = False, False
+    for i in tqdm(range(int(T / dt) - 1)):
+        if i * dt % 10 == 0:
+            setpoint = env.action_space.sample()
+        obs, _, term, trunc, info = env.step(setpoint)
+        observations.append(obs)
 
-        pbar.update(1)
-        controller_errors.append(info["control"]["errors"])
-        observations.append(copy.copy(obs))
+    # In[9]:
 
-    if trunc or term:
-        print(info)
+    data = np.array(observations)
+    t = np.linspace(0, len(data) * dt, len(data))
+    df = pd.DataFrame(
+        data,
+        columns=[
+            "x",
+            "y",
+            "z",
+            "qx",
+            "qy",
+            "qz",
+            "qw",
+            "phi",
+            "theta",
+            "psi",
+            "vx",
+            "vy",
+            "vz",
+            "p",
+            "q",
+            "r",
+            "P0",
+            "P1",
+            "P2",
+            "P3",
+        ],
+        index=t,
+    )
+    df.index.name = "t"
+
+    # In[10]:
+
+    df_long = df.melt(
+        var_name="variable", value_name="value", ignore_index=False
+    ).reset_index()
+
+    # In[11]:
+
+    fig, ax = plt.subplots(2, 2, figsize=(10, 8))
+    ax = ax.flatten()
+
+    sns.lineplot(
+        data=df_long.query("variable in ('x','y','z')"),
+        x="t",
+        y="value",
+        hue="variable",
+        ax=ax[0],
+    )
+    ax[0].hlines(
+        setpoint[3],
+        df.index.min(),
+        df.index.max(),
+        linestyles="dotted",
+        label="setpoint",
+    )
+    ax[0].legend()
+
+    sns.lineplot(
+        data=df_long.query("variable in ('phi','theta','psi')"),
+        x="t",
+        y="value",
+        hue="variable",
+        ax=ax[1],
+    )
+    ax[1].hlines(
+        setpoint[:3],
+        df.index.min(),
+        df.index.max(),
+        linestyles="dotted",
+        label="setpoint",
+    )
+    ax[1].legend()
+
+    sns.lineplot(
+        data=df_long.query("variable in ('vx','vy','vz')"),
+        x="t",
+        y="value",
+        hue="variable",
+        ax=ax[2],
+    )
+    ax[2].legend()
+
+    sns.lineplot(
+        data=df_long.query("variable in ('P0','P1','P2','P3')"),
+        x="t",
+        y="value",
+        hue="variable",
+        ax=ax[3],
+    )
+    ax[3].legend()
+
+    fig.tight_layout()
+
+    plt.show()
+
+    # In[12]:
+
+    fig, ax = plt.subplots(1, 1, figsize=(10, 8))
+
+    ax.plot(df.x, df.y)
+
+    fig.tight_layout()
+
+    plt.show()
