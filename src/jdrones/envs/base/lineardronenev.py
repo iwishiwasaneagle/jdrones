@@ -22,15 +22,13 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
     ):
         super().__init__(model, initial_state, dt)
 
-        self._init_matrices()
+        self.A, self.B, self.C = self.get_matrices(model)
 
-    def _init_matrices(self):
-        k_T = self.model.k_T
-        k_Q = self.model.k_Q
-        length = self.model.l
-        m = self.model.mass
-        g = self.model.g
-        Ix, Iy, Iz = self.model.I
+    @staticmethod
+    def get_matrices(model: URDFModel):
+        m = model.mass
+        g = model.g
+        Ix, Iy, Iz = model.I
 
         A = np.array(
             [
@@ -68,12 +66,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
 
         C = np.vstack([0, 0, 0, 0, 0, -g, 0, 0, 0, 0, 0, 0])
 
-        self.A = A
-        self.B = B
-        self.C = C
-        self.allocation_matrix = self.model.mixing_matrix(
-            k_T=k_T, length=length, k_Q=k_Q
-        )
+        return A, B, C
 
     @staticmethod
     def calc_dx(A, B, C, x, u):
