@@ -7,6 +7,7 @@ from typing import Tuple
 
 import gymnasium
 from gymnasium.core import ActType
+from jdrones.controllers import Controller
 from jdrones.controllers import PID
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.types import State
@@ -56,5 +57,5 @@ class BaseControlledEnv(gymnasium.Env, abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def _init_controllers(dt: float) -> dict[str, PID]:
+    def _init_controllers(dt: float) -> dict[str, Controller]:
         pass
