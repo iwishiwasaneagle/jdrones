@@ -127,10 +127,10 @@ copyright = "2023, Jan-Hendrik Ewers"
 # If you don’t need the separation provided between version and release,
 # just set them both to the same value.
 try:
-    from jdrones import __version__ as version
-except ImportError or ModuleNotFoundError:
     from setuptools_scm import get_version
     version = get_version(root='..', relative_to=__file__)
+except Exception:
+    version = ""
 
 if not version or version.lower() == "unknown":
     version = os.getenv("READTHEDOCS_VERSION", "unknown")  # automatically set by RTD
