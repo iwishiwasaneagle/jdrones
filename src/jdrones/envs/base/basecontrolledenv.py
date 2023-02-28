@@ -22,10 +22,9 @@ class BaseControlledEnv(gymnasium.Env, abc.ABC):
     def __init__(self, env: BaseDroneEnv, dt: float = 1 / 240):
         self.env = env
         self.dt = dt
-        self.controllers = self._init_controllers(self.dt)
+        self.controllers = self._init_controllers()
 
         self.observation_space = self.env.observation_space
-        self.simulation_type = self.env.simulation_type
 
     @property
     @abc.abstractmethod
@@ -55,7 +54,6 @@ class BaseControlledEnv(gymnasium.Env, abc.ABC):
             ctrl.reset()
         return self.env.reset()
 
-    @staticmethod
     @abc.abstractmethod
-    def _init_controllers(dt: float) -> dict[str, Controller]:
+    def _init_controllers(self) -> dict[str, Controller]:
         pass
