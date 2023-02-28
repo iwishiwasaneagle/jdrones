@@ -37,7 +37,7 @@ class AngleController(Controller):
     def __call__(self, *, measured, setpoint):
         if self.angle:
             return self.angle_error(measured, setpoint)
-        return super().__call__(measured, setpoint)
+        return super().__call__(measured=measured, setpoint=setpoint)
 
 
 class PID(AngleController):
@@ -70,7 +70,7 @@ class PID(AngleController):
 
     def __call__(self, *, measured, setpoint):
         # PID calculations
-        e = super().__call__(measured=measured, setpoint=measured)
+        e = super().__call__(measured=measured, setpoint=setpoint)
         P = self._calc_P(e)
         Integration = self._calc_I(e)
         D = self._calc_D(e)
