@@ -11,5 +11,9 @@ register(
     "LinearDynamicModelDroneEnv-v0",
     entry_point="jdrones.envs:LinearDynamicModelDroneEnv",
 )
+register(
+    "LQRDroneEnv-v0",
+    entry_point="jdrones.envs:LQRDroneEnv",
+)
 
 __version__ = "unknown"

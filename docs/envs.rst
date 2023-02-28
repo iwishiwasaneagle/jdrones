@@ -28,3 +28,10 @@ LinearDynamicModelDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
+
+LQRDroneEnv
+-----------
+.. autoclass:: jdrones.envs.LQRDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
