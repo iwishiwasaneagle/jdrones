@@ -35,3 +35,10 @@ LQRDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
+
+PositionDroneEnv
+----------------
+.. autoclass:: jdrones.envs.PositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
