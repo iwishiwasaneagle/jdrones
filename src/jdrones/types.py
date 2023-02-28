@@ -7,6 +7,7 @@ from typing import Tuple
 
 import nptyping as npt
 import numpy as np
+import pandas as pd
 import pybullet as p
 import pydantic
 
@@ -22,8 +23,6 @@ AttitudeAltitudeAction = Length4Action
 VelHeadAltAction = Length4Action
 PositionAction = Length3Action
 PositionVelAction = Length4Action
-
-States = npt.NDArray[npt.Shape["1, 20"], npt.Double]
 
 
 class KLengthArray(np.ndarray):
@@ -144,6 +143,88 @@ class State(KLengthArray):
     def prop_omega(self, prop_omega: VEC4):
         self[16:20] = prop_omega
 
+    @classmethod
+    def from_x(x):
+        return State(
+            np.concatenate(
+                [
+                    x[:3],
+                    (0, 0, 0, 0),
+                    x[6:9],
+                    x[3:6],
+                    x[9:12],
+                    (0, 0, 0, 0),
+                ]
+            )
+        )
+
+    def to_x(self):
+        return np.concatenate([self.pos, self.vel, self.rpy, self.ang_vel])
+
+
+class Conversions:
+    @staticmethod
+    def iter_to_df(x, *, tag, dt, N, cols):
+        t = np.linspace(0, len(x) * dt, len(x))
+        df = pd.DataFrame(
+            x,
+            columns=cols,
+            index=t,
+        )
+        df.index.name = "t"
+
+        if len(df) > N:
+            inds = np.linspace(0, len(df) - 1, N, dtype=int)
+            df = df.take(inds)
+
+        df_long = df.melt(
+            var_name="variable", value_name="value", ignore_index=False
+        ).reset_index()
+        df_long["tag"] = tag
+        return df_long
+
+
+class States(np.ndarray):
+    def __new__(cls, input_array=None):
+        if input_array is None:
+            obj = np.array([])
+        else:
+            obj = np.asarray(input_array)
+            if obj.shape[1] != 20:
+                raise ValueError(f"Incorrect shape {obj.shape}")
+        return obj.view(cls)
+
+    def to_df(self, *, tag, dt=1, N=500):
+        df = Conversions.iter_to_df(
+            x=self,
+            tag=tag,
+            dt=dt,
+            N=N,
+            cols=[
+                "x",
+                "y",
+                "z",
+                "qx",
+                "qy",
+                "qz",
+                "qw",
+                "phi",
+                "theta",
+                "psi",
+                "vx",
+                "vy",
+                "vz",
+                "p",
+                "q",
+                "r",
+                "P0",
+                "P1",
+                "P2",
+                "P3",
+            ],
+        )
+        return df
+
 
 class SimulationType(enum.IntEnum):
     """Enum to handle the support pybullet simulation types"""
@@ -198,17 +279,15 @@ class URDFModel(pydantic.BaseModel):
         return self.g * self.mass
 
     def rpyT2rpm(
-        self, roll: float, pitch: float, yaw: float, thrust: float
+        self, rpyT: Tuple[float, float, float, float]
     ) -> Tuple[float, float, float, float]:
         """
         Apply the inverse :meth:`mixing_matrix`.
 
         Parameters
         ----------
-        roll : float
-        pitch : float
-        yaw : float
-        thrust : float
+        rpyT: float,float,float,float
+            Roll, pitch, yaw, thrust
 
         Returns
         -------
@@ -217,7 +296,7 @@ class URDFModel(pydantic.BaseModel):
         """
         return np.linalg.solve(
             self.mixing_matrix(length=self.l, k_T=self.k_T, k_Q=self.k_Q),
-            [roll, pitch, yaw, thrust],
+            rpyT,
         )
 
     def rpm2rpyT(

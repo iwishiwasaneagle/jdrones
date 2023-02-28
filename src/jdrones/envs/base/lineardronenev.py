@@ -72,29 +72,10 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
     def calc_dx(A, B, C, x, u):
         return (A @ x + B @ u + C.T).flatten()
 
-    @staticmethod
-    def _x_to_state(x):
-        return State(
-            np.concatenate(
-                [
-                    x[:3],
-                    (0, 0, 0, 0),
-                    x[6:9],
-                    x[3:6],
-                    x[9:12],
-                    (0, 0, 0, 0),
-                ]
-            )
-        )
-
-    @staticmethod
-    def _state_to_x(state):
-        return np.concatenate([state.pos, state.vel, state.rpy, state.ang_vel])
-
     def calc_dstate(self, action) -> State:
-        x = self._state_to_x(self.state)
+        x = self.state.to_x()
         dstate = self.calc_dx(self.A, self.B, self.C, x, action)
-        return self._x_to_state(dstate)
+        return State.from_x(dstate)
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
         """

@@ -10,45 +10,8 @@ from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.types import State
+from jdrones.types import States
 from tqdm.auto import trange
-
-
-def _merge_data(dq: deque, simulation_name: str):
-    data = np.array(dq)
-    t = np.linspace(0, len(data) * dt, len(data))
-    df = pd.DataFrame(
-        data,
-        columns=[
-            "x",
-            "y",
-            "z",
-            "qx",
-            "qy",
-            "qz",
-            "qw",
-            "phi",
-            "theta",
-            "psi",
-            "vx",
-            "vy",
-            "vz",
-            "p",
-            "q",
-            "r",
-            "P0",
-            "P1",
-            "P2",
-            "P3",
-        ],
-        index=t,
-    )
-    df.index.name = "t"
-    df_long = df.melt(
-        var_name="variable", value_name="value", ignore_index=False
-    ).reset_index()
-    df_long["simulation_name"] = simulation_name
-
-    return df_long
 
 
 def _simulate_env(env, T, dt):
@@ -82,7 +45,7 @@ pb_env = PyBulletDroneEnv(
 )
 df_long = pd.concat(
     [
-        _merge_data(_simulate_env(f, T, dt), type(f).__name__)
+        States(_simulate_env(f, T, dt)).to_df(tag=type(f).__name__, dt=dt)
         for f in [nl_env, pb_env, l_env]
     ]
 ).reset_index()
