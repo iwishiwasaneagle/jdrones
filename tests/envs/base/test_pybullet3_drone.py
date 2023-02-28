@@ -1,9 +1,17 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-from itertools import combinations_with_replacement
-
 import numpy as np
 import pytest
+from envs.base.conftest import INPUT_TO_ROT
+from envs.base.conftest import LARGE_INPUT
+from envs.base.conftest import LOW_INPUT
+from envs.base.conftest import PITCH_INPUT
+from envs.base.conftest import POSITION_FROM_VELOCITY_1_PB
+from envs.base.conftest import POSITION_FROM_VELOCITY_2
+from envs.base.conftest import ROLL_INPUT
+from envs.base.conftest import RPY_FROM_ANG_VEL
+from envs.base.conftest import VELOCITY_FROM_ROTATION
+from envs.base.conftest import YAW_INPUT
 
 
 @pytest.mark.parametrize(
@@ -110,7 +118,7 @@ def test_zero_input(vec_omega, rpy, pbdroneenv):
 
 
 # @pytest.mark.integration
-@pytest.mark.parametrize("vec_omega", [np.zeros(4), np.ones(4) * 0.01], indirect=True)
+@LOW_INPUT
 def test_low_input(vec_omega, pbdroneenv):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
@@ -118,133 +126,60 @@ def test_low_input(vec_omega, pbdroneenv):
 
 
 # @pytest.mark.integration
-@pytest.mark.parametrize(
-    "vec_omega", [np.ones(4) * 10000, np.ones(4) * 1e10], indirect=True
-)
+@LARGE_INPUT
 def test_large_input(vec_omega, pbdroneenv):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.vel), (0, 0, 1))
 
 
-@pytest.mark.parametrize(
-    "vec_omega,exp",
-    [
-        [(1, 1, 1, 1), [0, 0, 0]],
-        [(1, 0.4, 1, 0.5), [1, 0, -1]],
-        [(1, 0.5, 1, 0.4), [-1, 0, -1]],
-        [(1, 0.9, 1, 1.1), [1, 0, 1]],
-        [(1, 1.1, 1, 0.9), [-1, 0, 1]],
-        [(1, 2, 1, 0), [-1, 0, 1]],
-        [(1, 0, 1, 2), [1, 0, 1]],
-    ],
-    indirect=["vec_omega"],
-)
-def test_roll_input(vec_omega, pbdroneenv, exp):
+@ROLL_INPUT
+def test_roll_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.ang_vel), exp)
+    assert np.allclose(np.sign(obs.ang_vel), exp * rhr_to_lhr)
 
 
 # @pytest.mark.integration
-@pytest.mark.parametrize(
-    "vec_omega,exp",
-    [
-        [(1, 1, 1, 1), [0, 0, 0]],
-        [(0.5, 1, 0.4, 1), [0, 1, 1]],
-        [(0.4, 1, 0.5, 1), [0, -1, 1]],
-        [(1.1, 1, 0.9, 1), [0, 1, -1]],
-        [
-            (0.9, 1, 1.1, 1),
-            [0, -1, -1],
-        ],
-        [(2, 1, 0, 1), [0, 1, -1]],
-        [(0, 1, 2, 1), [0, -1, -1]],
-    ],
-    indirect=["vec_omega"],
-)
-def test_pitch_input(vec_omega, pbdroneenv, exp):
+@PITCH_INPUT
+def test_pitch_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.ang_vel), exp)
+    assert np.allclose(np.sign(obs.ang_vel), np.sign(rhr_to_lhr * exp))
 
 
 # @pytest.mark.integration
-@pytest.mark.parametrize(
-    "vec_omega,exp",
-    [
-        [(1, 1, 1, 1), [0, 0, 0]],
-        [(1, 1.1, 1, 1.1), [0, 0, 1]],
-        [(1.1, 1, 1.1, 1), [0, 0, -1]],
-        [(1, 2, 1, 2), [0, 0, 1]],
-        [(2, 1, 2, 1), [0, 0, -1]],
-    ],
-    indirect=["vec_omega"],
-)
-def test_yaw_input(vec_omega, equilibrium_prop_rpm, pbdroneenv, exp):
+@YAW_INPUT
+def test_yaw_input(rhr_to_lhr, vec_omega, equilibrium_prop_rpm, pbdroneenv, exp):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.ang_vel), exp)
+    assert np.allclose(np.sign(obs.ang_vel), rhr_to_lhr * exp)
 
 
-@pytest.mark.parametrize(
-    "rpy,exp",
-    [
-        [(0, 0, 0), [0, 0, 0]],
-        [(0.1, 0, 0), [0, -1, -1]],
-        [(-0.1, 0, 0), [0, 1, -1]],
-        [(0, 0.1, 0), [1, 0, -1]],
-        [(0, -0.1, 0), [-1, 0, -1]],
-        [(0, 0, 0.1), [0, 0, 0]],
-        [(0, 0, -0.1), [0, 0, 0]],
-    ],
-    indirect=["rpy"],
-)
-def test_vel_from_rot(vec_omega, rpy, pbdroneenv, exp):
+@VELOCITY_FROM_ROTATION
+def test_vel_from_rot(vec_omega, rhr_to_lhr, rpy, pbdroneenv, exp):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(0.99 * vec_omega)
+    assert np.allclose(np.sign(obs.vel.round(16)), rhr_to_lhr * exp)
+
+
+@POSITION_FROM_VELOCITY_1_PB
+@POSITION_FROM_VELOCITY_2
+def test_pos_from_vel(rhr_to_lhr, pos, vec_omega, pbdroneenv, velocity):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.vel.round(16)), exp)
+    assert np.allclose(np.sign(obs.pos), rhr_to_lhr * np.sign(velocity - pos))
 
 
-@pytest.mark.parametrize(
-    "velocity",
-    combinations_with_replacement((1, 0, -1), 3),
-    indirect=True,
-)
-def test_pos_from_vel(vec_omega, pbdroneenv, pos, velocity):
+@RPY_FROM_ANG_VEL
+def test_rpy_from_ang_vel(vec_omega, rhr_to_lhr, pbdroneenv, angular_velocity):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.pos), velocity - pos)
+    assert np.allclose(np.sign(obs.rpy), rhr_to_lhr * angular_velocity)
 
 
-@pytest.mark.parametrize(
-    "angular_velocity",
-    combinations_with_replacement((1, 0, -1), 3),
-    indirect=True,
-)
-def test_rpy_from_ang_vel(vec_omega, pbdroneenv, angular_velocity):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.rpy), angular_velocity)
-
-
-@pytest.mark.parametrize(
-    "vec_omega,k_Q,ang_vel_sign",
-    [
-        [
-            (1, 0, 0, 0),
-            0,
-            (0, -1, 0),
-        ],
-        [(0, 0, 1, 0), 0, (0, 1, 0)],
-        [(0, 1, 0, 0), 0, (1, 0, 0)],
-        [(0, 0, 0, 1), 0, (-1, 0, 0)],
-        [(1, 0.9, 1, 0.9), 0.1, (0, 0, -1)],
-        [(0.9, 1, 0.9, 1), 0.1, (0, 0, 1)],
-    ],
-    indirect=["vec_omega", "k_Q"],
-)
-def test_pbdroneenv_correct_input_to_rot(seed, pbdroneenv, action, k_Q, ang_vel_sign):
+@INPUT_TO_ROT
+def test_correct_input_to_rot(seed, rhr_to_lhr, pbdroneenv, action, k_Q, ang_vel_sign):
     """
     Step input over a short time will give a good insight if the drone is behaving
     as expected
@@ -253,4 +188,4 @@ def test_pbdroneenv_correct_input_to_rot(seed, pbdroneenv, action, k_Q, ang_vel_
     for _ in range(5):
         obs, *_ = pbdroneenv.step(action * 100)
     # Drone landed within 10cm of where we expected it
-    assert np.allclose(np.sign(obs.ang_vel), ang_vel_sign)
+    assert np.allclose(np.sign(obs.ang_vel), rhr_to_lhr * ang_vel_sign)
