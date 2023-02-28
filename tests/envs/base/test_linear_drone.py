@@ -2,6 +2,7 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import pytest
+from envs.base.conftest import INPUT_TO_ROT
 from envs.base.conftest import LARGE_INPUT
 from envs.base.conftest import LOW_INPUT
 from envs.base.conftest import PITCH_INPUT
@@ -79,3 +80,16 @@ def test_rpy_from_ang_vel(vec_omega, lineardroneenv, angular_velocity):
     lineardroneenv.reset()
     obs, *_ = lineardroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.rpy), np.sign(angular_velocity))
+
+
+@INPUT_TO_ROT
+def test_input_to_rot(seed, lineardroneenv, action, k_Q, ang_vel_sign):
+    """
+    Step input over a short time will give a good insight if the drone is behaving
+    as expected
+    """
+    lineardroneenv.reset(seed=seed)
+    for _ in range(5):
+        obs, *_ = lineardroneenv.step(action * 100)
+    # Drone landed within 10cm of where we expected it
+    assert np.allclose(np.sign(obs.ang_vel), ang_vel_sign)

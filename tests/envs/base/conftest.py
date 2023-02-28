@@ -21,7 +21,14 @@ VELOCITY_FROM_ROTATION = pytest.mark.parametrize(
 POSITION_FROM_VELOCITY_1 = pytest.mark.parametrize(
     "pos",
     [
-        (0, 0, 0),
+        np.array((0, 0, 0)),
+    ],
+    indirect=True,
+)
+POSITION_FROM_VELOCITY_1_PB = pytest.mark.parametrize(
+    "pos",
+    [
+        np.array((0, 0, 1)),
     ],
     indirect=True,
 )
@@ -82,3 +89,25 @@ YAW_INPUT = pytest.mark.parametrize(
     ],
     indirect=["vec_omega"],
 )
+
+INPUT_TO_ROT = pytest.mark.parametrize(
+    "vec_omega,k_Q,ang_vel_sign",
+    [
+        [
+            (1, 0, 0, 0),
+            0,
+            (0, 1, 0),
+        ],
+        [(0, 0, 1, 0), 0, (0, -1, 0)],
+        [(0, 1, 0, 0), 0, (-1, 0, 0)],
+        [(0, 0, 0, 1), 0, (1, 0, 0)],
+        [(1, 0.9, 1, 0.9), 0.1, (0, 0, -1)],
+        [(0.9, 1, 0.9, 1), 0.1, (0, 0, 1)],
+    ],
+    indirect=["vec_omega", "k_Q"],
+)
+
+
+@pytest.fixture
+def rhr_to_lhr():
+    return np.array((-1, -1, 1))
