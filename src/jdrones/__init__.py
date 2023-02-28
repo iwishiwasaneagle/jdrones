@@ -15,5 +15,9 @@ register(
     "LQRDroneEnv-v0",
     entry_point="jdrones.envs:LQRDroneEnv",
 )
+register(
+    "PositionDroneEnv-v0",
+    entry_point="jdrones.envs:PositionDroneEnv",
+)
 
 __version__ = "unknown"
