@@ -95,7 +95,7 @@ def test_calculate_propulsive_forces(pbdroneenv, state, vec_omega, k_T, exp_t):
     assert np.allclose(act_t, exp_t)
 
 
-# @pytest.mark.integration
+@pytest.mark.integration
 @pytest.mark.parametrize(
     "rpy",
     [
@@ -117,7 +117,7 @@ def test_zero_input(vec_omega, rpy, pbdroneenv):
     assert np.allclose(np.sign(obs.vel), (0, 0, -1))
 
 
-# @pytest.mark.integration
+@pytest.mark.integration
 @LOW_INPUT
 def test_low_input(vec_omega, pbdroneenv):
     pbdroneenv.reset()
@@ -125,7 +125,7 @@ def test_low_input(vec_omega, pbdroneenv):
     assert np.allclose(np.sign(obs.vel), (0, 0, -1))
 
 
-# @pytest.mark.integration
+@pytest.mark.integration
 @LARGE_INPUT
 def test_large_input(vec_omega, pbdroneenv):
     pbdroneenv.reset()
@@ -133,6 +133,7 @@ def test_large_input(vec_omega, pbdroneenv):
     assert np.allclose(np.sign(obs.vel), (0, 0, 1))
 
 
+@pytest.mark.integration
 @ROLL_INPUT
 def test_roll_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
     pbdroneenv.reset()
@@ -140,7 +141,7 @@ def test_roll_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
     assert np.allclose(np.sign(obs.ang_vel), exp * rhr_to_lhr)
 
 
-# @pytest.mark.integration
+@pytest.mark.integration
 @PITCH_INPUT
 def test_pitch_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
     pbdroneenv.reset()
@@ -148,7 +149,7 @@ def test_pitch_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
     assert np.allclose(np.sign(obs.ang_vel), np.sign(rhr_to_lhr * exp))
 
 
-# @pytest.mark.integration
+@pytest.mark.integration
 @YAW_INPUT
 def test_yaw_input(rhr_to_lhr, vec_omega, equilibrium_prop_rpm, pbdroneenv, exp):
     pbdroneenv.reset()
@@ -156,6 +157,7 @@ def test_yaw_input(rhr_to_lhr, vec_omega, equilibrium_prop_rpm, pbdroneenv, exp)
     assert np.allclose(np.sign(obs.ang_vel), rhr_to_lhr * exp)
 
 
+@pytest.mark.integration
 @VELOCITY_FROM_ROTATION
 def test_vel_from_rot(vec_omega, rhr_to_lhr, rpy, pbdroneenv, exp):
     pbdroneenv.reset()
@@ -163,6 +165,7 @@ def test_vel_from_rot(vec_omega, rhr_to_lhr, rpy, pbdroneenv, exp):
     assert np.allclose(np.sign(obs.vel.round(16)), rhr_to_lhr * exp)
 
 
+@pytest.mark.integration
 @POSITION_FROM_VELOCITY_1_PB
 @POSITION_FROM_VELOCITY_2
 def test_pos_from_vel(rhr_to_lhr, pos, vec_omega, pbdroneenv, velocity):
@@ -171,6 +174,7 @@ def test_pos_from_vel(rhr_to_lhr, pos, vec_omega, pbdroneenv, velocity):
     assert np.allclose(np.sign(obs.pos), rhr_to_lhr * np.sign(velocity - pos))
 
 
+@pytest.mark.integration
 @RPY_FROM_ANG_VEL
 def test_rpy_from_ang_vel(vec_omega, rhr_to_lhr, pbdroneenv, angular_velocity):
     pbdroneenv.reset()
@@ -178,6 +182,7 @@ def test_rpy_from_ang_vel(vec_omega, rhr_to_lhr, pbdroneenv, angular_velocity):
     assert np.allclose(np.sign(obs.rpy), rhr_to_lhr * angular_velocity)
 
 
+@pytest.mark.integration
 @INPUT_TO_ROT
 def test_correct_input_to_rot(seed, rhr_to_lhr, pbdroneenv, action, k_Q, ang_vel_sign):
     """
