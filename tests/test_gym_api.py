@@ -9,10 +9,10 @@ from gymnasium.utils.env_checker import check_env
 @pytest.mark.parametrize(
     "env,kwargs",
     [
-        ("DroneEnv-v0", {}),
-        ("AttitudeAltitudeDroneEnv-v0", {}),
-        ("VelHeadAltDroneEnv-v0", {}),
-        ("PIDTrajectoryDroneEnv-v0", {}),
+        ("PyBulletDroneEnv-v0", {}),
+        ("NonLinearDynamicModelDroneEnv-v0", {}),
+        ("LinearDynamicModelDroneEnv-v0", {}),
+        ("LQRDroneEnv-v0", {}),
     ],
 )
 def test_make(env, kwargs):
@@ -20,20 +20,20 @@ def test_make(env, kwargs):
 
 
 @pytest.mark.integration
-def test_DroneEnv(droneenv):
-    check_env(droneenv)
+def test_PB3DroneEnv(pbdroneenv):
+    check_env(pbdroneenv)
 
 
 @pytest.mark.integration
-def test_AttitudeAltitudeDroneEnv(attaltdroneenv):
-    check_env(attaltdroneenv)
+def test_LinearDynamicsDroneEnv(lineardroneenv):
+    check_env(lineardroneenv)
 
 
 @pytest.mark.integration
-def test_VelHeadAltDroneEnv(velheadaltdroneenv):
-    check_env(velheadaltdroneenv)
+def test_NonLinearDynamicsDroneEnv(nonlineardroneenv):
+    check_env(nonlineardroneenv)
 
 
 @pytest.mark.integration
-def test_PIDTrajectoryDroneEnv(pidtrajposdroneenv):
-    check_env(pidtrajposdroneenv)
+def test_LQRDroneEnv(lqrdroneenv):
+    check_env(lqrdroneenv)
