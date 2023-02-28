@@ -201,7 +201,7 @@ class URDFModel(pydantic.BaseModel):
         self, roll: float, pitch: float, yaw: float, thrust: float
     ) -> Tuple[float, float, float, float]:
         """
-        Apply the :meth:`mixing_matrix`.
+        Apply the inverse :meth:`mixing_matrix`.
 
         Parameters
         ----------
@@ -215,10 +215,27 @@ class URDFModel(pydantic.BaseModel):
         float,float,float,float
             RPMs for P0,P1,P2,P3
         """
-        rpyT = np.array([roll, pitch, yaw, thrust])
-        matrix_mul = self.mixing_matrix(self.l, self.k_T, self.k_Q) * rpyT
-        matrix_mul_sum = np.sum(matrix_mul, axis=1)
-        return np.sign(matrix_mul_sum) * np.sqrt(np.abs(matrix_mul_sum))
+        return np.linalg.solve(
+            self.mixing_matrix(length=self.l, k_T=self.k_T, k_Q=self.k_Q),
+            [roll, pitch, yaw, thrust],
+        )
+
+    def rpm2rpyT(
+        self, rpm: Tuple[float, float, float, float]
+    ) -> Tuple[float, float, float, float]:
+        """
+        Apply the :meth:`mixing_matrix`.
+
+        Parameters
+        ----------
+        rpm : float,float,float,float
+
+        Returns
+        -------
+        float,float,float,float
+            Roll, pitch, yaw, thrust
+        """
+        return self.mixing_matrix(length=self.l, k_T=self.k_T, k_Q=self.k_Q) @ rpm
 
     filepath: str
     """File path to URDF model"""
