@@ -7,6 +7,7 @@ import pytest
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
+from jdrones.envs import PositionDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.transforms import euler_to_quat
@@ -249,5 +250,12 @@ def lineardroneenv(env_default_kwargs):
 @pytest.fixture
 def lqrdroneenv(env_default_kwargs):
     d = LQRDroneEnv(**env_default_kwargs)
+    yield d
+    d.close()
+
+
+@pytest.fixture
+def positiondroneenv(env_default_kwargs):
+    d = PositionDroneEnv(**env_default_kwargs)
     yield d
     d.close()
