@@ -144,8 +144,8 @@ class State(KLengthArray):
         self[16:20] = prop_omega
 
     @classmethod
-    def from_x(x):
-        return State(
+    def from_x(cls, x):
+        return cls(
             np.concatenate(
                 [
                     x[:3],
