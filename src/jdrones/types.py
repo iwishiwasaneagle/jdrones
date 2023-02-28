@@ -16,6 +16,7 @@ VEC4 = npt.NDArray[npt.Shape["1, 4"], npt.Double]
 MAT3X3 = npt.NDArray[npt.Shape["3, 3"], npt.Double]
 MAT4X3 = npt.NDArray[npt.Shape["4, 4"], npt.Double]
 Action = npt.NDArray[Any, npt.Double]
+LinearXAction = npt.NDArray[npt.Shape["12, 1"], npt.Double]
 Length3Action = VEC3
 Length4Action = VEC4
 PropellerAction = Length4Action
@@ -144,7 +145,7 @@ class State(KLengthArray):
         self[16:20] = prop_omega
 
     @classmethod
-    def from_x(cls, x):
+    def from_x(cls, x: LinearXAction):
         return cls(
             np.concatenate(
                 [
@@ -158,7 +159,7 @@ class State(KLengthArray):
             )
         )
 
-    def to_x(self):
+    def to_x(self) -> LinearXAction:
         return np.concatenate([self.pos, self.vel, self.rpy, self.ang_vel])
 
 

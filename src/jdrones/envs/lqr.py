@@ -11,7 +11,7 @@ from jdrones.envs.base import BaseControlledEnv
 from jdrones.envs.base import LinearDynamicModelDroneEnv
 from jdrones.envs.base import NonlinearDynamicModelDroneEnv
 from jdrones.envs.dronemodels import DronePlus
-from jdrones.types import PositionAction
+from jdrones.types import LinearXAction
 from jdrones.types import State
 from jdrones.types import URDFModel
 
@@ -78,10 +78,10 @@ class LQRDroneEnv(BaseControlledEnv):
         return super().reset(seed=seed, options=options)
 
     def step(
-        self, action: PositionAction
+        self, action: LinearXAction
     ) -> tuple[State, float, bool, bool, dict[str, Any]]:
 
-        setpoint = np.concatenate([action, np.zeros(17)])
+        setpoint = State.from_x(action)
 
         action = self.controllers["lqr"](measured=self.env.state, setpoint=setpoint)
         action_with_linearization_assumptions = np.sqrt(
@@ -99,7 +99,7 @@ class LQRDroneEnv(BaseControlledEnv):
 
     @property
     def action_space(self):
-        bounds = np.ones((3, 2)) * np.inf
+        bounds = np.ones((12, 2)) * np.inf
         bounds[:, 0] *= -1
 
         return spaces.Box(low=bounds[:, 0], high=bounds[:, 1])
