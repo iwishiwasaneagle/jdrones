@@ -31,10 +31,10 @@ import pytest
     indirect=["velocity"],
 )
 def test_calculate_aerodynamic_forces(
-    droneenv, drag_coeffs, rpy, state, vec_omega, exp_f
+    pbdroneenv, drag_coeffs, rpy, state, vec_omega, exp_f
 ):
-    droneenv.state = state
-    act_f = droneenv.calculate_aerodynamic_forces(vec_omega)
+    pbdroneenv.state = state
+    act_f = pbdroneenv.calculate_aerodynamic_forces(vec_omega)
     assert np.allclose(act_f, exp_f)
 
 
@@ -57,9 +57,9 @@ def test_calculate_aerodynamic_forces(
     ],
     indirect=["vec_omega"],
 )
-def test_calculate_external_torques(droneenv, state, vec_omega, k_Q, exp_q_z):
-    droneenv.state = state
-    act_q = droneenv.calculate_external_torques(vec_omega)
+def test_calculate_external_torques(pbdroneenv, state, vec_omega, k_Q, exp_q_z):
+    pbdroneenv.state = state
+    act_q = pbdroneenv.calculate_external_torques(vec_omega)
     assert np.allclose(act_q, [0, 0, exp_q_z * k_Q])
 
 
@@ -81,9 +81,9 @@ def test_calculate_external_torques(droneenv, state, vec_omega, k_Q, exp_q_z):
     ],
     indirect=["vec_omega"],
 )
-def test_calculate_propulsive_forces(droneenv, state, vec_omega, k_T, exp_t):
-    droneenv.state = state
-    act_t = droneenv.calculate_propulsive_forces(vec_omega)
+def test_calculate_propulsive_forces(pbdroneenv, state, vec_omega, k_T, exp_t):
+    pbdroneenv.state = state
+    act_t = pbdroneenv.calculate_propulsive_forces(vec_omega)
     assert np.allclose(act_t, exp_t)
 
 
@@ -100,20 +100,20 @@ def test_calculate_propulsive_forces(droneenv, state, vec_omega, k_T, exp_t):
     indirect=True,
 )
 @pytest.mark.parametrize("vec_omega", [np.zeros(4)], indirect=True)
-def test_zero_input(vec_omega, rpy, droneenv):
+def test_zero_input(vec_omega, rpy, pbdroneenv):
     """
     Expect it to drop like a stone
     """
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.vel), (0, 0, -1))
 
 
 # @pytest.mark.integration
 @pytest.mark.parametrize("vec_omega", [np.zeros(4), np.ones(4) * 0.01], indirect=True)
-def test_low_input(vec_omega, droneenv):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_low_input(vec_omega, pbdroneenv):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.vel), (0, 0, -1))
 
 
@@ -121,9 +121,9 @@ def test_low_input(vec_omega, droneenv):
 @pytest.mark.parametrize(
     "vec_omega", [np.ones(4) * 10000, np.ones(4) * 1e10], indirect=True
 )
-def test_large_input(vec_omega, droneenv):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_large_input(vec_omega, pbdroneenv):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.vel), (0, 0, 1))
 
 
@@ -140,9 +140,9 @@ def test_large_input(vec_omega, droneenv):
     ],
     indirect=["vec_omega"],
 )
-def test_roll_input(vec_omega, droneenv, exp):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_roll_input(vec_omega, pbdroneenv, exp):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.ang_vel), exp)
 
 
@@ -163,9 +163,9 @@ def test_roll_input(vec_omega, droneenv, exp):
     ],
     indirect=["vec_omega"],
 )
-def test_pitch_input(vec_omega, droneenv, exp):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_pitch_input(vec_omega, pbdroneenv, exp):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.ang_vel), exp)
 
 
@@ -181,9 +181,9 @@ def test_pitch_input(vec_omega, droneenv, exp):
     ],
     indirect=["vec_omega"],
 )
-def test_yaw_input(vec_omega, equilibrium_prop_rpm, droneenv, exp):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_yaw_input(vec_omega, equilibrium_prop_rpm, pbdroneenv, exp):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.ang_vel), exp)
 
 
@@ -200,9 +200,9 @@ def test_yaw_input(vec_omega, equilibrium_prop_rpm, droneenv, exp):
     ],
     indirect=["rpy"],
 )
-def test_vel_from_rot(vec_omega, rpy, droneenv, exp):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_vel_from_rot(vec_omega, rpy, pbdroneenv, exp):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.vel.round(16)), exp)
 
 
@@ -211,9 +211,9 @@ def test_vel_from_rot(vec_omega, rpy, droneenv, exp):
     combinations_with_replacement((1, 0, -1), 3),
     indirect=True,
 )
-def test_pos_from_vel(vec_omega, droneenv, pos, velocity):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_pos_from_vel(vec_omega, pbdroneenv, pos, velocity):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.pos), velocity - pos)
 
 
@@ -222,9 +222,9 @@ def test_pos_from_vel(vec_omega, droneenv, pos, velocity):
     combinations_with_replacement((1, 0, -1), 3),
     indirect=True,
 )
-def test_rpy_from_ang_vel(vec_omega, droneenv, angular_velocity):
-    droneenv.reset()
-    obs, *_ = droneenv.step(vec_omega)
+def test_rpy_from_ang_vel(vec_omega, pbdroneenv, angular_velocity):
+    pbdroneenv.reset()
+    obs, *_ = pbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.rpy), angular_velocity)
 
 
@@ -244,13 +244,13 @@ def test_rpy_from_ang_vel(vec_omega, droneenv, angular_velocity):
     ],
     indirect=["vec_omega", "k_Q"],
 )
-def test_droneenv_correct_input_to_rot(seed, droneenv, action, k_Q, ang_vel_sign):
+def test_pbdroneenv_correct_input_to_rot(seed, pbdroneenv, action, k_Q, ang_vel_sign):
     """
     Step input over a short time will give a good insight if the drone is behaving
     as expected
     """
-    droneenv.reset(seed=seed)
+    pbdroneenv.reset(seed=seed)
     for _ in range(5):
-        obs, *_ = droneenv.step(action * 100)
+        obs, *_ = pbdroneenv.step(action * 100)
     # Drone landed within 10cm of where we expected it
     assert np.allclose(np.sign(obs.ang_vel), ang_vel_sign)
