@@ -5,4 +5,4 @@ Simple Examples
    :maxdepth: 2
    :glob:
 
-   ./simple**
+   ./**
