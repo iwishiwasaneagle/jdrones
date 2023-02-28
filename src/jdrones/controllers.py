@@ -136,8 +136,8 @@ class LQR(Controller):
         return np.asarray(K)
 
     def reset(self):
-        self.e = 0
+        self.e = State()
 
-    def __call__(self, *, measured, setpoint):
+    def __call__(self, *, measured: State, setpoint: State) -> float:
         self.e = super().__call__(measured=measured, setpoint=setpoint)
-        return self.K @ State(self.e).to_x()
+        return self.K @ self.e.to_x()
