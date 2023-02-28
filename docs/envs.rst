@@ -3,14 +3,28 @@ Environments
 
 BaseDroneEnv
 ------------
-.. autoclass:: jdrones.envs.BaseDroneEnv
+.. autoclass:: jdrones.envs.base.basedronenev.BaseDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-DroneEnv
---------
-.. autoclass:: jdrones.envs.DroneEnv
+PyBulletDroneEnv
+----------------
+.. autoclass:: jdrones.envs.PyBulletDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+NonlinearDynamicModelDroneEnv
+-----------------------------
+.. autoclass:: jdrones.envs.NonlinearDynamicModelDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+LinearDynamicModelDroneEnv
+--------------------------
+.. autoclass:: jdrones.envs.LinearDynamicModelDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
