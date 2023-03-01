@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import pybullet as p
 import pydantic
+from jdrones.maths import quat_mul
 from jdrones.transforms import quat_to_euler
 from jdrones.transforms import quat_to_rotmat
 from jdrones.types import LinearXAction
@@ -27,6 +28,10 @@ class KLengthArray(np.ndarray):
             obj = np.asarray(input_array)
             if obj.shape != (cls.k,):
                 raise ValueError(f"Incorrect shape {obj.shape}")
+
+        if not isinstance(obj[0], (np.floating, float)):
+            raise ValueError(f"Incorrect dtype={obj.dtype}")
+
         return obj.view(cls)
 
 
@@ -155,7 +160,7 @@ class State(KLengthArray):
         rotmat = quat_to_rotmat(quat)
         self.pos = rotmat @ self.pos
         self.vel = rotmat @ self.vel
-        self.quat = quat * self.quat
+        self.quat = quat_mul(self.quat, quat)
         self.rpy = quat_to_euler(self.quat)
         self.ang_vel = rotmat @ self.ang_vel
 

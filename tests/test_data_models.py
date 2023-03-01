@@ -3,6 +3,7 @@
 import numpy as np
 import pytest
 from jdrones.data_models import State
+from scipy.spatial.transform import Rotation as R
 
 
 @pytest.fixture(params=[(0,) * 20])
@@ -69,7 +70,188 @@ def test_x_to_state():
 
 
 @pytest.mark.parametrize(
-    "quat,state,exp", [[(0, 0, 0, 1), np.arange(20), np.arange(20)]], indirect=["state"]
+    "quat,act,exp",
+    [
+        [
+            (0.0, 0.0, 0.0, 1.0),
+            *(
+                [
+                    1.0,
+                    2.0,
+                    3.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    4.0,
+                    5.0,
+                    6.0,
+                    7.0,
+                    8.0,
+                    9.0,
+                    10.0,
+                    11.0,
+                    12.0,
+                    13.0,
+                ],
+            )
+            * 2,
+        ],
+        [
+            (1.0, 0.0, 0.0, 0.0),
+            [
+                1.0,
+                2.0,
+                3.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                5.0,
+                6.0,
+                7.0,
+                8.0,
+                9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+            ],
+            [
+                1.0,
+                -2.0,
+                -3.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                np.pi,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                -6.0,
+                7.0,
+                -8.0,
+                -9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+            ],
+        ],
+        [
+            (0.0, 1.0, 0.0, 0.0),
+            [
+                1.0,
+                2.0,
+                3.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                5.0,
+                6.0,
+                7.0,
+                8.0,
+                9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+            ],
+            [
+                -1.0,
+                2.0,
+                -3.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                np.pi,
+                0.0,
+                -4.0,
+                5.0,
+                -6.0,
+                -7.0,
+                8.0,
+                -9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+            ],
+        ],
+        [
+            (0.0, 0.0, 1.0, 0.0),
+            [
+                1.0,
+                2.0,
+                3.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                5.0,
+                6.0,
+                7.0,
+                8.0,
+                9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+            ],
+            [
+                -1.0,
+                -2.0,
+                3.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                np.pi,
+                -4.0,
+                -5.0,
+                6.0,
+                -7.0,
+                -8.0,
+                9.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+            ],
+        ],
+    ],
 )
-def test_state_apply_quat(quat, state, exp):
-    assert np.allclose(state.apply_quat(quat), exp)
+def test_state_apply_quat(quat, act, exp):
+    exp = State(exp)
+    rotated = State(act).apply_quat(quat)
+    assert np.allclose(rotated.pos, exp.pos)
+    assert np.allclose(rotated.quat, exp.quat)
+    assert np.allclose(
+        R.from_euler("ZYX", rotated.rpy).as_quat(),
+        R.from_euler("ZYX", exp.rpy).as_quat(),
+    )
+    assert np.allclose(rotated.ang_vel, exp.ang_vel)
+    assert np.allclose(rotated.vel, exp.vel)
+    assert np.allclose(rotated.prop_omega, exp.prop_omega)
