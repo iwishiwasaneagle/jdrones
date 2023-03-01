@@ -257,7 +257,7 @@ class PyBulletDroneEnv(BaseDroneEnv):
 
     def calculate_external_torques(self, action: ActType) -> VEC3:
         Qi = np.square(action) * self.model.k_Q
-        return (0, 0, -Qi[0] + Qi[1] - Qi[2] + Qi[3])
+        return (0, 0, Qi[0] -Qi[1] + Qi[2] - Qi[3])
 
     def calculate_propulsive_forces(self, action: VEC4) -> VEC4:
         return np.square(action) * self.model.k_T
