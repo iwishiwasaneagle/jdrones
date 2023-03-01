@@ -60,7 +60,7 @@ for i, vars in enumerate(
         x="t",
         y="value",
         hue="variable",
-        style="simulation_name",
+        style="tag",
         ax=ax[i],
     )
     ax[i].legend()
@@ -75,7 +75,7 @@ for i, var in enumerate(("x", "y", "z", "phi", "theta", "psi", "vx", "vy", "vz")
         x="t",
         y="value",
         hue="variable",
-        style="simulation_name",
+        style="tag",
         ax=ax[i],
         legend=False,
     )
