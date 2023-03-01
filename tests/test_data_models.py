@@ -2,7 +2,7 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import pytest
-from jdrones.types import State
+from jdrones.data_models import State
 
 
 @pytest.fixture(params=[(0,) * 20])
@@ -66,3 +66,10 @@ def test_x_to_state():
     assert np.allclose(x_to_state.vel, (4, 5, 6))
     assert np.allclose(x_to_state.rpy, (7, 8, 9))
     assert np.allclose(x_to_state.ang_vel, (10, 11, 12))
+
+
+@pytest.mark.parametrize(
+    "quat,state,exp", [[(0, 0, 0, 1), np.arange(20), np.arange(20)]], indirect=["state"]
+)
+def test_state_apply_quat(quat, state, exp):
+    assert np.allclose(state.apply_quat(quat), exp)

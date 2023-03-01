@@ -2,8 +2,8 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import scipy as scipy
+from jdrones.data_models import State
 from jdrones.maths import clip_scalar
-from jdrones.types import State
 
 
 class Controller:

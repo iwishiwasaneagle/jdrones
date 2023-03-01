@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from jdrones.data_models import State
+from jdrones.data_models import States
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs import PyBulletDroneEnv
-from jdrones.types import State
-from jdrones.types import States
 from tqdm.auto import trange
 
 

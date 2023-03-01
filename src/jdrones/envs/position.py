@@ -7,12 +7,12 @@ import gymnasium
 import numpy as np
 from gymnasium import spaces
 from gymnasium.core import ActType
+from jdrones.data_models import State
+from jdrones.data_models import States
+from jdrones.data_models import URDFModel
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.envs.lqr import LQRDroneEnv
 from jdrones.types import PositionAction
-from jdrones.types import State
-from jdrones.types import States
-from jdrones.types import URDFModel
 
 
 class PositionDroneEnv(gymnasium.Env):

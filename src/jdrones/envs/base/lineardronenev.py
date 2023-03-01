@@ -5,12 +5,12 @@ from typing import Tuple
 
 import numpy as np
 from gymnasium import spaces
+from jdrones.data_models import State
+from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.transforms import euler_to_quat
 from jdrones.types import PropellerAction
-from jdrones.types import State
-from jdrones.types import URDFModel
 
 
 class LinearDynamicModelDroneEnv(BaseDroneEnv):
@@ -54,7 +54,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
                 (0, 0, 0, 0),  # z
                 (0, 0, 0, 0),  # dx
                 (0, 0, 0, 0),  # dy
-                (0, 0, 0, 1 / m),  # dz
+                (0, 0, 0, -1 / m),  # dz
                 (0, 0, 0, 0),  # phi
                 (0, 0, 0, 0),  # theta
                 (0, 0, 0, 0),  # psi
@@ -64,7 +64,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
             ]
         )
 
-        C = np.vstack([0, 0, 0, 0, 0, -g, 0, 0, 0, 0, 0, 0])
+        C = np.vstack([0, 0, 0, 0, 0, g, 0, 0, 0, 0, 0, 0])
 
         return A, B, C
 
@@ -119,7 +119,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
-                0 & 0 & 0 & 1 / m\\\\
+                0 & 0 & 0 & -1 / m\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
@@ -132,7 +132,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
             \\end{bmatrix}
             +
             \\begin{bmatrix}
-                0\\\\0\\\\0\\\\0\\\\0\\\\-g\\\\0\\\\0\\\\0\\\\0\\\\0\\\\0
+                0\\\\0\\\\0\\\\0\\\\0\\\\g\\\\0\\\\0\\\\0\\\\0\\\\0\\\\0
             \\end{bmatrix}
 
         .. math::

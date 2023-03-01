@@ -7,13 +7,13 @@ import numpy as np
 from gymnasium import spaces
 from jdrones.controllers import Controller
 from jdrones.controllers import LQR
+from jdrones.data_models import State
+from jdrones.data_models import URDFModel
 from jdrones.envs.base import BaseControlledEnv
 from jdrones.envs.base import LinearDynamicModelDroneEnv
 from jdrones.envs.base import NonlinearDynamicModelDroneEnv
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.types import LinearXAction
-from jdrones.types import State
-from jdrones.types import URDFModel
 
 
 class LQRDroneEnv(BaseControlledEnv):

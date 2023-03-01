@@ -3,12 +3,12 @@
 from typing import Tuple
 
 import numpy as np
+from jdrones.data_models import State
+from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.transforms import euler_to_quat
 from jdrones.transforms import euler_to_rotmat
 from jdrones.types import PropellerAction
-from jdrones.types import State
-from jdrones.types import URDFModel
 
 
 class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
@@ -35,7 +35,7 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
                 (0, 0, 0, 0),
                 state.ang_vel,
                 (
-                    -m * g * unit_z.T + (R_W_Q @ unit_z).T * u_star[3] + drag_force
+                    m * g * unit_z.T - (R_W_Q @ unit_z).T * u_star[3] + drag_force
                 ).flatten()
                 / m,
                 np.linalg.solve(Inertias, u_star[0:3]),
@@ -49,10 +49,10 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
         .. math::
             \\begin{align}
                 m\\vec x '' &=
-                - \\begin{bmatrix}
+                \\begin{bmatrix}
                     0\\\\0\\\\mg
                 \\end{bmatrix}
-                +
+                -
                 R^B_E
                 \\begin{bmatrix}
                     0\\\\0\\\\k_T\\Sigma^4_{i=1} P_i^2

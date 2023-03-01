@@ -8,10 +8,10 @@ from typing import Tuple
 import gymnasium
 import numpy as np
 from gymnasium import spaces
+from jdrones.data_models import State
+from jdrones.data_models import URDFModel
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.transforms import euler_to_quat
-from jdrones.types import State
-from jdrones.types import URDFModel
 
 
 class BaseDroneEnv(gymnasium.Env):

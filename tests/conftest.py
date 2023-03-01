@@ -4,6 +4,9 @@ import pathlib
 
 import numpy as np
 import pytest
+from jdrones.data_models import SimulationType
+from jdrones.data_models import State
+from jdrones.data_models import URDFModel
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
@@ -11,9 +14,6 @@ from jdrones.envs import PositionDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.transforms import euler_to_quat
-from jdrones.types import SimulationType
-from jdrones.types import State
-from jdrones.types import URDFModel
 
 
 def pytest_configure(config):

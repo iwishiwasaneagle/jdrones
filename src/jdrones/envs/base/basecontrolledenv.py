@@ -9,8 +9,8 @@ import gymnasium
 from gymnasium.core import ActType
 from jdrones.controllers import Controller
 from jdrones.controllers import PID
+from jdrones.data_models import State
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.types import State
 
 
 class BaseControlledEnv(gymnasium.Env, abc.ABC):

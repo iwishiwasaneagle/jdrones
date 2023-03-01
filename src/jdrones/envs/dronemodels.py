@@ -3,7 +3,7 @@
 from importlib.resources import files
 
 import numpy as np
-from jdrones.types import URDFModel
+from jdrones.data_models import URDFModel
 
 
 def droneplus_mixing_matrix(*, length, k_Q, k_T):

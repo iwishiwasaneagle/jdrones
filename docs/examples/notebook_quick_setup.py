@@ -15,7 +15,7 @@ import gymnasium
 
 print(f"\tImported gymnasium version {gymnasium.__version__}")
 import jdrones
-from jdrones.types import *
+from jdrones.data_models import *
 
 print(f"\tImported jdrones version {jdrones.__version__}")
 
