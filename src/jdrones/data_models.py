@@ -156,15 +156,18 @@ class State(KLengthArray):
     def to_x(self) -> LinearXAction:
         return np.concatenate([self.pos, self.vel, self.rpy, self.ang_vel])
 
-    def apply_quat(self, quat: VEC4) -> "State":
+    def quat_rotation(self, quat: VEC4) -> "State":
         rotmat = quat_to_rotmat(quat)
-        self.pos = rotmat @ self.pos
-        self.vel = rotmat @ self.vel
-        self.quat = quat_mul(self.quat, quat)
-        self.rpy = quat_to_euler(self.quat)
-        self.ang_vel = rotmat @ self.ang_vel
 
-        return self
+        state = self.copy()
+
+        state.pos = rotmat @ state.pos
+        state.vel = rotmat @ state.vel
+        state.quat = quat_mul(state.quat, quat)
+        state.rpy = quat_to_euler(state.quat)
+        state.ang_vel = rotmat @ state.ang_vel
+
+        return state
 
 
 class Conversions:

@@ -243,9 +243,9 @@ def test_x_to_state():
         ],
     ],
 )
-def test_state_apply_quat(quat, act, exp):
+def test_state_quat_rotation(quat, act, exp):
     exp = State(exp)
-    rotated = State(act).apply_quat(quat)
+    rotated = State(act).quat_rotation(quat)
     assert np.allclose(rotated.pos, exp.pos)
     assert np.allclose(rotated.quat, exp.quat)
     assert np.allclose(
