@@ -10,8 +10,8 @@ on:
     workflow_dispatch:
 
 jobs:
-  cache-pybullet:
-    name: Cache pybullet
+  cache-deps:
+    name: Cache dependencies
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -40,7 +40,7 @@ jobs:
   run-tests:
     name: Run tests
     runs-on: ${{ matrix.platform }}
-    needs: cache-pybullet
+    needs: cache-deps
     defaults:
       run:
         shell: bash -l {0}
