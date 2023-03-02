@@ -65,7 +65,7 @@ jobs:
         id: release
         shell: bash
         run: |
-          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+          r=$(cat ${{ steps.git-cliff-latest.outputs.changelog }})
           echo "::set-output name=release_body::$r"
 
   build-python:
@@ -108,7 +108,6 @@ jobs:
           body: "${{ needs.generate-changelog.outputs.release_body }}"
           files: |
             dist/**
-          tag: ${{ github.ref }}
           name: "Release ${{needs.setup-envs.outputs.version}}"
           generate_release_notes: false
 
