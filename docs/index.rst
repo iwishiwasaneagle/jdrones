@@ -39,9 +39,10 @@ Using this package
    :maxdepth: 2
    :hidden:
 
-   Environments <envs>
-   Data Models <data_models>
-   Controllers <controllers>
+   envs
+   data_models
+   controllers
+   trajectory
 
 .. toctree::
    :caption: Misc.
