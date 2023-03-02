@@ -32,7 +32,6 @@ class PositionDroneEnv(gymnasium.Env):
     @property
     def action_space(self) -> ActType:
         bounds = np.array([[0, 10], [0, 10], [1, 10]])
-
         return spaces.Box(low=bounds[:, 0], high=bounds[:, 1])
 
     def reset(
@@ -64,10 +63,12 @@ class PositionDroneEnv(gymnasium.Env):
 
             e = self.env.controllers["lqr"].e
             dist = np.linalg.norm(np.concatenate([e.pos, e.rpy]))
+            if np.any(np.isnan(dist)):
+                trunc = True
+
             if dist < 0.01:
                 term = True
                 info["error"] = dist
-                break
 
         states = States(observations)
         return states, self.get_reward(states), term, trunc, info
