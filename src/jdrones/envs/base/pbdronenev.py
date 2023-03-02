@@ -145,13 +145,13 @@ class PyBulletDroneEnv(BaseDroneEnv):
         .. note::
             The physics are implemented in the following functions:
 
-            - :meth:`jdrones.envs.BaseDroneEnv.calculate_propulsive_forces`
-            - :meth:`jdrones.envs.BaseDroneEnv.calculate_aerodynamic_forces`
-            - :meth:`jdrones.envs.BaseDroneEnv.calculate_external_torques`
+            - :meth:`jdrones.envs.PyBulletDroneEnv.calculate_propulsive_forces`
+            - :meth:`jdrones.envs.PyBulletDroneEnv.calculate_aerodynamic_forces`
+            - :meth:`jdrones.envs.PyBulletDroneEnv.calculate_external_torques`
 
         Parameters
         ----------
-        action : PropellerAction
+        action : float,float,float,float
             An action provided by the agent to update the environment state
 
         Returns
@@ -215,7 +215,7 @@ class PyBulletDroneEnv(BaseDroneEnv):
     @staticmethod
     def get_kinematic_data(ids: PyBulletIds) -> State:
         """
-        Get the drones's :class:`~jdrones.types.State` from pybullet post
+        Get the drones's :class:`~jdrones.data_models.State` from pybullet post
         :meth:`step`
 
         Parameters
@@ -225,7 +225,7 @@ class PyBulletDroneEnv(BaseDroneEnv):
 
         Returns
         -------
-        State
+        jdrones.data_models.State
             The current state of the drone
         """
         state = State()
@@ -257,7 +257,7 @@ class PyBulletDroneEnv(BaseDroneEnv):
 
     def calculate_external_torques(self, action: ActType) -> VEC3:
         Qi = np.square(action) * self.model.k_Q
-        return (0, 0, Qi[0] -Qi[1] + Qi[2] - Qi[3])
+        return (0, 0, Qi[0] - Qi[1] + Qi[2] - Qi[3])
 
     def calculate_propulsive_forces(self, action: VEC4) -> VEC4:
         return np.square(action) * self.model.k_T

@@ -52,7 +52,7 @@ class QuinticPolynomialTrajectory:
     Where :math:`T` is the total time to traverse the polynomial.
 
     .. seealso::
-        :meth:`jdrones.envs.position.PolyPositionDroneEnv.calc_traj`
+        :meth:`jdrones.envs.PolyPositionDroneEnv.calc_traj`
 
     The coefficients are then saved in :code:`coeffs` and accessed by
     :meth:`acceleration`,:meth:`velocity`, and :meth:`position` as required.

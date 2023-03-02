@@ -6,3 +6,11 @@ Data Models
    :members:
    :undoc-members:
    :show-inheritance:
+
+
+Types
+=====
+
+.. automodule:: jdrones.types
+   :members:
+   :undoc-members:
