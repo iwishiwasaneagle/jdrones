@@ -10,8 +10,8 @@ def droneplus_mixing_matrix(*, length, k_Q, k_T):
     return np.array(
         [
             [0, -k_T * length, 0, k_T * length],
-            [k_T * length, 0, -k_T * length, 0],
-            [-k_Q, k_Q, -k_Q, k_Q],
+            [-k_T * length, 0, k_T * length, 0],
+            [k_Q, -k_Q, k_Q, -k_Q],
             [k_T, k_T, k_T, k_T],
         ]
     )

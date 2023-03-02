@@ -35,7 +35,7 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
                 (0, 0, 0, 0),
                 state.ang_vel,
                 (
-                    m * g * unit_z.T - (R_W_Q @ unit_z).T * u_star[3] + drag_force
+                    -m * g * unit_z.T + (R_W_Q @ unit_z).T * u_star[3] + drag_force
                 ).flatten()
                 / m,
                 np.linalg.solve(Inertias, u_star[0:3]),

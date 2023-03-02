@@ -60,8 +60,8 @@ def test_calculate_aerodynamic_forces(
         [(0, 0, 0, 0), 0],
         [(1, 1, 1, 1), 0],
         [(100, 100, 100, 100), 0],
-        [(2, 1, 2, 1), -6],
-        [(100, 1, 50, 400), 147501],
+        [(2, 1, 2, 1), 6],
+        [(100, 1, 50, 400), -147501],
     ],
     indirect=["vec_omega"],
 )
@@ -114,7 +114,10 @@ def test_zero_input(vec_omega, rpy, pbdroneenv):
     """
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.vel), (0, 0, -1))
+    # Need to round, as tiny errors are introduced by PB3. We only care about bigger
+    # picture here
+    act = obs.vel.round(20)
+    assert np.allclose(np.sign(act), (0, 0, -1))
 
 
 @pytest.mark.integration
@@ -135,60 +138,62 @@ def test_large_input(vec_omega, pbdroneenv):
 
 @pytest.mark.integration
 @ROLL_INPUT
-def test_roll_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
+def test_roll_input(vec_omega, pbdroneenv, exp):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.ang_vel), exp * rhr_to_lhr)
+    assert np.allclose(np.sign(obs.ang_vel), exp)
 
 
 @pytest.mark.integration
 @PITCH_INPUT
-def test_pitch_input(rhr_to_lhr, vec_omega, pbdroneenv, exp):
+def test_pitch_input(vec_omega, pbdroneenv, exp):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.ang_vel), np.sign(rhr_to_lhr * exp))
+    assert np.allclose(np.sign(obs.ang_vel), np.sign(exp))
 
 
 @pytest.mark.integration
 @YAW_INPUT
-def test_yaw_input(rhr_to_lhr, vec_omega, equilibrium_prop_rpm, pbdroneenv, exp):
+def test_yaw_input(vec_omega, equilibrium_prop_rpm, pbdroneenv, exp):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.ang_vel), rhr_to_lhr * exp)
+    assert np.allclose(np.sign(obs.ang_vel), exp)
 
 
-@pytest.mark.skip(
-    reason="Currently unsure why this is failing. Will get fixed when "
-    "resolving the different coordinate systems issue."
-)
 @pytest.mark.integration
 @VELOCITY_FROM_ROTATION
-def test_vel_from_rot(vec_omega, rhr_to_lhr, rpy, pbdroneenv, exp):
+def test_vel_from_rot(vec_omega, rpy, pbdroneenv, exp):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(0.99 * vec_omega)
-    assert np.allclose(np.sign(obs.vel.round(16)), rhr_to_lhr * exp)
+    assert np.allclose(np.sign(obs.vel.round(4)), exp)
 
 
 @pytest.mark.integration
 @POSITION_FROM_VELOCITY_1_PB
 @POSITION_FROM_VELOCITY_2
-def test_pos_from_vel(rhr_to_lhr, pos, vec_omega, pbdroneenv, velocity):
+def test_pos_from_vel(pos, vec_omega, pbdroneenv, velocity):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.pos), rhr_to_lhr * np.sign(velocity - pos))
+    # Need to round, as tiny errors are introduced by PB3. We only care about bigger
+    # picture here
+    act = obs.pos.round(5)
+    assert np.allclose(np.sign(act - pos), np.sign(velocity))
 
 
 @pytest.mark.integration
 @RPY_FROM_ANG_VEL
-def test_rpy_from_ang_vel(vec_omega, rhr_to_lhr, pbdroneenv, angular_velocity):
+def test_rpy_from_ang_vel(vec_omega, pbdroneenv, angular_velocity):
     pbdroneenv.reset()
     obs, *_ = pbdroneenv.step(vec_omega)
-    assert np.allclose(np.sign(obs.rpy), rhr_to_lhr * angular_velocity)
+    # Need to round, as tiny errors are introduced by PB3. We only care about bigger
+    # picture here
+    act = obs.rpy.round(4)
+    assert np.allclose(np.sign(act), np.sign(angular_velocity))
 
 
 @pytest.mark.integration
 @INPUT_TO_ROT
-def test_correct_input_to_rot(seed, rhr_to_lhr, pbdroneenv, action, k_Q, ang_vel_sign):
+def test_correct_input_to_rot(seed, pbdroneenv, action, k_Q, ang_vel_sign):
     """
     Step input over a short time will give a good insight if the drone is behaving
     as expected
@@ -197,4 +202,4 @@ def test_correct_input_to_rot(seed, rhr_to_lhr, pbdroneenv, action, k_Q, ang_vel
     for _ in range(5):
         obs, *_ = pbdroneenv.step(action * 100)
     # Drone landed within 10cm of where we expected it
-    assert np.allclose(np.sign(obs.ang_vel), rhr_to_lhr * ang_vel_sign)
+    assert np.allclose(np.sign(obs.ang_vel), ang_vel_sign)

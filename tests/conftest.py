@@ -4,6 +4,7 @@ import pathlib
 
 import numpy as np
 import pytest
+from gymnasium import spaces
 from jdrones.data_models import SimulationType
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
@@ -126,8 +127,8 @@ def drag_coeffs(request):
 
 @pytest.fixture(params=["droneplus.urdf"])
 def filepath(request):
-    root = pathlib.Path("tests")
-    base = pathlib.Path("assets")
+    root = pathlib.Path("src")
+    base = pathlib.Path("jdrones/envs")
     if root.exists():
         return root / base / request.param
     return base / request.param
@@ -256,6 +257,11 @@ def lqrdroneenv(env_default_kwargs):
 
 @pytest.fixture
 def positiondroneenv(env_default_kwargs):
-    d = PositionDroneEnv(**env_default_kwargs)
+    class _A(PositionDroneEnv):
+        @property
+        def action_space(self):
+            return spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
+
+    d = _A(**env_default_kwargs)
     yield d
     d.close()
