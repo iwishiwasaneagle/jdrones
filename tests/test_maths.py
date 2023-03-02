@@ -2,7 +2,6 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import pytest
-from hypothesis import assume
 from hypothesis import given
 from hypothesis import strategies as st
 from jdrones.maths import apply_rpy
@@ -68,14 +67,27 @@ def test_apply_rpy(value, rpy, exp):
     assert np.allclose(act, exp)
 
 
-NonNanNonInfFloat = st.floats(
-    allow_nan=False,
-    allow_subnormal=False,
-    allow_infinity=False,
-    min_value=-1,
-    max_value=1,
+QUAT = st.tuples(
+    *(
+        st.one_of(
+            st.floats(
+                allow_nan=False,
+                allow_subnormal=False,
+                allow_infinity=False,
+                min_value=0.001,
+                max_value=1,
+            ),
+            st.floats(
+                allow_nan=False,
+                allow_subnormal=False,
+                allow_infinity=False,
+                min_value=-1,
+                max_value=-0.001,
+            ),
+        ),
+    )
+    * 4
 )
-QUAT = st.tuples(*(NonNanNonInfFloat,) * 4)
 
 
 @given(
@@ -83,8 +95,6 @@ QUAT = st.tuples(*(NonNanNonInfFloat,) * 4)
     b=QUAT,
 )
 def test_quat_mul(a, b):
-    assume(np.sum(a) != 0 and np.sum(b) != 0)
-
     ar = R.from_quat(a)
     br = R.from_quat(b)
 
