@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.3] - 2023-03-02
+
+### Bug Fixes
+
+- Typo in step ID [(c78362f)](https://github.com/iwishiwasaneagle/jdrones/commit/c78362fae94b875e7c25a2e2c76d1fe5e7d6e7dd)
+
 ## [0.5.2] - 2023-03-02
 
 ### Features
 
 - Update release creator to use softprops/action-gh-release as recommended by GH [(f8e3880)](https://github.com/iwishiwasaneagle/jdrones/commit/f8e38805604f2d9cd61ce4b391e565a1a11eb648)
+
+### Miscellaneous Tasks
+
+- Update changelog for v0.5.2 [skip pre-commit.ci] [(20244c1)](https://github.com/iwishiwasaneagle/jdrones/commit/20244c154d570862bdbfae25ae9ad29f0beaa4f1)
 
 ## [0.5.1] - 2023-03-02
 
