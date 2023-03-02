@@ -36,6 +36,13 @@ LinearDynamicModelDroneEnv
 Controlled
 ==========
 
+BaseControlledEnv
+-----------------
+.. autoclass:: jdrones.envs.BaseControlledEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 LQRDroneEnv
 -----------
 .. autoclass:: jdrones.envs.LQRDroneEnv
