@@ -46,17 +46,28 @@ jobs:
         shell: bash -l {0}
 
     strategy:
+      max-parallel: 1
       matrix:
-        platform: ["ubuntu-latest"]
-        pytest-flags: ["--only-integration", ""]
-        python-version:
-            - "3.10"
-            - "3.11"
-        codecov: [false]
         include:
           - python-version: "3.11"
             pytest-flags: ""
             codecov: true
+            platform: "ubuntu-latest"
+          - python-version: "3.10"
+            pytest-flags: ""
+            codecov: false
+            platform: "ubuntu-latest"
+          - python-version: "3.11"
+            pytest-flags: "--only-integration"
+            codecov: false
+            platform: "ubuntu-latest"
+          - python-version: "3.10"
+            pytest-flags: "--only-integration"
+            codecov: false
+            platform: "ubuntu-latest"
+          - python-version: "3.11"
+            pytest-flags: "--only-stress-tests"
+            codecov: false
             platform: "ubuntu-latest"
 
     steps:
