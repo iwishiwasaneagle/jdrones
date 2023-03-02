@@ -15,7 +15,7 @@ Using this package
 :doc:`Environments <envs>`
     Gymnasium API environments to fly drones with various controllers
 
-:doc:`Data Models <types>`
+:doc:`Data Models <data_models>`
     Data models for usage with this library
 
 :doc:`Controllers <controllers>`
@@ -39,9 +39,10 @@ Using this package
    :maxdepth: 2
    :hidden:
 
-   Environments <envs>
-   Data Models <types>
-   Controllers <controllers>
+   envs
+   data_models
+   controllers
+   trajectory
 
 .. toctree::
    :caption: Misc.

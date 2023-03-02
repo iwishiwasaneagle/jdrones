@@ -1,27 +1,57 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+from copy import copy
+from typing import Any
+from typing import Optional
+from typing import Tuple
+
+import gymnasium
 import numpy as np
-from gymnasium.core import ActType
-from gymnasium.core import ObsType
-from gymnasium.vector.utils import spaces
-from jdrones.envs.base import BaseDroneEnv
-from jdrones.transforms import quat_to_rotmat
-from jdrones.types import VEC3
-from jdrones.types import VEC4
+from gymnasium import spaces
+from jdrones.data_models import State
+from jdrones.data_models import URDFModel
+from jdrones.envs.dronemodels import DronePlus
+from jdrones.transforms import euler_to_quat
 
 
-class DroneEnv(BaseDroneEnv):
-    def calculate_aerodynamic_forces(self, action: ActType) -> VEC3:
-        rotmat_i_b = quat_to_rotmat(self.state.quat)
-        drag_factors = -1 * np.array(self.model.drag_coeffs)
-        return np.dot(rotmat_i_b, drag_factors * self.state.vel)
+class BaseDroneEnv(gymnasium.Env):
+    state: State
+    """Current drone state"""
 
-    def calculate_external_torques(self, action: ActType) -> VEC3:
-        Qi = action * self.model.k_Q
-        return (0, 0, -Qi[0] + Qi[1] - Qi[2] + Qi[3])
+    initial_state: State
+    """Initial drone state. Used for resettign the simulation"""
 
-    def calculate_propulsive_forces(self, action: VEC4) -> VEC4:
-        return action * self.model.k_T
+    model: URDFModel
+    """Model parameters"""
+
+    info: dict[str, Any]
+    """Information dictionary to return"""
+
+    def __init__(
+        self,
+        model: URDFModel = DronePlus,
+        initial_state: State = None,
+        dt: float = 1 / 240,
+    ):
+        if initial_state is None:
+            initial_state = State()
+        self.initial_state = initial_state
+        self.state = copy(self.initial_state)
+        self.model = model
+        self.dt = dt
+        self.info = {}
+
+    def reset(
+        self,
+        *,
+        seed: Optional[int] = None,
+        options: Optional[dict] = None,
+    ) -> Tuple[State, dict]:
+        super().reset(seed=seed, options=options)
+        self.info = {}
+        self.state = copy(self.initial_state)
+        self.state.quat = euler_to_quat(self.state.rpy)
+        return self.state, self.info
 
     @property
     def action_space(self):
@@ -78,21 +108,3 @@ class DroneEnv(BaseDroneEnv):
             ]
         )
         return spaces.Box(low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=float)
-
-    def get_observation(self) -> ObsType:
-        return self.state
-
-    def get_reward(self) -> float:
-        return 0
-
-    def get_terminated(self) -> bool:
-        term = self.on_ground_plane
-        if term:
-            self.info["collision"] = f"On ground plane at {self.state.pos}"
-        return term
-
-    def get_truncated(self) -> bool:
-        return False
-
-    def get_info(self) -> dict:
-        return {}

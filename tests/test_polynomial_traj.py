@@ -2,7 +2,7 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import pytest
-from jdrones.trajectory import Trajectory
+from jdrones.trajectory import QuinticPolynomialTrajectory
 
 
 @pytest.fixture
@@ -50,7 +50,7 @@ def T(request):
 
 @pytest.fixture()
 def trajectory(start_pos, start_vel, start_acc, dest_pos, dest_vel, dest_acc, T):
-    return Trajectory(
+    return QuinticPolynomialTrajectory(
         start_pos=start_pos,
         start_vel=start_vel,
         start_acc=start_acc,

@@ -4,6 +4,7 @@ import numpy as np
 import numpy.typing as npt
 from jdrones.transforms import euler_to_rotmat
 from jdrones.types import VEC3
+from jdrones.types import VEC4
 
 
 def clip_scalar(value: float, vmin: float, vmax: float) -> float:
@@ -43,3 +44,17 @@ def euclidean_distance(x1: float, y1: float, x2: float, y2: float) -> float:
 
 def apply_rpy(value: VEC3, rpy: VEC3) -> VEC3:
     return np.dot(value, euler_to_rotmat(rpy))
+
+
+def quat_mul(a: VEC4, b: VEC4) -> VEC4:
+    ax, ay, az, aw = a
+    bx, by, bz, bw = b
+
+    return np.array(
+        (
+            aw * bx + ax * bw + ay * bz - az * by,
+            aw * by - ax * bz + ay * bw + az * bx,
+            aw * bz + ax * by - ay * bx + az * bw,
+            aw * bw - ax * bx - ay * by - az * bz,
+        )
+    )

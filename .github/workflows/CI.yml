@@ -32,16 +32,10 @@ jobs:
           cache-dependency-path: |
             **/requirements*.txt
 
-      - name: Get pybullet version
-        id: pb-version
-        run: |
-          PBV=$(grep "pybullet" requirements.txt | grep -oE "[0-9]+\.[0-9]+\.[0-9]+$")
-          echo "pbv=$PBV" >> $GITHUB_OUTPUT
-
-      - name: Install pybullet
+      - name: Install requirements
         run: |
           pip install wheel
-          pip install pybullet==${{ steps.pb-version.outputs.pbv }}
+          pip install -r requirements.txt
 
   run-tests:
     name: Run tests
@@ -52,17 +46,28 @@ jobs:
         shell: bash -l {0}
 
     strategy:
+      max-parallel: 1
       matrix:
-        platform: ["ubuntu-latest"]
-        pytest-flags: ["--only-integration", ""]
-        python-version:
-            - "3.10"
-            - "3.11"
-        codecov: [false]
         include:
           - python-version: "3.11"
             pytest-flags: ""
             codecov: true
+            platform: "ubuntu-latest"
+          - python-version: "3.10"
+            pytest-flags: ""
+            codecov: false
+            platform: "ubuntu-latest"
+          - python-version: "3.11"
+            pytest-flags: "--only-integration"
+            codecov: false
+            platform: "ubuntu-latest"
+          - python-version: "3.10"
+            pytest-flags: "--only-integration"
+            codecov: false
+            platform: "ubuntu-latest"
+          - python-version: "3.11"
+            pytest-flags: "--only-stress-tests"
+            codecov: false
             platform: "ubuntu-latest"
 
     steps:

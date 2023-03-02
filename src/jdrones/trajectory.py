@@ -3,13 +3,68 @@
 from typing import Dict
 from typing import Tuple
 
-import nptyping
 import numpy as np
 from jdrones.types import VEC3
 
 
-class Trajectory:
-    coeffs: Dict[str, nptyping.NDArray[nptyping.Shape["1,6"], nptyping.Double]]
+class QuinticPolynomialTrajectory:
+    """
+    A helper class to solve the quintic polynomial given a start and end criterion.
+
+    Define the problem as
+
+    .. math::
+        \\begin{align}
+        x &= c_0 t ^5 + c_1 t^4 + c_2 t ^3 + c_3 t ^2 + c_4 t + c_5,\\\\
+        \\dot x &= 5 c_0 t ^ 4 + 4 c_1 t^3 + 3 c_2 t ^2 + 2 c_3 t + c_4,\\\\
+        \\ddot x &= 20 c_0 t ^ 3 + 12 c_1 t^2 + 6 c_2 t + 2 c_3
+        \\end{align}
+
+    Which is then solved by
+
+    .. math::
+       \\begin{bmatrix}
+            0 & 0 & 0 & 0 & 0 & 1 \\\\
+            T^5 & T^4 & T^3 & T^2 & T & 1 \\\\
+            0 & 0 & 0 & 0 & 1 & 0 \\\\
+            5T^4 & 4T^3 & 3T^2 & 2T & 1 & 0 \\\\
+            0 & 0 & 0 & 2 & 0 & 0 \\\\
+            20T^3 & 12T^2 & 6T & 2 & 0 & 0
+        \\end{bmatrix}
+        \\begin{bmatrix}
+            x_{t=0}\\\\
+            x_{t=T}\\\\
+            \\dot x_{t=0}\\\\
+            \\dot x_{t=T}\\\\
+            \\ddot x_{t=0}\\\\
+            \\ddot x_{t=T}
+        \\end{bmatrix}
+        =
+        \\begin{bmatrix}
+            c_0\\\\
+            c_1\\\\
+            c_2\\\\
+            c_3\\\\
+            c_4\\\\
+            c_5\\\\
+        \\end{bmatrix}
+
+    Where :math:`T` is the total time to traverse the polynomial.
+
+    .. seealso::
+        :meth:`jdrones.envs.PolyPositionDroneEnv.calc_traj`
+
+    The coefficients are then saved in :code:`coeffs` and accessed by
+    :meth:`acceleration`,:meth:`velocity`, and :meth:`position` as required.
+
+
+    .. note::
+        The trajectory is solved individually for :math:`x`,:math:`y`, and :math:`z`.
+
+    """
+
+    coeffs: Dict[str, tuple[float, float, float, float, float, float]]
+    """Storage for the polynomial coefficients"""
 
     def __init__(
         self,
@@ -78,6 +133,23 @@ class Trajectory:
         )
 
     def acceleration(self, t: float) -> Tuple[float, float, float]:
+        """
+        Calculate the acceleration at time :math:`t` for :math:`x`, :math:`y`,
+        and :math:`z` using
+
+        .. math::
+            \\ddot x = 20 c_0 t ^ 3 + 12 c_1 t^2 + 6 c_2 t + 2 c_3
+
+        Parameters
+        ----------
+        t : float
+            Time to evaluate
+
+        Returns
+        -------
+        float, float, float
+             :math:`\\ddot x, \\ddot y, \\ddot z`
+        """
         calc = (
             lambda c, t: 20 * c[0] * t**3
             + 12 * c[1] * t**2
@@ -91,6 +163,23 @@ class Trajectory:
         return ret
 
     def velocity(self, t: float) -> Tuple[float, float, float]:
+        """
+        Calculate the velocity at time :math:`t` for :math:`x`, :math:`y`,
+        and :math:`z` using
+
+        .. math::
+            \\dot x = 5 c_0 t ^ 4 + 4 c_1 t^3 + 3 c_2 t ^2 + 2 c_3 t + c_4
+
+        Parameters
+        ----------
+        t : float
+            Time to evaluate
+
+        Returns
+        -------
+        float, float, float
+             :math:`\\dot x, \\dot y, \\dot z`
+        """
         calc = (
             lambda c, t: 5 * c[0] * t**4
             + 4 * c[1] * t**3
@@ -105,6 +194,23 @@ class Trajectory:
         return ret
 
     def position(self, t: float) -> Tuple[float, float, float]:
+        """
+        Calculate the position at time :math:`t` for :math:`x`, :math:`y`,
+        and :math:`z` using
+
+        .. math::
+            x = c_0 t ^5 + c_1 t^4 + c_2 t ^3 + c_3 t ^2 + c_4 t + c_5
+
+        Parameters
+        ----------
+        t : float
+            Time to evaluate
+
+        Returns
+        -------
+        float, float, float
+             :math:`x, y, z`
+        """
         calc = (
             lambda c, t: c[0] * t**5
             + c[1] * t**4
