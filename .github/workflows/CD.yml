@@ -57,7 +57,7 @@ jobs:
         uses: orhun/git-cliff-action@v2
         id: git-cliff-latest
         with:
-          args: -vv --latest
+          args: -vv --latest --strip header
         env:
           OUTPUT: CHANGELOG.md
 
@@ -66,10 +66,6 @@ jobs:
         shell: bash
         run: |
           r=$(cat ${{ steps.git-cliff.outputs.changelog }})
-          r="$(printf "$r" | tail -n +3)"
-          r="${r//'%'/'%25'}"
-          r="${r//$'\n'/'%0A'}"
-          r="${r//$'\r'/'%0D'}"
           echo "::set-output name=release_body::$r"
 
   build-python:
