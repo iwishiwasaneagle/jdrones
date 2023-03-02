@@ -61,12 +61,18 @@ jobs:
         env:
           OUTPUT: CHANGELOG.md
 
-      - name: Set the release body
-        id: release
-        shell: bash
+      - name: Check CHANGELOG isn't empty
         run: |
-          r=$(cat ${{ steps.git-cliff-latest.outputs.changelog }})
-          echo "::set-output name=release_body::$r"
+          if [ -z "$(cat CHANGELOG.md)" ]
+          then
+            exit 1
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: changelog
+          path: CHANGELOG.md
 
   build-python:
     name: Build python
@@ -101,11 +107,16 @@ jobs:
           name: dist
           path: dist
 
+      - name: Download changelog
+        uses: actions/download-artifact@v3
+        with:
+          name: changelog
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          body: "${{ needs.generate-changelog.outputs.release_body }}"
+          body_file: CHANGLOG.md
           files: |
             dist/**
           name: "Release ${{needs.setup-envs.outputs.version}}"
