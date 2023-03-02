@@ -10,11 +10,22 @@ Provide a [gymnasium] style interface using a physics simulation engine ([pybull
 
 ## Development
 
+Create the local development environment:
+
 ```bash
 conda create --name jdrones
 conda activate jdrones
 pip install -r requirements.txt -r tests/requirements.txt
-PYTHONPATH=$PWD/src pytest tests
+```
+
+The run *****all** tests with
+
+```bash
+#!/bin/bash
+GIT_DIR=$(git rev-parse --show-toplevel)
+PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto $GIT_DIR
+PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto --only-integration $GIT_DIR
+PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto --only-stress-tests $GIT_DIR
 ```
 
 ## Citations

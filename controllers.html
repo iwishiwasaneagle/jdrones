@@ -4,25 +4,25 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controllers &mdash; jdrones 0.4.0 documentation</title>
+  <title>Controllers &mdash; jdrones 0.5.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "macros": {"vec": ["\\textbf{#1}", 1], "m": "\\text{m}", "ms": "\\text{m}\\text{s}^-1", "mss": "\\text{m}\\text{s}^-2"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="changelog.html" />
-    <link rel="prev" title="Types" href="types.html" /> 
+    <link rel="next" title="Trajectory Generation" href="trajectory.html" />
+    <link rel="prev" title="Data Models" href="data_models.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,7 +38,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -57,22 +57,38 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#simple-examples">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#automation">Automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#experimental-control">Experimental Control</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="envs.html">Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_models.html">Data Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Controllers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.AngleController"><code class="docutils literal notranslate"><span class="pre">AngleController</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.AngleController.angle_error"><code class="docutils literal notranslate"><span class="pre">AngleController.angle_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.Controller"><code class="docutils literal notranslate"><span class="pre">Controller</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.Controller.error"><code class="docutils literal notranslate"><span class="pre">Controller.error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.Controller.reset"><code class="docutils literal notranslate"><span class="pre">Controller.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.LQR"><code class="docutils literal notranslate"><span class="pre">LQR</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.reset"><code class="docutils literal notranslate"><span class="pre">LQR.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.solve"><code class="docutils literal notranslate"><span class="pre">LQR.solve()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.PID"><code class="docutils literal notranslate"><span class="pre">PID</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.angle_error"><code class="docutils literal notranslate"><span class="pre">PID.angle_error()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.error"><code class="docutils literal notranslate"><span class="pre">PID.error()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.reset"><code class="docutils literal notranslate"><span class="pre">PID.reset()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.PID_antiwindup"><code class="docutils literal notranslate"><span class="pre">PID_antiwindup</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
@@ -131,19 +147,77 @@
 <section id="module-jdrones.controllers">
 <span id="controllers"></span><h1>Controllers<a class="headerlink" href="#module-jdrones.controllers" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="jdrones.controllers.PID">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">PID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Kd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#PID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.PID" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="jdrones.controllers.AngleController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">AngleController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#AngleController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.AngleController" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jdrones.controllers.Controller" title="jdrones.controllers.Controller"><code class="xref py py-class docutils literal notranslate"><span class="pre">Controller</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jdrones.controllers.AngleController.angle_error">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">angle_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#AngleController.angle_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.AngleController.angle_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jdrones.controllers.Controller">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">Controller</span></span><a class="reference internal" href="_modules/jdrones/controllers.html#Controller"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.Controller" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="jdrones.controllers.PID.angle_error">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">angle_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#PID.angle_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.PID.angle_error" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="jdrones.controllers.Controller.error">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#Controller.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.Controller.error" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="jdrones.controllers.PID.error">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#PID.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.PID.error" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="jdrones.controllers.Controller.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#Controller.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.Controller.reset" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jdrones.controllers.LQR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">LQR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#LQR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.LQR" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jdrones.controllers.Controller" title="jdrones.controllers.Controller"><code class="xref py py-class docutils literal notranslate"><span class="pre">Controller</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jdrones.controllers.LQR.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#LQR.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.LQR.reset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jdrones.controllers.LQR.solve">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#LQR.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.LQR.solve" title="Permalink to this definition"></a></dt>
+<dd><p>Solve the continuous time lqr controller.</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\frac{dx}{dt} = A x + B u\\J = \int x^T Q x + u^T R u\end{aligned}\end{align} \]</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.mwm.im/lqr-controllers-with-python/">http://www.mwm.im/lqr-controllers-with-python/</a></p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – System matrix</p></li>
+<li><p><strong>B</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – System control matrix</p></li>
+<li><p><strong>Q</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – </p></li>
+<li><p><strong>R</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>K</strong> – LQR K matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jdrones.controllers.PID">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">PID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Kd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#PID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.PID" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jdrones.controllers.AngleController" title="jdrones.controllers.AngleController"><code class="xref py py-class docutils literal notranslate"><span class="pre">AngleController</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.controllers.PID.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#PID.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.PID.reset" title="Permalink to this definition"></a></dt>
@@ -163,8 +237,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="types.html" class="btn btn-neutral float-left" title="Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="data_models.html" class="btn btn-neutral float-left" title="Data Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trajectory.html" class="btn btn-neutral float-right" title="Trajectory Generation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

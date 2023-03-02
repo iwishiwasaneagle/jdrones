@@ -4,24 +4,22 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Why &mdash; jdrones 0.4.0 documentation</title>
+  <title>Why &mdash; jdrones 0.5.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Simple Examples" href="examples/examples.html" />
+    <link rel="next" title="Validation" href="examples/examples.html" />
     <link rel="prev" title="jDrones" href="index.html" /> 
 </head>
 
@@ -38,7 +36,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -57,13 +55,17 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#simple-examples">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#automation">Automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#experimental-control">Experimental Control</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="envs.html">Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_models.html">Data Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
@@ -131,10 +133,18 @@
 </section>
 <section id="development">
 <h1>Development<a class="headerlink" href="#development" title="Permalink to this heading"></a></h1>
+<p>Create the local development environment:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>jdrones
 conda<span class="w"> </span>activate<span class="w"> </span>jdrones
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>-r<span class="w"> </span>tests/requirements.txt
-<span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$PWD</span>/src<span class="w"> </span>pytest<span class="w"> </span>tests
+</pre></div>
+</div>
+<p>The run ***<strong>all</strong> tests with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="nv">GIT_DIR</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="k">)</span>
+<span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$GIT_DIR</span>/src<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-s<span class="w"> </span>-q<span class="w"> </span>-n<span class="w"> </span>auto<span class="w"> </span><span class="nv">$GIT_DIR</span>
+<span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$GIT_DIR</span>/src<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-s<span class="w"> </span>-q<span class="w"> </span>-n<span class="w"> </span>auto<span class="w"> </span>--only-integration<span class="w"> </span><span class="nv">$GIT_DIR</span>
+<span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$GIT_DIR</span>/src<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-s<span class="w"> </span>-q<span class="w"> </span>-n<span class="w"> </span>auto<span class="w"> </span>--only-stress-tests<span class="w"> </span><span class="nv">$GIT_DIR</span>
 </pre></div>
 </div>
 </section>
@@ -163,7 +173,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="jDrones" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="examples/examples.html" class="btn btn-neutral float-right" title="Simple Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="examples/examples.html" class="btn btn-neutral float-right" title="Validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

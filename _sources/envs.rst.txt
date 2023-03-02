@@ -1,37 +1,75 @@
+============
 Environments
 ============
 
+Base Models
+===========
+
 BaseDroneEnv
 ------------
-.. autoclass:: jdrones.envs.BaseDroneEnv
+.. autoclass:: jdrones.envs.base.basedronenev.BaseDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-DroneEnv
---------
-.. autoclass:: jdrones.envs.DroneEnv
+PyBulletDroneEnv
+----------------
+.. autoclass:: jdrones.envs.PyBulletDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-AttitudeAltitudeDroneEnv
-------------------------
-.. autoclass:: jdrones.envs.AttitudeAltitudeDroneEnv
+NonlinearDynamicModelDroneEnv
+-----------------------------
+.. autoclass:: jdrones.envs.NonlinearDynamicModelDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-VelHeadAltDroneEnv
-------------------
-.. autoclass:: jdrones.envs.VelHeadAltDroneEnv
+LinearDynamicModelDroneEnv
+--------------------------
+.. autoclass:: jdrones.envs.LinearDynamicModelDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-PIDTrajectoryDroneEnv
----------------------
-.. autoclass:: jdrones.envs.PIDTrajectoryDroneEnv
+Controlled
+==========
+
+BaseControlledEnv
+-----------------
+.. autoclass:: jdrones.envs.BaseControlledEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+LQRDroneEnv
+-----------
+.. autoclass:: jdrones.envs.LQRDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Position
+========
+
+BasePositionDroneEnv
+--------------------
+.. autoclass:: jdrones.envs.position.BasePositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+LQRPositionDroneEnv
+-------------------
+.. autoclass:: jdrones.envs.LQRPositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+PolyPositionDroneEnv
+--------------------
+.. autoclass:: jdrones.envs.PolyPositionDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:

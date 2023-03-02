@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jdrones.envs.position &mdash; jdrones 0.5.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            jdrones
+              <img src="../../../_static/banner_nobg.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.5.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#citations">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#future-work">Future Work</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/examples.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/examples.html#simple-examples">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/examples.html#automation">Automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/examples.html#experimental-control">Experimental Control</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../envs.html">Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_models.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../trajectory.html">Trajectory Generation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Contributors</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">jdrones</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">jdrones.envs.position</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for jdrones.envs.position</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright 2023 Jan-Hendrik Ewers</span>
+<span class="c1">#  SPDX-License-Identifier: GPL-3.0-only</span>
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">gymnasium</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">gymnasium</span> <span class="kn">import</span> <span class="n">spaces</span>
+<span class="kn">from</span> <span class="nn">jdrones.data_models</span> <span class="kn">import</span> <span class="n">State</span>
+<span class="kn">from</span> <span class="nn">jdrones.data_models</span> <span class="kn">import</span> <span class="n">States</span>
+<span class="kn">from</span> <span class="nn">jdrones.data_models</span> <span class="kn">import</span> <span class="n">URDFModel</span>
+<span class="kn">from</span> <span class="nn">jdrones.envs.base.basecontrolledenv</span> <span class="kn">import</span> <span class="n">BaseControlledEnv</span>
+<span class="kn">from</span> <span class="nn">jdrones.envs.dronemodels</span> <span class="kn">import</span> <span class="n">DronePlus</span>
+<span class="kn">from</span> <span class="nn">jdrones.envs.lqr</span> <span class="kn">import</span> <span class="n">LQRDroneEnv</span>
+<span class="kn">from</span> <span class="nn">jdrones.trajectory</span> <span class="kn">import</span> <span class="n">QuinticPolynomialTrajectory</span>
+<span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">PositionAction</span>
+
+
+<div class="viewcode-block" id="BasePositionDroneEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.BasePositionDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">BasePositionDroneEnv</span><span class="p">(</span><span class="n">gymnasium</span><span class="o">.</span><span class="n">Env</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Baseclass for other position drone environments. These are ones where step takes</span>
+<span class="sd">    a :math:`(x,y,z)` argument and makes a drone fly from its current position to there.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">env</span><span class="p">:</span> <span class="n">BaseControlledEnv</span>
+
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="n">model</span><span class="p">:</span> <span class="n">URDFModel</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">URDFModel</span> <span class="o">=</span> <span class="n">DronePlus</span><span class="p">,</span>
+        <span class="n">initial_state</span><span class="p">:</span> <span class="n">State</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">240</span><span class="p">,</span>
+        <span class="n">env</span><span class="p">:</span> <span class="n">LQRDroneEnv</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="n">LQRDroneEnv</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Sequence</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
+            <span class="n">low</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="BasePositionDroneEnv.reset"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.BasePositionDroneEnv.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">States</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="n">obs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">States</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">obs</span><span class="p">)]),</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="BasePositionDroneEnv.step"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.BasePositionDroneEnv.step">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">PositionAction</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">States</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A step from the viewpoint of a</span>
+<span class="sd">        :class:`~jdrones.envs.position.BasePositionDroneEnv` is making the drone</span>
+<span class="sd">        fly from its current position :math:`A` to the target position :math:`B`.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        action : float,float,float</span>
+<span class="sd">            Target coordinates :math:`(x,y,z)`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            states: jdrones.data_models.States</span>
+<span class="sd">            reward: float</span>
+<span class="sd">            term: bool</span>
+<span class="sd">            trunc: bool</span>
+<span class="sd">            info: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BasePositionDroneEnv.get_reward"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.BasePositionDroneEnv.get_reward">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_reward</span><span class="p">(</span><span class="n">states</span><span class="p">:</span> <span class="n">States</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the cost of the segment with</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{gather}</span>
+<span class="sd">            J = \\sum_{i=0}^{T/dt} Q \\frac{\\vec x_i}{dt}</span>
+<span class="sd">            \\\\</span>
+<span class="sd">            Q =</span>
+<span class="sd">            \\left[</span>
+<span class="sd">                1000,1000,1000,0,0,0,0,10,10,10,1,1,1,1,1,1,0,0,0,0</span>
+<span class="sd">            \\right]</span>
+<span class="sd">            \\\\</span>
+<span class="sd">            \\vec x =</span>
+<span class="sd">            \\left[</span>
+<span class="sd">                x,y,z,q_x,q_y,q_z,q_w,\\phi,\\theta,\\psi,\\dot x,\\dot y,\\dot z,</span>
+<span class="sd">                p,q,r,P_1,P_2,P_3,P_4</span>
+<span class="sd">            \\right]</span>
+<span class="sd">            \\end{gather}</span>
+
+<span class="sd">        Where :math:`\\vec x_i` is the state matrix at time-step :math:`i`, and</span>
+<span class="sd">        :math:`Q` is a cost matrix prioritizing error in position and angle.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        states : jdrones.data_models.States</span>
+<span class="sd">            Iterable containing the observed states at regular intervals :math:`dt`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The calculated cost</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">states</span><span class="o">.</span><span class="n">to_df</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s2">&quot;temp&quot;</span><span class="p">)</span>
+        <span class="n">df_sums</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">variable</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">abs</span><span class="p">(),</span> <span class="n">x</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="n">df_sums</span><span class="p">[[</span><span class="s2">&quot;P0&quot;</span><span class="p">,</span> <span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">,</span> <span class="s2">&quot;P3&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">df_sums</span><span class="p">[[</span><span class="s2">&quot;qw&quot;</span><span class="p">,</span> <span class="s2">&quot;qx&quot;</span><span class="p">,</span> <span class="s2">&quot;qy&quot;</span><span class="p">,</span> <span class="s2">&quot;qz&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">df_sums</span><span class="p">[[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]]</span> <span class="o">*=</span> <span class="mi">1000</span>
+        <span class="n">df_sums</span><span class="p">[[</span><span class="s2">&quot;phi&quot;</span><span class="p">,</span> <span class="s2">&quot;theta&quot;</span><span class="p">,</span> <span class="s2">&quot;psi&quot;</span><span class="p">]]</span> <span class="o">*=</span> <span class="mi">10</span>
+
+        <span class="k">return</span> <span class="n">df_sums</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="PolyPositionDroneEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolyPositionDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">PolyPositionDroneEnv</span><span class="p">(</span><span class="n">BasePositionDroneEnv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uses :class:`jdrones.trajectory.QuinticPolynomialTrajectory` to give target</span>
+<span class="sd">    position and velocity commands at every time point until the target is reached.</span>
+<span class="sd">    If the time taken exceeds :math:`T`, the original target position is given as a raw</span>
+<span class="sd">    input as in :class:`~jdrones.envs.position.LQRPositionDroneEnv`. However, if this</span>
+<span class="sd">    were to happen, the distance is small enough to ensure stability.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PolyPositionDroneEnv.step"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolyPositionDroneEnv.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">PositionAction</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">States</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">action_as_state</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
+        <span class="n">action_as_state</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">action</span>
+
+        <span class="n">observations</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span>
+        <span class="n">traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_traj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">action_as_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">max_vel_ms</span><span class="p">)</span>
+
+        <span class="n">u</span><span class="p">:</span> <span class="n">State</span> <span class="o">=</span> <span class="n">action_as_state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="p">{}</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="p">(</span><span class="n">term</span> <span class="ow">or</span> <span class="n">trunc</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">traj</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+                <span class="n">u</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">action</span>
+                <span class="n">u</span><span class="o">.</span><span class="n">vel</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">u</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">position</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">u</span><span class="o">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+            <span class="n">obs</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">to_x</span><span class="p">())</span>
+
+            <span class="n">observations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">action_as_state</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dist</span><span class="p">)):</span>
+                <span class="n">trunc</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">info</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
+
+        <span class="n">states</span> <span class="o">=</span> <span class="n">States</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reward</span><span class="p">(</span><span class="n">states</span><span class="p">),</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span></div>
+
+<div class="viewcode-block" id="PolyPositionDroneEnv.calc_traj"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolyPositionDroneEnv.calc_traj">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">calc_traj</span><span class="p">(</span>
+        <span class="n">cur</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">tgt</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">max_vel</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuinticPolynomialTrajectory</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the trajectory for the drone to traverse.</span>
+
+<span class="sd">        Total time to traverse the polynomial is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            T = \\frac{||x_{t=T}-x_{t=0}||}{v_\\max}</span>
+
+<span class="sd">        to ensure dynamic compatibility.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cur : jdrones.data_models.State</span>
+<span class="sd">            Current state</span>
+<span class="sd">        tgt : jdrones.data_models.State</span>
+<span class="sd">            Target state</span>
+<span class="sd">        max_vel : float</span>
+<span class="sd">            Maximum vehicle velocity</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        jdrones.trajectory.QuinticPolynomialTrajectory</span>
+<span class="sd">            The solved trajectory</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tgt</span><span class="o">.</span><span class="n">pos</span> <span class="o">-</span> <span class="n">cur</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">/</span> <span class="n">max_vel</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">QuinticPolynomialTrajectory</span><span class="p">(</span>
+            <span class="n">start_pos</span><span class="o">=</span><span class="n">cur</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+            <span class="n">start_vel</span><span class="o">=</span><span class="n">cur</span><span class="o">.</span><span class="n">vel</span><span class="p">,</span>
+            <span class="n">start_acc</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">dest_pos</span><span class="o">=</span><span class="n">tgt</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+            <span class="n">dest_vel</span><span class="o">=</span><span class="n">tgt</span><span class="o">.</span><span class="n">vel</span><span class="p">,</span>
+            <span class="n">dest_acc</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">t</span></div></div>
+
+
+<div class="viewcode-block" id="LQRPositionDroneEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.LQRPositionDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">LQRPositionDroneEnv</span><span class="p">(</span><span class="n">BasePositionDroneEnv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Feeds the raw position setpoint into :class:`jdrones.envs.lqr.LQRDroneEnv` until</span>
+<span class="sd">    the drones arrives.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        This is unstable for large inputs (distances of over :math:`10m`) and should</span>
+<span class="sd">        **not** be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LQRPositionDroneEnv.step"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.LQRPositionDroneEnv.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">PositionAction</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">States</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">x_action</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span>
+        <span class="n">x_action</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">action</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">x_action</span><span class="o">.</span><span class="n">to_x</span><span class="p">()</span>
+
+        <span class="n">observations</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span>
+
+        <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="p">{}</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="p">(</span><span class="n">term</span> <span class="ow">or</span> <span class="n">trunc</span><span class="p">):</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+            <span class="n">observations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">obs</span><span class="p">))</span>
+
+            <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">controllers</span><span class="p">[</span><span class="s2">&quot;lqr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">e</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">rpy</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dist</span><span class="p">)):</span>
+                <span class="n">trunc</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">info</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
+
+        <span class="n">states</span> <span class="o">=</span> <span class="n">States</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reward</span><span class="p">(</span><span class="n">states</span><span class="p">),</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Jan-Hendrik Ewers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

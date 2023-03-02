@@ -2,6 +2,123 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2023-03-02
+
+### Bug Fixes
+
+- Make velocity depend on the yaw error [(55e3e09)](https://github.com/iwishiwasaneagle/jpdmgen/commit/55e3e09fc2aebbfa462d11539db00e5a7a1eb1c4)
+- Update states after step [(e768caf)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e768caf14def4a536484bccbf6bdec6f2fe2b079)
+- Small changes to simplify drone model [(6c540a5)](https://github.com/iwishiwasaneagle/jpdmgen/commit/6c540a55d69d4d537ae0c2148a6931ac5c0ce08b)
+- General controller as return, rather than PID [(c7a0f3c)](https://github.com/iwishiwasaneagle/jpdmgen/commit/c7a0f3c03f57e8d3ef41608f6e1c201c81064fc8)
+- Top-level collect errors [(9d8bd3f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/9d8bd3f607468515c50da618c2ec652d568c7db9)
+- Remove and add the appropriate envs [(19e835e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/19e835e24e75c2c58b9731685af3453a9d0e37c7)
+- Incorrect classmethod implementation [(df08a83)](https://github.com/iwishiwasaneagle/jpdmgen/commit/df08a83f59ca653501beed42d2be789d34c10fb5)
+- Bug in PID code after updating to Controller parent class [(93a6a5a)](https://github.com/iwishiwasaneagle/jpdmgen/commit/93a6a5aa7b3cee6fc470ac8319ec7a7d811220e0)
+- Add all in the dir. Controlling what gets published is done via VSC [(92db0a8)](https://github.com/iwishiwasaneagle/jpdmgen/commit/92db0a8155c56700a3107d401532e85ac1b9976e)
+- Droneenv -> pbdroneenv as per conftest [(9b7d206)](https://github.com/iwishiwasaneagle/jpdmgen/commit/9b7d206efa6a3bccc22ad20958f267312bc423f8)
+- Sign changes due to linear model direction changes in d394ad6e1778d2add26d0c792f706db06c0d8ccd [(72ab2cb)](https://github.com/iwishiwasaneagle/jpdmgen/commit/72ab2cba2f51a354b096caf0fc3ba01847ad472e)
+- Top level warning at every import to warn about the different coordinate systems in use [(67d330a)](https://github.com/iwishiwasaneagle/jpdmgen/commit/67d330a7b232c861e606b7681ab1b0e026226f00)
+- Other dependencies were causing huge increases in CI build time, so just cache them all for now [(efd7e00)](https://github.com/iwishiwasaneagle/jpdmgen/commit/efd7e00632d31d7e3491ec6327db47e0c58bdb23)
+- Stupid dumb typo... [(1702be4)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1702be459d21826a4d477f05e8a2f47f90bb43b8)
+- Correctly define drone motors [(1860e97)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1860e9738c79d26c278b086d9bad1adb65c12ad5)
+- Simulation_name -> tag [(80e3fa8)](https://github.com/iwishiwasaneagle/jpdmgen/commit/80e3fa8e4ddda49cf671490b1d22d514ed00ae86)
+- Add condition within PositionDroneEnv to truncate sim if any value is nan [(024387b)](https://github.com/iwishiwasaneagle/jpdmgen/commit/024387b02ae5f7ff78028a45a625df0d825d6ca8)
+- Update docs to reflect changes in f56225d9 (previously forgot to do this) [(4ff1508)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4ff1508b797d1b51eec7db9ab2763011a8b04642)
+- Typo [(8af69f8)](https://github.com/iwishiwasaneagle/jpdmgen/commit/8af69f88b10d9c7f4e0d6844333396932f445461)
+- Correction on the maths. This step is done elsewhere [(3d8a93c)](https://github.com/iwishiwasaneagle/jpdmgen/commit/3d8a93c8b41da4a74dbdc0333970c868b35bcbc9)
+- Oversight from aa0e1e3 after refactor [(a011166)](https://github.com/iwishiwasaneagle/jpdmgen/commit/a0111668312e7831d1c4b378f09446b60710dbe5)
+
+### Documentation
+
+- Incude PositionDroneEnv [(f488f7b)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f488f7bba9dc883a3eec65bbb762f52076f79852)
+- Docstring for LQR solve [(1730bdf)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1730bdf2dff6b8c5fece8412e2852aa000374670)
+- Catagorise example notebooks [(9fd5531)](https://github.com/iwishiwasaneagle/jpdmgen/commit/9fd5531373fa82e7d52627b44a101827efb8f2f0)
+- Include trajectory code in docs [(3057bd0)](https://github.com/iwishiwasaneagle/jpdmgen/commit/3057bd0d8e4fdfe7d1900ff09592b5ad6795b847)
+- Full docs (incl. maths) for QuinticPolynomialTrajectory [(53b56c1)](https://github.com/iwishiwasaneagle/jpdmgen/commit/53b56c1aa6aa27aed0679f13a998ddf07d962d08)
+- Explain cost function within get_reward() [(b175e1c)](https://github.com/iwishiwasaneagle/jpdmgen/commit/b175e1cf068dcaf7f77a1831d0761cc19e8709fe)
+- Docs for BasePositionDroneEnv [(aa0e1e3)](https://github.com/iwishiwasaneagle/jpdmgen/commit/aa0e1e3a2dd30a63a416c94ff5b705a562fa73cb)
+- Docs for PolyPositionDroneEnv [(95d28d0)](https://github.com/iwishiwasaneagle/jpdmgen/commit/95d28d0d521a10ee907b86d18dec565c18430d40)
+- Docs for LQRPositionDroneEnv [(52ab54f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/52ab54fb1b1e49acbcf727cba1ba237c04783dbd)
+- Fix intersphinx links [(5e0a308)](https://github.com/iwishiwasaneagle/jpdmgen/commit/5e0a308766f5eb1eed30b10fd1bd9b382f964a8e)
+- Update README.md to show how to run all types of tests [(dcb07b2)](https://github.com/iwishiwasaneagle/jpdmgen/commit/dcb07b293a73fbd335622b09efa11141a760761f)
+
+### Feat
+
+- GA-tuned LQR [(d35f8b2)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d35f8b2766ee1ee336a3a11a6a43863ffa3dda63)
+
+### Features
+
+- Allow wrappers to be added to the sub-env [(647cc1f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/647cc1f5c9d835493fa0c4c545221e5f68e67652)
+- Implement nonlinear, linear, and nonlinear PB3 models [(d394ad6)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d394ad6e1778d2add26d0c792f706db06c0d8ccd)
+- Create helper functions for both rpm->rpyT and vise versa [(6aea072)](https://github.com/iwishiwasaneagle/jpdmgen/commit/6aea0723893a617bf77a88e7aa9ff6346980b522)
+- LQR controlled drone env [(eb30f2d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/eb30f2d4fc059a5a1cdc1a13a8a1eba973aa26cb)
+- Helper functions and classes to make going from and to state logs easier using pandas [(8fd2b89)](https://github.com/iwishiwasaneagle/jpdmgen/commit/8fd2b897b7de90021f4d928892ad11a0a9673c9f)
+- Lqrdroneenv fixture [(4e725fc)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4e725fcd325e549137eb6631a8c09209e06edca3)
+- Use scipy [(f8c96a1)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f8c96a1a70d76e2e0d9c3e3e7ffa2ea36e718310)
+- PositionDroneEnv [(11e812d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/11e812df0c19a43de219b41da3ff044bbfd835e2)
+- Visually validate models to step inputs [(6123dd2)](https://github.com/iwishiwasaneagle/jpdmgen/commit/6123dd2bdf7745a12c3072c4660a1f26ea4c6842)
+- Position example [(8a3c694)](https://github.com/iwishiwasaneagle/jpdmgen/commit/8a3c694275ac6ce06f99250241f94fab6e6e9fdf)
+- Import script to make the imports less clunky across scripts [(4000218)](https://github.com/iwishiwasaneagle/jpdmgen/commit/40002188b3ea3bc28fa7d0fbe3328ba9940cfb96)
+- Positiondroneenv fixture [(345c5e8)](https://github.com/iwishiwasaneagle/jpdmgen/commit/345c5e88df9d9f1510fb73b754d266f4458f3ed0)
+- MPC Drone Example [(80f4458)](https://github.com/iwishiwasaneagle/jpdmgen/commit/80f4458cdaedcf9562fbf5aca1c0e4e37c386b3b)
+- Add pandas [(450c653)](https://github.com/iwishiwasaneagle/jpdmgen/commit/450c653913aa9fc413c58e4bc704dde3a5947c7b)
+- Quaternion multiplication [(083e53f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/083e53fc04a9dc270df96f108c8615e3f50e9ba3)
+- Rotate state by quat [(8aeba67)](https://github.com/iwishiwasaneagle/jpdmgen/commit/8aeba67aaea7d97e4ce60403daf2331e2c639deb)
+- Ensure all models use RHR coordinate system, consistent with URDF and other sim packages [(2e90952)](https://github.com/iwishiwasaneagle/jpdmgen/commit/2e90952e0460d0e4d797426d185d88be422a6e94)
+- Polynomial trajectory drone env [(7ef1768)](https://github.com/iwishiwasaneagle/jpdmgen/commit/7ef17680231542d3515b6ac2d09b6d423af1b05c)
+- Stress test the position environments to ensure they don't crash over time [(513dcf2)](https://github.com/iwishiwasaneagle/jpdmgen/commit/513dcf2c75b61a2cffd88087da00a5d394d19518)
+
+### Miscellaneous Tasks
+
+- Clean up application of forces and torques to use body [(d6b2ed4)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d6b2ed41e550e81e5d8888ddb22e51c98220a07c)
+- Commit before deleting, to save the current state of the AttitudeAltitudeDroneEnv [(54c99a9)](https://github.com/iwishiwasaneagle/jpdmgen/commit/54c99a9aed4b2a70a4f10e6ffa08d53f7f7676a5)
+- Commit before deleting, to save the current state of the VelHeadAltDroneEnv [(f312e9d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f312e9dfd40801f649236d4f33b4e594d84dc77d)
+- Commit before deleting, to save the current state of the trajectory envs [(fa55246)](https://github.com/iwishiwasaneagle/jpdmgen/commit/fa552469456e945a1a9fc2c8e3fc74c52a257472)
+- Update Q and R matrix gains from tuning via GA [(5a0c71c)](https://github.com/iwishiwasaneagle/jpdmgen/commit/5a0c71caf36fbc2fed249f6a137726183e4113ec)
+- Fix API [(be1e6c2)](https://github.com/iwishiwasaneagle/jpdmgen/commit/be1e6c217a60a0d455c2bae1651f171fa3a052f6)
+- Add more test cases to transform tests [(2e850c3)](https://github.com/iwishiwasaneagle/jpdmgen/commit/2e850c34ecebd3845f32d46fec65325e23e748b5)
+- Commit before deletion for archival purposes [(1b2c99c)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1b2c99c4519cf75f8eaad1ab214669e2cb4de754)
+- Specify action space [(497e74f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/497e74fe85213e251a9193c1e75d027b4ea68a9a)
+- Implement reset in LQR controller and be more verbose about shape of error [(eb828e1)](https://github.com/iwishiwasaneagle/jpdmgen/commit/eb828e16834753cc2dea79b6741c582146414c13)
+- Cleanup imports [(e416f5b)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e416f5b377fd03d40e5a72b834f83c149ac97a36)
+- Version getting [(664d4aa)](https://github.com/iwishiwasaneagle/jpdmgen/commit/664d4aae2b2235ac308c2b5240498e521660d549)
+- Remove [(c1ac6cf)](https://github.com/iwishiwasaneagle/jpdmgen/commit/c1ac6cf9072d52be6863201e6326a4136118f4e9)
+- Update Q and R matrix gains from tuning via GA [(e59f514)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e59f514a248afa784f0692958bb9706eba2da35e)
+- Update graphics [(d8b8ac8)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d8b8ac8b60a7b7c24169f29d55de9cd4e79bc1d5)
+- Still broken, but at least it's been unified... [(adc136a)](https://github.com/iwishiwasaneagle/jpdmgen/commit/adc136aac0319eb6ce9a45f0719eb855928a10d0)
+- Mark integration tests [(c54f3fe)](https://github.com/iwishiwasaneagle/jpdmgen/commit/c54f3fed1ae9a120f28f55f121c12c997cd1f8f9)
+- Rename CI step to something more descriptive [(475303d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/475303de23281efe4714b4cdcad3fb32fdafc19b)
+- Update Q and R matrix gains from tuning via GA [(6d14ee9)](https://github.com/iwishiwasaneagle/jpdmgen/commit/6d14ee95cdd6b7297163982364a587c3681d1c79)
+- Update graphics [(e78074f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e78074fe9869197cbe1757f51aa9e2758f5f3a6c)
+- Add automatic linearisation of NL model to examples [(e365fb1)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e365fb1e7ad3446cf7f91c3db4e317d69eaadbe1)
+- Mock pandas [(4b2399c)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4b2399c93b1d0fd8777c48a4f04b95cebba3a63a)
+- Document BaseControlledEnv [(f4b039e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f4b039e028bc43f69f82b4d12fada85b4a62fc98)
+- Explicitly state the stratgies to prevent duplicates and only run the stress tests once [(e976499)](https://github.com/iwishiwasaneagle/jpdmgen/commit/e9764992be829fb20ee3c7166ea0b03402903a71)
+
+### Refactor
+
+- Remove AttitudeAltitudeDroneEnv to be replaced by LQR controller [(6df31dd)](https://github.com/iwishiwasaneagle/jpdmgen/commit/6df31ddb984b6491f71232de6b6676635844ebd4)
+- Remove VelHeadAltDroneEnv to be replaced by LQR controller [(9de143a)](https://github.com/iwishiwasaneagle/jpdmgen/commit/9de143a64e627d83b00bd34e2ed603be0da3216b)
+- Remove trajectory envs to be replaced by LQR controller [(1807e57)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1807e57868fa82536a7a8e093644882351cd9f20)
+- Reflect envs refactory changes [(07e91ad)](https://github.com/iwishiwasaneagle/jpdmgen/commit/07e91ad753d1d6ac4eb75a47f8826f3a7a6aff4d)
+- Merge into BaseDroneEnv [(d3df134)](https://github.com/iwishiwasaneagle/jpdmgen/commit/d3df134604d4034cc6328f60bba3ffe65dcee8c5)
+- Switch to creating matrices via staticmethod to enable easier access without creating the class [(4b972da)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4b972daf93152f69846304a26a57ecb0cd4cdff7)
+- Move to/from x tests as per refactor [(387cf9f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/387cf9ffb385de65458ebd35c150a35fa0c1f2a3)
+- Delete [(1f4fd4f)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1f4fd4fbb39a08b8c30f8e2a33cd6c8e0d3110fc)
+- Use the new PositionDroneEnv [(3149d74)](https://github.com/iwishiwasaneagle/jpdmgen/commit/3149d74d63f1e9af5fc2f677074f710cbcfe8e38)
+- Split true types and data models into seperate files [(f56225d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/f56225d9ea1d646418bcbf004b3822ea02562245)
+
+### Testing
+
+- Unify tests for NL and L models to ensure compatibility when designing controllers [(606317d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/606317d349f56c49c1f9eed9dd39d09387d9047e)
+- Correct input to rotation [(820540d)](https://github.com/iwishiwasaneagle/jpdmgen/commit/820540dce216f25dcb2d20ca576e6586361418e1)
+- Mark pybullet env's test_vel_from_rot as skipped for now [(1b30792)](https://github.com/iwishiwasaneagle/jpdmgen/commit/1b30792a508f795611cd7f04e8e7aeb51b039bc8)
+- Tested State.apply_quat [(683a12e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/683a12ecafc8a6206a6acf698f1dcf1c513f6572)
+- Ensure assets are consistent between lib and tests [(581d0d5)](https://github.com/iwishiwasaneagle/jpdmgen/commit/581d0d5156cca059e79e23b781f7cfed5f5e8861)
+- Ensure states are float as per 683a12ec [(ab208fd)](https://github.com/iwishiwasaneagle/jpdmgen/commit/ab208fdac37b3f7ef113b3b84e15307d94e4c290)
+- Quat mul via hypothesis using scipy.spatial.transform.Rotation [(5cfcd55)](https://github.com/iwishiwasaneagle/jpdmgen/commit/5cfcd551cdcf606da43457b099552c60c691e3ff)
+- Add pytest-xdist to allow threaded test execution [(92c480b)](https://github.com/iwishiwasaneagle/jpdmgen/commit/92c480b9d873e58a67e1abc151cfa578a4207c7f)
+
 ## [0.4.0] - 2023-02-09
 
 ### Bug Fixes
@@ -23,6 +140,7 @@ All notable changes to this project will be documented in this file.
 - Bump numpy from 1.24.1 to 1.24.2 [(55af72e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/55af72e03ab7d1eb0de8276b607d94dba407ce6c)
 - MathJax configurations [(53fef7e)](https://github.com/iwishiwasaneagle/jpdmgen/commit/53fef7e0d971034f0dc7466405cd8179957f9652)
 - Add warning about this being in alpha [(dbcb855)](https://github.com/iwishiwasaneagle/jpdmgen/commit/dbcb855046442ff874e836cc36a4c2cc47b036f5)
+- Update changelog for v0.4.0 [skip pre-commit.ci] [(4e2afb6)](https://github.com/iwishiwasaneagle/jpdmgen/commit/4e2afb6d7af3332207f9b77894f96a7050cade8a)
 
 ## [0.3.1] - 2023-02-03
 

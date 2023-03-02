@@ -4,24 +4,22 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Examples &mdash; jdrones 0.4.0 documentation</title>
+  <title>Validation &mdash; jdrones 0.5.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Simple Attitude" href="simple_attitude.html" />
+    <link rel="next" title="Validation" href="visual_validations.html" />
     <link rel="prev" title="Why" href="../readme.html" /> 
 </head>
 
@@ -38,7 +36,7 @@
               <img src="../_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -57,18 +55,30 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Simple Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="simple_attitude.html">Simple Attitude</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visual_validations.html">Validation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#simple-examples">Simple Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="simple_position.html">Simple Position</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simple_velocity_heading.html">Simple Velocity-Heading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#automation">Automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ga_tune_lqr_drone.html">Using GA to Tune The LQR Drone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linearise_nonlinear_model.html">Linearise Nonlinear Model Automatically</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#experimental-control">Experimental Control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mpc_drone.html">MPC Drone</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../envs.html">Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_models.html">Data Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trajectory.html">Trajectory Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
@@ -90,7 +100,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Simple Examples</li>
+      <li class="breadcrumb-item active">Validation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/examples/examples.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -124,13 +134,36 @@
     text-align: unset;
 }
 </style>
+<section id="validation">
+<h1>Validation<a class="headerlink" href="#validation" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="visual_validations.html">Validation</a></li>
+</ul>
+</div>
+</section>
 <section id="simple-examples">
 <h1>Simple Examples<a class="headerlink" href="#simple-examples" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="simple_attitude.html">Simple Attitude</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simple_position.html">Simple Position</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simple_velocity_heading.html">Simple Velocity-Heading</a></li>
+</ul>
+</div>
+</section>
+<section id="automation">
+<h1>Automation<a class="headerlink" href="#automation" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ga_tune_lqr_drone.html">Using GA to Tune The LQR Drone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linearise_nonlinear_model.html">Linearise Nonlinear Model Automatically</a></li>
+</ul>
+</div>
+</section>
+<section id="experimental-control">
+<h1>Experimental Control<a class="headerlink" href="#experimental-control" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mpc_drone.html">MPC Drone</a></li>
 </ul>
 </div>
 </section>
@@ -140,7 +173,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../readme.html" class="btn btn-neutral float-left" title="Why" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="simple_attitude.html" class="btn btn-neutral float-right" title="Simple Attitude" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="visual_validations.html" class="btn btn-neutral float-right" title="Validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

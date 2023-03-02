@@ -4,17 +4,15 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; jdrones 0.4.0 documentation</title>
+  <title>Changelog &mdash; jdrones 0.5.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -22,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributors" href="authors.html" />
-    <link rel="prev" title="Controllers" href="controllers.html" /> 
+    <link rel="prev" title="Trajectory Generation" href="trajectory.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,7 +36,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -57,63 +55,77 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#simple-examples">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#automation">Automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#experimental-control">Experimental Control</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="envs.html">Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_models.html">Data Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">[0.4.0] - 2023-02-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">[0.5.0] - 2023-03-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feat">Feat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#miscellaneous-tasks">Miscellaneous Tasks</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">[0.3.1] - 2023-02-03</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Miscellaneous Tasks</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">[0.3.0] - 2023-02-03</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">Miscellaneous Tasks</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">[0.2.0] - 2023-02-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id10">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id12">Miscellaneous Tasks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#refactor">Refactor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id13">[0.1.2] - 2023-01-31</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id14">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id15">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id16">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id17">Refactor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">[0.4.0] - 2023-02-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Miscellaneous Tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id18">[0.1.1] - 2023-01-31</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id19">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id20">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id21">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id22">Miscellaneous Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">[0.3.1] - 2023-02-03</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Miscellaneous Tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id23">[0.1.0] - 2023-01-27</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id24">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id25">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id26">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id27">Refactor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id28">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">[0.3.0] - 2023-02-03</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Miscellaneous Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">[0.2.0] - 2023-02-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Refactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">[0.1.2] - 2023-01-31</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Refactor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id25">[0.1.1] - 2023-01-31</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id26">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id27">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id28">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id29">Miscellaneous Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id30">[0.1.0] - 2023-01-27</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id31">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id32">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id33">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Refactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Testing</a></li>
 </ul>
 </li>
 </ul>
@@ -173,68 +185,201 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading"></a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <section id="id1">
-<h2>[0.4.0] - 2023-02-09<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h2>[0.5.0] - 2023-03-02<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <section id="bug-fixes">
 <h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Getting versions via setuptools_scm.get_version in docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/93558120b3de774f16cfa618752cc2e1285158f8">(9355812)</a></p></li>
-<li><p>Import errors when getting version for docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/0366a1f782f987c2c9ffead3acc81f1ca7b67c95">(0366a1f)</a></p></li>
+<li><p>Make velocity depend on the yaw error <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/55e3e09fc2aebbfa462d11539db00e5a7a1eb1c4">(55e3e09)</a></p></li>
+<li><p>Update states after step <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e768caf14def4a536484bccbf6bdec6f2fe2b079">(e768caf)</a></p></li>
+<li><p>Small changes to simplify drone model <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6c540a55d69d4d537ae0c2148a6931ac5c0ce08b">(6c540a5)</a></p></li>
+<li><p>General controller as return, rather than PID <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/c7a0f3c03f57e8d3ef41608f6e1c201c81064fc8">(c7a0f3c)</a></p></li>
+<li><p>Top-level collect errors <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9d8bd3f607468515c50da618c2ec652d568c7db9">(9d8bd3f)</a></p></li>
+<li><p>Remove and add the appropriate envs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/19e835e24e75c2c58b9731685af3453a9d0e37c7">(19e835e)</a></p></li>
+<li><p>Incorrect classmethod implementation <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/df08a83f59ca653501beed42d2be789d34c10fb5">(df08a83)</a></p></li>
+<li><p>Bug in PID code after updating to Controller parent class <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/93a6a5aa7b3cee6fc470ac8319ec7a7d811220e0">(93a6a5a)</a></p></li>
+<li><p>Add all in the dir. Controlling what gets published is done via VSC <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/92db0a8155c56700a3107d401532e85ac1b9976e">(92db0a8)</a></p></li>
+<li><p>Droneenv -&gt; pbdroneenv as per conftest <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9b7d206efa6a3bccc22ad20958f267312bc423f8">(9b7d206)</a></p></li>
+<li><p>Sign changes due to linear model direction changes in d394ad6e1778d2add26d0c792f706db06c0d8ccd <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/72ab2cba2f51a354b096caf0fc3ba01847ad472e">(72ab2cb)</a></p></li>
+<li><p>Top level warning at every import to warn about the different coordinate systems in use <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/67d330a7b232c861e606b7681ab1b0e026226f00">(67d330a)</a></p></li>
+<li><p>Other dependencies were causing huge increases in CI build time, so just cache them all for now <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/efd7e00632d31d7e3491ec6327db47e0c58bdb23">(efd7e00)</a></p></li>
+<li><p>Stupid dumb typo… <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1702be459d21826a4d477f05e8a2f47f90bb43b8">(1702be4)</a></p></li>
+<li><p>Correctly define drone motors <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1860e9738c79d26c278b086d9bad1adb65c12ad5">(1860e97)</a></p></li>
+<li><p>Simulation_name -&gt; tag <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/80e3fa8e4ddda49cf671490b1d22d514ed00ae86">(80e3fa8)</a></p></li>
+<li><p>Add condition within PositionDroneEnv to truncate sim if any value is nan <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/024387b02ae5f7ff78028a45a625df0d825d6ca8">(024387b)</a></p></li>
+<li><p>Update docs to reflect changes in f56225d9 (previously forgot to do this) <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/4ff1508b797d1b51eec7db9ab2763011a8b04642">(4ff1508)</a></p></li>
+<li><p>Typo <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/8af69f88b10d9c7f4e0d6844333396932f445461">(8af69f8)</a></p></li>
+<li><p>Correction on the maths. This step is done elsewhere <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/3d8a93c8b41da4a74dbdc0333970c868b35bcbc9">(3d8a93c)</a></p></li>
+<li><p>Oversight from aa0e1e3 after refactor <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/a0111668312e7831d1c4b378f09446b60710dbe5">(a011166)</a></p></li>
 </ul>
 </section>
 <section id="documentation">
 <h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>PID trajectory env documentation to explain the control logic <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f9568f09250fc4ed3e027362939cbb07559ab127">(f9568f0)</a></p></li>
-<li><p>Improve envs page readability through headings which now show up in toctree <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/cedc2cc379ce62b41f0f4bfe83d7af42f75ea343">(cedc2cc)</a></p></li>
+<li><p>Incude PositionDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f488f7bba9dc883a3eec65bbb762f52076f79852">(f488f7b)</a></p></li>
+<li><p>Docstring for LQR solve <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1730bdf2dff6b8c5fece8412e2852aa000374670">(1730bdf)</a></p></li>
+<li><p>Catagorise example notebooks <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9fd5531373fa82e7d52627b44a101827efb8f2f0">(9fd5531)</a></p></li>
+<li><p>Include trajectory code in docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/3057bd0d8e4fdfe7d1900ff09592b5ad6795b847">(3057bd0)</a></p></li>
+<li><p>Full docs (incl. maths) for QuinticPolynomialTrajectory <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/53b56c1aa6aa27aed0679f13a998ddf07d962d08">(53b56c1)</a></p></li>
+<li><p>Explain cost function within get_reward() <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/b175e1cf068dcaf7f77a1831d0761cc19e8709fe">(b175e1c)</a></p></li>
+<li><p>Docs for BasePositionDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/aa0e1e3a2dd30a63a416c94ff5b705a562fa73cb">(aa0e1e3)</a></p></li>
+<li><p>Docs for PolyPositionDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/95d28d0d521a10ee907b86d18dec565c18430d40">(95d28d0)</a></p></li>
+<li><p>Docs for LQRPositionDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/52ab54fb1b1e49acbcf727cba1ba237c04783dbd">(52ab54f)</a></p></li>
+<li><p>Fix intersphinx links <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/5e0a308766f5eb1eed30b10fd1bd9b382f964a8e">(5e0a308)</a></p></li>
+<li><p>Update README.md to show how to run all types of tests <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/dcb07b293a73fbd335622b09efa11141a760761f">(dcb07b2)</a></p></li>
+</ul>
+</section>
+<section id="feat">
+<h3>Feat<a class="headerlink" href="#feat" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>GA-tuned LQR <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d35f8b2766ee1ee336a3a11a6a43863ffa3dda63">(d35f8b2)</a></p></li>
 </ul>
 </section>
 <section id="features">
 <h3>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Add GPL3 headers to all project files <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/737214c61f2ee894e2109e9a36032941062253a4">(737214c)</a></p></li>
+<li><p>Allow wrappers to be added to the sub-env <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/647cc1f5c9d835493fa0c4c545221e5f68e67652">(647cc1f)</a></p></li>
+<li><p>Implement nonlinear, linear, and nonlinear PB3 models <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d394ad6e1778d2add26d0c792f706db06c0d8ccd">(d394ad6)</a></p></li>
+<li><p>Create helper functions for both rpm-&gt;rpyT and vise versa <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6aea0723893a617bf77a88e7aa9ff6346980b522">(6aea072)</a></p></li>
+<li><p>LQR controlled drone env <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/eb30f2d4fc059a5a1cdc1a13a8a1eba973aa26cb">(eb30f2d)</a></p></li>
+<li><p>Helper functions and classes to make going from and to state logs easier using pandas <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/8fd2b897b7de90021f4d928892ad11a0a9673c9f">(8fd2b89)</a></p></li>
+<li><p>Lqrdroneenv fixture <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/4e725fcd325e549137eb6631a8c09209e06edca3">(4e725fc)</a></p></li>
+<li><p>Use scipy <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f8c96a1a70d76e2e0d9c3e3e7ffa2ea36e718310">(f8c96a1)</a></p></li>
+<li><p>PositionDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/11e812df0c19a43de219b41da3ff044bbfd835e2">(11e812d)</a></p></li>
+<li><p>Visually validate models to step inputs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6123dd2bdf7745a12c3072c4660a1f26ea4c6842">(6123dd2)</a></p></li>
+<li><p>Position example <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/8a3c694275ac6ce06f99250241f94fab6e6e9fdf">(8a3c694)</a></p></li>
+<li><p>Import script to make the imports less clunky across scripts <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/40002188b3ea3bc28fa7d0fbe3328ba9940cfb96">(4000218)</a></p></li>
+<li><p>Positiondroneenv fixture <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/345c5e88df9d9f1510fb73b754d266f4458f3ed0">(345c5e8)</a></p></li>
+<li><p>MPC Drone Example <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/80f4458cdaedcf9562fbf5aca1c0e4e37c386b3b">(80f4458)</a></p></li>
+<li><p>Add pandas <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/450c653913aa9fc413c58e4bc704dde3a5947c7b">(450c653)</a></p></li>
+<li><p>Quaternion multiplication <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/083e53fc04a9dc270df96f108c8615e3f50e9ba3">(083e53f)</a></p></li>
+<li><p>Rotate state by quat <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/8aeba67aaea7d97e4ce60403daf2331e2c639deb">(8aeba67)</a></p></li>
+<li><p>Ensure all models use RHR coordinate system, consistent with URDF and other sim packages <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/2e90952e0460d0e4d797426d185d88be422a6e94">(2e90952)</a></p></li>
+<li><p>Polynomial trajectory drone env <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/7ef17680231542d3515b6ac2d09b6d423af1b05c">(7ef1768)</a></p></li>
+<li><p>Stress test the position environments to ensure they don’t crash over time <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/513dcf2c75b61a2cffd88087da00a5d394d19518">(513dcf2)</a></p></li>
 </ul>
 </section>
 <section id="miscellaneous-tasks">
 <h3>Miscellaneous Tasks<a class="headerlink" href="#miscellaneous-tasks" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Bump numpy from 1.24.1 to 1.24.2 <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/55af72e03ab7d1eb0de8276b607d94dba407ce6c">(55af72e)</a></p></li>
-<li><p>MathJax configurations <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/53fef7e0d971034f0dc7466405cd8179957f9652">(53fef7e)</a></p></li>
-<li><p>Add warning about this being in alpha <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/dbcb855046442ff874e836cc36a4c2cc47b036f5">(dbcb855)</a></p></li>
+<li><p>Clean up application of forces and torques to use body <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d6b2ed41e550e81e5d8888ddb22e51c98220a07c">(d6b2ed4)</a></p></li>
+<li><p>Commit before deleting, to save the current state of the AttitudeAltitudeDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/54c99a9aed4b2a70a4f10e6ffa08d53f7f7676a5">(54c99a9)</a></p></li>
+<li><p>Commit before deleting, to save the current state of the VelHeadAltDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f312e9dfd40801f649236d4f33b4e594d84dc77d">(f312e9d)</a></p></li>
+<li><p>Commit before deleting, to save the current state of the trajectory envs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/fa552469456e945a1a9fc2c8e3fc74c52a257472">(fa55246)</a></p></li>
+<li><p>Update Q and R matrix gains from tuning via GA <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/5a0c71caf36fbc2fed249f6a137726183e4113ec">(5a0c71c)</a></p></li>
+<li><p>Fix API <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/be1e6c217a60a0d455c2bae1651f171fa3a052f6">(be1e6c2)</a></p></li>
+<li><p>Add more test cases to transform tests <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/2e850c34ecebd3845f32d46fec65325e23e748b5">(2e850c3)</a></p></li>
+<li><p>Commit before deletion for archival purposes <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1b2c99c4519cf75f8eaad1ab214669e2cb4de754">(1b2c99c)</a></p></li>
+<li><p>Specify action space <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/497e74fe85213e251a9193c1e75d027b4ea68a9a">(497e74f)</a></p></li>
+<li><p>Implement reset in LQR controller and be more verbose about shape of error <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/eb828e16834753cc2dea79b6741c582146414c13">(eb828e1)</a></p></li>
+<li><p>Cleanup imports <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e416f5b377fd03d40e5a72b834f83c149ac97a36">(e416f5b)</a></p></li>
+<li><p>Version getting <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/664d4aae2b2235ac308c2b5240498e521660d549">(664d4aa)</a></p></li>
+<li><p>Remove <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/c1ac6cf9072d52be6863201e6326a4136118f4e9">(c1ac6cf)</a></p></li>
+<li><p>Update Q and R matrix gains from tuning via GA <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e59f514a248afa784f0692958bb9706eba2da35e">(e59f514)</a></p></li>
+<li><p>Update graphics <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d8b8ac8b60a7b7c24169f29d55de9cd4e79bc1d5">(d8b8ac8)</a></p></li>
+<li><p>Still broken, but at least it’s been unified… <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/adc136aac0319eb6ce9a45f0719eb855928a10d0">(adc136a)</a></p></li>
+<li><p>Mark integration tests <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/c54f3fed1ae9a120f28f55f121c12c997cd1f8f9">(c54f3fe)</a></p></li>
+<li><p>Rename CI step to something more descriptive <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/475303de23281efe4714b4cdcad3fb32fdafc19b">(475303d)</a></p></li>
+<li><p>Update Q and R matrix gains from tuning via GA <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6d14ee95cdd6b7297163982364a587c3681d1c79">(6d14ee9)</a></p></li>
+<li><p>Update graphics <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e78074fe9869197cbe1757f51aa9e2758f5f3a6c">(e78074f)</a></p></li>
+<li><p>Add automatic linearisation of NL model to examples <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e365fb1e7ad3446cf7f91c3db4e317d69eaadbe1">(e365fb1)</a></p></li>
+<li><p>Mock pandas <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/4b2399c93b1d0fd8777c48a4f04b95cebba3a63a">(4b2399c)</a></p></li>
+<li><p>Document BaseControlledEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f4b039e028bc43f69f82b4d12fada85b4a62fc98">(f4b039e)</a></p></li>
+<li><p>Explicitly state the stratgies to prevent duplicates and only run the stress tests once <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e9764992be829fb20ee3c7166ea0b03402903a71">(e976499)</a></p></li>
+</ul>
+</section>
+<section id="refactor">
+<h3>Refactor<a class="headerlink" href="#refactor" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Remove AttitudeAltitudeDroneEnv to be replaced by LQR controller <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6df31ddb984b6491f71232de6b6676635844ebd4">(6df31dd)</a></p></li>
+<li><p>Remove VelHeadAltDroneEnv to be replaced by LQR controller <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9de143a64e627d83b00bd34e2ed603be0da3216b">(9de143a)</a></p></li>
+<li><p>Remove trajectory envs to be replaced by LQR controller <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1807e57868fa82536a7a8e093644882351cd9f20">(1807e57)</a></p></li>
+<li><p>Reflect envs refactory changes <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/07e91ad753d1d6ac4eb75a47f8826f3a7a6aff4d">(07e91ad)</a></p></li>
+<li><p>Merge into BaseDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d3df134604d4034cc6328f60bba3ffe65dcee8c5">(d3df134)</a></p></li>
+<li><p>Switch to creating matrices via staticmethod to enable easier access without creating the class <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/4b972daf93152f69846304a26a57ecb0cd4cdff7">(4b972da)</a></p></li>
+<li><p>Move to/from x tests as per refactor <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/387cf9ffb385de65458ebd35c150a35fa0c1f2a3">(387cf9f)</a></p></li>
+<li><p>Delete <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1f4fd4fbb39a08b8c30f8e2a33cd6c8e0d3110fc">(1f4fd4f)</a></p></li>
+<li><p>Use the new PositionDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/3149d74d63f1e9af5fc2f677074f710cbcfe8e38">(3149d74)</a></p></li>
+<li><p>Split true types and data models into seperate files <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f56225d9ea1d646418bcbf004b3822ea02562245">(f56225d)</a></p></li>
+</ul>
+</section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Unify tests for NL and L models to ensure compatibility when designing controllers <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/606317d349f56c49c1f9eed9dd39d09387d9047e">(606317d)</a></p></li>
+<li><p>Correct input to rotation <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/820540dce216f25dcb2d20ca576e6586361418e1">(820540d)</a></p></li>
+<li><p>Mark pybullet env’s test_vel_from_rot as skipped for now <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1b30792a508f795611cd7f04e8e7aeb51b039bc8">(1b30792)</a></p></li>
+<li><p>Tested State.apply_quat <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/683a12ecafc8a6206a6acf698f1dcf1c513f6572">(683a12e)</a></p></li>
+<li><p>Ensure assets are consistent between lib and tests <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/581d0d5156cca059e79e23b781f7cfed5f5e8861">(581d0d5)</a></p></li>
+<li><p>Ensure states are float as per 683a12ec <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/ab208fdac37b3f7ef113b3b84e15307d94e4c290">(ab208fd)</a></p></li>
+<li><p>Quat mul via hypothesis using scipy.spatial.transform.Rotation <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/5cfcd551cdcf606da43457b099552c60c691e3ff">(5cfcd55)</a></p></li>
+<li><p>Add pytest-xdist to allow threaded test execution <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/92c480b9d873e58a67e1abc151cfa578a4207c7f">(92c480b)</a></p></li>
 </ul>
 </section>
 </section>
 <section id="id2">
-<h2>[0.3.1] - 2023-02-03<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<h2>[0.4.0] - 2023-02-09<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
 <section id="id3">
 <h3>Bug Fixes<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Getting versions via setuptools_scm.get_version in docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/93558120b3de774f16cfa618752cc2e1285158f8">(9355812)</a></p></li>
+<li><p>Import errors when getting version for docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/0366a1f782f987c2c9ffead3acc81f1ca7b67c95">(0366a1f)</a></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Documentation<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>PID trajectory env documentation to explain the control logic <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f9568f09250fc4ed3e027362939cbb07559ab127">(f9568f0)</a></p></li>
+<li><p>Improve envs page readability through headings which now show up in toctree <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/cedc2cc379ce62b41f0f4bfe83d7af42f75ea343">(cedc2cc)</a></p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>Features<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add GPL3 headers to all project files <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/737214c61f2ee894e2109e9a36032941062253a4">(737214c)</a></p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Bump numpy from 1.24.1 to 1.24.2 <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/55af72e03ab7d1eb0de8276b607d94dba407ce6c">(55af72e)</a></p></li>
+<li><p>MathJax configurations <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/53fef7e0d971034f0dc7466405cd8179957f9652">(53fef7e)</a></p></li>
+<li><p>Add warning about this being in alpha <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/dbcb855046442ff874e836cc36a4c2cc47b036f5">(dbcb855)</a></p></li>
+<li><p>Update changelog for v0.4.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/4e2afb6d7af3332207f9b77894f96a7050cade8a">(4e2afb6)</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h2>[0.3.1] - 2023-02-03<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<section id="id8">
+<h3>Bug Fixes<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Install pandoc in CD pipeline <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/8ede88665934c84b9854f2a9af9a9bb48be49074">(8ede886)</a></p></li>
 </ul>
 </section>
-<section id="id4">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<section id="id9">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Update changelog for v0.3.1 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/98c35970785ad5942496eec865da5aba022d1de9">(98c3597)</a></p></li>
 </ul>
 </section>
 </section>
-<section id="id5">
-<h2>[0.3.0] - 2023-02-03<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
-<section id="id6">
-<h3>Bug Fixes<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<section id="id10">
+<h2>[0.3.0] - 2023-02-03<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h2>
+<section id="id11">
+<h3>Bug Fixes<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Install pandoc which is required by sphinx <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/433b1463907f526bbee2c35b872338ee26770903">(433b146)</a></p></li>
 <li><p>Sudo for apt-get commands <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1ea68ea0bb24ef6b9301874a777556d33dcbd49a">(1ea68ea)</a></p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>Features<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<section id="id12">
+<h3>Features<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Examples <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/8baabd41d11a2f2e997299b1db5ad19da3cd682f">(8baabd4)</a></p></li>
 </ul>
 </section>
-<section id="id8">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<section id="id13">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Fix building of docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/4b6fffc6358508d7a05e3bb7f29747a5d7535a8b">(4b6fffc)</a></p></li>
 <li><p>Mock nbtyping for docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9f9f88f8ccbae2c965b502ddeff3f74f10d6c1e7">(9f9f88f)</a></p></li>
@@ -243,16 +388,16 @@
 </ul>
 </section>
 </section>
-<section id="id9">
-<h2>[0.2.0] - 2023-02-02<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h2>
-<section id="id10">
-<h3>Bug Fixes<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<section id="id14">
+<h2>[0.2.0] - 2023-02-02<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h2>
+<section id="id15">
+<h3>Bug Fixes<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Unused variable in the URDFModel from refactoring <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/95ae8b184ea1c5779dae65b7b06e3164c2129328">(95ae8b1)</a></p></li>
 </ul>
 </section>
-<section id="id11">
-<h3>Features<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<section id="id16">
+<h3>Features<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Move yaw and rpy transform calculations into maths module <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/99e65324a517e07a9feff84097b432bb6f2f1950">(99e6532)</a></p></li>
 <li><p>Move poly traj into own module and fully test <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/a727658c41fc53ddd20d58b22eb60d868efcf799">(a727658)</a></p></li>
@@ -262,8 +407,8 @@
 <li><p>Properly handle asset paths <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/583c6006dbf07b5f1c6b01b82ba6a4bf6949f92c">(583c600)</a></p></li>
 </ul>
 </section>
-<section id="id12">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<section id="id17">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Use more appropriate clip_scalar <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e288313a97f4818f7644d12cc02bfe5326a2b396">(e288313)</a></p></li>
 <li><p>Deal with refactoring of drone envs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/05fe4c5db17d3e626c4268efe83572d4a5eabdca">(05fe4c5)</a></p></li>
@@ -275,8 +420,8 @@
 <li><p>Update changelog for v0.2.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1a4ccd82bcd5854b3623c5a9da39b81ffabdf152">(1a4ccd8)</a></p></li>
 </ul>
 </section>
-<section id="refactor">
-<h3>Refactor<a class="headerlink" href="#refactor" title="Permalink to this heading"></a></h3>
+<section id="id18">
+<h3>Refactor<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Remove custom action types and remodel them as types <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/025ca4e7bef6a8099d9e1e34f9e3db88eb90a896">(025ca4e)</a></p></li>
 <li><p>Alter way the info dict is manipulated <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/a17a9a4adb3c2164658f75cdf9907e0bec6e5413">(a17a9a4)</a></p></li>
@@ -286,40 +431,40 @@
 <li><p>Merged with trajectory env API <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/a0c30c3dbd62e2f840ebb443c358d4f27c754e93">(a0c30c3)</a></p></li>
 </ul>
 </section>
-<section id="testing">
-<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h3>
+<section id="id19">
+<h3>Testing<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Fully test PID controllers <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/94862d4d8247dbcf4b13290cfc6a511275126cad">(94862d4)</a></p></li>
 </ul>
 </section>
 </section>
-<section id="id13">
-<h2>[0.1.2] - 2023-01-31<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h2>
-<section id="id14">
-<h3>Bug Fixes<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<section id="id20">
+<h2>[0.1.2] - 2023-01-31<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h2>
+<section id="id21">
+<h3>Bug Fixes<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Use different URLs for files that are hosted on gh-pages <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d84ccb37136503aa81f8c1b8ec446dd29b61e6c0">(d84ccb3)</a></p></li>
 <li><p>Docstr-cov was failing whilst trying to get baseline <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/49d207739829f082ba04ad548004884753f0f2fc">(49d2077)</a></p></li>
 <li><p>Hierarchy error in titles <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/21ea9b7546144286fdbc361bf5be74535ebcc350">(21ea9b7)</a></p></li>
 </ul>
 </section>
-<section id="id15">
-<h3>Documentation<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<section id="id22">
+<h3>Documentation<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Add controllers to docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/856c336ab2a64cc35594d2041ac8114ab0577654">(856c336)</a></p></li>
 <li><p>Improve index.rst to act as the landing page for the hosted docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1091aed4ea211d706283a5affa9643670617a9e5">(1091aed)</a></p></li>
 </ul>
 </section>
-<section id="id16">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<section id="id23">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Mock pybullet_data <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d858099acad558b9fe0665b587fa062b6ac07ef9">(d858099)</a></p></li>
 <li><p>Remove -q from checkout <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f5493c671f64fd533d1c04e85c68443de829af79">(f5493c6)</a></p></li>
 <li><p>Update changelog for v0.1.2 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/0495c5663b11d65370a22533b63f43361d7eba51">(0495c56)</a></p></li>
 </ul>
 </section>
-<section id="id17">
-<h3>Refactor<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<section id="id24">
+<h3>Refactor<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Speed up docstr build by only requireing docs/requirements.txt <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6d6cb6401a33edb7ce3fa1eac218750f0e50e9ef">(6d6cb64)</a></p></li>
 <li><p>Move PyBulletIds to types module <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/b3ad632744045e7f411f6fcf1e10f2d660b8712e">(b3ad632)</a></p></li>
@@ -327,10 +472,10 @@
 </ul>
 </section>
 </section>
-<section id="id18">
-<h2>[0.1.1] - 2023-01-31<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h2>
-<section id="id19">
-<h3>Bug Fixes<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
+<section id="id25">
+<h2>[0.1.1] - 2023-01-31<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h2>
+<section id="id26">
+<h3>Bug Fixes<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Running very slow because of np.asarray <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6e193445972e9aa307bb648cf01d512ffbf3fa16">(6e19344)</a></p></li>
 <li><p>Reused function name <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/2690f4ebc6f16445502014dcf6438ed3acccbdb8">(2690f4e)</a></p></li>
@@ -340,8 +485,8 @@
 <li><p>Allow –accept-empty in case there’s no python files <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/1714bbfcbb494225aa0b51b6b3beb353eec4861e">(1714bbf)</a></p></li>
 </ul>
 </section>
-<section id="id20">
-<h3>Documentation<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<section id="id27">
+<h3>Documentation<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Start of BaseDroneEnv docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/7b9553fe5d68e92fc78e4c9b594c4cac55101db8">(7b9553f)</a></p></li>
 <li><p>Do most of the types docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/c3e3a18e178a60e5f5ee8c85ed141d305b48e2c3">(c3e3a18)</a></p></li>
@@ -349,14 +494,14 @@
 <li><p>Include BaseDroneEnv in generated docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/de0f0585d1f734483369e133056703d41fda9812">(de0f058)</a></p></li>
 </ul>
 </section>
-<section id="id21">
-<h3>Features<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
+<section id="id28">
+<h3>Features<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Check docstr coverage isn’t being reduced <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/a4be21b1a618060c360cdff4c0f32b828117f1e2">(a4be21b)</a></p></li>
 </ul>
 </section>
-<section id="id22">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
+<section id="id29">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Improve readme <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/f9095111c7fbc999cab9a9a45d2f8d1d3ae4ac4f">(f909511)</a></p></li>
 <li><p>Add future work on motor modelling <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9307e91da249088486242203515f0ff98a985c58">(9307e91)</a></p></li>
@@ -369,10 +514,10 @@
 </ul>
 </section>
 </section>
-<section id="id23">
-<h2>[0.1.0] - 2023-01-27<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h2>
-<section id="id24">
-<h3>Bug Fixes<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
+<section id="id30">
+<h2>[0.1.0] - 2023-01-27<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h2>
+<section id="id31">
+<h3>Bug Fixes<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Updates to setup since there’s no CPP <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/6e489fb22f5aa2edf54887734eae587d649b61bc">(6e489fb)</a></p></li>
 <li><p>Use pip wheel rather than cibuildwheel as it’s currently a pure python package <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/94a0837ee37f26784de4231afd42b5258e44f09a">(94a0837)</a></p></li>
@@ -386,15 +531,15 @@
 <li><p>Revert permissions, as this is done through settings console <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/07b9198b677288b2a15ef73e1c315fb09af12113">(07b9198)</a></p></li>
 </ul>
 </section>
-<section id="id25">
-<h3>Features<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h3>
+<section id="id32">
+<h3>Features<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Initial commit <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/2b2928c2901d69e5954e0558ba9e2cd204b2a48c">(2b2928c)</a></p></li>
 <li><p>Move back to pip as conda wasn’t required <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/071ae4b8f5ecb21e82fa4263611e0012c520271a">(071ae4b)</a></p></li>
 </ul>
 </section>
-<section id="id26">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h3>
+<section id="id33">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Update changelog for v0.2.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/e4b25d479669a2fa7301dd51f1090d5e378655c2">(e4b25d4)</a></p></li>
 <li><p>Update changelog for v0.1.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/9b402385ae225dca824639154dbdb241394c1592">(9b40238)</a></p></li>
@@ -407,14 +552,14 @@
 <li><p>Update changelog for v0.1.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/d3dc7686ca804b005aa050f14521381a74cae501">(d3dc768)</a></p></li>
 </ul>
 </section>
-<section id="id27">
-<h3>Refactor<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
+<section id="id34">
+<h3>Refactor<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Docs filenames and symlink names <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/64aba9a8b773d72df807f4177ca34b068e4de8c0">(64aba9a)</a></p></li>
 </ul>
 </section>
-<section id="id28">
-<h3>Testing<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
+<section id="id35">
+<h3>Testing<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Skip integration tests <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/2651c8be53738c47f3c79c7622f1ab0c15621f4b">(2651c8b)</a></p></li>
 <li><p>Fix tests since quats and euler have multiple correct variations <a class="reference external" href="https://github.com/iwishiwasaneagle/jpdmgen/commit/5a3a96daf1b9374d605fba3f4dae620973b88c8e">(5a3a96d)</a></p></li>
@@ -427,7 +572,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="controllers.html" class="btn btn-neutral float-left" title="Controllers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trajectory.html" class="btn btn-neutral float-left" title="Trajectory Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="authors.html" class="btn btn-neutral float-right" title="Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

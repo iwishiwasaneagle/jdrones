@@ -3,17 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; jdrones 0.4.0 documentation</title>
+  <title>Index &mdash; jdrones 0.5.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -35,7 +33,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -54,13 +52,17 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#simple-examples">Simple Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#automation">Automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html#experimental-control">Experimental Control</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="envs.html">Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="types.html">Data Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_models.html">Data Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
@@ -107,6 +109,7 @@
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
@@ -121,25 +124,25 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.action_space">action_space (jdrones.envs.AttitudeAltitudeDroneEnv property)</a>
+      <li><a href="trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory.acceleration">acceleration() (jdrones.trajectory.QuinticPolynomialTrajectory method)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv.action_space">action_space (jdrones.envs.base.basedronenev.BaseDroneEnv property)</a>
 
       <ul>
-        <li><a href="envs.html#jdrones.envs.BaseDroneEnv.action_space">(jdrones.envs.BaseDroneEnv property)</a>
+        <li><a href="envs.html#jdrones.envs.BaseControlledEnv.action_space">(jdrones.envs.BaseControlledEnv property)</a>
 </li>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.action_space">(jdrones.envs.DroneEnv property)</a>
+        <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv.action_space">(jdrones.envs.LinearDynamicModelDroneEnv property)</a>
 </li>
-        <li><a href="envs.html#jdrones.envs.PIDTrajectoryDroneEnv.action_space">(jdrones.envs.PIDTrajectoryDroneEnv property)</a>
-</li>
-        <li><a href="envs.html#jdrones.envs.VelHeadAltDroneEnv.action_space">(jdrones.envs.VelHeadAltDroneEnv property)</a>
+        <li><a href="envs.html#jdrones.envs.LQRDroneEnv.action_space">(jdrones.envs.LQRDroneEnv property)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.State.ang_vel">ang_vel (jdrones.types.State property)</a>
+      <li><a href="data_models.html#jdrones.data_models.State.ang_vel">ang_vel (jdrones.data_models.State property)</a>
 </li>
-      <li><a href="controllers.html#jdrones.controllers.PID.angle_error">angle_error() (jdrones.controllers.PID static method)</a>
+      <li><a href="controllers.html#jdrones.controllers.AngleController.angle_error">angle_error() (jdrones.controllers.AngleController static method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv">AttitudeAltitudeDroneEnv (class in jdrones.envs)</a>
+      <li><a href="controllers.html#jdrones.controllers.AngleController">AngleController (class in jdrones.controllers)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -147,7 +150,13 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv">BaseDroneEnv (class in jdrones.envs)</a>
+      <li><a href="envs.html#jdrones.envs.BaseControlledEnv">BaseControlledEnv (class in jdrones.envs)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv">BaseDroneEnv (class in jdrones.envs.base.basedronenev)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.position.BasePositionDroneEnv">BasePositionDroneEnv (class in jdrones.envs.position)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -155,33 +164,35 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.calculate_aerodynamic_forces">calculate_aerodynamic_forces() (jdrones.envs.BaseDroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv.calc_dstate">calc_dstate() (jdrones.envs.LinearDynamicModelDroneEnv method)</a>
 
       <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_aerodynamic_forces">(jdrones.envs.DroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.NonlinearDynamicModelDroneEnv.calc_dstate">(jdrones.envs.NonlinearDynamicModelDroneEnv static method)</a>
 </li>
       </ul></li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.calculate_external_torques">calculate_external_torques() (jdrones.envs.BaseDroneEnv method)</a>
-
-      <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_external_torques">(jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv.calc_dx">calc_dx() (jdrones.envs.LinearDynamicModelDroneEnv static method)</a>
 </li>
-      </ul></li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.calculate_propulsive_forces">calculate_propulsive_forces() (jdrones.envs.BaseDroneEnv method)</a>
-
-      <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.calculate_propulsive_forces">(jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.PolyPositionDroneEnv.calc_traj">calc_traj() (jdrones.envs.PolyPositionDroneEnv static method)</a>
 </li>
-      </ul></li>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_aerodynamic_forces">calculate_aerodynamic_forces() (jdrones.envs.PyBulletDroneEnv method)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_external_torques">calculate_external_torques() (jdrones.envs.PyBulletDroneEnv method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.PyBulletIds.client">client (jdrones.types.PyBulletIds attribute)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_propulsive_forces">calculate_propulsive_forces() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.close">close() (jdrones.envs.BaseDroneEnv method)</a>
+      <li><a href="data_models.html#jdrones.data_models.PyBulletIds.client">client (jdrones.data_models.PyBulletIds attribute)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.controllers">controllers (jdrones.envs.AttitudeAltitudeDroneEnv attribute)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.close">close() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.PIDTrajectoryDroneEnv.cost_func">cost_func (jdrones.envs.PIDTrajectoryDroneEnv attribute)</a>
+      <li><a href="trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory.coeffs">coeffs (jdrones.trajectory.QuinticPolynomialTrajectory attribute)</a>
+</li>
+      <li><a href="controllers.html#jdrones.controllers.Controller">Controller (class in jdrones.controllers)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.BaseControlledEnv.controllers">controllers (jdrones.envs.BaseControlledEnv attribute)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.Conversions">Conversions (class in jdrones.data_models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -189,15 +200,15 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.SimulationType.DIRECT">DIRECT (jdrones.types.SimulationType attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.SimulationType.DIRECT">DIRECT (jdrones.data_models.SimulationType attribute)</a>
 </li>
-      <li><a href="types.html#jdrones.types.URDFModel.drag_coeffs">drag_coeffs (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.drag_coeffs">drag_coeffs (jdrones.data_models.URDFModel attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.PyBulletIds.drone">drone (jdrones.types.PyBulletIds attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.PyBulletIds.drone">drone (jdrones.data_models.PyBulletIds attribute)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.DroneEnv">DroneEnv (class in jdrones.envs)</a>
+      <li><a href="envs.html#jdrones.envs.position.BasePositionDroneEnv.dt">dt (jdrones.envs.position.BasePositionDroneEnv attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -205,11 +216,15 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.PIDTrajectoryDroneEnv.env">env (jdrones.envs.PIDTrajectoryDroneEnv attribute)</a>
+      <li><a href="envs.html#jdrones.envs.BaseControlledEnv.env">env (jdrones.envs.BaseControlledEnv attribute)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.position.BasePositionDroneEnv.env">(jdrones.envs.position.BasePositionDroneEnv attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="controllers.html#jdrones.controllers.PID.error">error() (jdrones.controllers.PID static method)</a>
+      <li><a href="controllers.html#jdrones.controllers.Controller.error">error() (jdrones.controllers.Controller static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -217,7 +232,11 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.filepath">filepath (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.filepath">filepath (jdrones.data_models.URDFModel attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="data_models.html#jdrones.data_models.State.from_x">from_x() (jdrones.data_models.State class method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -225,39 +244,29 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.g">g (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.g">g (jdrones.data_models.URDFModel attribute)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.DroneEnv.get_info">get_info() (jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.get_info">get_info() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_kinematic_data">get_kinematic_data() (jdrones.envs.BaseDroneEnv static method)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.get_kinematic_data">get_kinematic_data() (jdrones.envs.PyBulletDroneEnv static method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_observation">get_observation() (jdrones.envs.BaseDroneEnv method)</a>
-
-      <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.get_observation">(jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv.get_matrices">get_matrices() (jdrones.envs.LinearDynamicModelDroneEnv static method)</a>
 </li>
-      </ul></li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_reward">get_reward() (jdrones.envs.BaseDroneEnv method)</a>
-
-      <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.get_reward">(jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.get_observation">get_observation() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_terminated">get_terminated() (jdrones.envs.BaseDroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.position.BasePositionDroneEnv.get_reward">get_reward() (jdrones.envs.position.BasePositionDroneEnv static method)</a>
 
       <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.get_terminated">(jdrones.envs.DroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.get_reward">(jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.get_truncated">get_truncated() (jdrones.envs.BaseDroneEnv method)</a>
-
-      <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.get_truncated">(jdrones.envs.DroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.get_terminated">get_terminated() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
-      </ul></li>
-      <li><a href="types.html#jdrones.types.SimulationType.GUI">GUI (jdrones.types.SimulationType attribute)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.get_truncated">get_truncated() (jdrones.envs.PyBulletDroneEnv method)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.SimulationType.GUI">GUI (jdrones.data_models.SimulationType attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -265,15 +274,17 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.I">I (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.I">I (jdrones.data_models.URDFModel attribute)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.ids">ids (jdrones.envs.BaseDroneEnv attribute)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.ids">ids (jdrones.envs.PyBulletDroneEnv attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.info">info (jdrones.envs.BaseDroneEnv attribute)</a>
+      <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv.info">info (jdrones.envs.base.basedronenev.BaseDroneEnv attribute)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.initial_state">initial_state (jdrones.envs.BaseDroneEnv attribute)</a>
+      <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv.initial_state">initial_state (jdrones.envs.base.basedronenev.BaseDroneEnv attribute)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.Conversions.iter_to_df">iter_to_df() (jdrones.data_models.Conversions static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -288,13 +299,27 @@
         <li><a href="controllers.html#module-jdrones.controllers">module</a>
 </li>
       </ul></li>
+      <li>
+    jdrones.data_models
+
+      <ul>
+        <li><a href="data_models.html#module-jdrones.data_models">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    jdrones.trajectory
+
+      <ul>
+        <li><a href="trajectory.html#module-jdrones.trajectory">module</a>
+</li>
+      </ul></li>
       <li>
     jdrones.types
 
       <ul>
-        <li><a href="types.html#module-jdrones.types">module</a>
+        <li><a href="data_models.html#module-jdrones.types">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -303,19 +328,19 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.KLengthArray.k">k (jdrones.types.KLengthArray attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.KLengthArray.k">k (jdrones.data_models.KLengthArray attribute)</a>
 
       <ul>
-        <li><a href="types.html#jdrones.types.State.k">(jdrones.types.State attribute)</a>
+        <li><a href="data_models.html#jdrones.data_models.State.k">(jdrones.data_models.State attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.k_Q">k_Q (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.k_Q">k_Q (jdrones.data_models.URDFModel attribute)</a>
 </li>
-      <li><a href="types.html#jdrones.types.URDFModel.k_T">k_T (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.k_T">k_T (jdrones.data_models.URDFModel attribute)</a>
 </li>
-      <li><a href="types.html#jdrones.types.KLengthArray">KLengthArray (class in jdrones.types)</a>
+      <li><a href="data_models.html#jdrones.data_models.KLengthArray">KLengthArray (class in jdrones.data_models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -323,7 +348,19 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.l">l (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.l">l (jdrones.data_models.URDFModel attribute)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv">LinearDynamicModelDroneEnv (class in jdrones.envs)</a>
+</li>
+      <li><a href="data_models.html#jdrones.types.LinearXAction">LinearXAction (in module jdrones.types)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="controllers.html#jdrones.controllers.LQR">LQR (class in jdrones.controllers)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.LQRDroneEnv">LQRDroneEnv (class in jdrones.envs)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.LQRPositionDroneEnv">LQRPositionDroneEnv (class in jdrones.envs)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -331,42 +368,56 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.mass">mass (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.mass">mass (jdrones.data_models.URDFModel attribute)</a>
 </li>
-      <li><a href="types.html#jdrones.types.URDFModel.max_vel_ms">max_vel_ms (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.types.MAT3X3">MAT3X3 (in module jdrones.types)</a>
 </li>
-      <li><a href="types.html#jdrones.types.URDFModel.mixing_matrix">mixing_matrix (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.types.MAT4X3">MAT4X3 (in module jdrones.types)</a>
 </li>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.max_vel_ms">max_vel_ms (jdrones.data_models.URDFModel attribute)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.mixing_matrix">mixing_matrix (jdrones.data_models.URDFModel attribute)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv.model">model (jdrones.envs.base.basedronenev.BaseDroneEnv attribute)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.position.BasePositionDroneEnv.model">(jdrones.envs.position.BasePositionDroneEnv attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.model">model (jdrones.envs.BaseDroneEnv attribute)</a>
-</li>
       <li>
     module
 
       <ul>
         <li><a href="controllers.html#module-jdrones.controllers">jdrones.controllers</a>
 </li>
-        <li><a href="types.html#module-jdrones.types">jdrones.types</a>
+        <li><a href="data_models.html#module-jdrones.data_models">jdrones.data_models</a>
+</li>
+        <li><a href="trajectory.html#module-jdrones.trajectory">jdrones.trajectory</a>
+</li>
+        <li><a href="data_models.html#module-jdrones.types">jdrones.types</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.NonlinearDynamicModelDroneEnv">NonlinearDynamicModelDroneEnv (class in jdrones.envs)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.observation_space">observation_space (jdrones.envs.BaseDroneEnv property)</a>
-
-      <ul>
-        <li><a href="envs.html#jdrones.envs.DroneEnv.observation_space">(jdrones.envs.DroneEnv property)</a>
+      <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv.observation_space">observation_space (jdrones.envs.base.basedronenev.BaseDroneEnv property)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.PIDTrajectoryDroneEnv.observations">observations (jdrones.envs.PIDTrajectoryDroneEnv attribute)</a>
-</li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.on_ground_plane">on_ground_plane (jdrones.envs.BaseDroneEnv property)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.on_ground_plane">on_ground_plane (jdrones.envs.PyBulletDroneEnv property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -378,17 +429,25 @@
 </li>
       <li><a href="controllers.html#jdrones.controllers.PID_antiwindup">PID_antiwindup (class in jdrones.controllers)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.PIDTrajectoryDroneEnv">PIDTrajectoryDroneEnv (class in jdrones.envs)</a>
+      <li><a href="data_models.html#jdrones.data_models.PyBulletIds.plane">plane (jdrones.data_models.PyBulletIds attribute)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.PolyPositionDroneEnv">PolyPositionDroneEnv (class in jdrones.envs)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.State.pos">pos (jdrones.data_models.State property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.PyBulletIds.plane">plane (jdrones.types.PyBulletIds attribute)</a>
+      <li><a href="trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory.position">position() (jdrones.trajectory.QuinticPolynomialTrajectory method)</a>
 </li>
-      <li><a href="types.html#jdrones.types.State.pos">pos (jdrones.types.State property)</a>
+      <li><a href="data_models.html#jdrones.types.PositionAction">PositionAction (in module jdrones.types)</a>
 </li>
-      <li><a href="types.html#jdrones.types.State.prop_omega">prop_omega (jdrones.types.State property)</a>
+      <li><a href="data_models.html#jdrones.data_models.State.prop_omega">prop_omega (jdrones.data_models.State property)</a>
 </li>
-      <li><a href="types.html#jdrones.types.PyBulletIds">PyBulletIds (class in jdrones.types)</a>
+      <li><a href="data_models.html#jdrones.types.PropellerAction">PropellerAction (in module jdrones.types)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv">PyBulletDroneEnv (class in jdrones.envs)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.PyBulletIds">PyBulletIds (class in jdrones.data_models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -396,7 +455,13 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.State.quat">quat (jdrones.types.State property)</a>
+      <li><a href="data_models.html#jdrones.data_models.State.quat">quat (jdrones.data_models.State property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="data_models.html#jdrones.data_models.State.quat_rotation">quat_rotation() (jdrones.data_models.State method)</a>
+</li>
+      <li><a href="trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory">QuinticPolynomialTrajectory (class in jdrones.trajectory)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -404,23 +469,33 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.render">render() (jdrones.envs.BaseDroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.render">render() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
-      <li><a href="controllers.html#jdrones.controllers.PID.reset">reset() (jdrones.controllers.PID method)</a>
+      <li><a href="controllers.html#jdrones.controllers.Controller.reset">reset() (jdrones.controllers.Controller method)</a>
 
       <ul>
-        <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.reset">(jdrones.envs.AttitudeAltitudeDroneEnv method)</a>
+        <li><a href="controllers.html#jdrones.controllers.LQR.reset">(jdrones.controllers.LQR method)</a>
 </li>
-        <li><a href="envs.html#jdrones.envs.BaseDroneEnv.reset">(jdrones.envs.BaseDroneEnv method)</a>
+        <li><a href="controllers.html#jdrones.controllers.PID.reset">(jdrones.controllers.PID method)</a>
 </li>
-        <li><a href="envs.html#jdrones.envs.PIDTrajectoryDroneEnv.reset">(jdrones.envs.PIDTrajectoryDroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv.reset">(jdrones.envs.base.basedronenev.BaseDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.BaseControlledEnv.reset">(jdrones.envs.BaseControlledEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.LQRDroneEnv.reset">(jdrones.envs.LQRDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.position.BasePositionDroneEnv.reset">(jdrones.envs.position.BasePositionDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.reset">(jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.State.rpy">rpy (jdrones.types.State property)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.rpm2rpyT">rpm2rpyT() (jdrones.data_models.URDFModel method)</a>
 </li>
-      <li><a href="types.html#jdrones.types.URDFModel.rpyT2rpm">rpyT2rpm() (jdrones.types.URDFModel method)</a>
+      <li><a href="data_models.html#jdrones.data_models.State.rpy">rpy (jdrones.data_models.State property)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.rpyT2rpm">rpyT2rpm() (jdrones.data_models.URDFModel method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -428,24 +503,38 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.simulation_type">simulation_type (jdrones.envs.BaseDroneEnv attribute)</a>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.simulation_type">simulation_type (jdrones.envs.PyBulletDroneEnv attribute)</a>
 </li>
-      <li><a href="types.html#jdrones.types.SimulationType">SimulationType (class in jdrones.types)</a>
+      <li><a href="data_models.html#jdrones.data_models.SimulationType">SimulationType (class in jdrones.data_models)</a>
 </li>
-      <li><a href="types.html#jdrones.types.State">State (class in jdrones.types)</a>
+      <li><a href="controllers.html#jdrones.controllers.LQR.solve">solve() (jdrones.controllers.LQR static method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.BaseDroneEnv.state">state (jdrones.envs.BaseDroneEnv attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.State">State (class in jdrones.data_models)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.base.basedronenev.BaseDroneEnv.state">state (jdrones.envs.base.basedronenev.BaseDroneEnv attribute)</a>
+
+      <ul>
+        <li><a href="envs.html#jdrones.envs.BaseControlledEnv.state">(jdrones.envs.BaseControlledEnv property)</a>
+</li>
+      </ul></li>
+      <li><a href="data_models.html#jdrones.data_models.States">States (class in jdrones.data_models)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.AttitudeAltitudeDroneEnv.step">step() (jdrones.envs.AttitudeAltitudeDroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv.step">step() (jdrones.envs.LinearDynamicModelDroneEnv method)</a>
 
       <ul>
-        <li><a href="envs.html#jdrones.envs.BaseDroneEnv.step">(jdrones.envs.BaseDroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.LQRDroneEnv.step">(jdrones.envs.LQRDroneEnv method)</a>
 </li>
-        <li><a href="envs.html#jdrones.envs.PIDTrajectoryDroneEnv.step">(jdrones.envs.PIDTrajectoryDroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.LQRPositionDroneEnv.step">(jdrones.envs.LQRPositionDroneEnv method)</a>
 </li>
-        <li><a href="envs.html#jdrones.envs.VelHeadAltDroneEnv.step">(jdrones.envs.VelHeadAltDroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.NonlinearDynamicModelDroneEnv.step">(jdrones.envs.NonlinearDynamicModelDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.PolyPositionDroneEnv.step">(jdrones.envs.PolyPositionDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.position.BasePositionDroneEnv.step">(jdrones.envs.position.BasePositionDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.step">(jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -454,11 +543,15 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.tau_Q">tau_Q (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.tau_Q">tau_Q (jdrones.data_models.URDFModel attribute)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.tau_T">tau_T (jdrones.data_models.URDFModel attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.tau_T">tau_T (jdrones.types.URDFModel attribute)</a>
+      <li><a href="data_models.html#jdrones.data_models.States.to_df">to_df() (jdrones.data_models.States method)</a>
+</li>
+      <li><a href="data_models.html#jdrones.data_models.State.to_x">to_x() (jdrones.data_models.State method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -466,7 +559,7 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel">URDFModel (class in jdrones.types)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel">URDFModel (class in jdrones.data_models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -474,11 +567,15 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.State.vel">vel (jdrones.types.State property)</a>
+      <li><a href="data_models.html#jdrones.types.VEC3">VEC3 (in module jdrones.types)</a>
+</li>
+      <li><a href="data_models.html#jdrones.types.VEC4">VEC4 (in module jdrones.types)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="envs.html#jdrones.envs.VelHeadAltDroneEnv">VelHeadAltDroneEnv (class in jdrones.envs)</a>
+      <li><a href="data_models.html#jdrones.data_models.State.vel">vel (jdrones.data_models.State property)</a>
+</li>
+      <li><a href="trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory.velocity">velocity() (jdrones.trajectory.QuinticPolynomialTrajectory method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -486,7 +583,7 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="types.html#jdrones.types.URDFModel.weight">weight (jdrones.types.URDFModel property)</a>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.weight">weight (jdrones.data_models.URDFModel property)</a>
 </li>
   </ul></td>
 </tr></table>
