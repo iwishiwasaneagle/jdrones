@@ -6,7 +6,7 @@ from jdrones.data_models import State
 from scipy.spatial.transform import Rotation as R
 
 
-@pytest.fixture(params=[(0,) * 20])
+@pytest.fixture(params=[(0.0,) * 20])
 def state(request):
     return State(request.param)
 
@@ -52,7 +52,30 @@ def test_state_to_x_to_state(s):
 
 
 def test_state_to_x():
-    state = State([1, 2, 3, 0, 0, 0, 0, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 0, 0, 0])
+    state = State(
+        [
+            1.0,
+            2.0,
+            3.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0,
+            5.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
     state_to_x = state.to_x()
     assert np.allclose(state_to_x[:3], (1, 2, 3))
     assert np.allclose(state_to_x[3:6], (7, 8, 9))
@@ -61,7 +84,7 @@ def test_state_to_x():
 
 
 def test_x_to_state():
-    x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    x = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
     x_to_state = State.from_x(x)
     assert np.allclose(x_to_state.pos, (1, 2, 3))
     assert np.allclose(x_to_state.vel, (4, 5, 6))
