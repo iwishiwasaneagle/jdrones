@@ -1,5 +1,6 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import abc
 import collections
 import itertools
 from typing import Any
@@ -7,10 +8,10 @@ from typing import Any
 import gymnasium
 import numpy as np
 from gymnasium import spaces
-from gymnasium.core import ActType
 from jdrones.data_models import State
 from jdrones.data_models import States
 from jdrones.data_models import URDFModel
+from jdrones.envs.base.basecontrolledenv import BaseControlledEnv
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.envs.lqr import LQRDroneEnv
 from jdrones.trajectory import QuinticPolynomialTrajectory
@@ -18,7 +19,18 @@ from jdrones.types import PositionAction
 from loguru import logger
 
 
-class BasePositionDroneEnv(gymnasium.Env):
+class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
+    """
+    Baseclass for other position drone environments. These are ones where step takes
+    a :math:`(x,y,z)` argument and makes a drone fly from its current position to there.
+    """
+
+    env: BaseControlledEnv
+
+    dt: float
+
+    model: URDFModel
+
     def __init__(
         self,
         model: URDFModel = DronePlus,
@@ -30,12 +42,11 @@ class BasePositionDroneEnv(gymnasium.Env):
             env = LQRDroneEnv(model=model, initial_state=initial_state, dt=dt)
         self.env = env
         self.dt = dt
+        self.model = model
         self.observation_space = spaces.Sequence(self.env.observation_space)
-
-    @property
-    def action_space(self) -> ActType:
-        bounds = np.array([[0, 10], [0, 10], [1, 10]])
-        return spaces.Box(low=bounds[:, 0], high=bounds[:, 1])
+        self.action_space = spaces.Box(
+            low=np.array([0, 0, 1]), high=np.array([10, 10, 10])
+        )
 
     def reset(
         self,
@@ -48,6 +59,31 @@ class BasePositionDroneEnv(gymnasium.Env):
         obs, _ = self.env.reset(seed=seed, options=options)
 
         return States([np.copy(obs)]), {}
+
+    @abc.abstractmethod
+    def step(
+        self, action: PositionAction
+    ) -> tuple[States, float, bool, bool, dict[str, Any]]:
+        """
+        A step from the viewpoint of a
+        :class:`~jdrones.envs.position.BasePositionDroneEnv` is making the drone
+        fly from its current position :math:`A` to the target position :math:`B`.
+
+
+        Parameters
+        ----------
+        action : float,float,float
+            Target coordinates :math:`(x,y,z)`
+
+        Returns
+        -------
+            states: jdrones.data_models.States
+            reward: float
+            term: bool
+            trunc: bool
+            info: dict
+        """
+        pass
 
     @staticmethod
     def get_reward(states: States) -> float:
