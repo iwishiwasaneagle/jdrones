@@ -1,5 +1,9 @@
+============
 Environments
 ============
+
+Base Models
+===========
 
 BaseDroneEnv
 ------------
@@ -29,6 +33,9 @@ LinearDynamicModelDroneEnv
    :undoc-members:
    :show-inheritance:
 
+Controlled
+==========
+
 LQRDroneEnv
 -----------
 .. autoclass:: jdrones.envs.LQRDroneEnv
@@ -36,9 +43,26 @@ LQRDroneEnv
    :undoc-members:
    :show-inheritance:
 
-PositionDroneEnv
-----------------
-.. autoclass:: jdrones.envs.PositionDroneEnv
+Position
+========
+
+BasePositionDroneEnv
+--------------------
+.. autoclass:: jdrones.envs.position.BasePositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+LQRPositionDroneEnv
+-------------------
+.. autoclass:: jdrones.envs.LQRPositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+LQRPositionDroneEnv
+-------------------
+.. autoclass:: jdrones.envs.PolyPositionDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:

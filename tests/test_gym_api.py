@@ -13,7 +13,8 @@ from gymnasium.utils.env_checker import check_env
         ("NonLinearDynamicModelDroneEnv-v0", {}),
         ("LinearDynamicModelDroneEnv-v0", {}),
         ("LQRDroneEnv-v0", {}),
-        ("PositionDroneEnv-v0", {}),
+        ("LQRPositionDroneEnv-v0", {}),
+        ("PolyPositionDroneEnv-v0", {}),
     ],
 )
 def test_make(env, kwargs):
@@ -41,5 +42,10 @@ def test_LQRDroneEnv(lqrdroneenv):
 
 
 @pytest.mark.integration
-def test_PositionDroneEnv(positiondroneenv):
-    check_env(positiondroneenv)
+def test_LQRPositionDroneEnv(lqrpositiondroneenv):
+    check_env(lqrpositiondroneenv)
+
+
+@pytest.mark.integration
+def test_PolyPositionDroneEnv(polypositiondroneenv):
+    check_env(polypositiondroneenv)

@@ -10,8 +10,9 @@ from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
+from jdrones.envs import LQRPositionDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
-from jdrones.envs import PositionDroneEnv
+from jdrones.envs import PolyPositionDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.transforms import euler_to_quat
@@ -256,8 +257,20 @@ def lqrdroneenv(env_default_kwargs):
 
 
 @pytest.fixture
-def positiondroneenv(env_default_kwargs):
-    class _A(PositionDroneEnv):
+def lqrpositiondroneenv(env_default_kwargs):
+    class _A(LQRPositionDroneEnv):
+        @property
+        def action_space(self):
+            return spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
+
+    d = _A(**env_default_kwargs)
+    yield d
+    d.close()
+
+
+@pytest.fixture
+def polypositiondroneenv(env_default_kwargs):
+    class _A(PolyPositionDroneEnv):
         @property
         def action_space(self):
             return spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)

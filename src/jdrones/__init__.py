@@ -17,8 +17,12 @@ register(
     entry_point="jdrones.envs:LQRDroneEnv",
 )
 register(
-    "PositionDroneEnv-v0",
-    entry_point="jdrones.envs:PositionDroneEnv",
+    "LQRPositionDroneEnv-v0",
+    entry_point="jdrones.envs:LQRPositionDroneEnv",
+)
+register(
+    "PolyPositionDroneEnv-v0",
+    entry_point="jdrones.envs:PolyPositionDroneEnv",
 )
 
 __version__ = "unknown"

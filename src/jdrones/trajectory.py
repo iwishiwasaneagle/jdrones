@@ -8,7 +8,7 @@ import numpy as np
 from jdrones.types import VEC3
 
 
-class Trajectory:
+class QuinticPolynomialTrajectory:
 
     coeffs: Dict[str, nptyping.NDArray[nptyping.Shape["1,6"], nptyping.Double]]
 
