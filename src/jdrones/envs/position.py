@@ -51,6 +51,38 @@ class BasePositionDroneEnv(gymnasium.Env):
 
     @staticmethod
     def get_reward(states: States) -> float:
+        """
+        Calculate the cost of the segment with
+
+        .. math::
+            \\begin{gather}
+            J = \\sum_{i=0}^{T/dt} Q \\frac{\\vec x_i}{dt}
+            \\\\
+            Q =
+            \\left[
+                1000,1000,1000,0,0,0,0,10,10,10,1,1,1,1,1,1,0,0,0,0
+            \\right]
+            \\\\
+            \\vec x =
+            \\left[
+                x,y,z,q_x,q_y,q_z,q_w,\\phi,\\theta,\\psi,\\dot x,\\dot y,\\dot z,
+                p,q,r,P_1,P_2,P_3,P_4
+            \\right]
+            \\end{gather}
+
+        Where :math:`\\vec x_i` is the state matrix at time-step :math:`i`, and
+        :math:`Q` is a cost matrix prioritizing error in position and angle.
+
+        Parameters
+        ----------
+        states : jdrones.data_models.States
+            Iterable containing the observed states at regular intervals :math:`dt`
+
+        Returns
+        -------
+        float
+            The calculated cost
+        """
         df = states.to_df(tag="temp")
         df_sums = (
             df.sort_values("t")
