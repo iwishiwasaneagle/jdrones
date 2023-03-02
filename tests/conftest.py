@@ -24,6 +24,11 @@ def pytest_configure(config):
         "integration: mark tests as integration tests and only run when "
         "--with-integration or --only-integration is passed",
     )
+    config.addinivalue_line(
+        "markers",
+        "stress: mark tests as stress tests and only run when "
+        "--with-stress-tests or --only-stress-tests is passed",
+    )
 
 
 def pytest_addoption(parser):
@@ -33,34 +38,56 @@ def pytest_addoption(parser):
     parser.addoption(
         "--only-integration", action="store_true", help="Only run integration tests"
     )
+    parser.addoption(
+        "--with-stress-tests", action="store_true", help="Run stress tests"
+    )
+    parser.addoption(
+        "--only-stress-tests", action="store_true", help="Only run stress tests"
+    )
 
 
 def pytest_collection_modifyitems(config, items):
     w_int = config.getoption("--with-integration")
     o_int = config.getoption("--only-integration")
-    if w_int and o_int:
-        raise Exception("Cannot have both -with-integration and --only-integration")
-    elif w_int and not o_int:
-        # --with-integration given in cli: do not skip any tests
+    w_stress = config.getoption("--with-stress-tests")
+    o_stress = config.getoption("--only-stress-tests")
+
+    skip_integration = pytest.mark.skip(reason="Integration tests are being skipped")
+    skip_non_integration = pytest.mark.skip(
+        reason="Non-integration tests are being skipped"
+    )
+    skip_stress = pytest.mark.skip(reason="Stress tests are being skipped")
+    skip_non_stress = pytest.mark.skip(reason="Non-stress tests are being skipped")
+
+    if w_int and w_stress:
         return
-    elif not w_int and not o_int:
-        # --with-integration NOT given in cli: skip integration tests
-        skip_integration = pytest.mark.skip(
-            reason="Integration tests are being skipped"
-        )
-        for item in items:
-            if "integration" in item.keywords:
+
+    if o_stress and o_int:
+        raise Exception("Cannot have both --only-integration and --only-stress-tests")
+
+    for item in items:
+        int_in_kw = "integration" in item.keywords
+        stress_in_kw = "stress" in item.keywords
+        if w_int or o_int or w_stress or o_stress:
+            if o_int:
+                if not int_in_kw:
+                    item.add_marker(skip_non_integration)
+            elif o_stress:
+                if not stress_in_kw:
+                    item.add_marker(skip_non_stress)
+            elif w_int and w_stress:
+                pass
+            elif w_int:
+                if stress_in_kw:
+                    item.add_marker(skip_stress)
+            elif w_stress:
+                if int_in_kw:
+                    item.add_marker(skip_integration)
+        else:
+            if int_in_kw:
                 item.add_marker(skip_integration)
-    elif not w_int and o_int:
-        # --only-integration given in cli: skip all non-integration tests
-        skip_non_integration = pytest.mark.skip(
-            reason="Non-integration tests are being skipped"
-        )
-        for item in items:
-            if "integration" not in item.keywords:
-                item.add_marker(skip_non_integration)
-    else:
-        raise Exception("Unknown condition")
+            elif stress_in_kw:
+                item.add_marker(skip_stress)
 
 
 @pytest.fixture
@@ -259,9 +286,9 @@ def lqrdroneenv(env_default_kwargs):
 @pytest.fixture
 def lqrpositiondroneenv(env_default_kwargs):
     class _A(LQRPositionDroneEnv):
-        @property
-        def action_space(self):
-            return spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.action_space = spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
 
     d = _A(**env_default_kwargs)
     yield d
@@ -271,9 +298,9 @@ def lqrpositiondroneenv(env_default_kwargs):
 @pytest.fixture
 def polypositiondroneenv(env_default_kwargs):
     class _A(PolyPositionDroneEnv):
-        @property
-        def action_space(self):
-            return spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.action_space = spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
 
     d = _A(**env_default_kwargs)
     yield d
