@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.2] - 2023-03-02
+
+### Features
+
+- Update release creator to use softprops/action-gh-release as recommended by GH [(f8e3880)](https://github.com/iwishiwasaneagle/jdrones/commit/f8e38805604f2d9cd61ce4b391e565a1a11eb648)
+
 ## [0.5.1] - 2023-03-02
 
 ### Bug Fixes
@@ -12,6 +18,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous Tasks
 
 - Clean up old jpdmgen references [(2647eca)](https://github.com/iwishiwasaneagle/jdrones/commit/2647ecaedadc01e43a709c42d3a69f361c5fb03c)
+- Update changelog for v0.5.1 [skip pre-commit.ci] [(02852e2)](https://github.com/iwishiwasaneagle/jdrones/commit/02852e27fe9240865d55818ffc715249d32bc908)
 
 ## [0.5.0] - 2023-03-02
 
