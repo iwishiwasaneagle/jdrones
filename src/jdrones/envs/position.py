@@ -16,7 +16,6 @@ from jdrones.envs.dronemodels import DronePlus
 from jdrones.envs.lqr import LQRDroneEnv
 from jdrones.trajectory import QuinticPolynomialTrajectory
 from jdrones.types import PositionAction
-from loguru import logger
 
 
 class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
@@ -135,6 +134,14 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
 
 
 class PolyPositionDroneEnv(BasePositionDroneEnv):
+    """
+    Uses :class:`jdrones.trajectory.QuinticPolynomialTrajectory` to give target
+    position and velocity commands at every time point until the target is reached.
+    If the time taken exceeds :math:`T`, the original target position is given as a raw
+    input as in :class:`~jdrones.envs.position.LQRPositionDroneEnv`. However, if this
+    were to happen, the distance is small enough to ensure stability.
+    """
+
     def step(
         self, action: PositionAction
     ) -> tuple[States, float, bool, bool, dict[str, Any]]:
@@ -142,7 +149,7 @@ class PolyPositionDroneEnv(BasePositionDroneEnv):
         action_as_state.pos = action
 
         observations = collections.deque()
-        traj = self.calc_traj(self.env.state, action_as_state)
+        traj = self.calc_traj(self.env.state, action_as_state, self.model.max_vel_ms)
 
         u: State = action_as_state.copy()
 
@@ -176,11 +183,32 @@ class PolyPositionDroneEnv(BasePositionDroneEnv):
     def calc_traj(
         cur: State, tgt: State, max_vel: float = 1
     ) -> QuinticPolynomialTrajectory:
-        logger.debug(f"Generating polynomial trajectory from {cur.pos} to {tgt.pos}")
+        """
+        Calculate the trajectory for the drone to traverse.
 
+        Total time to traverse the polynomial is defined as
+
+        .. math::
+            T = \\frac{||x_{t=T}-x_{t=0}||}{v_\\max}
+
+        to ensure dynamic compatibility.
+
+        Parameters
+        ----------
+        cur : jdrones.data_models.State
+            Current state
+        tgt : jdrones.data_models.State
+            Target state
+        max_vel : float
+            Maximum vehicle velocity
+
+        Returns
+        -------
+        jdrones.trajectory.QuinticPolynomialTrajectory
+            The solved trajectory
+        """
         dist = np.linalg.norm(tgt.pos - cur.pos)
         T = dist / max_vel
-        logger.debug(f"Total time for polynomial is {T=:.2f}s")
 
         t = QuinticPolynomialTrajectory(
             start_pos=cur.pos,
