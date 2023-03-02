@@ -117,14 +117,17 @@ class LQR(Controller):
 
         Parameters
         ----------
-        A
-        B
-        Q
-        R
+        A : numpy.ndarray
+            System matrix
+        B : numpy.ndarray
+            System control matrix
+        Q : numpy.ndarray
+        R : numpy.ndarray
 
         Returns
         -------
-        K
+        K : numpy.ndarray
+            LQR K matrix
         """
 
         # first, try to solve the ricatti equation
