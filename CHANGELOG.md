@@ -2,17 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.5.1] - 2023-03-02
+## [0.5.2] - 2023-03-02
 
 ### Bug Fixes
 
 - Rename job to match what's going on (caching all deps, not just PB) [(09c1b99)](https://github.com/iwishiwasaneagle/jdrones/commit/09c1b99135c8d0b8d38143be2f4365af2962f741)
-- Set up git cliff to output proper markdown for prettier releases [(5c5fa10)](https://github.com/iwishiwasaneagle/jdrones/commit/5c5fa1051a96d4df02ee77e3a81c1bed66e9a013)
+- Set up git cliff to output proper markdown for prettier releases [(4a54e72)](https://github.com/iwishiwasaneagle/jdrones/commit/4a54e72f7aa6ee2e3861e43d2a01ffa222444afb)
 
 ### Miscellaneous Tasks
 
 - Clean up old jpdmgen references [(2647eca)](https://github.com/iwishiwasaneagle/jdrones/commit/2647ecaedadc01e43a709c42d3a69f361c5fb03c)
-- Update changelog for v0.5.1 [skip pre-commit.ci] [(02852e2)](https://github.com/iwishiwasaneagle/jdrones/commit/02852e27fe9240865d55818ffc715249d32bc908)
 
 ## [0.5.0] - 2023-03-02
 
