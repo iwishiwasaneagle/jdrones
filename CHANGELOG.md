@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2023-03-02
+
+### Bug Fixes
+
+- Rename job to match what's going on (caching all deps, not just PB) [(09c1b99)](https://github.com/iwishiwasaneagle/jdrones/commit/09c1b99135c8d0b8d38143be2f4365af2962f741)
+- Set up git cliff to output proper markdown for prettier releases [(5c5fa10)](https://github.com/iwishiwasaneagle/jdrones/commit/5c5fa1051a96d4df02ee77e3a81c1bed66e9a013)
+
+### Miscellaneous Tasks
+
+- Clean up old jpdmgen references [(2647eca)](https://github.com/iwishiwasaneagle/jdrones/commit/2647ecaedadc01e43a709c42d3a69f361c5fb03c)
+- Update changelog for v0.5.1 [skip pre-commit.ci] [(02852e2)](https://github.com/iwishiwasaneagle/jdrones/commit/02852e27fe9240865d55818ffc715249d32bc908)
+
 ## [0.5.0] - 2023-03-02
 
 ### Bug Fixes
@@ -94,6 +106,7 @@ All notable changes to this project will be documented in this file.
 - Mock pandas [(4b2399c)](https://github.com/iwishiwasaneagle/jdrones/commit/4b2399c93b1d0fd8777c48a4f04b95cebba3a63a)
 - Document BaseControlledEnv [(f4b039e)](https://github.com/iwishiwasaneagle/jdrones/commit/f4b039e028bc43f69f82b4d12fada85b4a62fc98)
 - Explicitly state the stratgies to prevent duplicates and only run the stress tests once [(e976499)](https://github.com/iwishiwasaneagle/jdrones/commit/e9764992be829fb20ee3c7166ea0b03402903a71)
+- Update changelog for v0.5.0 [skip pre-commit.ci] [(3a7f9a7)](https://github.com/iwishiwasaneagle/jdrones/commit/3a7f9a778778869f6b368000581c11da2b8d7856)
 
 ### Refactor
 

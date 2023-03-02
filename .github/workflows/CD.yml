@@ -57,20 +57,22 @@ jobs:
         uses: orhun/git-cliff-action@v2
         id: git-cliff-latest
         with:
-          args: -vv --latest
+          args: -vv --latest --strip header
         env:
           OUTPUT: CHANGELOG.md
 
-      - name: Set the release body
-        id: release
-        shell: bash
+      - name: Check CHANGELOG isn't empty
         run: |
-          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
-          r="$(printf "$r" | tail -n +3)"
-          r="${r//'%'/'%25'}"
-          r="${r//$'\n'/'%0A'}"
-          r="${r//$'\r'/'%0D'}"
-          echo "::set-output name=release_body::$r"
+          if [ -z "$(cat CHANGELOG.md)" ]
+          then
+            exit 1
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: changelog
+          path: CHANGELOG.md
 
   build-python:
     name: Build python
@@ -104,15 +106,21 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Upload the release
-        uses: svenstaro/upload-release-action@v2
+
+      - name: Download changelog
+        uses: actions/download-artifact@v3
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
-          file: dist/**
-          file_glob: true
-          release_name: "Release ${{needs.setup-envs.outputs.version}}"
-          body: "${{ needs.generate-changelog.outputs.release_body }}"
+          name: changelog
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body_path: CHANGELOG.md
+          files: |
+            dist/**
+          name: "Release ${{needs.setup-envs.outputs.version}}"
+          generate_release_notes: false
 
   publish-gh-page:
     name: Publish to Github Pages
