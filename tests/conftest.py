@@ -15,6 +15,7 @@ from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs import PolyPositionDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
+from jdrones.envs.position import BasePositionDroneEnv
 from jdrones.transforms import euler_to_quat
 
 
@@ -68,26 +69,28 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         int_in_kw = "integration" in item.keywords
         stress_in_kw = "stress" in item.keywords
-        if w_int or o_int or w_stress or o_stress:
-            if o_int:
-                if not int_in_kw:
-                    item.add_marker(skip_non_integration)
-            elif o_stress:
-                if not stress_in_kw:
-                    item.add_marker(skip_non_stress)
-            elif w_int and w_stress:
-                pass
-            elif w_int:
-                if stress_in_kw:
-                    item.add_marker(skip_stress)
-            elif w_stress:
-                if int_in_kw:
-                    item.add_marker(skip_integration)
+        apply = []
+
+        if o_int:
+            if not int_in_kw:
+                apply.append(skip_non_integration)
+        elif o_stress:
+            if not stress_in_kw:
+                apply.append(skip_non_stress)
+        elif w_int:
+            if stress_in_kw:
+                apply.append(skip_stress)
+        elif w_stress:
+            if int_in_kw:
+                apply.append(skip_integration)
         else:
             if int_in_kw:
-                item.add_marker(skip_integration)
-            elif stress_in_kw:
-                item.add_marker(skip_stress)
+                apply.append(skip_integration)
+            if stress_in_kw:
+                apply.append(skip_stress)
+
+        for marker in apply:
+            item.add_marker(marker)
 
 
 @pytest.fixture
@@ -283,25 +286,35 @@ def lqrdroneenv(env_default_kwargs):
     d.close()
 
 
-@pytest.fixture
-def lqrpositiondroneenv(env_default_kwargs):
-    class _A(LQRPositionDroneEnv):
+@pytest.fixture(params=[[[-0.1, 0.1], [-0.1, 0.1], [0, 0.2]]])
+def position_drone_action_space(request):
+    a = np.array(request.param)
+    return spaces.Box(low=a[:, 0], high=a[:, 1])
+
+
+def custom_position_action_space_wrapper(action_space, obj: type[BasePositionDroneEnv]):
+    class _A(obj):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.action_space = spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
+            self.action_space = action_space
 
-    d = _A(**env_default_kwargs)
+    return _A
+
+
+@pytest.fixture
+def lqrpositiondroneenv(position_drone_action_space, env_default_kwargs):
+
+    d = custom_position_action_space_wrapper(
+        position_drone_action_space, LQRPositionDroneEnv
+    )(**env_default_kwargs)
     yield d
     d.close()
 
 
 @pytest.fixture
-def polypositiondroneenv(env_default_kwargs):
-    class _A(PolyPositionDroneEnv):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.action_space = spaces.Box(low=np.ones(3) * -0.1, high=np.ones(3) * 0.1)
-
-    d = _A(**env_default_kwargs)
+def polypositiondroneenv(position_drone_action_space, env_default_kwargs):
+    d = custom_position_action_space_wrapper(
+        position_drone_action_space, PolyPositionDroneEnv
+    )(**env_default_kwargs)
     yield d
     d.close()
