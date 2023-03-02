@@ -2,11 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.5] - 2023-03-02
+
+### Bug Fixes
+
+- Typo body_file -> body_path [(65df82d)](https://github.com/iwishiwasaneagle/jdrones/commit/65df82d7c8ebb5fa982a6626a2cd33896340f3e4)
+
+### Miscellaneous Tasks
+
+- Update changelog for v0.5.5 [skip pre-commit.ci] [(f52892f)](https://github.com/iwishiwasaneagle/jdrones/commit/f52892fc22ba3ea06e7745fe00314343fb20bee8)
+- Delete changelog for redo of v0.5.5 [skip pre-commit.ci] [(e863f74)](https://github.com/iwishiwasaneagle/jdrones/commit/e863f744e550ef2bddaf775d683c4fe245380864)
+
 ## [0.5.4] - 2023-03-02
 
 ### Bug Fixes
 
 - Switch to file-based release body [(12d4290)](https://github.com/iwishiwasaneagle/jdrones/commit/12d429042228ac01e6c2dfbceaa780fe5684fb8a)
+
+### Miscellaneous Tasks
+
+- Update changelog for v0.5.4 [skip pre-commit.ci] [(c44822c)](https://github.com/iwishiwasaneagle/jdrones/commit/c44822cf845c256e4573abaeb8d7f78bb8237d14)
 
 ## [0.5.3] - 2023-03-02
 
