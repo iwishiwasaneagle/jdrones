@@ -2,58 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.5.5] - 2023-03-02
-
-### Bug Fixes
-
-- Typo body_file -> body_path [(65df82d)](https://github.com/iwishiwasaneagle/jdrones/commit/65df82d7c8ebb5fa982a6626a2cd33896340f3e4)
-
-### Miscellaneous Tasks
-
-- Update changelog for v0.5.5 [skip pre-commit.ci] [(f52892f)](https://github.com/iwishiwasaneagle/jdrones/commit/f52892fc22ba3ea06e7745fe00314343fb20bee8)
-- Delete changelog for redo of v0.5.5 [skip pre-commit.ci] [(e863f74)](https://github.com/iwishiwasaneagle/jdrones/commit/e863f744e550ef2bddaf775d683c4fe245380864)
-
-## [0.5.4] - 2023-03-02
-
-### Bug Fixes
-
-- Switch to file-based release body [(12d4290)](https://github.com/iwishiwasaneagle/jdrones/commit/12d429042228ac01e6c2dfbceaa780fe5684fb8a)
-
-### Miscellaneous Tasks
-
-- Update changelog for v0.5.4 [skip pre-commit.ci] [(c44822c)](https://github.com/iwishiwasaneagle/jdrones/commit/c44822cf845c256e4573abaeb8d7f78bb8237d14)
-
-## [0.5.3] - 2023-03-02
-
-### Bug Fixes
-
-- Typo in step ID [(c78362f)](https://github.com/iwishiwasaneagle/jdrones/commit/c78362fae94b875e7c25a2e2c76d1fe5e7d6e7dd)
-
-### Miscellaneous Tasks
-
-- Update changelog for v0.5.3 [skip pre-commit.ci] [(3b9df4f)](https://github.com/iwishiwasaneagle/jdrones/commit/3b9df4fb83c6f62f0048f7bb31559d48ea9a800e)
-
 ## [0.5.2] - 2023-03-02
-
-### Features
-
-- Update release creator to use softprops/action-gh-release as recommended by GH [(f8e3880)](https://github.com/iwishiwasaneagle/jdrones/commit/f8e38805604f2d9cd61ce4b391e565a1a11eb648)
-
-### Miscellaneous Tasks
-
-- Update changelog for v0.5.2 [skip pre-commit.ci] [(20244c1)](https://github.com/iwishiwasaneagle/jdrones/commit/20244c154d570862bdbfae25ae9ad29f0beaa4f1)
-
-## [0.5.1] - 2023-03-02
 
 ### Bug Fixes
 
 - Rename job to match what's going on (caching all deps, not just PB) [(09c1b99)](https://github.com/iwishiwasaneagle/jdrones/commit/09c1b99135c8d0b8d38143be2f4365af2962f741)
-- Set up git cliff to output proper markdown for prettier releases [(5c5fa10)](https://github.com/iwishiwasaneagle/jdrones/commit/5c5fa1051a96d4df02ee77e3a81c1bed66e9a013)
+- Set up git cliff to output proper markdown for prettier releases [(4a54e72)](https://github.com/iwishiwasaneagle/jdrones/commit/4a54e72f7aa6ee2e3861e43d2a01ffa222444afb)
 
 ### Miscellaneous Tasks
 
 - Clean up old jpdmgen references [(2647eca)](https://github.com/iwishiwasaneagle/jdrones/commit/2647ecaedadc01e43a709c42d3a69f361c5fb03c)
-- Update changelog for v0.5.1 [skip pre-commit.ci] [(02852e2)](https://github.com/iwishiwasaneagle/jdrones/commit/02852e27fe9240865d55818ffc715249d32bc908)
 
 ## [0.5.0] - 2023-03-02
 
