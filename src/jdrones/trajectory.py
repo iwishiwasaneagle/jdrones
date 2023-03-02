@@ -49,7 +49,10 @@ class QuinticPolynomialTrajectory:
             c_5\\\\
         \\end{bmatrix}
 
-    Where :math:`T = \\frac{||x_{t=T}-x_{t=0}||}{v_\\max}`.
+    Where :math:`T` is the total time to traverse the polynomial.
+
+    .. seealso::
+        :meth:`jdrones.envs.position.PolyPositionDroneEnv.calc_traj`
 
     The coefficients are then saved in :code:`coeffs` and accessed by
     :meth:`acceleration`,:meth:`velocity`, and :meth:`position` as required.
