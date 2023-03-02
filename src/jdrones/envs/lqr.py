@@ -80,7 +80,6 @@ class LQRDroneEnv(BaseControlledEnv):
     def step(
         self, action: LinearXAction
     ) -> tuple[State, float, bool, bool, dict[str, Any]]:
-
         setpoint = State.from_x(action)
 
         action = self.controllers["lqr"](measured=self.env.state, setpoint=setpoint)
@@ -106,7 +105,6 @@ class LQRDroneEnv(BaseControlledEnv):
 
 
 if __name__ == "__main__":
-
     from collections import deque
 
     import matplotlib.pyplot as plt

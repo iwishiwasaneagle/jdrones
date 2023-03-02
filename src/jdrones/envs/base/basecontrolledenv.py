@@ -14,7 +14,6 @@ from jdrones.envs.base.basedronenev import BaseDroneEnv
 
 
 class BaseControlledEnv(gymnasium.Env, abc.ABC):
-
     env: BaseDroneEnv
 
     controllers: Dict[str, PID]

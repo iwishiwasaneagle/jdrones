@@ -303,7 +303,6 @@ def custom_position_action_space_wrapper(action_space, obj: type[BasePositionDro
 
 @pytest.fixture
 def lqrpositiondroneenv(position_drone_action_space, env_default_kwargs):
-
     d = custom_position_action_space_wrapper(
         position_drone_action_space, LQRPositionDroneEnv
     )(**env_default_kwargs)
