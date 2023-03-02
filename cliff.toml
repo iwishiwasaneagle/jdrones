@@ -20,7 +20,7 @@ body = """
     ### {{ group | upper_first }}
     {% for commit in commits %}
         - {{ commit.message | upper_first }} [({{ commit.id | truncate(length=7, end=\"\") }})]\
-                (https://github.com/iwishiwasaneagle/jpdmgen/commit/{{ commit.id }})\
+                (https://github.com/iwishiwasaneagle/jdrones/commit/{{ commit.id }})\
     {% endfor %}
 {% endfor %}\n
 """
