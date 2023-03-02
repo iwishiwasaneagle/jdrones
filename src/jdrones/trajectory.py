@@ -76,7 +76,6 @@ class QuinticPolynomialTrajectory:
         start_acc: VEC3 = (0, 0, 0),
         dest_acc: VEC3 = (0, 0, 0),
     ):
-
         self.start_pos = start_pos
         self.dest_pos = dest_pos
 
