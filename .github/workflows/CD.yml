@@ -100,15 +100,17 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Upload the release
-        uses: svenstaro/upload-release-action@v2
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
-          file: dist/**
-          file_glob: true
-          release_name: "Release ${{needs.setup-envs.outputs.version}}"
+          token: ${{ secrets.GITHUB_TOKEN }}
           body: "${{ needs.generate-changelog.outputs.release_body }}"
+          files: |
+            dist/**
+          tag: ${{ github.ref }}
+          name: "Release ${{needs.setup-envs.outputs.version}}"
+          generate_release_notes: false
 
   publish-gh-page:
     name: Publish to Github Pages
