@@ -38,6 +38,7 @@ autodoc_mock_imports = [  # https://www.sphinx-doc.org/en/master/usage/extension
     "matplotlib",
     "numpy",
     "scipy",
+    "pandas",
     "loguru",
     "tqdm",
     "dynaconf",
