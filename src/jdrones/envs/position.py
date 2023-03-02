@@ -223,6 +223,15 @@ class PolyPositionDroneEnv(BasePositionDroneEnv):
 
 
 class LQRPositionDroneEnv(BasePositionDroneEnv):
+    """
+    Feeds the raw position setpoint into :class:`jdrones.envs.lqr.LQRDroneEnv` until
+    the drones arrives.
+
+    .. warning::
+        This is unstable for large inputs (distances of over :math:`10m`) and should
+        **not** be used.
+    """
+
     def step(
         self, action: PositionAction
     ) -> tuple[States, float, bool, bool, dict[str, Any]]:
