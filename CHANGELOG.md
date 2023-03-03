@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.3] - 2023-03-03
+
+### Miscellaneous Tasks
+
+- Update graphics [(d30bb66)](https://github.com/iwishiwasaneagle/jdrones/commit/d30bb66592f8ae9233eb7442dd78c332d2aafa85)
+
 ## [0.5.2] - 2023-03-02
 
 ### Bug Fixes
@@ -12,6 +18,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous Tasks
 
 - Clean up old jpdmgen references [(2647eca)](https://github.com/iwishiwasaneagle/jdrones/commit/2647ecaedadc01e43a709c42d3a69f361c5fb03c)
+- Update changelog for v0.5.2 [skip pre-commit.ci] [(1e446c9)](https://github.com/iwishiwasaneagle/jdrones/commit/1e446c9683d79be5d817644ec57b5e35a8c3f37a)
 
 ## [0.5.0] - 2023-03-02
 
