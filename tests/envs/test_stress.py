@@ -3,7 +3,7 @@
 import pytest
 
 
-@pytest.mark.stress
+@pytest.mark.slow_integration
 @pytest.mark.parametrize(
     "position_drone_action_space", [[(-2, 2), (-2, 2), (-2, 2)]], indirect=True
 )
@@ -19,7 +19,7 @@ def test_long_lqr_position(T, dt, lqrpositiondroneenv):
     assert not trunc, f"Failed after {t} simulation seconds and {c} setpoints"
 
 
-@pytest.mark.stress
+@pytest.mark.slow_integration
 @pytest.mark.parametrize(
     "position_drone_action_space",
     [[(-100, 100), (-100, 100), (-100, 100)]],

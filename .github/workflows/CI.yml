@@ -66,7 +66,7 @@ jobs:
             codecov: false
             platform: "ubuntu-latest"
           - python-version: "3.11"
-            pytest-flags: "--only-stress-tests"
+            pytest-flags: "--only-slow-integration"
             codecov: false
             platform: "ubuntu-latest"
 
