@@ -1,5 +1,6 @@
 hypothesis
 pytest
 pytest-cov
+pytest-extra-markers
 pytest-mock
 pytest-xdist

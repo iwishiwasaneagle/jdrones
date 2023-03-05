@@ -25,7 +25,7 @@ The run *****all** tests with
 GIT_DIR=$(git rev-parse --show-toplevel)
 PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto $GIT_DIR
 PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto --only-integration $GIT_DIR
-PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto --only-stress-tests $GIT_DIR
+PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto --only-slow-integration $GIT_DIR
 ```
 
 ## Citations
