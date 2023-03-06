@@ -13,7 +13,7 @@ from jdrones.transforms import euler_to_quat
 from jdrones.types import PropellerAction
 
 
-class LinearDynamicModelDroneEnv(BaseDroneEnv):
+class QuadLinearDynamicModelDroneEnv(BaseDroneEnv):
     def __init__(
         self,
         model: URDFModel = DronePlus,

@@ -13,7 +13,7 @@ from jdrones.types import PropellerAction
 from jdrones.types import VEC5
 
 
-class RotatingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
+class XWingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
     @property
     def action_space(self):
         act_bounds = np.array(
@@ -37,18 +37,14 @@ class RotatingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
         m = model.mass
         g = model.g
         length = model.l
-        P = action[:4]
         alpha = action[4]
 
-        T = model.k_T * np.square(P)
-
-        P1, P2, P3, P4 = P
-        T1, T2, T3, T4 = T
+        T1, T2, T3, T4 = model.k_T * np.square(action[:4])
+        u_star = model.rpm2rpyT(np.square(action[:4]))
 
         unit_z = np.array([0, 0, 1]).reshape((-1, 1))
 
-        R_W_B = euler_to_rotmat(state.rpy)
-        R_B_W = np.linalg.inv(R_W_B)
+        R_W_B = np.array(euler_to_rotmat(state.rpy))
 
         dstate = np.concatenate(
             [
@@ -58,11 +54,11 @@ class RotatingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
                 (
                     -m * g * unit_z.T
                     + (
-                        R_B_W
+                        R_W_B
                         @ [
-                            (T4 - T2) * np.sin(alpha),
-                            (T3 - T1) * np.sin(alpha),
-                            T.sum() * np.cos(alpha),
+                            T4 * np.sin(alpha) + T2 * np.sin(-alpha),
+                            T1 * np.sin(alpha) + T4 * np.sin(-alpha),
+                            u_star[3] * np.cos(alpha),
                         ]
                     ).T
                 ).flatten()
@@ -70,13 +66,12 @@ class RotatingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
                 np.linalg.solve(
                     Inertias,
                     (
-                        R_B_W
+                        R_W_B
                         @ [
-                            length * (T4 - T2) * np.cos(alpha),
-                            length * (T3 - T1) * np.cos(alpha),
-                            length * T.sum() * np.sin(alpha)
-                            + model.k_Q
-                            + (-P1 * P1 + P2 * P2 - P3 * P3 + P4 * P4) * np.cos(alpha),
+                            u_star[0] * np.cos(alpha),
+                            u_star[1] * np.cos(alpha),
+                            length * u_star[3] * np.sin(alpha)
+                            + u_star[2] * np.cos(alpha),
                         ]
                     ),
                 ),
@@ -127,7 +122,7 @@ if __name__ == "__main__":
     initial_state.pos = (0, 0, 10)
     initial_state.rpy = (0, 0, 0)
 
-    nl_env = RotatingNonlinearDynamicModelDroneEnv(
+    nl_env = XWingNonlinearDynamicModelDroneEnv(
         initial_state=initial_state,
         dt=dt,
     )

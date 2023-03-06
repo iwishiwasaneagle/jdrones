@@ -2,16 +2,16 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import pytest
-from envs.base.conftest import INPUT_TO_ROT
-from envs.base.conftest import LARGE_INPUT
-from envs.base.conftest import LOW_INPUT
-from envs.base.conftest import PITCH_INPUT
-from envs.base.conftest import POSITION_FROM_VELOCITY_1_PB
-from envs.base.conftest import POSITION_FROM_VELOCITY_2
-from envs.base.conftest import ROLL_INPUT
-from envs.base.conftest import RPY_FROM_ANG_VEL
-from envs.base.conftest import VELOCITY_FROM_ROTATION
-from envs.base.conftest import YAW_INPUT
+from envs.conftest import INPUT_TO_ROT
+from envs.conftest import LARGE_INPUT
+from envs.conftest import LOW_INPUT
+from envs.conftest import PITCH_INPUT
+from envs.conftest import POSITION_FROM_VELOCITY_1_PB
+from envs.conftest import POSITION_FROM_VELOCITY_2
+from envs.conftest import ROLL_INPUT
+from envs.conftest import RPY_FROM_ANG_VEL
+from envs.conftest import VELOCITY_FROM_ROTATION
+from envs.conftest import YAW_INPUT
 
 
 @pytest.mark.parametrize(
@@ -39,10 +39,10 @@ from envs.base.conftest import YAW_INPUT
     indirect=["velocity"],
 )
 def test_calculate_aerodynamic_forces(
-    pbdroneenv, drag_coeffs, rpy, state, vec_omega, exp_f
+    quadpbdroneenv, drag_coeffs, rpy, state, vec_omega, exp_f
 ):
-    pbdroneenv.state = state
-    act_f = pbdroneenv.calculate_aerodynamic_forces(vec_omega)
+    quadpbdroneenv.state = state
+    act_f = quadpbdroneenv.calculate_aerodynamic_forces(vec_omega)
     assert np.allclose(act_f, exp_f)
 
 
@@ -65,9 +65,9 @@ def test_calculate_aerodynamic_forces(
     ],
     indirect=["vec_omega"],
 )
-def test_calculate_external_torques(pbdroneenv, state, vec_omega, k_Q, exp_q_z):
-    pbdroneenv.state = state
-    act_q = pbdroneenv.calculate_external_torques(vec_omega)
+def test_calculate_external_torques(quadpbdroneenv, state, vec_omega, k_Q, exp_q_z):
+    quadpbdroneenv.state = state
+    act_q = quadpbdroneenv.calculate_external_torques(vec_omega)
     assert np.allclose(act_q, [0, 0, exp_q_z * k_Q])
 
 
@@ -89,9 +89,9 @@ def test_calculate_external_torques(pbdroneenv, state, vec_omega, k_Q, exp_q_z):
     ],
     indirect=["vec_omega"],
 )
-def test_calculate_propulsive_forces(pbdroneenv, state, vec_omega, k_T, exp_t):
-    pbdroneenv.state = state
-    act_t = pbdroneenv.calculate_propulsive_forces(vec_omega)
+def test_calculate_propulsive_forces(quadpbdroneenv, state, vec_omega, k_T, exp_t):
+    quadpbdroneenv.state = state
+    act_t = quadpbdroneenv.calculate_propulsive_forces(vec_omega)
     assert np.allclose(act_t, exp_t)
 
 
@@ -108,12 +108,12 @@ def test_calculate_propulsive_forces(pbdroneenv, state, vec_omega, k_T, exp_t):
     indirect=True,
 )
 @pytest.mark.parametrize("vec_omega", [np.zeros(4)], indirect=True)
-def test_zero_input(vec_omega, rpy, pbdroneenv):
+def test_zero_input(vec_omega, rpy, quadpbdroneenv):
     """
     Expect it to drop like a stone
     """
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     # Need to round, as tiny errors are introduced by PB3. We only care about bigger
     # picture here
     act = obs.vel.round(20)
@@ -122,58 +122,58 @@ def test_zero_input(vec_omega, rpy, pbdroneenv):
 
 @pytest.mark.integration
 @LOW_INPUT
-def test_low_input(vec_omega, pbdroneenv):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+def test_low_input(vec_omega, quadpbdroneenv):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.vel), (0, 0, -1))
 
 
 @pytest.mark.integration
 @LARGE_INPUT
-def test_large_input(vec_omega, pbdroneenv):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+def test_large_input(vec_omega, quadpbdroneenv):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.vel), (0, 0, 1))
 
 
 @pytest.mark.integration
 @ROLL_INPUT
-def test_roll_input(vec_omega, pbdroneenv, exp):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+def test_roll_input(vec_omega, quadpbdroneenv, exp):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.ang_vel), exp)
 
 
 @pytest.mark.integration
 @PITCH_INPUT
-def test_pitch_input(vec_omega, pbdroneenv, exp):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+def test_pitch_input(vec_omega, quadpbdroneenv, exp):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.ang_vel), np.sign(exp))
 
 
 @pytest.mark.integration
 @YAW_INPUT
-def test_yaw_input(vec_omega, equilibrium_prop_rpm, pbdroneenv, exp):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+def test_yaw_input(vec_omega, equilibrium_prop_rpm, quadpbdroneenv, exp):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     assert np.allclose(np.sign(obs.ang_vel), exp)
 
 
 @pytest.mark.integration
 @VELOCITY_FROM_ROTATION
-def test_vel_from_rot(vec_omega, rpy, pbdroneenv, exp):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(0.99 * vec_omega)
+def test_vel_from_rot(vec_omega, rpy, quadpbdroneenv, exp):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(0.99 * vec_omega)
     assert np.allclose(np.sign(obs.vel.round(4)), exp)
 
 
 @pytest.mark.integration
 @POSITION_FROM_VELOCITY_1_PB
 @POSITION_FROM_VELOCITY_2
-def test_pos_from_vel(pos, vec_omega, pbdroneenv, velocity):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+def test_pos_from_vel(pos, vec_omega, quadpbdroneenv, velocity):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     # Need to round, as tiny errors are introduced by PB3. We only care about bigger
     # picture here
     act = obs.pos.round(5)
@@ -182,9 +182,9 @@ def test_pos_from_vel(pos, vec_omega, pbdroneenv, velocity):
 
 @pytest.mark.integration
 @RPY_FROM_ANG_VEL
-def test_rpy_from_ang_vel(vec_omega, pbdroneenv, angular_velocity):
-    pbdroneenv.reset()
-    obs, *_ = pbdroneenv.step(vec_omega)
+def test_rpy_from_ang_vel(vec_omega, quadpbdroneenv, angular_velocity):
+    quadpbdroneenv.reset()
+    obs, *_ = quadpbdroneenv.step(vec_omega)
     # Need to round, as tiny errors are introduced by PB3. We only care about bigger
     # picture here
     act = obs.rpy.round(4)
@@ -193,13 +193,13 @@ def test_rpy_from_ang_vel(vec_omega, pbdroneenv, angular_velocity):
 
 @pytest.mark.integration
 @INPUT_TO_ROT
-def test_correct_input_to_rot(seed, pbdroneenv, action, k_Q, ang_vel_sign):
+def test_correct_input_to_rot(seed, quadpbdroneenv, action, k_Q, ang_vel_sign):
     """
     Step input over a short time will give a good insight if the drone is behaving
     as expected
     """
-    pbdroneenv.reset(seed=seed)
+    quadpbdroneenv.reset(seed=seed)
     for _ in range(5):
-        obs, *_ = pbdroneenv.step(action * 100)
+        obs, *_ = quadpbdroneenv.step(action * 100)
     # Drone landed within 10cm of where we expected it
     assert np.allclose(np.sign(obs.ang_vel), ang_vel_sign)

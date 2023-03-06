@@ -10,9 +10,9 @@ from jdrones.controllers import LQR
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs.base import BaseControlledEnv
-from jdrones.envs.base import LinearDynamicModelDroneEnv
-from jdrones.envs.base import NonlinearDynamicModelDroneEnv
 from jdrones.envs.dronemodels import DronePlus
+from jdrones.envs.quad import QuadLinearDynamicModelDroneEnv
+from jdrones.envs.quad import QuadNonlinearDynamicModelDroneEnv
 from jdrones.types import LinearXAction
 
 
@@ -22,12 +22,12 @@ class LQRDroneEnv(BaseControlledEnv):
         model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
-        env: NonlinearDynamicModelDroneEnv = None,
+        env: QuadNonlinearDynamicModelDroneEnv = None,
         Q=None,
         R=None,
     ):
         if env is None:
-            env = NonlinearDynamicModelDroneEnv(
+            env = QuadNonlinearDynamicModelDroneEnv(
                 model=model, initial_state=initial_state, dt=dt
             )
 
@@ -66,7 +66,7 @@ class LQRDroneEnv(BaseControlledEnv):
         super().__init__(env, dt)
 
     def _init_controllers(self) -> dict[str, Controller]:
-        A, B, _ = LinearDynamicModelDroneEnv.get_matrices(self.env.model)
+        A, B, _ = QuadLinearDynamicModelDroneEnv.get_matrices(self.env.model)
         return dict(lqr=LQR(A, B, self.Q, self.R))
 
     def reset(

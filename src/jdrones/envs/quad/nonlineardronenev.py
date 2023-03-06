@@ -11,7 +11,7 @@ from jdrones.transforms import euler_to_rotmat
 from jdrones.types import PropellerAction
 
 
-class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
+class QuadNonlinearDynamicModelDroneEnv(BaseDroneEnv):
     @staticmethod
     def calc_dstate(action: PropellerAction, state: State, model: URDFModel):
         Inertias = np.diag(model.I)

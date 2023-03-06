@@ -9,9 +9,10 @@ from gymnasium.utils.env_checker import check_env
 @pytest.mark.parametrize(
     "env,kwargs",
     [
-        ("PyBulletDroneEnv-v0", {}),
-        ("NonLinearDynamicModelDroneEnv-v0", {}),
-        ("LinearDynamicModelDroneEnv-v0", {}),
+        ("QuadPyBulletDroneEnv-v0", {}),
+        ("QuadNonLinearDynamicModelDroneEnv-v0", {}),
+        ("QuadLinearDynamicModelDroneEnv-v0", {}),
+        ("XWingNonlinearDynamicModelDroneEnv-v0", {}),
         ("LQRDroneEnv-v0", {}),
         ("LQRPositionDroneEnv-v0", {}),
         ("PolyPositionDroneEnv-v0", {}),
@@ -22,18 +23,23 @@ def test_make(env, kwargs):
 
 
 @pytest.mark.integration
-def test_PB3DroneEnv(pbdroneenv):
-    check_env(pbdroneenv)
+def test_QuadPB3DroneEnv(quadpbdroneenv):
+    check_env(quadpbdroneenv)
 
 
 @pytest.mark.integration
-def test_LinearDynamicsDroneEnv(lineardroneenv):
-    check_env(lineardroneenv)
+def test_QuadLinearDynamicsDroneEnv(quadlineardroneenv):
+    check_env(quadlineardroneenv)
 
 
 @pytest.mark.integration
-def test_NonLinearDynamicsDroneEnv(nonlineardroneenv):
-    check_env(nonlineardroneenv)
+def test_QuadNonLinearDynamicsDroneEnv(quadnonlineardroneenv):
+    check_env(quadnonlineardroneenv)
+
+
+@pytest.mark.integration
+def test_XWingNonLinearDynamicsDroneEnv(xwingnonlineardroneenv):
+    check_env(xwingnonlineardroneenv)
 
 
 @pytest.mark.integration
