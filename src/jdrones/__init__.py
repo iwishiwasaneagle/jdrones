@@ -13,6 +13,10 @@ register(
     entry_point="jdrones.envs:LinearDynamicModelDroneEnv",
 )
 register(
+    "RotatingNonlinearDynamicModelDroneEnv-v0",
+    entry_point="jdrones.envs:RotatingNonlinearDynamicModelDroneEnv",
+)
+register(
     "LQRDroneEnv-v0",
     entry_point="jdrones.envs:LQRDroneEnv",
 )

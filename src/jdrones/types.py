@@ -6,6 +6,8 @@ VEC3 = tuple[float, float, float]
 VEC4 = tuple[float, float, float, float]
 """:math:`(a,b,c,d)` vector"""
 MAT3X3 = tuple[VEC3, VEC3, VEC3]
+VEC5 = tuple[float, float, float, float, float]
+""":math:`(a,b,c,d,e)` vector"""
 """:math:`3 \\times 3` matrix"""
 MAT4X3 = tuple[VEC4, VEC4, VEC4, VEC4]
 """:math:`4 \\times 4` matrix"""
