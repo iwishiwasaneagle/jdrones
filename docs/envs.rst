@@ -35,7 +35,7 @@ QuadLinearDynamicModelDroneEnv
 
 XWingNonLinearDynamicModelDroneEnv
 ----------------------------------
-.. autoclass:: jdrones.envs.XWingNonLinearDynamicModelDroneEnv
+.. autoclass:: jdrones.envs.XWingNonlinearDynamicModelDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
@@ -77,6 +77,15 @@ LQRPositionDroneEnv
 PolyPositionDroneEnv
 --------------------
 .. autoclass:: jdrones.envs.PolyPositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Models
+======
+
+
+.. automodule:: jdrones.envs.dronemodels
    :members:
    :undoc-members:
    :show-inheritance:

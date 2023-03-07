@@ -119,7 +119,7 @@ class QuadLinearDynamicModelDroneEnv(BaseDroneEnv):
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
-                0 & 0 & 0 & -1 / m\\\\
+                0 & 0 & 0 & 1 / m\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
@@ -127,28 +127,15 @@ class QuadLinearDynamicModelDroneEnv(BaseDroneEnv):
                 0 & 1/Iy & 0 & 0\\\\
                 0 & & 1 / Iz & 0
             \\end{bmatrix}
-            \\begin{bmatrix}
-                \\tau_\\phi\\\\\\tau_\\theta\\\\\\tau_\\psi\\\\T
-            \\end{bmatrix}
+            \\vec M
             +
             \\begin{bmatrix}
                 0\\\\0\\\\0\\\\0\\\\0\\\\g\\\\0\\\\0\\\\0\\\\0\\\\0\\\\0
             \\end{bmatrix}
 
-        .. math::
-
-            \\begin{bmatrix}
-                \\tau_\\phi\\\\\\tau_\\theta\\\\\\tau_\\psi\\\\T
-            \\end{bmatrix}
-             &= \\begin{bmatrix}
-            0& -l k_T& 0& l k_T \\\\
-            l k_T& 0& -l k_T& 0\\\\
-            -k_Q&k_Q& -k_Q& k_Q \\\\
-            k_T & k_T & k_T & k_T
-            \\end{bmatrix}
-            \\begin{bmatrix}
-                P_1\\\\P_2\\\\P_3\\\\P_4
-            \\end{bmatrix}
+        .. seealso::
+            :math:`\\vec M = [\\vec \\Gamma, T]^T` is defined in
+            :func:`jdrones.envs.dronemodels.droneplus_mixing_matrix`
 
         Parameters
         ----------

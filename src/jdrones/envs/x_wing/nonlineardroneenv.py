@@ -83,6 +83,43 @@ class XWingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
         return dstate
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
+        """
+        .. math::
+            \\begin{align}
+                m\\vec x '' &=
+                \\begin{bmatrix}
+                    0\\\\0\\\\mg
+                \\end{bmatrix}
+                -
+                R^B_E
+                \\begin{bmatrix}
+                    (T_4-T_2)\\sin(\\alpha)\\\\
+                    (T_1-T_3)\\sin(\\alpha)\\\\
+                    \\Sigma^4_{i=1} T_i \\cos(\\alpha)
+                \\end{bmatrix}
+                -
+                R^B_E (\\vec C_d R^E_B \\vec x ') \\\\
+                \\vec I \\vec \\phi'' &=
+                \\begin{bmatrix}
+                    \\Gamma_\\phi \\cos(\\alpha) \\\\
+                    \\Gamma_\\theta \\cos(\\alpha)\\\\
+                    \\Gamma_\\psi + \\Sigma^4_{i=0} T_i \\sin(\\alpha)
+                \\end{bmatrix}
+                \\vec T_i &= k_T P_i^2 \\\\
+            \\end{align}
+
+        .. seealso::
+            :math:`\\vec M = [\\vec \\Gamma, T]^T` is defined in
+            :func:`jdrones.envs.dronemodels.droneplus_mixing_matrix`
+
+        Parameters
+        ----------
+        action :
+
+        Returns
+        -------
+
+        """
         # Get state
         dstate = self.calc_dstate(action, self.state, self.model)
 

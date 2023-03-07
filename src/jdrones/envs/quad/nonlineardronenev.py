@@ -60,12 +60,12 @@ class QuadNonlinearDynamicModelDroneEnv(BaseDroneEnv):
                 -
                 R^B_E (\\vec C_d R^E_B \\vec x ') \\\\
                 \\vec I \\vec \\phi'' &=
-                \\begin{bmatrix}
-                    l k_T (P_4^2-P_2^2) \\\\
-                    l k_T (P_1^2-P_3^2) \\\\
-                    k_Q (-P_1^2+P_2^2-P_3^2+P_4^2)
-                \\end{bmatrix}
+                \\vec \\Gamma
             \\end{align}
+
+        .. seealso::
+            :math:`\\vec M = [\\vec \\Gamma, T]^T` is defined in
+            :func:`jdrones.envs.dronemodels.droneplus_mixing_matrix`
 
         Parameters
         ----------
