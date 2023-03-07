@@ -3,14 +3,18 @@
 from gymnasium.envs.registration import register
 
 
-register("PyBulletDroneEnv-v0", entry_point="jdrones.envs:PyBulletDroneEnv")
+register("QuadPyBulletDroneEnv-v0", entry_point="jdrones.envs:QuadPyBulletDroneEnv")
 register(
-    "NonLinearDynamicModelDroneEnv-v0",
-    entry_point="jdrones.envs:NonlinearDynamicModelDroneEnv",
+    "QuadNonLinearDynamicModelDroneEnv-v0",
+    entry_point="jdrones.envs:QuadNonlinearDynamicModelDroneEnv",
 )
 register(
-    "LinearDynamicModelDroneEnv-v0",
-    entry_point="jdrones.envs:LinearDynamicModelDroneEnv",
+    "QuadLinearDynamicModelDroneEnv-v0",
+    entry_point="jdrones.envs:QuadLinearDynamicModelDroneEnv",
+)
+register(
+    "XWingNonlinearDynamicModelDroneEnv-v0",
+    entry_point="jdrones.envs:XWingNonlinearDynamicModelDroneEnv",
 )
 register(
     "LQRDroneEnv-v0",

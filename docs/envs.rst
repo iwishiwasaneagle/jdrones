@@ -12,23 +12,30 @@ BaseDroneEnv
    :undoc-members:
    :show-inheritance:
 
-PyBulletDroneEnv
-----------------
-.. autoclass:: jdrones.envs.PyBulletDroneEnv
+QuadPyBulletDroneEnv
+--------------------
+.. autoclass:: jdrones.envs.QuadPyBulletDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-NonlinearDynamicModelDroneEnv
------------------------------
-.. autoclass:: jdrones.envs.NonlinearDynamicModelDroneEnv
+QuadNonlinearDynamicModelDroneEnv
+---------------------------------
+.. autoclass:: jdrones.envs.QuadNonlinearDynamicModelDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-LinearDynamicModelDroneEnv
---------------------------
-.. autoclass:: jdrones.envs.LinearDynamicModelDroneEnv
+QuadLinearDynamicModelDroneEnv
+------------------------------
+.. autoclass:: jdrones.envs.QuadLinearDynamicModelDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+XWingNonLinearDynamicModelDroneEnv
+----------------------------------
+.. autoclass:: jdrones.envs.XWingNonlinearDynamicModelDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
@@ -70,6 +77,15 @@ LQRPositionDroneEnv
 PolyPositionDroneEnv
 --------------------
 .. autoclass:: jdrones.envs.PolyPositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Models
+======
+
+
+.. automodule:: jdrones.envs.dronemodels
    :members:
    :undoc-members:
    :show-inheritance:

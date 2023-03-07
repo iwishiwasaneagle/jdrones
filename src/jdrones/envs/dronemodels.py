@@ -4,9 +4,43 @@ from importlib.resources import files
 
 import numpy as np
 from jdrones.data_models import URDFModel
+from jdrones.types import MAT4X4
 
 
-def droneplus_mixing_matrix(*, length, k_Q, k_T):
+def droneplus_mixing_matrix(*, length: float, k_Q: float, k_T: float) -> MAT4X4:
+    """
+    .. math::
+        \\vec M
+        = \\begin{bmatrix}
+            \\vec \\Gamma \\\\
+            T
+        \\end{bmatrix}
+        =
+        \\begin{bmatrix}
+            \\Gamma_\\phi\\\\\\Gamma_\\theta\\\\\\Gamma_\\psi\\\\T
+        \\end{bmatrix}
+        = \\begin{bmatrix}
+        0& -l k_T& 0& l k_T \\\\
+        -l k_T& 0& l k_T& 0\\\\
+        k_Q&-k_Q& k_Q& -k_Q \\\\
+        k_T & k_T & k_T & k_T
+        \\end{bmatrix}
+        \\begin{bmatrix}
+            P_1\\\\P_2\\\\P_3\\\\P_4
+        \\end{bmatrix}
+
+    Parameters
+    ----------
+    length : float
+    k_Q : float
+    k_T : float
+
+    Returns
+    -------
+    jdrones.types.MAT4X4
+        Mixing matrix
+    """
+
     return np.array(
         [
             [0, -k_T * length, 0, k_T * length],

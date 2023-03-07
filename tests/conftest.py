@@ -8,12 +8,13 @@ from gymnasium import spaces
 from jdrones.data_models import SimulationType
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
-from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
 from jdrones.envs import LQRPositionDroneEnv
-from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs import PolyPositionDroneEnv
-from jdrones.envs import PyBulletDroneEnv
+from jdrones.envs import QuadLinearDynamicModelDroneEnv
+from jdrones.envs import QuadNonlinearDynamicModelDroneEnv
+from jdrones.envs import QuadPyBulletDroneEnv
+from jdrones.envs import XWingNonlinearDynamicModelDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
 from jdrones.transforms import euler_to_quat
@@ -185,22 +186,29 @@ def env_default_kwargs(urdfmodel, dt, state):
 
 
 @pytest.fixture
-def pbdroneenv(env_default_kwargs, simulation_type):
-    d = PyBulletDroneEnv(**env_default_kwargs, simulation_type=simulation_type)
+def quadpbdroneenv(env_default_kwargs, simulation_type):
+    d = QuadPyBulletDroneEnv(**env_default_kwargs, simulation_type=simulation_type)
     yield d
     d.close()
 
 
 @pytest.fixture
-def nonlineardroneenv(env_default_kwargs):
-    d = NonlinearDynamicModelDroneEnv(**env_default_kwargs)
+def quadnonlineardroneenv(env_default_kwargs):
+    d = QuadNonlinearDynamicModelDroneEnv(**env_default_kwargs)
     yield d
     d.close()
 
 
 @pytest.fixture
-def lineardroneenv(env_default_kwargs):
-    d = LinearDynamicModelDroneEnv(**env_default_kwargs)
+def quadlineardroneenv(env_default_kwargs):
+    d = QuadLinearDynamicModelDroneEnv(**env_default_kwargs)
+    yield d
+    d.close()
+
+
+@pytest.fixture
+def xwingnonlineardroneenv(env_default_kwargs):
+    d = XWingNonlinearDynamicModelDroneEnv(**env_default_kwargs)
     yield d
     d.close()
 
