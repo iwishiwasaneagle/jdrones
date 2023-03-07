@@ -37,14 +37,17 @@ class XWingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
         m = model.mass
         g = model.g
         length = model.l
+
         alpha = action[4]
-
-        T1, T2, T3, T4 = model.k_T * np.square(action[:4])
-        u_star = model.rpm2rpyT(np.square(action[:4]))
-
-        unit_z = np.array([0, 0, 1]).reshape((-1, 1))
+        p_squared = np.square(action[:4])
+        T1, T2, T3, T4 = model.k_T * p_squared
+        u_star = model.rpm2rpyT(p_squared)
+        tau_phi, tau_theta, tau_psi, thrust = u_star
+        unit_z = np.array([0, 0, 1])
 
         R_W_B = np.array(euler_to_rotmat(state.rpy))
+
+        salpha, calpha = np.sin(alpha), np.cos(alpha)
 
         dstate = np.concatenate(
             [
@@ -52,13 +55,13 @@ class XWingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
                 (0, 0, 0, 0),
                 state.ang_vel,
                 (
-                    -m * g * unit_z.T
+                    -m * g * unit_z
                     + (
                         R_W_B
                         @ [
-                            T4 * np.sin(alpha) + T2 * np.sin(-alpha),
-                            T1 * np.sin(alpha) + T4 * np.sin(-alpha),
-                            u_star[3] * np.cos(alpha),
+                            (T4 - T2) * salpha,
+                            (T1 - T4) * salpha,
+                            thrust * calpha,
                         ]
                     ).T
                 ).flatten()
@@ -68,10 +71,9 @@ class XWingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
                     (
                         R_W_B
                         @ [
-                            u_star[0] * np.cos(alpha),
-                            u_star[1] * np.cos(alpha),
-                            length * u_star[3] * np.sin(alpha)
-                            + u_star[2] * np.cos(alpha),
+                            tau_phi * calpha,
+                            tau_theta * calpha,
+                            length * thrust * salpha + tau_psi * calpha,
                         ]
                     ),
                 ),
