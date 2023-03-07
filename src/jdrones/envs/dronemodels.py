@@ -4,9 +4,10 @@ from importlib.resources import files
 
 import numpy as np
 from jdrones.data_models import URDFModel
+from jdrones.types import MAT4X4
 
 
-def droneplus_mixing_matrix(*, length, k_Q, k_T):
+def droneplus_mixing_matrix(*, length: float, k_Q: float, k_T: float) -> MAT4X4:
     """
     .. math::
         \\vec M
@@ -36,7 +37,7 @@ def droneplus_mixing_matrix(*, length, k_Q, k_T):
 
     Returns
     -------
-    VEC4X4
+    jdrones.types.MAT4X4
         Mixing matrix
     """
 
