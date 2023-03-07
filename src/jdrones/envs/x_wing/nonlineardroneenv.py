@@ -60,7 +60,7 @@ class XWingNonlinearDynamicModelDroneEnv(BaseDroneEnv):
                         R_W_B
                         @ [
                             (T4 - T2) * salpha,
-                            (T1 - T4) * salpha,
+                            (T1 - T3) * salpha,
                             thrust * calpha,
                         ]
                     ).T
