@@ -7,18 +7,14 @@ from gymnasium.utils.env_checker import check_env
 
 @pytest.mark.integration
 @pytest.mark.parametrize(
-    "env,kwargs",
-    [
-        ("PyBulletDroneEnv-v0", {}),
-        ("NonLinearDynamicModelDroneEnv-v0", {}),
-        ("LinearDynamicModelDroneEnv-v0", {}),
-        ("LQRDroneEnv-v0", {}),
-        ("LQRPositionDroneEnv-v0", {}),
-        ("PolyPositionDroneEnv-v0", {}),
-    ],
+    "env",
+    filter(
+        lambda item: "jdrones" in str(item.entry_point),
+        tuple(gymnasium.registry.values()),
+    ),
 )
-def test_make(env, kwargs):
-    assert isinstance(gymnasium.make(env, **kwargs), gymnasium.Env)
+def test_make(env):
+    assert isinstance(gymnasium.make(env), gymnasium.Env)
 
 
 @pytest.mark.integration
