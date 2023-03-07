@@ -345,7 +345,7 @@ autodoc_pydantic_settings_show_json = False
 mathjax3_config = {
   "tex": {
     "macros": {
-      "vec": ['\\textbf{#1}', 1],
+      "vec": ['{\\mathbf #1}', 1],
       "m": "\\text{m}",
       "ms": "\\text{m}\\text{s}^-1",
       "mss": "\\text{m}\\text{s}^-2",
