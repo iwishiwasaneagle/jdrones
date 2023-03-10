@@ -10,36 +10,10 @@ on:
     workflow_dispatch:
 
 jobs:
-  cache-deps:
-    name: Cache dependencies
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version:
-            - "3.10"
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          cache: "pip"
-          python-version: ${{ matrix.python-version }}
-          cache-dependency-path: |
-            **/requirements*.txt
-
-      - name: Install requirements
-        run: |
-          pip install wheel
-          pip install -r requirements.txt
 
   run-tests:
     name: Run tests
     runs-on: ${{ matrix.platform }}
-    needs: cache-deps
     defaults:
       run:
         shell: bash -l {0}
@@ -78,7 +52,11 @@ jobs:
     - name: Install wheel
       run: pip install wheel
 
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+
     - name: Install dependencies
+      if: steps.cache-virtualenv.outputs.cache-hit != 'true'
       run: |
         pip install -r requirements.txt -r tests/requirements.txt
 
@@ -86,7 +64,6 @@ jobs:
       run: |
         PYTHONPATH=$PWD/src \
         pytest tests \
-        --reverse \
         --cov-report=xml \
         --cov-branch \
         --cov jdrones \

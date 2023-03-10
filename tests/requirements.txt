@@ -4,4 +4,3 @@ pytest-cov
 pytest-extra-markers
 pytest-mock
 pytest-xdist
-pytest-reverse
