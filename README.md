@@ -13,7 +13,7 @@ Provide a [gymnasium] style interface using a physics simulation engine ([pybull
 Create the local development environment:
 
 ```bash
-conda create --name jdrones
+conda create --name jdrones python=3.10
 conda activate jdrones
 pip install -r requirements.txt -r tests/requirements.txt
 ```
