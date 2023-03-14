@@ -10,9 +10,9 @@ from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
+from jdrones.envs import LQRPolyPositionDroneEnv
 from jdrones.envs import LQRPositionDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
-from jdrones.envs import PolyPositionDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
@@ -239,7 +239,7 @@ def lqrpositiondroneenv(position_drone_action_space, env_default_kwargs):
 @pytest.fixture
 def polypositiondroneenv(position_drone_action_space, env_default_kwargs):
     d = custom_position_action_space_wrapper(
-        position_drone_action_space, PolyPositionDroneEnv
+        position_drone_action_space, LQRPolyPositionDroneEnv
     )(**env_default_kwargs)
     yield d
     d.close()

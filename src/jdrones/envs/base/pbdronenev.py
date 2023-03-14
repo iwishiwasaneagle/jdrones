@@ -29,6 +29,12 @@ class PyBulletDroneEnv(BaseDroneEnv):
     """
     Base drone environment. Handles pybullet loading, and application of forces.
     Generalizes the physics to allow other models to be used.
+
+    How To Use
+    ----------
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("PB3NonLinearDrone-v0")
     """
 
     ids: PyBulletIds

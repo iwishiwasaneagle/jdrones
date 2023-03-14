@@ -67,9 +67,9 @@ LQRPositionDroneEnv
    :undoc-members:
    :show-inheritance:
 
-PolyPositionDroneEnv
---------------------
-.. autoclass:: jdrones.envs.PolyPositionDroneEnv
+LQRPolyPositionDroneEnv
+-----------------------
+.. autoclass:: jdrones.envs.LQRPolyPositionDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:

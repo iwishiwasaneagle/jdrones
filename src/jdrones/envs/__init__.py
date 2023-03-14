@@ -6,8 +6,8 @@ from .base import PyBulletDroneEnv
 from .base.basecontrolledenv import BaseControlledEnv
 from .dronemodels import DronePlus
 from .lqr import LQRDroneEnv
+from .position import LQRPolyPositionDroneEnv
 from .position import LQRPositionDroneEnv
-from .position import PolyPositionDroneEnv
 
 __all__ = [
     "PyBulletDroneEnv",
@@ -16,6 +16,6 @@ __all__ = [
     "LQRDroneEnv",
     "LQRPositionDroneEnv",
     "DronePlus",
-    "PolyPositionDroneEnv",
+    "LQRPolyPositionDroneEnv",
     "BaseControlledEnv",
 ]

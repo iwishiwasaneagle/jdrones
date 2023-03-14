@@ -12,6 +12,14 @@ from jdrones.types import PropellerAction
 
 
 class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
+    """ "
+    How To Use
+    ----------
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("NonLinearDrone-v0")
+    """
+
     @staticmethod
     def calc_dstate(action: PropellerAction, state: State, model: URDFModel):
         Inertias = np.diag(model.I)

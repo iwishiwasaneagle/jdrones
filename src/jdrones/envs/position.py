@@ -133,13 +133,19 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         return df_sums.sum()
 
 
-class PolyPositionDroneEnv(BasePositionDroneEnv):
+class LQRPolyPositionDroneEnv(BasePositionDroneEnv):
     """
     Uses :class:`jdrones.trajectory.QuinticPolynomialTrajectory` to give target
     position and velocity commands at every time point until the target is reached.
     If the time taken exceeds :math:`T`, the original target position is given as a raw
     input as in :class:`~jdrones.envs.position.LQRPositionDroneEnv`. However, if this
     were to happen, the distance is small enough to ensure stability.
+
+    How To Use
+    ----------
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("LQRPolyPositionDrone-v0")
     """
 
     def step(
@@ -230,6 +236,12 @@ class LQRPositionDroneEnv(BasePositionDroneEnv):
     .. warning::
         This is unstable for large inputs (distances of over :math:`10m`) and should
         **not** be used.
+
+    How To Use
+    ----------
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("LQRPositionDrone-v0")
     """
 
     def step(

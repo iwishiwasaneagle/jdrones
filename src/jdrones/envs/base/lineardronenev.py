@@ -14,6 +14,14 @@ from jdrones.types import PropellerAction
 
 
 class LinearDynamicModelDroneEnv(BaseDroneEnv):
+    """ "
+    How To Use
+    ----------
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("LinearDrone-v0")
+    """
+
     def __init__(
         self,
         model: URDFModel = DronePlus,

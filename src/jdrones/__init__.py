@@ -2,27 +2,29 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 from gymnasium.envs.registration import register
 
-
-register("PyBulletDroneEnv-v0", entry_point="jdrones.envs:PyBulletDroneEnv")
 register(
-    "NonLinearDynamicModelDroneEnv-v0",
+    "PB3NonLinearDrone-v0",
+    entry_point="jdrones.envs:PyBulletDroneEnv",
+)
+register(
+    "NonLinearDrone-v0",
     entry_point="jdrones.envs:NonlinearDynamicModelDroneEnv",
 )
 register(
-    "LinearDynamicModelDroneEnv-v0",
+    "LinearDrone-v0",
     entry_point="jdrones.envs:LinearDynamicModelDroneEnv",
 )
 register(
-    "LQRDroneEnv-v0",
+    "LQRDrone-v0",
     entry_point="jdrones.envs:LQRDroneEnv",
 )
 register(
-    "LQRPositionDroneEnv-v0",
+    "LQRPositionDrone-v0",
     entry_point="jdrones.envs:LQRPositionDroneEnv",
 )
 register(
-    "PolyPositionDroneEnv-v0",
-    entry_point="jdrones.envs:PolyPositionDroneEnv",
+    "LQRPolyPositionDrone-v0",
+    entry_point="jdrones.envs:LQRPolyPositionDroneEnv",
 )
 
 __version__ = "unknown"
