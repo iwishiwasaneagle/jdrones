@@ -2,7 +2,8 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
 import pytest
-from jdrones.trajectory import QuinticPolynomialTrajectory
+from jdrones.trajectory import FifthOrderPolynomialTrajectory
+from jdrones.trajectory import FirstOrderPolynomialTrajectory
 
 
 @pytest.fixture
@@ -49,14 +50,25 @@ def T(request):
 
 
 @pytest.fixture()
-def trajectory(start_pos, start_vel, start_acc, dest_pos, dest_vel, dest_acc, T):
-    return QuinticPolynomialTrajectory(
+def fifth_o_trajectory(
+    start_pos, start_vel, start_acc, dest_pos, dest_vel, dest_acc, T
+):
+    return FifthOrderPolynomialTrajectory(
         start_pos=start_pos,
         start_vel=start_vel,
         start_acc=start_acc,
         dest_pos=dest_pos,
         dest_vel=dest_vel,
         dest_acc=dest_acc,
+        T=T,
+    )
+
+
+@pytest.fixture()
+def first_o_trajectory(start_pos, dest_pos, T):
+    return FirstOrderPolynomialTrajectory(
+        start_pos=start_pos,
+        dest_pos=dest_pos,
         T=T,
     )
 
@@ -115,8 +127,8 @@ def trajectory(start_pos, start_vel, start_acc, dest_pos, dest_vel, dest_acc, T)
     ],
     indirect=["start_pos", "dest_pos"],
 )
-def test_traj_coeffs_only_pos(trajectory, exp):
-    act = trajectory.coeffs
+def test_fifth_o_traj_coeffs_only_pos(fifth_o_trajectory, exp):
+    act = fifth_o_trajectory.coeffs
 
     assert all(np.allclose(exp[f], act[f]) for f in ("x", "y", "z"))
 
@@ -172,20 +184,82 @@ def test_traj_coeffs_only_pos(trajectory, exp):
     indirect=True,
 )
 @pytest.mark.parametrize("T", [5, 10], indirect=True)
-def test_traj_bounds(
-    trajectory, T, start_pos, dest_pos, start_vel, dest_vel, start_acc, dest_acc
+def test_fifth_o_traj_bounds(
+    fifth_o_trajectory, T, start_pos, dest_pos, start_vel, dest_vel, start_acc, dest_acc
 ):
-    act_start_pos = trajectory.position(0)
-    act_dest_pos = trajectory.position(T)
+    act_start_pos = fifth_o_trajectory.position(0)
+    act_dest_pos = fifth_o_trajectory.position(T)
     assert np.allclose(act_start_pos, start_pos)
     assert np.allclose(act_dest_pos, dest_pos)
 
-    act_start_vel = trajectory.velocity(0)
-    act_dest_vel = trajectory.velocity(T)
+    act_start_vel = fifth_o_trajectory.velocity(0)
+    act_dest_vel = fifth_o_trajectory.velocity(T)
     assert np.allclose(act_start_vel, start_vel)
     assert np.allclose(act_dest_vel, dest_vel)
 
-    act_start_acc = trajectory.acceleration(0)
-    act_dest_acc = trajectory.acceleration(T)
+    act_start_acc = fifth_o_trajectory.acceleration(0)
+    act_dest_acc = fifth_o_trajectory.acceleration(T)
     assert np.allclose(act_start_acc, start_acc)
     assert np.allclose(act_dest_acc, dest_acc)
+
+
+@pytest.mark.parametrize(
+    "start_pos,dest_pos,exp",
+    [
+        [
+            (0, 0, 0),
+            (1, 0, 0),
+            dict(
+                x=[0.2, 0],
+                y=np.zeros(2),
+                z=np.zeros(2),
+            ),
+        ],
+        [
+            (0, 0, 0),
+            (0, 1, 0),
+            dict(
+                y=[0.2, 0],
+                x=np.zeros(2),
+                z=np.zeros(2),
+            ),
+        ],
+        [
+            (0, 0, 0),
+            (0, 0, 1),
+            dict(
+                z=[0.2, 0],
+                y=np.zeros(2),
+                x=np.zeros(2),
+            ),
+        ],
+    ],
+    indirect=["start_pos", "dest_pos"],
+)
+def test_first_o_traj_coeffs_only_pos(first_o_trajectory, exp):
+    act = first_o_trajectory.coeffs
+
+    assert all(np.allclose(exp[f], act[f]) for f in ("x", "y", "z"))
+
+
+@pytest.mark.parametrize(
+    "start_pos,dest_pos",
+    [
+        [
+            (0, 0, 0),
+            (1, 0, 0),
+        ],
+        [
+            (-3, -2, -1),
+            (1, 2, 3),
+        ],
+        np.random.random((2, 3)),
+    ],
+    indirect=True,
+)
+@pytest.mark.parametrize("T", [5, 10], indirect=True)
+def test_first_o_traj_bounds(first_o_trajectory, T, start_pos, dest_pos):
+    act_start_pos = first_o_trajectory.position(0)
+    act_dest_pos = first_o_trajectory.position(T)
+    assert np.allclose(act_start_pos, start_pos)
+    assert np.allclose(act_dest_pos, dest_pos)

@@ -38,10 +38,10 @@ def test_LQRDroneEnv(lqrdroneenv):
 
 
 @pytest.mark.integration
-def test_LQRPositionDroneEnv(lqrpositiondroneenv):
-    check_env(lqrpositiondroneenv)
+def test_FirstOrderPolyPositionDroneEnv(firstorderploypositiondroneenv):
+    check_env(firstorderploypositiondroneenv)
 
 
 @pytest.mark.integration
-def test_PolyPositionDroneEnv(polypositiondroneenv):
-    check_env(polypositiondroneenv)
+def test_FifthOrderPolyPositionDroneEnv(fifthorderpolypositiondroneenv):
+    check_env(fifthorderpolypositiondroneenv)

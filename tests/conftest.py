@@ -8,11 +8,11 @@ from gymnasium import spaces
 from jdrones.data_models import SimulationType
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
+from jdrones.envs import FifthOrderPolyPositionDroneEnv
+from jdrones.envs import FirstOrderPolyPositionDroneEnv
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
-from jdrones.envs import LQRPositionDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
-from jdrones.envs import PolyPositionDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
@@ -228,18 +228,18 @@ def custom_position_action_space_wrapper(action_space, obj: type[BasePositionDro
 
 
 @pytest.fixture
-def lqrpositiondroneenv(position_drone_action_space, env_default_kwargs):
+def firstorderploypositiondroneenv(position_drone_action_space, env_default_kwargs):
     d = custom_position_action_space_wrapper(
-        position_drone_action_space, LQRPositionDroneEnv
+        position_drone_action_space, FirstOrderPolyPositionDroneEnv
     )(**env_default_kwargs)
     yield d
     d.close()
 
 
 @pytest.fixture
-def polypositiondroneenv(position_drone_action_space, env_default_kwargs):
+def fifthorderpolypositiondroneenv(position_drone_action_space, env_default_kwargs):
     d = custom_position_action_space_wrapper(
-        position_drone_action_space, PolyPositionDroneEnv
+        position_drone_action_space, FifthOrderPolyPositionDroneEnv
     )(**env_default_kwargs)
     yield d
     d.close()

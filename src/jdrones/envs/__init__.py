@@ -6,16 +6,16 @@ from .base import PyBulletDroneEnv
 from .base.basecontrolledenv import BaseControlledEnv
 from .dronemodels import DronePlus
 from .lqr import LQRDroneEnv
-from .position import LQRPositionDroneEnv
-from .position import PolyPositionDroneEnv
+from .position import FifthOrderPolyPositionDroneEnv
+from .position import FirstOrderPolyPositionDroneEnv
 
 __all__ = [
     "PyBulletDroneEnv",
     "NonlinearDynamicModelDroneEnv",
     "LinearDynamicModelDroneEnv",
     "LQRDroneEnv",
-    "LQRPositionDroneEnv",
+    "FirstOrderPolyPositionDroneEnv",
     "DronePlus",
-    "PolyPositionDroneEnv",
+    "FifthOrderPolyPositionDroneEnv",
     "BaseControlledEnv",
 ]
