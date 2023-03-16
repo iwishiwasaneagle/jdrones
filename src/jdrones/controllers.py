@@ -7,14 +7,38 @@ from jdrones.maths import clip_scalar
 
 
 class Controller:
+    """
+    Base controller class
+    """
+
     @staticmethod
-    def error(measured, setpoint):
+    def error(measured: float, setpoint: float) -> float:
+        """
+        Calculate the error between measured and setpoint
+
+        .. math::
+
+            e = u - \\hat x
+
+        Parameters
+        ----------
+        measured : float
+        setpoint : float
+
+        Returns
+        -------
+        float
+        """
         return setpoint - measured
 
     def __call__(self, *, measured, setpoint):
         return self.error(measured, setpoint)
 
     def reset(self):
+        """
+        Resets the controller. Useful for when there's calculations dependent on the
+        previous timestep.
+        """
         raise NotImplementedError
 
 
