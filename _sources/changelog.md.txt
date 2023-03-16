@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Python versions (was >3.8, now is >3.10) [(8f5e9f7)](https://github.com/iwishiwasaneagle/jdrones/commit/8f5e9f7cbe197665ab69fdb1c5471b4924dafc2c)
 - Use short ref in docstr-cov CI [(ae6bf2a)](https://github.com/iwishiwasaneagle/jdrones/commit/ae6bf2a79fd39a12a230fa2383d73fe5b3859b06)
 - Use python 3.10 to build the package in the CD [(320a88c)](https://github.com/iwishiwasaneagle/jdrones/commit/320a88c93977c3b86682322e6e7c8e9fea981722)
+- --no-deps for wheels to only build jdrones and none of the deps [(7b8599d)](https://github.com/iwishiwasaneagle/jdrones/commit/7b8599d3608f30a96238099f43d539a7312059b3)
 
 ### Documentation
 
@@ -33,11 +34,14 @@ All notable changes to this project will be documented in this file.
 - Bump pydantic from 1.10.4 to 1.10.6 [(5b69bd5)](https://github.com/iwishiwasaneagle/jdrones/commit/5b69bd56832f561cb138758b7cca56a129b3346e)
 - Update changelog for v0.6.0 [skip pre-commit.ci] [(a183231)](https://github.com/iwishiwasaneagle/jdrones/commit/a18323100ba220fc08b1c50bdb6a70e20a50876c)
 - Delete changelog for redo of v0.6.0 [skip pre-commit.ci] [(b8c872d)](https://github.com/iwishiwasaneagle/jdrones/commit/b8c872d3144a9df557ea057b56b0c42230d9e3a6)
+- Update changelog for v0.6.0 [skip pre-commit.ci] [(1b98622)](https://github.com/iwishiwasaneagle/jdrones/commit/1b9862282f87429984485b96f5d42212edaf5d40)
+- Delete changelog for redo of v0.6.0 [skip pre-commit.ci] [(85b3de8)](https://github.com/iwishiwasaneagle/jdrones/commit/85b3de8e4fd98934f9b36438ca9b4f6dfc522215)
 
 ### Testing
 
 - Search for jdrones envs rather than manually specify them [(4198604)](https://github.com/iwishiwasaneagle/jdrones/commit/4198604ca70b4d79f776777c59e2d1c3502ef30b)
 - Use syphar/restore-virtualenv@v1 to cache the python venv [(f57d4fc)](https://github.com/iwishiwasaneagle/jdrones/commit/f57d4fc4f9f3f5186c830907012845d037d1971a)
+- Build the wheel for jdrones as part of the CI [(a457ba5)](https://github.com/iwishiwasaneagle/jdrones/commit/a457ba5ef66708ee029c252bda8d71785f8fbc4b)
 
 ## [0.5.2] - 2023-03-02
 
