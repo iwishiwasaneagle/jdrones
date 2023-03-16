@@ -82,6 +82,21 @@ jobs:
         files: ./coverage.xml,./coverage.info
         fail_ci_if_error: true
 
+  build-python:
+    name: Build python
+    needs: run-tests
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Build wheels
+        run: pip wheel . --no-deps
+
   run-doc-tests:
     name: Build docs and test for issues
     runs-on: ubuntu-latest
