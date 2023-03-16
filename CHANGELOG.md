@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2023-03-16
+
+### Bug Fixes
+
+- Use \mathbf instead of \textbf to ensure symbols are being rendered correctly [(96e9376)](https://github.com/iwishiwasaneagle/jdrones/commit/96e9376bb0794232030e7104144444993602f60b)
+- Python versions (was >3.8, now is >3.10) [(8f5e9f7)](https://github.com/iwishiwasaneagle/jdrones/commit/8f5e9f7cbe197665ab69fdb1c5471b4924dafc2c)
+- Use short ref in docstr-cov CI [(ae6bf2a)](https://github.com/iwishiwasaneagle/jdrones/commit/ae6bf2a79fd39a12a230fa2383d73fe5b3859b06)
+- Use python 3.10 to build the package in the CD [(320a88c)](https://github.com/iwishiwasaneagle/jdrones/commit/320a88c93977c3b86682322e6e7c8e9fea981722)
+
+### Documentation
+
+- Docstr for parent poly traj class [(3874400)](https://github.com/iwishiwasaneagle/jdrones/commit/387440027d81b4759fac87981d65198864666a6c)
+- Docstring for Controller base class [(0c7c2c6)](https://github.com/iwishiwasaneagle/jdrones/commit/0c7c2c68fd55128a673af2ff191fc4c5c51f2701)
+- Docstring for AngleController [(8daafa2)](https://github.com/iwishiwasaneagle/jdrones/commit/8daafa2c1589de109d4d422b9a37923ec5cfbb1a)
+- Docstring for PID [(3a5fbd5)](https://github.com/iwishiwasaneagle/jdrones/commit/3a5fbd5ddb58df235c2adcdfd45cb9a56a744863)
+- Docstring for LQR top-level [(fdaed6a)](https://github.com/iwishiwasaneagle/jdrones/commit/fdaed6acd39b92ce67161fc0d3e2bd2c2e7c7c3d)
+
+### Features
+
+- Extract integration test markers to seperate package (pytest-extra-markers) [(f0453b2)](https://github.com/iwishiwasaneagle/jdrones/commit/f0453b2df78618bc548c080ee4811821af776294)
+- Stabilize the simple position drone by using a straight line trajectory [(35d3b70)](https://github.com/iwishiwasaneagle/jdrones/commit/35d3b702a68751661b1e237b96977375f6cd761c)
+- Update check status for docstr-cov [(a3f275c)](https://github.com/iwishiwasaneagle/jdrones/commit/a3f275c626e03a4cb4f7a4bdee75c59688fa7553)
+
+### Miscellaneous Tasks
+
+- Update graphics [(d30bb66)](https://github.com/iwishiwasaneagle/jdrones/commit/d30bb66592f8ae9233eb7442dd78c332d2aafa85)
+- Update changelog for v0.5.3 [skip pre-commit.ci] [(482652c)](https://github.com/iwishiwasaneagle/jdrones/commit/482652c22ab8b9416c118e6099148c5efaaf462d)
+- Bump pandas from 1.3.4 to 1.5.3 [(9051ed2)](https://github.com/iwishiwasaneagle/jdrones/commit/9051ed2d932f4b360dbd7f6fdfe3ea550ff7fc85)
+- Bump pydantic from 1.10.4 to 1.10.6 [(5b69bd5)](https://github.com/iwishiwasaneagle/jdrones/commit/5b69bd56832f561cb138758b7cca56a129b3346e)
+- Update changelog for v0.6.0 [skip pre-commit.ci] [(a183231)](https://github.com/iwishiwasaneagle/jdrones/commit/a18323100ba220fc08b1c50bdb6a70e20a50876c)
+- Delete changelog for redo of v0.6.0 [skip pre-commit.ci] [(b8c872d)](https://github.com/iwishiwasaneagle/jdrones/commit/b8c872d3144a9df557ea057b56b0c42230d9e3a6)
+
+### Testing
+
+- Search for jdrones envs rather than manually specify them [(4198604)](https://github.com/iwishiwasaneagle/jdrones/commit/4198604ca70b4d79f776777c59e2d1c3502ef30b)
+- Use syphar/restore-virtualenv@v1 to cache the python venv [(f57d4fc)](https://github.com/iwishiwasaneagle/jdrones/commit/f57d4fc4f9f3f5186c830907012845d037d1971a)
+
 ## [0.5.2] - 2023-03-02
 
 ### Bug Fixes
