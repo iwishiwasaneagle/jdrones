@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jdrones.controllers &mdash; jdrones 0.5.3 documentation</title>
+  <title>jdrones.controllers &mdash; jdrones 0.6.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
@@ -33,7 +34,7 @@
               <img src="../../_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -98,29 +99,88 @@
 <span></span><span class="c1">#  Copyright 2023 Jan-Hendrik Ewers</span>
 <span class="c1">#  SPDX-License-Identifier: GPL-3.0-only</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">scipy</span>
 <span class="kn">from</span> <span class="nn">jdrones.data_models</span> <span class="kn">import</span> <span class="n">State</span>
 <span class="kn">from</span> <span class="nn">jdrones.maths</span> <span class="kn">import</span> <span class="n">clip_scalar</span>
 
 
 <div class="viewcode-block" id="Controller"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.Controller">[docs]</a><span class="k">class</span> <span class="nc">Controller</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base controller class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Controller.error"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.Controller.error">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="n">measured</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="n">measured</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the error between measured and setpoint</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            e = u - \\hat x</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        measured : float</span>
+<span class="sd">        setpoint : float</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">setpoint</span> <span class="o">-</span> <span class="n">measured</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">measured</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">measured</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Controller.reset"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.Controller.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the controller. Useful for when there&#39;s calculations dependent on the</span>
+<span class="sd">        previous timestep.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 
 <div class="viewcode-block" id="AngleController"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.AngleController">[docs]</a><span class="k">class</span> <span class="nc">AngleController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Special controller type when the inputs are angles that wrap around</span>
+<span class="sd">    :math:`2\\pi`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">angle</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Flag to determine which method to use for calculating the error&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span>
 
 <div class="viewcode-block" id="AngleController.angle_error"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.AngleController.angle_error">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">angle_error</span><span class="p">(</span><span class="n">measured</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">angle_error</span><span class="p">(</span><span class="n">measured</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the angle error through</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{align}</span>
+<span class="sd">                \\hat x_{\\mathit{wrapped}} &amp;=</span>
+<span class="sd">                \\begin{cases}</span>
+<span class="sd">                    \\hat x - 2\\pi&amp;, \\hat x &gt; 0 \\\\</span>
+<span class="sd">                    \\hat x + 2\\pi&amp;, \\mathit{else}</span>
+<span class="sd">                \\end{cases}\\\\</span>
+<span class="sd">                e &amp;= \\begin{cases}</span>
+<span class="sd">                    u - \\hat x&amp;, |u - \\hat x|&lt;|u-\\hat x_{\\mathit{wrapped}}|\\\\</span>
+<span class="sd">                    u-\\hat x_{\\mathit{wrapped}}&amp;,\\mathit{else}</span>
+<span class="sd">                \\end{cases}</span>
+<span class="sd">            \\end{align}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        measured : float</span>
+<span class="sd">        setpoint : float</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">measured_wrapped</span> <span class="o">=</span> <span class="n">measured</span>
         <span class="k">if</span> <span class="n">measured</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">measured_wrapped</span> <span class="o">-=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
@@ -138,6 +198,31 @@
 
 
 <div class="viewcode-block" id="PID"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.PID">[docs]</a><span class="k">class</span> <span class="nc">PID</span><span class="p">(</span><span class="n">AngleController</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple PID controller implementation.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        u(t) = K\\left[K_p e(t) + K_i \\int^t_0 e(t) dt + K_d \\frac{de(t)}{dt}\\right]</span>
+
+
+<span class="sd">    &gt;&gt;&gt; pid = PID(1,2,3,dt=0.1)</span>
+<span class="sd">    &gt;&gt;&gt; pid(measured=0,setpoint=1)</span>
+<span class="sd">        31.2</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Kp</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Proportional gain&quot;&quot;&quot;</span>
+    <span class="n">Ki</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Integral gain&quot;&quot;&quot;</span>
+    <span class="n">Kd</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derivative gain&quot;&quot;&quot;</span>
+    <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scaling constant :math:`K`&quot;&quot;&quot;</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Difference in time between calculations&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Kp</span><span class="p">,</span> <span class="n">Ki</span><span class="p">,</span> <span class="n">Kd</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Kp</span> <span class="o">=</span> <span class="n">Kp</span>
@@ -150,6 +235,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <div class="viewcode-block" id="PID.reset"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.PID.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the error and integration to 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Integration</span> <span class="o">=</span> <span class="mi">0</span></div>
 
@@ -191,6 +279,20 @@
 
 
 <div class="viewcode-block" id="LQR"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.LQR">[docs]</a><span class="k">class</span> <span class="nc">LQR</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple Linear-Quadratic Regulator class that handles solving and evaluation of the</span>
+<span class="sd">    controller.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">A</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The system matrix&quot;&quot;&quot;</span>
+    <span class="n">B</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The control matrix&quot;&quot;&quot;</span>
+    <span class="n">Q</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The state deviation cost matrix&quot;&quot;&quot;</span>
+    <span class="n">R</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The control deviation cost matrix&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">A</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">B</span>
@@ -236,6 +338,9 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">K</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="LQR.reset"><a class="viewcode-back" href="../../controllers.html#jdrones.controllers.LQR.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the error to :math:`\\vec e = \\vec 0_{20,1}`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">State</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">measured</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">setpoint</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>

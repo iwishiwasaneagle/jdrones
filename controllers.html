@@ -4,19 +4,20 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controllers &mdash; jdrones 0.5.3 documentation</title>
+  <title>Controllers &mdash; jdrones 0.6.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "macros": {"vec": ["\\textbf{#1}", 1], "m": "\\text{m}", "ms": "\\text{m}\\text{s}^-1", "mss": "\\text{m}\\text{s}^-2"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "macros": {"vec": ["{\\mathbf #1}", 1], "m": "\\text{m}", "ms": "\\text{m}\\text{s}^-1", "mss": "\\text{m}\\text{s}^-2"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -38,7 +39,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -68,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_models.html">Data Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Controllers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.AngleController"><code class="docutils literal notranslate"><span class="pre">AngleController</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.AngleController.angle"><code class="docutils literal notranslate"><span class="pre">AngleController.angle</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.AngleController.angle_error"><code class="docutils literal notranslate"><span class="pre">AngleController.angle_error()</span></code></a></li>
 </ul>
 </li>
@@ -77,11 +79,20 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.LQR"><code class="docutils literal notranslate"><span class="pre">LQR</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.A"><code class="docutils literal notranslate"><span class="pre">LQR.A</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.B"><code class="docutils literal notranslate"><span class="pre">LQR.B</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.Q"><code class="docutils literal notranslate"><span class="pre">LQR.Q</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.R"><code class="docutils literal notranslate"><span class="pre">LQR.R</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.reset"><code class="docutils literal notranslate"><span class="pre">LQR.reset()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.LQR.solve"><code class="docutils literal notranslate"><span class="pre">LQR.solve()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#jdrones.controllers.PID"><code class="docutils literal notranslate"><span class="pre">PID</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.Kd"><code class="docutils literal notranslate"><span class="pre">PID.Kd</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.Ki"><code class="docutils literal notranslate"><span class="pre">PID.Ki</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.Kp"><code class="docutils literal notranslate"><span class="pre">PID.Kp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.dt"><code class="docutils literal notranslate"><span class="pre">PID.dt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.gain"><code class="docutils literal notranslate"><span class="pre">PID.gain</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jdrones.controllers.PID.reset"><code class="docutils literal notranslate"><span class="pre">PID.reset()</span></code></a></li>
 </ul>
 </li>
@@ -120,40 +131,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="module-jdrones.controllers">
+  <section id="module-jdrones.controllers">
 <span id="controllers"></span><h1>Controllers<a class="headerlink" href="#module-jdrones.controllers" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="jdrones.controllers.AngleController">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">AngleController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#AngleController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.AngleController" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jdrones.controllers.Controller" title="jdrones.controllers.Controller"><code class="xref py py-class docutils literal notranslate"><span class="pre">Controller</span></code></a></p>
+<p>Special controller type when the inputs are angles that wrap around
+<span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.AngleController.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#jdrones.controllers.AngleController.angle" title="Permalink to this definition"></a></dt>
+<dd><p>Flag to determine which method to use for calculating the error</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.controllers.AngleController.angle_error">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">angle_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#AngleController.angle_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.AngleController.angle_error" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">angle_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></span><a class="reference internal" href="_modules/jdrones/controllers.html#AngleController.angle_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.AngleController.angle_error" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the angle error through</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+    \hat x_{\mathit{wrapped}} &amp;=
+    \begin{cases}
+        \hat x - 2\pi&amp;, \hat x &gt; 0 \\
+        \hat x + 2\pi&amp;, \mathit{else}
+    \end{cases}\\
+    e &amp;= \begin{cases}
+        u - \hat x&amp;, |u - \hat x|&lt;|u-\hat x_{\mathit{wrapped}}|\\
+        u-\hat x_{\mathit{wrapped}}&amp;,\mathit{else}
+    \end{cases}
+\end{align}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>measured</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – </p></li>
+<li><p><strong>setpoint</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Error</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -161,15 +183,32 @@
 <dt class="sig sig-object py" id="jdrones.controllers.Controller">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">Controller</span></span><a class="reference internal" href="_modules/jdrones/controllers.html#Controller"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.Controller" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base controller class</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.controllers.Controller.error">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#Controller.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.Controller.error" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">setpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></span><a class="reference internal" href="_modules/jdrones/controllers.html#Controller.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.Controller.error" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the error between measured and setpoint</p>
+<div class="math notranslate nohighlight">
+\[e = u - \hat x\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>measured</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – </p></li>
+<li><p><strong>setpoint</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.controllers.Controller.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#Controller.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.Controller.reset" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Resets the controller. Useful for when there’s calculations dependent on the
+previous timestep.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -177,10 +216,37 @@
 <dt class="sig sig-object py" id="jdrones.controllers.LQR">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">LQR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#LQR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.LQR" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jdrones.controllers.Controller" title="jdrones.controllers.Controller"><code class="xref py py-class docutils literal notranslate"><span class="pre">Controller</span></code></a></p>
+<p>Simple Linear-Quadratic Regulator class that handles solving and evaluation of the
+controller.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.LQR.A">
+<span class="sig-name descname"><span class="pre">A</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span></em><a class="headerlink" href="#jdrones.controllers.LQR.A" title="Permalink to this definition"></a></dt>
+<dd><p>The system matrix</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.LQR.B">
+<span class="sig-name descname"><span class="pre">B</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span></em><a class="headerlink" href="#jdrones.controllers.LQR.B" title="Permalink to this definition"></a></dt>
+<dd><p>The control matrix</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.LQR.Q">
+<span class="sig-name descname"><span class="pre">Q</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span></em><a class="headerlink" href="#jdrones.controllers.LQR.Q" title="Permalink to this definition"></a></dt>
+<dd><p>The state deviation cost matrix</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.LQR.R">
+<span class="sig-name descname"><span class="pre">R</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span></em><a class="headerlink" href="#jdrones.controllers.LQR.R" title="Permalink to this definition"></a></dt>
+<dd><p>The control deviation cost matrix</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.controllers.LQR.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#LQR.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.LQR.reset" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Resets the error to <span class="math notranslate nohighlight">\(\vec e = \vec 0_{20,1}\)</span></p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.controllers.LQR.solve">
@@ -197,17 +263,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A</strong> (<em>numpy.ndarray</em>) – System matrix</p></li>
-<li><p><strong>B</strong> (<em>numpy.ndarray</em>) – System control matrix</p></li>
-<li><p><strong>Q</strong> (<em>numpy.ndarray</em>) – </p></li>
-<li><p><strong>R</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>A</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – System matrix</p></li>
+<li><p><strong>B</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – System control matrix</p></li>
+<li><p><strong>Q</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – </p></li>
+<li><p><strong>R</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>K</strong> – LQR K matrix</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -218,10 +284,49 @@
 <dt class="sig sig-object py" id="jdrones.controllers.PID">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.controllers.</span></span><span class="sig-name descname"><span class="pre">PID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Kp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ki</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Kd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#PID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.PID" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jdrones.controllers.AngleController" title="jdrones.controllers.AngleController"><code class="xref py py-class docutils literal notranslate"><span class="pre">AngleController</span></code></a></p>
+<p>Simple PID controller implementation.</p>
+<div class="math notranslate nohighlight">
+\[u(t) = K\left[K_p e(t) + K_i \int^t_0 e(t) dt + K_d \frac{de(t)}{dt}\right]\]</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="n">PID</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">dt</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span><span class="p">(</span><span class="n">measured</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">setpoint</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">    31.2</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.PID.Kd">
+<span class="sig-name descname"><span class="pre">Kd</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#jdrones.controllers.PID.Kd" title="Permalink to this definition"></a></dt>
+<dd><p>Derivative gain</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.PID.Ki">
+<span class="sig-name descname"><span class="pre">Ki</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#jdrones.controllers.PID.Ki" title="Permalink to this definition"></a></dt>
+<dd><p>Integral gain</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.PID.Kp">
+<span class="sig-name descname"><span class="pre">Kp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#jdrones.controllers.PID.Kp" title="Permalink to this definition"></a></dt>
+<dd><p>Proportional gain</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.PID.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#jdrones.controllers.PID.dt" title="Permalink to this definition"></a></dt>
+<dd><p>Difference in time between calculations</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdrones.controllers.PID.gain">
+<span class="sig-name descname"><span class="pre">gain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#jdrones.controllers.PID.gain" title="Permalink to this definition"></a></dt>
+<dd><p>Scaling constant <span class="math notranslate nohighlight">\(K\)</span></p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.controllers.PID.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/controllers.html#PID.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.controllers.PID.reset" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Resets the error and integration to 0</p>
+</dd></dl>
 
 </dd></dl>
 

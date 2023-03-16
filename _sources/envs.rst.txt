@@ -60,16 +60,16 @@ BasePositionDroneEnv
    :undoc-members:
    :show-inheritance:
 
-LQRPositionDroneEnv
--------------------
-.. autoclass:: jdrones.envs.LQRPositionDroneEnv
+FirstOrderPolyPositionDroneEnv
+------------------------------
+.. autoclass:: jdrones.envs.FirstOrderPolyPositionDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
 
-PolyPositionDroneEnv
---------------------
-.. autoclass:: jdrones.envs.PolyPositionDroneEnv
+FifthOrderPolyPositionDroneEnv
+------------------------------
+.. autoclass:: jdrones.envs.FifthOrderPolyPositionDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:

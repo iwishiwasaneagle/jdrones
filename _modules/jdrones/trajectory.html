@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jdrones.trajectory &mdash; jdrones 0.5.3 documentation</title>
+  <title>jdrones.trajectory &mdash; jdrones 0.6.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
@@ -33,7 +34,7 @@
               <img src="../../_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -104,7 +105,15 @@
 <span class="kn">from</span> <span class="nn">jdrones.types</span> <span class="kn">import</span> <span class="n">VEC3</span>
 
 
-<div class="viewcode-block" id="QuinticPolynomialTrajectory"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory">[docs]</a><span class="k">class</span> <span class="nc">QuinticPolynomialTrajectory</span><span class="p">:</span>
+<div class="viewcode-block" id="BasePolynomialTrajectory"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.BasePolynomialTrajectory">[docs]</a><span class="k">class</span> <span class="nc">BasePolynomialTrajectory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parent class for all Polynomial Trajectory classes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="FifthOrderPolynomialTrajectory"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.FifthOrderPolynomialTrajectory">[docs]</a><span class="k">class</span> <span class="nc">FifthOrderPolynomialTrajectory</span><span class="p">(</span><span class="n">BasePolynomialTrajectory</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A helper class to solve the quintic polynomial given a start and end criterion.</span>
 
@@ -149,14 +158,14 @@
 <span class="sd">    Where :math:`T` is the total time to traverse the polynomial.</span>
 
 <span class="sd">    .. seealso::</span>
-<span class="sd">        :meth:`jdrones.envs.PolyPositionDroneEnv.calc_traj`</span>
+<span class="sd">        :meth:`jdrones.envs.FifthOrderPolyPositionDroneEnv.calc_traj`</span>
 
 <span class="sd">    The coefficients are then saved in :code:`coeffs` and accessed by</span>
 <span class="sd">    :meth:`acceleration`,:meth:`velocity`, and :meth:`position` as required.</span>
 
 
 <span class="sd">    .. note::</span>
-<span class="sd">        The trajectory is solved individually for :math:`x`,:math:`y`, and :math:`z`.</span>
+<span class="sd">        The trajectory is solved individually for :math:`x`, :math:`y`, and :math:`z`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -229,7 +238,7 @@
             <span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]),</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="QuinticPolynomialTrajectory.acceleration"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory.acceleration">[docs]</a>    <span class="k">def</span> <span class="nf">acceleration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="FifthOrderPolynomialTrajectory.acceleration"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.FifthOrderPolynomialTrajectory.acceleration">[docs]</a>    <span class="k">def</span> <span class="nf">acceleration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the acceleration at time :math:`t` for :math:`x`, :math:`y`,</span>
 <span class="sd">        and :math:`z` using</span>
@@ -247,19 +256,17 @@
 <span class="sd">        float, float, float</span>
 <span class="sd">             :math:`\\ddot x, \\ddot y, \\ddot z`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">calc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">3</span>
-            <span class="o">+</span> <span class="mi">12</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">2</span>
-            <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span>
-            <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">12</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
         <span class="n">xdd</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">ydd</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">zdd</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">xdd</span><span class="p">,</span> <span class="n">ydd</span><span class="p">,</span> <span class="n">zdd</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
-<div class="viewcode-block" id="QuinticPolynomialTrajectory.velocity"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory.velocity">[docs]</a>    <span class="k">def</span> <span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="FifthOrderPolynomialTrajectory.velocity"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.FifthOrderPolynomialTrajectory.velocity">[docs]</a>    <span class="k">def</span> <span class="nf">velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the velocity at time :math:`t` for :math:`x`, :math:`y`,</span>
 <span class="sd">        and :math:`z` using</span>
@@ -277,20 +284,23 @@
 <span class="sd">        float, float, float</span>
 <span class="sd">             :math:`\\dot x, \\dot y, \\dot z`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">calc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">4</span>
-            <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">3</span>
-            <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">2</span>
-            <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span>
-            <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="mi">5</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">4</span>
+                <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">3</span>
+                <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">2</span>
+                <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span>
+                <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+            <span class="p">)</span>
+
         <span class="n">xd</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">yd</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">zd</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">zd</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
-<div class="viewcode-block" id="QuinticPolynomialTrajectory.position"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.QuinticPolynomialTrajectory.position">[docs]</a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="FifthOrderPolynomialTrajectory.position"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.FifthOrderPolynomialTrajectory.position">[docs]</a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the position at time :math:`t` for :math:`x`, :math:`y`,</span>
 <span class="sd">        and :math:`z` using</span>
@@ -308,14 +318,121 @@
 <span class="sd">        float, float, float</span>
 <span class="sd">             :math:`x, y, z`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">calc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">5</span>
-            <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">4</span>
-            <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">3</span>
-            <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">2</span>
-            <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span>
-            <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">5</span>
+                <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">4</span>
+                <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">3</span>
+                <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="mi">2</span>
+                <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span>
+                <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span></div></div>
+
+
+<div class="viewcode-block" id="FirstOrderPolynomialTrajectory"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.FirstOrderPolynomialTrajectory">[docs]</a><span class="k">class</span> <span class="nc">FirstOrderPolynomialTrajectory</span><span class="p">(</span><span class="n">BasePolynomialTrajectory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A helper class to solve the first-order polynomial given a start and end criterion.</span>
+
+<span class="sd">    Define the problem as</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        x = c_0 t + c_1</span>
+
+<span class="sd">    Which is then solved by</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       \\begin{bmatrix}</span>
+<span class="sd">            0 &amp; 1 \\\\</span>
+<span class="sd">            T &amp; 1</span>
+<span class="sd">        \\end{bmatrix}</span>
+<span class="sd">        \\begin{bmatrix}</span>
+<span class="sd">            x_{t=0}\\\\</span>
+<span class="sd">            x_{t=T}</span>
+<span class="sd">        \\end{bmatrix}</span>
+<span class="sd">        =</span>
+<span class="sd">        \\begin{bmatrix}</span>
+<span class="sd">            c_0\\\\</span>
+<span class="sd">            c_1</span>
+<span class="sd">        \\end{bmatrix}</span>
+
+<span class="sd">    Where :math:`T` is the total time to traverse the polynomial.</span>
+
+<span class="sd">    .. seealso::</span>
+<span class="sd">        :meth:`jdrones.envs.FirstOrderPolyPositionDroneEnv.calc_traj`</span>
+
+<span class="sd">    The coefficients are then saved in :code:`coeffs` and accessed by</span>
+<span class="sd">    :meth:`acceleration`,:meth:`velocity`, and :meth:`position` as required.</span>
+
+
+<span class="sd">    .. note::</span>
+<span class="sd">        The trajectory is solved individually for :math:`x`, :math:`y`, and :math:`z`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">coeffs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Storage for the polynomial coefficients&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start_pos</span><span class="p">:</span> <span class="n">VEC3</span><span class="p">,</span>
+        <span class="n">dest_pos</span><span class="p">:</span> <span class="n">VEC3</span><span class="p">,</span>
+        <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span> <span class="o">=</span> <span class="n">start_pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dest_pos</span> <span class="o">=</span> <span class="n">dest_pos</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">T</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_solve</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_solve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>  <span class="c1"># f(t=0)</span>
+                <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                    <span class="mi">1</span><span class="p">,</span>
+                <span class="p">],</span>  <span class="c1"># f(t=T)</span>
+            <span class="p">]</span>
         <span class="p">)</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">row_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_pos</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]),</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="FirstOrderPolynomialTrajectory.position"><a class="viewcode-back" href="../../trajectory.html#jdrones.trajectory.FirstOrderPolynomialTrajectory.position">[docs]</a>    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the position at time :math:`t` for :math:`x`, :math:`y`,</span>
+<span class="sd">        and :math:`z` using</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            x = c_0 t + c_1</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : float</span>
+<span class="sd">            Time to evaluate</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float, float, float</span>
+<span class="sd">             :math:`x, y, z`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
         <span class="n">x</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">calc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">)</span>
