@@ -43,11 +43,45 @@ class Controller:
 
 
 class AngleController(Controller):
+    """
+    Special controller type when the inputs are angles that wrap around
+    :math:`2\\pi`.
+    """
+
+    angle: bool
+    """Flag to determine which method to use for calculating the error"""
+
     def __init__(self, angle=False):
         self.angle = angle
 
     @staticmethod
-    def angle_error(measured, setpoint):
+    def angle_error(measured: float, setpoint: float) -> float:
+        """
+        Calculate the angle error through
+
+        .. math::
+            \\begin{align}
+                \\hat x_{\\mathit{wrapped}} &=
+                \\begin{cases}
+                    \\hat x - 2\\pi&, \\hat x > 0 \\\\
+                    \\hat x + 2\\pi&, \\mathit{else}
+                \\end{cases}\\\\
+                e &= \\begin{cases}
+                    u - \\hat x&, |u - \\hat x|<|u-\\hat x_{\\mathit{wrapped}}|\\\\
+                    u-\\hat x_{\\mathit{wrapped}}&,\\mathit{else}
+                \\end{cases}
+            \\end{align}
+
+        Parameters
+        ----------
+        measured : float
+        setpoint : float
+
+        Returns
+        -------
+        float
+            Error
+        """
         measured_wrapped = measured
         if measured > 0:
             measured_wrapped -= 2 * np.pi
