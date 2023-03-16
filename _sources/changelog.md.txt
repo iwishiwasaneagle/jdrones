@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Use \mathbf instead of \textbf to ensure symbols are being rendered correctly [(96e9376)](https://github.com/iwishiwasaneagle/jdrones/commit/96e9376bb0794232030e7104144444993602f60b)
 - Python versions (was >3.8, now is >3.10) [(8f5e9f7)](https://github.com/iwishiwasaneagle/jdrones/commit/8f5e9f7cbe197665ab69fdb1c5471b4924dafc2c)
 - Use short ref in docstr-cov CI [(ae6bf2a)](https://github.com/iwishiwasaneagle/jdrones/commit/ae6bf2a79fd39a12a230fa2383d73fe5b3859b06)
+- Use python 3.10 to build the package in the CD [(320a88c)](https://github.com/iwishiwasaneagle/jdrones/commit/320a88c93977c3b86682322e6e7c8e9fea981722)
 
 ### Documentation
 
@@ -30,6 +31,8 @@ All notable changes to this project will be documented in this file.
 - Update changelog for v0.5.3 [skip pre-commit.ci] [(482652c)](https://github.com/iwishiwasaneagle/jdrones/commit/482652c22ab8b9416c118e6099148c5efaaf462d)
 - Bump pandas from 1.3.4 to 1.5.3 [(9051ed2)](https://github.com/iwishiwasaneagle/jdrones/commit/9051ed2d932f4b360dbd7f6fdfe3ea550ff7fc85)
 - Bump pydantic from 1.10.4 to 1.10.6 [(5b69bd5)](https://github.com/iwishiwasaneagle/jdrones/commit/5b69bd56832f561cb138758b7cca56a129b3346e)
+- Update changelog for v0.6.0 [skip pre-commit.ci] [(a183231)](https://github.com/iwishiwasaneagle/jdrones/commit/a18323100ba220fc08b1c50bdb6a70e20a50876c)
+- Delete changelog for redo of v0.6.0 [skip pre-commit.ci] [(b8c872d)](https://github.com/iwishiwasaneagle/jdrones/commit/b8c872d3144a9df557ea057b56b0c42230d9e3a6)
 
 ### Testing
 
