@@ -162,6 +162,15 @@ jobs:
             exit 1
           fi
 
+      - name: Get $HEAD coverage
+        run: |
+          P=$(docstr-coverage -F0 -p)
+          if [ -z "$P" ]
+          then
+            P=0
+          fi
+          echo "HEAD_COV=$P" >> $GITHUB_ENV
+
       - name: Get $BASE coverage
         run: |
           git checkout $BASE
@@ -174,12 +183,35 @@ jobs:
 
       - name: Test $HEAD coverage
         run: |
-          echo "$BASE coverage was: $BASE_COV%"
+          printf "%s coverage was: %.2f%%\n" $BASE $BASE_COV
+          printf "%s coverage was: %.2f%%\n" $HEAD $HEAD_COV
+          printf "Difference: %.2f%%\n" $(python -c "print($HEAD_COV - $BASE_COV)")
           git checkout $HEAD
           docstr-coverage --fail-under=$BASE_COV
 
-      - name: Blame
+      - name: Format check status description
+        if: always()
         run: |
-          git diff --name-only $(git merge-base $BASE $HEAD) | \
-          xargs docstr-coverage -F0 --accept-empty
-        if: failure()
+          DIFFERENCE=$(python -c "print($HEAD_COV - $BASE_COV)")
+
+          printf -v CHECK_STATUS_TITLE '%.2f%% (%.2f%% difference) compared to %s\n' \
+            $HEAD_COV $DIFFERENCE $BASE
+          echo "CHECK_STATUS_TITLE=$CHECK_STATUS_TITLE" >> $GITHUB_ENV
+
+          printf -v CHECK_STATUS_DESC '%s (HEAD) is at %.2f%% whilst %s (BASE) was at %.2f%% (%.2f%% difference)\n' \
+            $HEAD $HEAD_COV $BASE $BASE_COV $DIFFERENCE
+          echo "CHECK_STATUS_DESC=$CHECK_STATUS_DESC" >> $GITHUB_ENV
+
+      - uses: LouisBrunner/checks-action@v1.6.0
+        name: Update check status
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: docstr-cov/details
+          conclusion: ${{ job.status }}
+          output: |
+            {
+              "summary": "Docstring Coverage",
+              "title": "${{ env.CHECK_STATUS_TITLE }}",
+              "text_description": "${{ env.CHECK_STATUS_DESC }}"
+            }
