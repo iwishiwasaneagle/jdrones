@@ -1,29 +1,88 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
+import numpy.typing as npt
 import scipy as scipy
 from jdrones.data_models import State
 from jdrones.maths import clip_scalar
 
 
 class Controller:
+    """
+    Base controller class
+    """
+
     @staticmethod
-    def error(measured, setpoint):
+    def error(measured: float, setpoint: float) -> float:
+        """
+        Calculate the error between measured and setpoint
+
+        .. math::
+
+            e = u - \\hat x
+
+        Parameters
+        ----------
+        measured : float
+        setpoint : float
+
+        Returns
+        -------
+        float
+        """
         return setpoint - measured
 
     def __call__(self, *, measured, setpoint):
         return self.error(measured, setpoint)
 
     def reset(self):
+        """
+        Resets the controller. Useful for when there's calculations dependent on the
+        previous timestep.
+        """
         raise NotImplementedError
 
 
 class AngleController(Controller):
+    """
+    Special controller type when the inputs are angles that wrap around
+    :math:`2\\pi`.
+    """
+
+    angle: bool
+    """Flag to determine which method to use for calculating the error"""
+
     def __init__(self, angle=False):
         self.angle = angle
 
     @staticmethod
-    def angle_error(measured, setpoint):
+    def angle_error(measured: float, setpoint: float) -> float:
+        """
+        Calculate the angle error through
+
+        .. math::
+            \\begin{align}
+                \\hat x_{\\mathit{wrapped}} &=
+                \\begin{cases}
+                    \\hat x - 2\\pi&, \\hat x > 0 \\\\
+                    \\hat x + 2\\pi&, \\mathit{else}
+                \\end{cases}\\\\
+                e &= \\begin{cases}
+                    u - \\hat x&, |u - \\hat x|<|u-\\hat x_{\\mathit{wrapped}}|\\\\
+                    u-\\hat x_{\\mathit{wrapped}}&,\\mathit{else}
+                \\end{cases}
+            \\end{align}
+
+        Parameters
+        ----------
+        measured : float
+        setpoint : float
+
+        Returns
+        -------
+        float
+            Error
+        """
         measured_wrapped = measured
         if measured > 0:
             measured_wrapped -= 2 * np.pi
@@ -41,6 +100,31 @@ class AngleController(Controller):
 
 
 class PID(AngleController):
+    """
+    Simple PID controller implementation.
+
+    .. math::
+        u(t) = K\\left[K_p e(t) + K_i \\int^t_0 e(t) dt + K_d \\frac{de(t)}{dt}\\right]
+
+
+    >>> pid = PID(1,2,3,dt=0.1)
+    >>> pid(measured=0,setpoint=1)
+        31.2
+
+
+    """
+
+    Kp: float
+    """Proportional gain"""
+    Ki: float
+    """Integral gain"""
+    Kd: float
+    """Derivative gain"""
+    gain: float
+    """Scaling constant :math:`K`"""
+    dt: float
+    """Difference in time between calculations"""
+
     def __init__(self, Kp, Ki, Kd, dt, angle=False, gain=1):
         super().__init__(angle=angle)
         self.Kp = Kp
@@ -53,6 +137,9 @@ class PID(AngleController):
         self.reset()
 
     def reset(self):
+        """
+        Resets the error and integration to 0
+        """
         self.e = 0
         self.Integration = 0
 
@@ -94,6 +181,20 @@ class PID_antiwindup(PID):
 
 
 class LQR(Controller):
+    """
+    Simple Linear-Quadratic Regulator class that handles solving and evaluation of the
+    controller.
+    """
+
+    A: npt.NDArray
+    """The system matrix"""
+    B: npt.NDArray
+    """The control matrix"""
+    Q: npt.NDArray
+    """The state deviation cost matrix"""
+    R: npt.NDArray
+    """The control deviation cost matrix"""
+
     def __init__(self, A, B, Q, R):
         self.A = A
         self.B = B
@@ -139,6 +240,9 @@ class LQR(Controller):
         return np.asarray(K)
 
     def reset(self):
+        """
+        Resets the error to :math:`\\vec e = \\vec 0_{20,1}`
+        """
         self.e = State()
 
     def __call__(self, *, measured: State, setpoint: State) -> float:

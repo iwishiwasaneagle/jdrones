@@ -14,7 +14,9 @@ from jdrones.data_models import URDFModel
 from jdrones.envs.base.basecontrolledenv import BaseControlledEnv
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.envs.lqr import LQRDroneEnv
-from jdrones.trajectory import QuinticPolynomialTrajectory
+from jdrones.trajectory import BasePolynomialTrajectory
+from jdrones.trajectory import FifthOrderPolynomialTrajectory
+from jdrones.trajectory import FirstOrderPolynomialTrajectory
 from jdrones.types import PositionAction
 
 
@@ -133,14 +135,18 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         return df_sums.sum()
 
 
-class PolyPositionDroneEnv(BasePositionDroneEnv):
-    """
-    Uses :class:`jdrones.trajectory.QuinticPolynomialTrajectory` to give target
-    position and velocity commands at every time point until the target is reached.
-    If the time taken exceeds :math:`T`, the original target position is given as a raw
-    input as in :class:`~jdrones.envs.position.LQRPositionDroneEnv`. However, if this
-    were to happen, the distance is small enough to ensure stability.
-    """
+class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
+    @staticmethod
+    def calc_traj(cur: State, tgt: State, max_vel: float = 1):
+        raise NotImplementedError
+
+    @staticmethod
+    def update_u_from_traj(u: State, traj: BasePolynomialTrajectory, t: float):
+        if hasattr(traj, "position"):
+            u.pos = traj.position(t)
+        if hasattr(traj, "velocity"):
+            u.vel = traj.velocity(t)
+        return u
 
     def step(
         self, action: PositionAction
@@ -161,8 +167,7 @@ class PolyPositionDroneEnv(BasePositionDroneEnv):
                 u.pos = action
                 u.vel = (0, 0, 0)
             else:
-                u.pos = traj.position(t)
-                u.vel = traj.velocity(t)
+                u = self.update_u_from_traj(u, traj, t)
 
             obs, _, term, trunc, info = self.env.step(u.to_x())
 
@@ -179,10 +184,20 @@ class PolyPositionDroneEnv(BasePositionDroneEnv):
         states = States(observations)
         return states, self.get_reward(states), term, trunc, info
 
+
+class FifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
+    """
+    Uses :class:`jdrones.trajectory.FifthOrderPolynomialTrajectory` to give target
+    position and velocity commands at every time point until the target is reached.
+    If the time taken exceeds :math:`T`, the original target position is given as a raw
+    input. However, if this were to happen, the distance is small enough to ensure
+    stability.
+    """
+
     @staticmethod
     def calc_traj(
         cur: State, tgt: State, max_vel: float = 1
-    ) -> QuinticPolynomialTrajectory:
+    ) -> FifthOrderPolynomialTrajectory:
         """
         Calculate the trajectory for the drone to traverse.
 
@@ -204,13 +219,13 @@ class PolyPositionDroneEnv(BasePositionDroneEnv):
 
         Returns
         -------
-        jdrones.trajectory.QuinticPolynomialTrajectory
+        jdrones.trajectory.FifthOrderPolynomialTrajectory
             The solved trajectory
         """
         dist = np.linalg.norm(tgt.pos - cur.pos)
         T = dist / max_vel
 
-        t = QuinticPolynomialTrajectory(
+        t = FifthOrderPolynomialTrajectory(
             start_pos=cur.pos,
             start_vel=cur.vel,
             start_acc=(0, 0, 0),
@@ -222,39 +237,49 @@ class PolyPositionDroneEnv(BasePositionDroneEnv):
         return t
 
 
-class LQRPositionDroneEnv(BasePositionDroneEnv):
+class FirstOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
     """
-    Feeds the raw position setpoint into :class:`jdrones.envs.lqr.LQRDroneEnv` until
-    the drones arrives.
-
-    .. warning::
-        This is unstable for large inputs (distances of over :math:`10m`) and should
-        **not** be used.
+    Uses :class:`jdrones.trajectory.FirstOrderPolynomialTrajectory` to give target
+    position commands at every time point until the target is reached.
+    If the time taken exceeds :math:`T`, the original target position is given as a raw
+    input. However, if this were to happen, the distance is small enough to ensure
+    stability.
     """
 
-    def step(
-        self, action: PositionAction
-    ) -> tuple[States, float, bool, bool, dict[str, Any]]:
-        x_action = State()
-        x_action.pos = action
-        u = x_action.to_x()
+    @staticmethod
+    def calc_traj(
+        cur: State, tgt: State, max_vel: float = 1
+    ) -> FirstOrderPolynomialTrajectory:
+        """
+        Calculate the trajectory for the drone to traverse.
 
-        observations = collections.deque()
+        Total time to traverse the polynomial is defined as
 
-        term, trunc, info = False, False, {}
-        while not (term or trunc):
-            obs, _, term, trunc, info = self.env.step(u)
+        .. math::
+            T = \\frac{||x_{t=T}-x_{t=0}||}{v_\\max}
 
-            observations.append(np.copy(obs))
+        to ensure dynamic compatibility.
 
-            e = self.env.controllers["lqr"].e
-            dist = np.linalg.norm(np.concatenate([e.pos, e.rpy]))
-            if np.any(np.isnan(dist)):
-                trunc = True
+        Parameters
+        ----------
+        cur : jdrones.data_models.State
+            Current state
+        tgt : jdrones.data_models.State
+            Target state
+        max_vel : float
+            Maximum vehicle velocity
 
-            if dist < 0.01:
-                term = True
-                info["error"] = dist
+        Returns
+        -------
+        jdrones.trajectory.FirstOrderPolynomialTrajectory
+            The solved trajectory
+        """
+        dist = np.linalg.norm(tgt.pos - cur.pos)
+        T = dist / max_vel
 
-        states = States(observations)
-        return states, self.get_reward(states), term, trunc, info
+        t = FirstOrderPolynomialTrajectory(
+            start_pos=cur.pos,
+            dest_pos=tgt.pos,
+            T=T,
+        )
+        return t
