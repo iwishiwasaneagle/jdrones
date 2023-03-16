@@ -99,6 +99,31 @@ class AngleController(Controller):
 
 
 class PID(AngleController):
+    """
+    Simple PID controller implementation.
+
+    .. math::
+        u(t) = K\\left[K_p e(t) + K_i \\int^t_0 e(t) dt + K_d \\frac{de(t)}{dt}\\right]
+
+
+    >>> pid = PID(1,2,3,dt=0.1)
+    >>> pid(measured=0,setpoint=1)
+        31.2
+
+
+    """
+
+    Kp: float
+    """Proportional gain"""
+    Ki: float
+    """Integral gain"""
+    Kd: float
+    """Derivative gain"""
+    gain: float
+    """Scaling constant :math:`K`"""
+    dt: float
+    """Difference in time between calculations"""
+
     def __init__(self, Kp, Ki, Kd, dt, angle=False, gain=1):
         super().__init__(angle=angle)
         self.Kp = Kp
@@ -111,6 +136,9 @@ class PID(AngleController):
         self.reset()
 
     def reset(self):
+        """
+        Resets the error and integration to 0
+        """
         self.e = 0
         self.Integration = 0
 
