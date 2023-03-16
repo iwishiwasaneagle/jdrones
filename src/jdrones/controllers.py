@@ -1,6 +1,7 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
 import numpy as np
+import numpy.typing as npt
 import scipy as scipy
 from jdrones.data_models import State
 from jdrones.maths import clip_scalar
@@ -180,6 +181,20 @@ class PID_antiwindup(PID):
 
 
 class LQR(Controller):
+    """
+    Simple Linear-Quadratic Regulator class that handles solving and evaluation of the
+    controller.
+    """
+
+    A: npt.NDArray
+    """The system matrix"""
+    B: npt.NDArray
+    """The control matrix"""
+    Q: npt.NDArray
+    """The state deviation cost matrix"""
+    R: npt.NDArray
+    """The control deviation cost matrix"""
+
     def __init__(self, A, B, Q, R):
         self.A = A
         self.B = B
@@ -225,6 +240,9 @@ class LQR(Controller):
         return np.asarray(K)
 
     def reset(self):
+        """
+        Resets the error to :math:`\\vec e = \\vec 0_{20,1}`
+        """
         self.e = State()
 
     def __call__(self, *, measured: State, setpoint: State) -> float:
