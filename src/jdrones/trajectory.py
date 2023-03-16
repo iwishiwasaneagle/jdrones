@@ -8,6 +8,10 @@ from jdrones.types import VEC3
 
 
 class BasePolynomialTrajectory:
+    """
+    Parent class for all Polynomial Trajectory classes.
+    """
+
     pass
 
 
