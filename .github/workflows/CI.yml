@@ -151,11 +151,11 @@ jobs:
         run: |
           git config advice.detachedHead false
           if [[ ${{ github.event_name }} == 'push' ]]; then
-            echo "BASE=$(git rev-parse HEAD^)" >> $GITHUB_ENV
-            echo "HEAD=$(git rev-parse HEAD)" >> $GITHUB_ENV
+            echo "BASE=$(git rev-parse --short HEAD^)" >> $GITHUB_ENV
+            echo "HEAD=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           elif [[ ${{ github.event_name }} == 'pull_request' ]]; then
-            echo "BASE=${{ github.event.pull_request.base.sha }}" >> $GITHUB_ENV
-            echo "HEAD=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+            echo "BASE=$(git rev-parse --short ${{ github.event.pull_request.base.sha }})" >> $GITHUB_ENV
+            echo "HEAD=$(git rev-parse --short ${{ github.event.pull_request.head.sha }})" >> $GITHUB_ENV
 
           else
             echo "Unexpected event trigger"
