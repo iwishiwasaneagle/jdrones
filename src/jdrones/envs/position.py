@@ -154,12 +154,21 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
         action_as_state = State()
         action_as_state.pos = action
 
+        term, trunc, info = False, False, {}
+        if np.allclose(action, self.env.state.pos):
+            # Avoid a singularity since the trajectory is scaled with distance
+            term = True
+            traj = None
+        else:
+            traj = self.calc_traj(
+                self.env.state, action_as_state, self.model.max_vel_ms
+            )
+
         observations = collections.deque()
-        traj = self.calc_traj(self.env.state, action_as_state, self.model.max_vel_ms)
+        observations.append(self.env.state.copy())
 
         u: State = action_as_state.copy()
 
-        term, trunc, info = False, False, {}
         counter = itertools.count(-1)
         while not (term or trunc):
             t = next(counter) * self.dt
