@@ -109,9 +109,7 @@ class PID(AngleController):
 
     >>> pid = PID(1,2,3,dt=0.1)
     >>> pid(measured=0,setpoint=1)
-        31.2
-
-
+    31.2
     """
 
     Kp: float
