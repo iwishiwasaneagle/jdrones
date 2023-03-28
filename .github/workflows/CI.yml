@@ -62,11 +62,10 @@ jobs:
     - name: Install dependencies
       if: steps.cache-virtualenv.outputs.cache-hit != 'true'
       run: |
-        pip install wheel -r requirements.txt -r tests/requirements.txt
+        pip install . -r requirements.txt -r tests/requirements.txt
 
     - name: Run tests
       run: |
-        PYTHONPATH=$PWD/src \
         pytest tests \
         --cov-report=xml \
         --cov-branch \
@@ -98,7 +97,7 @@ jobs:
         run: pip wheel . --no-deps
 
   run-doc-tests:
-    name: Build docs and test for issues
+    name: Run doctests
     runs-on: ubuntu-latest
 
     steps:
@@ -116,36 +115,14 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt-get update && sudo apt-get -y install pandoc
-        python -m pip install -r docs/requirements.txt
+        pip install . -r requirements.txt -r tests/requirements.txt
 
-    - name: Build docs and analyze output
-      run: |
-        PYTHONPATH=$PWD/src \
-        python -m \
-        sphinx \
-          -b html \
-          -d docs/_build/html/doctrees \
-          docs \
-          docs/_build/html/ \
-          >build.log
-
-        IGNORE_PATTERN=$(cat docs/sphinx_warning_ignore.txt | \
-                         sed -e 's/#.*$//g'| \
-                         sed -re '/^\s*$/d' | \
-                         awk '{print}' ORS='\\|' | \
-                         sed -e 's/\\|$//g' \
-                      )
-
-        OUTPUT=$(grep -E "[\w\s]+\.py" build.log | grep -v "$IGNORE_PATTERN")
-
-        if [ -z "$OUTPUT" ]; then
-          echo $OUTPUT
-          exit 1
-        else
-          echo "Everything is a-okay!"
-          exit 0
-        fi
+    - name: Run doctests
+      run : |
+        python -m doctest $(\
+          find src/jdrones -iname "*.py" -not -iname "__main__.py" | \
+          tr '\n' ' ' \
+        )
 
   docstr-cov:
     runs-on: ubuntu-latest
