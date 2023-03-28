@@ -3,6 +3,7 @@
 import numpy as np
 import pytest
 from jdrones.data_models import State
+from jdrones.data_models import STATE_ENUM
 from scipy.spatial.transform import Rotation as R
 
 
@@ -278,3 +279,56 @@ def test_state_quat_rotation(quat, act, exp):
     assert np.allclose(rotated.ang_vel, exp.ang_vel)
     assert np.allclose(rotated.vel, exp.vel)
     assert np.allclose(rotated.prop_omega, exp.prop_omega)
+
+
+def test_as_str_list():
+    assert tuple(STATE_ENUM.as_list()) == (
+        "x",
+        "y",
+        "z",
+        "qx",
+        "qy",
+        "qz",
+        "qw",
+        "phi",
+        "theta",
+        "psi",
+        "vx",
+        "vy",
+        "vz",
+        "p",
+        "q",
+        "r",
+        "P0",
+        "P1",
+        "P2",
+        "P3",
+    )
+
+
+def test_as_str_list_fail():
+    assert (
+        tuple(STATE_ENUM.as_list())
+        != (
+            "x",
+            "y",
+            "z",
+            "qx",
+            "qy",
+            "qz",
+            "qw",
+            "phi",
+            "theta",
+            "psi",
+            "vx",
+            "vy",
+            "vz",
+            "p",
+            "q",
+            "r",
+            "P0",
+            "P1",
+            "P2",
+            "P3",
+        )[::-1]
+    )

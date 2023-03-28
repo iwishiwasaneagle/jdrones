@@ -192,6 +192,40 @@ class Conversions:
         return df_long
 
 
+class STATE_ENUM(str, enum.Enum):
+    X = "x"
+    Y = "y"
+    Z = "z"
+    QX = "qx"
+    QY = "qy"
+    QZ = "qz"
+    QW = "qw"
+    PHI = "phi"
+    THETA = "theta"
+    PSI = "psi"
+    VX = "vx"
+    VY = "vy"
+    VZ = "vz"
+    P = "p"
+    Q = "q"
+    R = "r"
+    P0 = "P0"
+    P1 = "P1"
+    P2 = "P2"
+    P3 = "P3"
+
+    @classmethod
+    def as_list(cls) -> list[str]:
+        """
+        Convert the enum to a list of strings
+
+        Returns
+        -------
+        list[str]
+        """
+        return list(map(lambda i: i.value, cls))
+
+
 class States(np.ndarray):
     def __new__(cls, input_array=None):
         if input_array is None:
@@ -208,28 +242,7 @@ class States(np.ndarray):
             tag=tag,
             dt=dt,
             N=N,
-            cols=[
-                "x",
-                "y",
-                "z",
-                "qx",
-                "qy",
-                "qz",
-                "qw",
-                "phi",
-                "theta",
-                "psi",
-                "vx",
-                "vy",
-                "vz",
-                "p",
-                "q",
-                "r",
-                "P0",
-                "P1",
-                "P2",
-                "P3",
-            ],
+            cols=[STATE_ENUM.as_list()],
         )
         return df
 
