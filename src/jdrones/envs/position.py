@@ -201,6 +201,12 @@ class FifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
     If the time taken exceeds :math:`T`, the original target position is given as a raw
     input. However, if this were to happen, the distance is small enough to ensure
     stability.
+
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("FifthOrderPolyPositionDroneEnv-v0")
+    <OrderEnforcing<PassiveEnvChecker<FifthOrderPolyPositionDroneEnv<FifthOrderPolyPositionDroneEnv-v0>>>>
+
     """
 
     @staticmethod
@@ -253,6 +259,11 @@ class FirstOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
     If the time taken exceeds :math:`T`, the original target position is given as a raw
     input. However, if this were to happen, the distance is small enough to ensure
     stability.
+
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("FirstOrderPolyPositionDroneEnv-v0")
+    <OrderEnforcing<PassiveEnvChecker<FirstOrderPolyPositionDroneEnv<FirstOrderPolyPositionDroneEnv-v0>>>>
     """
 
     @staticmethod

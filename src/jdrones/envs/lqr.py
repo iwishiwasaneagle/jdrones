@@ -17,6 +17,13 @@ from jdrones.types import LinearXAction
 
 
 class LQRDroneEnv(BaseControlledEnv):
+    """
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("LQRDroneEnv-v0")
+    <OrderEnforcing<PassiveEnvChecker<LQRDroneEnv<LQRDroneEnv-v0>>>>
+    """
+
     def __init__(
         self,
         model: URDFModel = DronePlus,

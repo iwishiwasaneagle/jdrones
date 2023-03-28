@@ -14,6 +14,13 @@ from jdrones.types import PropellerAction
 
 
 class LinearDynamicModelDroneEnv(BaseDroneEnv):
+    """
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("LinearDynamicModelDroneEnv-v0")
+    <OrderEnforcing<PassiveEnvChecker<LinearDynamicModelDroneEnv<LinearDynamicModelDroneEnv-v0>>>>
+    """
+
     def __init__(
         self,
         model: URDFModel = DronePlus,
