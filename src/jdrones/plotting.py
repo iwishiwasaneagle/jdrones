@@ -238,7 +238,9 @@ def plot_states_over_time(df: pd.DataFrame, variables: list[STATE_ENUM], ax: plt
 
 
 @validate_df_wrapper
-def plot_standard(df: pd.DataFrame, figsize: tuple[float, float] = (12, 12)):
+def plot_standard(
+    df: pd.DataFrame, figsize: tuple[float, float] = (12, 12), show: bool = True
+):
     """
     Plot the standard 2-by-2 layout
 
@@ -255,6 +257,10 @@ def plot_standard(df: pd.DataFrame, figsize: tuple[float, float] = (12, 12)):
     figsize: float,float
         Figure size
         (Default = (12,12))
+    show : bool
+        If figure should be shown. Set to :code:`False` if you want to save the
+        figure using :code:`plt.gcf()`
+        (Default = :code:`True`)
     """
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(221, projection="3d")
@@ -270,4 +276,5 @@ def plot_standard(df: pd.DataFrame, figsize: tuple[float, float] = (12, 12)):
         ax.legend()
 
     fig.tight_layout()
-    plt.show()
+    if show:
+        plt.show()
