@@ -1,0 +1,57 @@
+# Copyright 2023 Jan-Hendrik Ewers
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: CI (testmon)
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+
+  run-tests-testmon:
+    name: Run tests (with testmon)
+    runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    strategy:
+      matrix:
+        platform: [ "ubuntu-latest" ]
+        python-version: [ "3.11" ]
+        pytest-flags:
+          - "-m 'not (integration or slow_integration)'"
+          - "-m 'integration'"
+          - "-m 'slow_integration'"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          cache: "pip"
+          python-version: ${{ matrix.python-version }}
+          cache-dependency-path: |
+            **/requirements*.txt
+
+      - uses: syphar/restore-virtualenv@v1
+        if: ${{ !github.event.act }}
+        id: cache-virtualenv
+
+      - name: Install dependencies
+        if: ${{ (!github.event.act) || (steps.cache-virtualenv.outputs.cache-hit != 'true') }}
+        run: |
+          pip install . -r requirements.txt hypothesis pytest pytest-mock
+
+      - name: Run tests
+        run: |
+          PYTHONPATH=tests \
+          pytest tests \
+          ${{ matrix.pytest-flags }}
