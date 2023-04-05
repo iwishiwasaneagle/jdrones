@@ -266,16 +266,18 @@ def plot_standard(
         (Default = :code:`True`)
     """
     fig = plt.figure(figsize=figsize)
+
     ax = fig.add_subplot(221, projection="3d")
     plot_3d_path(df, ax)
 
-    for ind, states in (
-        (222, ("x", "y", "z")),
-        (223, ("vx", "vy", "vz")),
-        (224, ("phi", "theta", "psi")),
+    for ind, states, label in (
+        (222, ("x", "y", "z"), "position (m)"),
+        (223, ("vx", "vy", "vz"), "velocity (m/s)"),
+        (224, ("phi", "theta", "psi"), "angular position (rad)"),
     ):
         ax = fig.add_subplot(ind)
         plot_states_over_time(df, states, ax)
+        ax.set_ylabel(label)
         ax.legend()
 
     fig.tight_layout()
