@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controllers &mdash; jdrones 0.6.0 documentation</title>
+  <title>Controllers &mdash; jdrones 0.7.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -39,7 +39,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.6.0
+                0.7.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -52,6 +52,7 @@
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#environments">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#development">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#citations">Citations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#future-work">Future Work</a></li>
@@ -289,7 +290,7 @@ controller.</p>
 \[u(t) = K\left[K_p e(t) + K_i \int^t_0 e(t) dt + K_d \frac{de(t)}{dt}\right]\]</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span> <span class="o">=</span> <span class="n">PID</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">dt</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pid</span><span class="p">(</span><span class="n">measured</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">setpoint</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">    31.2</span>
+<span class="go">31.2</span>
 </pre></div>
 </div>
 <dl class="py attribute">

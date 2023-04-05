@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jdrones.envs.base.nonlineardronenev &mdash; jdrones 0.6.0 documentation</title>
+  <title>jdrones.envs.base.nonlineardronenev &mdash; jdrones 0.7.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
               <img src="../../../../_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.6.0
+                0.7.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -47,6 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html#environments">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html#development">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html#citations">Citations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html#future-work">Future Work</a></li>
@@ -110,6 +111,13 @@
 
 
 <div class="viewcode-block" id="NonlinearDynamicModelDroneEnv"><a class="viewcode-back" href="../../../../envs.html#jdrones.envs.NonlinearDynamicModelDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">NonlinearDynamicModelDroneEnv</span><span class="p">(</span><span class="n">BaseDroneEnv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; import jdrones</span>
+<span class="sd">    &gt;&gt;&gt; import gymnasium</span>
+<span class="sd">    &gt;&gt;&gt; gymnasium.make(&quot;NonLinearDynamicModelDroneEnv-v0&quot;)</span>
+<span class="sd">    &lt;OrderEnforcing&lt;PassiveEnvChecker&lt;NonlinearDynamicModelDroneEnv&lt;NonLinearDynamicModelDroneEnv-v0&gt;&gt;&gt;&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="NonlinearDynamicModelDroneEnv.calc_dstate"><a class="viewcode-back" href="../../../../envs.html#jdrones.envs.NonlinearDynamicModelDroneEnv.calc_dstate">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">calc_dstate</span><span class="p">(</span><span class="n">action</span><span class="p">:</span> <span class="n">PropellerAction</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">URDFModel</span><span class="p">):</span>
         <span class="n">Inertias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
@@ -160,8 +168,8 @@
 <span class="sd">                \\vec I \\vec \\phi&#39;&#39; &amp;=</span>
 <span class="sd">                \\begin{bmatrix}</span>
 <span class="sd">                    l k_T (P_4^2-P_2^2) \\\\</span>
-<span class="sd">                    l k_T (P_1^2-P_3^2) \\\\</span>
-<span class="sd">                    k_Q (-P_1^2+P_2^2-P_3^2+P_4^2)</span>
+<span class="sd">                    l k_T (P_3^2-P_1^2) \\\\</span>
+<span class="sd">                    k_Q (P_1^2-P_2^2+P_3^2-P_4^2)</span>
 <span class="sd">                \\end{bmatrix}</span>
 <span class="sd">            \\end{align}</span>
 

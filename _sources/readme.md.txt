@@ -8,6 +8,24 @@ Provide a [gymnasium] style interface using a physics simulation engine ([pybull
 
 > :warning: This code is still in alpha and **will** change over time as I use it :warning:
 
+## Environments
+
+The environment documentation can be found [here](https://jdrones.janhendrikewers.uk/envs.html)
+
+### Base Dynamics
+
+1. `PyBulletDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#pybulletdroneenv)
+2. `NonLinearDynamicModelDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#nonlineardynamicmodeldroneenv)
+3. `LinearDynamicModelDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#lineardynamicmodeldroneenv)
+
+### Attitude
+1. `LQRDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#lqrdroneenv)
+
+### Position
+1. `FirstOrderPolyPositionDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#firstorderpolypositiondroneenv)
+2. `FifthOrderPolyPositionDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#fifthorderpolypositiondroneenv)
+3. `FifthOrderPolyPositionWithLookAheadDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#fifthorderpolypositionwithlookaheaddroneenv)
+
 ## Development
 
 Create the local development environment:
@@ -38,10 +56,12 @@ PYTHONPATH=$GIT_DIR/src python -m pytest -s -q -n auto --only-slow-integration $
 
 - [ ] Better sensor modelling and kalman filters
 - [ ] Performance improvements of simulation using either compiled code or a JIT
-- [ ] Better controllers
-- [ ] Better trajectory generation between waypoints
+- [x] Better controllers
+  - LQR
+- [x] Better trajectory generation between waypoints
+  - First- and fifth-order polynomial trajectory generation
 - [x] Examples
-- [ ] Proper integration testing
+- [x] Proper integration testing
 - [ ] Higher fidelity motor models
 
 [gymnasium]: https://gymnasium.farama.org/

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Environments &mdash; jdrones 0.6.0 documentation</title>
+  <title>Environments &mdash; jdrones 0.7.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -39,7 +39,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.6.0
+                0.7.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -52,6 +52,7 @@
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Why</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#environments">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#development">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#citations">Citations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#future-work">Future Work</a></li>
@@ -109,6 +110,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#jdrones.envs.FifthOrderPolyPositionDroneEnv"><code class="docutils literal notranslate"><span class="pre">FifthOrderPolyPositionDroneEnv</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#fifthorderpolypositiondroneenvwithlookaheaddroneenv">FifthOrderPolyPositionDroneEnvWithLookAheadDroneEnv</a></li>
 </ul>
 </li>
 </ul>
@@ -207,6 +209,12 @@
 <dd><p>Bases: <a class="reference internal" href="#jdrones.envs.base.basedronenev.BaseDroneEnv" title="jdrones.envs.base.basedronenev.BaseDroneEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDroneEnv</span></code></a></p>
 <p>Base drone environment. Handles pybullet loading, and application of forces.
 Generalizes the physics to allow other models to be used.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jdrones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gymnasium</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gymnasium</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;PyBulletDroneEnv-v0&quot;</span><span class="p">)</span>
+<span class="go">&lt;OrderEnforcing&lt;PassiveEnvChecker&lt;PyBulletDroneEnv&lt;PyBulletDroneEnv-v0&gt;&gt;&gt;&gt;</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.envs.PyBulletDroneEnv.calculate_aerodynamic_forces">
 <span class="sig-name descname"><span class="pre">calculate_aerodynamic_forces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gymnasium.core.ActType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/jdrones/envs/base/pbdronenev.html#PyBulletDroneEnv.calculate_aerodynamic_forces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.PyBulletDroneEnv.calculate_aerodynamic_forces" title="Permalink to this definition"></a></dt>
@@ -368,6 +376,12 @@ and logging)</p></li>
 <dt class="sig sig-object py" id="jdrones.envs.NonlinearDynamicModelDroneEnv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.envs.</span></span><span class="sig-name descname"><span class="pre">NonlinearDynamicModelDroneEnv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/envs/base/nonlineardronenev.html#NonlinearDynamicModelDroneEnv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.NonlinearDynamicModelDroneEnv" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jdrones.envs.base.basedronenev.BaseDroneEnv" title="jdrones.envs.base.basedronenev.BaseDroneEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDroneEnv</span></code></a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jdrones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gymnasium</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gymnasium</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;NonLinearDynamicModelDroneEnv-v0&quot;</span><span class="p">)</span>
+<span class="go">&lt;OrderEnforcing&lt;PassiveEnvChecker&lt;NonlinearDynamicModelDroneEnv&lt;NonLinearDynamicModelDroneEnv-v0&gt;&gt;&gt;&gt;</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.envs.NonlinearDynamicModelDroneEnv.calc_dstate">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_dstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_models.html#jdrones.data_models.State" title="jdrones.data_models.State"><span class="pre">State</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_models.html#jdrones.data_models.URDFModel" title="jdrones.data_models.URDFModel"><span class="pre">URDFModel</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/envs/base/nonlineardronenev.html#NonlinearDynamicModelDroneEnv.calc_dstate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.NonlinearDynamicModelDroneEnv.calc_dstate" title="Permalink to this definition"></a></dt>
@@ -392,8 +406,8 @@ and logging)</p></li>
     \vec I \vec \phi'' &amp;=
     \begin{bmatrix}
         l k_T (P_4^2-P_2^2) \\
-        l k_T (P_1^2-P_3^2) \\
-        k_Q (-P_1^2+P_2^2-P_3^2+P_4^2)
+        l k_T (P_3^2-P_1^2) \\
+        k_Q (P_1^2-P_2^2+P_3^2-P_4^2)
     \end{bmatrix}
 \end{align}\end{split}\]</div>
 <dl class="field-list simple">
@@ -412,6 +426,12 @@ and logging)</p></li>
 <dt class="sig sig-object py" id="jdrones.envs.LinearDynamicModelDroneEnv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.envs.</span></span><span class="sig-name descname"><span class="pre">LinearDynamicModelDroneEnv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/envs/base/lineardronenev.html#LinearDynamicModelDroneEnv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.LinearDynamicModelDroneEnv" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jdrones.envs.base.basedronenev.BaseDroneEnv" title="jdrones.envs.base.basedronenev.BaseDroneEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDroneEnv</span></code></a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jdrones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gymnasium</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gymnasium</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;LinearDynamicModelDroneEnv-v0&quot;</span><span class="p">)</span>
+<span class="go">&lt;OrderEnforcing&lt;PassiveEnvChecker&lt;LinearDynamicModelDroneEnv&lt;LinearDynamicModelDroneEnv-v0&gt;&gt;&gt;&gt;</span>
+</pre></div>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="jdrones.envs.LinearDynamicModelDroneEnv.action_space">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">action_space</span></span><a class="headerlink" href="#jdrones.envs.LinearDynamicModelDroneEnv.action_space" title="Permalink to this definition"></a></dt>
@@ -453,8 +473,8 @@ and logging)</p></li>
     0&amp; 0&amp; 0&amp; 1&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0\\
     0&amp; 0&amp; 0&amp; 0&amp; 1&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0\\
     0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 1&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0\\
-    0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; -g&amp; 0&amp; 0&amp; 0&amp; 0\\
-    0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; g&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0\\
+    0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; g&amp; 0&amp; 0&amp; 0&amp; 0\\
+    0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; -g&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0\\
     0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0\\
     0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 1&amp; 0&amp; 0\\
     0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 0&amp; 1&amp; 0\\
@@ -473,7 +493,7 @@ and logging)</p></li>
     0 &amp; 0 &amp; 0 &amp; 0\\
     0 &amp; 0 &amp; 0 &amp; 0\\
     0 &amp; 0 &amp; 0 &amp; 0\\
-    0 &amp; 0 &amp; 0 &amp; -1 / m\\
+    0 &amp; 0 &amp; 0 &amp; 1 / m\\
     0 &amp; 0 &amp; 0 &amp; 0\\
     0 &amp; 0 &amp; 0 &amp; 0\\
     0 &amp; 0 &amp; 0 &amp; 0\\
@@ -486,7 +506,7 @@ and logging)</p></li>
 \end{bmatrix}
 +
 \begin{bmatrix}
-    0\\0\\0\\0\\0\\g\\0\\0\\0\\0\\0\\0
+    0\\0\\0\\0\\0\\-g\\0\\0\\0\\0\\0\\0
 \end{bmatrix}\end{split}\]</div>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{bmatrix}
@@ -494,8 +514,8 @@ and logging)</p></li>
 \end{bmatrix}
  &amp;= \begin{bmatrix}
 0&amp; -l k_T&amp; 0&amp; l k_T \\
-l k_T&amp; 0&amp; -l k_T&amp; 0\\
--k_Q&amp;k_Q&amp; -k_Q&amp; k_Q \\
+-l k_T&amp; 0&amp; l k_T&amp; 0\\
+k_Q&amp;-k_Q&amp; k_Q&amp; -k_Q \\
 k_T &amp; k_T &amp; k_T &amp; k_T
 \end{bmatrix}
 \begin{bmatrix}
@@ -563,6 +583,12 @@ k_T &amp; k_T &amp; k_T &amp; k_T
 <dt class="sig sig-object py" id="jdrones.envs.LQRDroneEnv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.envs.</span></span><span class="sig-name descname"><span class="pre">LQRDroneEnv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/envs/lqr.html#LQRDroneEnv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.LQRDroneEnv" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jdrones.envs.BaseControlledEnv" title="jdrones.envs.base.basecontrolledenv.BaseControlledEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseControlledEnv</span></code></a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jdrones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gymnasium</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gymnasium</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;LQRDroneEnv-v0&quot;</span><span class="p">)</span>
+<span class="go">&lt;OrderEnforcing&lt;PassiveEnvChecker&lt;LQRDroneEnv&lt;LQRDroneEnv-v0&gt;&gt;&gt;&gt;</span>
+</pre></div>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="jdrones.envs.LQRDroneEnv.action_space">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">action_space</span></span><a class="headerlink" href="#jdrones.envs.LQRDroneEnv.action_space" title="Permalink to this definition"></a></dt>
@@ -650,34 +676,6 @@ Q =
 <span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="data_models.html#jdrones.data_models.URDFModel" title="jdrones.data_models.URDFModel"><span class="pre">URDFModel</span></a></em><a class="headerlink" href="#jdrones.envs.position.BasePositionDroneEnv.model" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="jdrones.envs.position.BasePositionDroneEnv.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="data_models.html#jdrones.data_models.States" title="jdrones.data_models.States"><span class="pre">jdrones.data_models.States</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/jdrones/envs/position.html#BasePositionDroneEnv.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.position.BasePositionDroneEnv.reset" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="jdrones.envs.position.BasePositionDroneEnv.step">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="data_models.html#jdrones.data_models.States" title="jdrones.data_models.States"><span class="pre">jdrones.data_models.States</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/jdrones/envs/position.html#BasePositionDroneEnv.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.position.BasePositionDroneEnv.step" title="Permalink to this definition"></a></dt>
-<dd><p>A step from the viewpoint of a
-<a class="reference internal" href="#jdrones.envs.position.BasePositionDroneEnv" title="jdrones.envs.position.BasePositionDroneEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePositionDroneEnv</span></code></a> is making the drone
-fly from its current position <span class="math notranslate nohighlight">\(A\)</span> to the target position <span class="math notranslate nohighlight">\(B\)</span>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Target coordinates <span class="math notranslate nohighlight">\((x,y,z)\)</span></p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>states</strong> (<em>jdrones.data_models.States</em>)</p></li>
-<li><p><strong>reward</strong> (<em>float</em>)</p></li>
-<li><p><strong>term</strong> (<em>bool</em>)</p></li>
-<li><p><strong>trunc</strong> (<em>bool</em>)</p></li>
-<li><p><strong>info</strong> (<em>dict</em>)</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -692,6 +690,12 @@ position commands at every time point until the target is reached.
 If the time taken exceeds <span class="math notranslate nohighlight">\(T\)</span>, the original target position is given as a raw
 input. However, if this were to happen, the distance is small enough to ensure
 stability.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jdrones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gymnasium</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gymnasium</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;FirstOrderPolyPositionDroneEnv-v0&quot;</span><span class="p">)</span>
+<span class="go">&lt;OrderEnforcing&lt;PassiveEnvChecker&lt;FirstOrderPolyPositionDroneEnv&lt;FirstOrderPolyPositionDroneEnv-v0&gt;&gt;&gt;&gt;</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.envs.FirstOrderPolyPositionDroneEnv.calc_traj">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_traj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cur</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_models.html#jdrones.data_models.State" title="jdrones.data_models.State"><span class="pre">State</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_models.html#jdrones.data_models.State" title="jdrones.data_models.State"><span class="pre">State</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="trajectory.html#jdrones.trajectory.FirstOrderPolynomialTrajectory" title="jdrones.trajectory.FirstOrderPolynomialTrajectory"><span class="pre">FirstOrderPolynomialTrajectory</span></a></span></span><a class="reference internal" href="_modules/jdrones/envs/position.html#FirstOrderPolyPositionDroneEnv.calc_traj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.FirstOrderPolyPositionDroneEnv.calc_traj" title="Permalink to this definition"></a></dt>
@@ -731,6 +735,12 @@ position and velocity commands at every time point until the target is reached.
 If the time taken exceeds <span class="math notranslate nohighlight">\(T\)</span>, the original target position is given as a raw
 input. However, if this were to happen, the distance is small enough to ensure
 stability.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jdrones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gymnasium</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gymnasium</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;FifthOrderPolyPositionDroneEnv-v0&quot;</span><span class="p">)</span>
+<span class="go">&lt;OrderEnforcing&lt;PassiveEnvChecker&lt;FifthOrderPolyPositionDroneEnv&lt;FifthOrderPolyPositionDroneEnv-v0&gt;&gt;&gt;&gt;</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="jdrones.envs.FifthOrderPolyPositionDroneEnv.calc_traj">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_traj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cur</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_models.html#jdrones.data_models.State" title="jdrones.data_models.State"><span class="pre">State</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_models.html#jdrones.data_models.State" title="jdrones.data_models.State"><span class="pre">State</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="trajectory.html#jdrones.trajectory.FifthOrderPolynomialTrajectory" title="jdrones.trajectory.FifthOrderPolynomialTrajectory"><span class="pre">FifthOrderPolynomialTrajectory</span></a></span></span><a class="reference internal" href="_modules/jdrones/envs/position.html#FifthOrderPolyPositionDroneEnv.calc_traj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.envs.FifthOrderPolyPositionDroneEnv.calc_traj" title="Permalink to this definition"></a></dt>
@@ -758,6 +768,9 @@ stability.</p>
 
 </dd></dl>
 
+</section>
+<section id="fifthorderpolypositiondroneenvwithlookaheaddroneenv">
+<h3>FifthOrderPolyPositionDroneEnvWithLookAheadDroneEnv<a class="headerlink" href="#fifthorderpolypositiondroneenvwithlookaheaddroneenv" title="Permalink to this heading"></a></h3>
 </section>
 </section>
 </section>
