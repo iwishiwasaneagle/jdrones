@@ -1,8 +1,10 @@
 gymnasium==0.27.1
 loguru==0.6.0
+matplotlib==3.7.1
 nptyping==2.5.0
 numpy==1.24.2
 pandas==2.0.0
 pybullet==3.2.5
 pydantic==1.10.6
 scipy==1.10.1
+seaborn==0.12.2
