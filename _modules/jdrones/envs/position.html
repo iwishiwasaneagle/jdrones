@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jdrones.envs.position &mdash; jdrones 0.7.0 documentation</title>
+  <title>jdrones.envs.position &mdash; jdrones 0.7.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
               <img src="../../../_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.0
+                0.7.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -199,18 +199,18 @@
         <span class="k">return</span> <span class="n">df_sums</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div></div>
 
 
-<span class="k">class</span> <span class="nc">PolynomialPositionBaseDronEnv</span><span class="p">(</span><span class="n">BasePositionDroneEnv</span><span class="p">):</span>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="PolynomialPositionBaseDronEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv">[docs]</a><span class="k">class</span> <span class="nc">PolynomialPositionBaseDronEnv</span><span class="p">(</span><span class="n">BasePositionDroneEnv</span><span class="p">):</span>
+<div class="viewcode-block" id="PolynomialPositionBaseDronEnv.calc_traj"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.calc_traj">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">calc_traj</span><span class="p">(</span><span class="n">cur</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">tgt</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">max_vel</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="PolynomialPositionBaseDronEnv.update_u_from_traj"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.update_u_from_traj">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">update_u_from_traj</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">traj</span><span class="p">:</span> <span class="n">BasePolynomialTrajectory</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span> <span class="s2">&quot;position&quot;</span><span class="p">):</span>
             <span class="n">u</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">position</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span> <span class="s2">&quot;velocity&quot;</span><span class="p">):</span>
             <span class="n">u</span><span class="o">.</span><span class="n">vel</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">u</span>
+        <span class="k">return</span> <span class="n">u</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_validate_action_input</span><span class="p">(</span>
@@ -248,7 +248,7 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">action_as_state</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
+<div class="viewcode-block" id="PolynomialPositionBaseDronEnv.reset"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -258,9 +258,9 @@
 
         <span class="n">obs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">States</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">obs</span><span class="p">)]),</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">States</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">obs</span><span class="p">)]),</span> <span class="p">{}</span></div>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
+<div class="viewcode-block" id="PolynomialPositionBaseDronEnv.step"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">PositionAction</span> <span class="o">|</span> <span class="n">PositionVelocityAction</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">States</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -322,7 +322,7 @@
                 <span class="n">info</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
 
         <span class="n">states</span> <span class="o">=</span> <span class="n">States</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reward</span><span class="p">(</span><span class="n">states</span><span class="p">),</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span>
+        <span class="k">return</span> <span class="n">states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reward</span><span class="p">(</span><span class="n">states</span><span class="p">),</span> <span class="n">term</span><span class="p">,</span> <span class="n">trunc</span><span class="p">,</span> <span class="n">info</span></div></div>
 
 
 <div class="viewcode-block" id="FifthOrderPolyPositionDroneEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.FifthOrderPolyPositionDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">FifthOrderPolyPositionDroneEnv</span><span class="p">(</span><span class="n">PolynomialPositionBaseDronEnv</span><span class="p">):</span>
@@ -436,7 +436,7 @@
         <span class="k">return</span> <span class="n">t</span></div></div>
 
 
-<span class="k">class</span> <span class="nc">FifthOrderPolyPositionWithLookAheadDroneEnv</span><span class="p">(</span><span class="n">BasePositionDroneEnv</span><span class="p">):</span>
+<div class="viewcode-block" id="FifthOrderPolyPositionWithLookAheadDroneEnv"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.FifthOrderPolyPositionWithLookAheadDroneEnv">[docs]</a><span class="k">class</span> <span class="nc">FifthOrderPolyPositionWithLookAheadDroneEnv</span><span class="p">(</span><span class="n">BasePositionDroneEnv</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Supplements the :class:`jdrones.env.FifthOrderPolyPositionDroneEnv` by including</span>
 <span class="sd">    the next waypoints position in the trajectory generation calculation.</span>
@@ -464,7 +464,7 @@
             <span class="n">low</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span> <span class="n">high</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
+<div class="viewcode-block" id="FifthOrderPolyPositionWithLookAheadDroneEnv.reset"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.FifthOrderPolyPositionWithLookAheadDroneEnv.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -474,9 +474,9 @@
 
         <span class="n">obs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">obs</span><span class="p">,</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">obs</span><span class="p">,</span> <span class="p">{}</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FifthOrderPolyPositionWithLookAheadDroneEnv.calc_v_at_B"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.FifthOrderPolyPositionWithLookAheadDroneEnv.calc_v_at_B">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">calc_v_at_B</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="n">VEC3</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">VEC3</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="n">VEC3</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">V</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        For the velocity vector at :math:`B`, it is ideal to create a smooth</span>
@@ -529,9 +529,9 @@
         <span class="n">rAC_unit</span> <span class="o">=</span> <span class="n">rAC</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">rAC</span><span class="p">),</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
         <span class="n">theta</span> <span class="o">=</span> <span class="n">rBA</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rBC</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">rBA</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">rBC</span><span class="p">))</span>
         <span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">V</span> <span class="o">*</span> <span class="n">rAC_unit</span> <span class="o">*</span> <span class="n">chi</span>
+        <span class="k">return</span> <span class="n">V</span> <span class="o">*</span> <span class="n">rAC_unit</span> <span class="o">*</span> <span class="n">chi</span></div>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
+<div class="viewcode-block" id="FifthOrderPolyPositionWithLookAheadDroneEnv.step"><a class="viewcode-back" href="../../../envs.html#jdrones.envs.position.FifthOrderPolyPositionWithLookAheadDroneEnv.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PositionAction</span><span class="p">,</span> <span class="n">PositionAction</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">States</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -566,7 +566,7 @@
             <span class="n">v_at_B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_v_at_B</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">V</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">max_vel_ms</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">)</span>
         <span class="n">tgt_pos</span> <span class="o">=</span> <span class="n">B</span>
         <span class="n">tgt_vel</span> <span class="o">=</span> <span class="n">v_at_B</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">tgt_pos</span><span class="p">,</span> <span class="n">tgt_vel</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">tgt_pos</span><span class="p">,</span> <span class="n">tgt_vel</span><span class="p">))</span></div></div>
 </pre></div>
 
            </div>

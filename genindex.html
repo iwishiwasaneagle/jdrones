@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; jdrones 0.7.0 documentation</title>
+  <title>Index &mdash; jdrones 0.7.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.0
+                0.7.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -192,13 +192,17 @@
       <ul>
         <li><a href="envs.html#jdrones.envs.FirstOrderPolyPositionDroneEnv.calc_traj">(jdrones.envs.FirstOrderPolyPositionDroneEnv static method)</a>
 </li>
-      </ul></li>
-      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_aerodynamic_forces">calculate_aerodynamic_forces() (jdrones.envs.PyBulletDroneEnv method)</a>
+        <li><a href="envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.calc_traj">(jdrones.envs.position.PolynomialPositionBaseDronEnv static method)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_external_torques">calculate_external_torques() (jdrones.envs.PyBulletDroneEnv method)</a>
+      </ul></li>
+      <li><a href="envs.html#jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv.calc_v_at_B">calc_v_at_B() (jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv static method)</a>
+</li>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_aerodynamic_forces">calculate_aerodynamic_forces() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_external_torques">calculate_external_torques() (jdrones.envs.PyBulletDroneEnv method)</a>
+</li>
       <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.calculate_propulsive_forces">calculate_propulsive_forces() (jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
       <li><a href="data_models.html#jdrones.data_models.PyBulletIds.client">client (jdrones.data_models.PyBulletIds attribute)</a>
@@ -263,10 +267,12 @@
 </li>
       <li><a href="envs.html#jdrones.envs.FifthOrderPolyPositionDroneEnv">FifthOrderPolyPositionDroneEnv (class in jdrones.envs)</a>
 </li>
-      <li><a href="data_models.html#jdrones.data_models.URDFModel.filepath">filepath (jdrones.data_models.URDFModel attribute)</a>
+      <li><a href="envs.html#jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv">FifthOrderPolyPositionWithLookAheadDroneEnv (class in jdrones.envs)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="data_models.html#jdrones.data_models.URDFModel.filepath">filepath (jdrones.data_models.URDFModel attribute)</a>
+</li>
       <li><a href="trajectory.html#jdrones.trajectory.FirstOrderPolynomialTrajectory">FirstOrderPolynomialTrajectory (class in jdrones.trajectory)</a>
 </li>
       <li><a href="envs.html#jdrones.envs.FirstOrderPolyPositionDroneEnv">FirstOrderPolyPositionDroneEnv (class in jdrones.envs)</a>
@@ -484,6 +490,8 @@
 </li>
       <li><a href="data_models.html#jdrones.data_models.PyBulletIds.plane">plane (jdrones.data_models.PyBulletIds attribute)</a>
 </li>
+      <li><a href="envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv">PolynomialPositionBaseDronEnv (class in jdrones.envs.position)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_models.html#jdrones.data_models.State.pos">pos (jdrones.data_models.State property)</a>
@@ -559,7 +567,11 @@
 </li>
         <li><a href="envs.html#jdrones.envs.BaseControlledEnv.reset">(jdrones.envs.BaseControlledEnv method)</a>
 </li>
+        <li><a href="envs.html#jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv.reset">(jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv method)</a>
+</li>
         <li><a href="envs.html#jdrones.envs.LQRDroneEnv.reset">(jdrones.envs.LQRDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.reset">(jdrones.envs.position.PolynomialPositionBaseDronEnv method)</a>
 </li>
         <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.reset">(jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
@@ -592,18 +604,22 @@
         <li><a href="envs.html#jdrones.envs.BaseControlledEnv.state">(jdrones.envs.BaseControlledEnv property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_models.html#jdrones.data_models.STATE_ENUM">STATE_ENUM (class in jdrones.data_models)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_models.html#jdrones.data_models.States">States (class in jdrones.data_models)</a>
 </li>
-      <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv.step">step() (jdrones.envs.LinearDynamicModelDroneEnv method)</a>
+      <li><a href="envs.html#jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv.step">step() (jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv method)</a>
 
       <ul>
+        <li><a href="envs.html#jdrones.envs.LinearDynamicModelDroneEnv.step">(jdrones.envs.LinearDynamicModelDroneEnv method)</a>
+</li>
         <li><a href="envs.html#jdrones.envs.LQRDroneEnv.step">(jdrones.envs.LQRDroneEnv method)</a>
 </li>
         <li><a href="envs.html#jdrones.envs.NonlinearDynamicModelDroneEnv.step">(jdrones.envs.NonlinearDynamicModelDroneEnv method)</a>
+</li>
+        <li><a href="envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.step">(jdrones.envs.position.PolynomialPositionBaseDronEnv method)</a>
 </li>
         <li><a href="envs.html#jdrones.envs.PyBulletDroneEnv.step">(jdrones.envs.PyBulletDroneEnv method)</a>
 </li>
@@ -631,6 +647,10 @@
 
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="envs.html#jdrones.envs.position.PolynomialPositionBaseDronEnv.update_u_from_traj">update_u_from_traj() (jdrones.envs.position.PolynomialPositionBaseDronEnv static method)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_models.html#jdrones.data_models.URDFModel">URDFModel (class in jdrones.data_models)</a>
 </li>
