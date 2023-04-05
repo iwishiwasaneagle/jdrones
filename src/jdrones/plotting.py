@@ -199,6 +199,9 @@ def plot_3d_path(df: pd.DataFrame, ax: plt.Axes, label: str = None):
         (Default = None)
     """
     plot_state_vs_state_vs_state(df, "x", "y", "z", ax, label)
+    ax.set_xlabel("x (m)")
+    ax.set_ylabel("y (m)")
+    ax.set_zlabel("z (m)")
 
 
 @validate_df_wrapper
