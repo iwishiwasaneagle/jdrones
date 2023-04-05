@@ -62,10 +62,11 @@ jobs:
     - name: Install dependencies
       if: steps.cache-virtualenv.outputs.cache-hit != 'true'
       run: |
-        pip install . -r requirements.txt -r tests/requirements.txt
+        pip install -r requirements.txt -r tests/requirements.txt
 
     - name: Run tests
       run: |
+        PYTHONPATH=src:tests \
         pytest tests \
         --cov-report=xml \
         --cov-branch \
