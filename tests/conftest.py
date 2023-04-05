@@ -9,6 +9,7 @@ from jdrones.data_models import SimulationType
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs import FifthOrderPolyPositionDroneEnv
+from jdrones.envs import FifthOrderPolyPositionWithLookAheadDroneEnv
 from jdrones.envs import FirstOrderPolyPositionDroneEnv
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
@@ -16,7 +17,6 @@ from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
-from jdrones.envs.position import FifthOrderPolyPositionWithLookAheadDroneEnv
 from jdrones.transforms import euler_to_quat
 
 
