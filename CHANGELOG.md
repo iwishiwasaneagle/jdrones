@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 - Option to not show, to enable saving of figure [(8c004df)](https://github.com/iwishiwasaneagle/jdrones/commit/8c004df83fbce2069e09f0a15420ffbac5e345df)
 - Reset was calling States(States(...)) causing invalid shaped arrays) [(f8c3233)](https://github.com/iwishiwasaneagle/jdrones/commit/f8c3233a85baddb1939d33c7ae9047064025671f)
 - Use local version of jdrones. Installing it previously means that a cached version could be used during unit testing [(6a1edb3)](https://github.com/iwishiwasaneagle/jdrones/commit/6a1edb3ae0907d98031eed9dcc6b683711b5100b)
+- Reset was calling States(States(...)) causing invalid shaped arrays) [(901cb08)](https://github.com/iwishiwasaneagle/jdrones/commit/901cb080bc4123f093a9d577e0fdcffe816c8a56)
+- Use local version of jdrones. Installing it previously means that a cached version could be used during unit testing [(3343d30)](https://github.com/iwishiwasaneagle/jdrones/commit/3343d30fda9ffb863eb62c8c2f0fbeecea2963a3)
 - Improve consistency between docstrings and code (#45) [(2e1a819)](https://github.com/iwishiwasaneagle/jdrones/commit/2e1a8194fbd9405ac5ec54d021f87af70f75cb70)
 
 ### Documentation
@@ -20,6 +22,8 @@ All notable changes to this project will be documented in this file.
 - Add gymnasium env names to README [(3a1da91)](https://github.com/iwishiwasaneagle/jdrones/commit/3a1da91885d5f8e16bba000ecfe362e5b4417d80)
 - Fifth order polynomial with look-ahead drone env [(fe55815)](https://github.com/iwishiwasaneagle/jdrones/commit/fe55815d29ebb32f3deb9fb50436bc3409cb1490)
 - Add new gymnasium env names to README [(a94a720)](https://github.com/iwishiwasaneagle/jdrones/commit/a94a72045c3380e0cabad5a07aae26162b323320)
+- Add new gymnasium env names to README [(dffdde7)](https://github.com/iwishiwasaneagle/jdrones/commit/dffdde7f31ed6a99f83f4ab9b501d806c9d66fa6)
+- Fifth order polynomial with look-ahead drone env [(bc79fa6)](https://github.com/iwishiwasaneagle/jdrones/commit/bc79fa61e39b4b31dc8e0c22f36c083a5a33f184)
 
 ### Features
 
@@ -37,6 +41,8 @@ All notable changes to this project will be documented in this file.
 - Proper axis labels for 3D path plot [(f6c03aa)](https://github.com/iwishiwasaneagle/jdrones/commit/f6c03aa04de9f4f8eb1461fe5ca7dabfa2f2cc8f)
 - Proper axis labels for standard plots [(585d2d3)](https://github.com/iwishiwasaneagle/jdrones/commit/585d2d3cc535e9a5b9394f16f79589b88525d4bf)
 - Clean up imports [(b8ef4a5)](https://github.com/iwishiwasaneagle/jdrones/commit/b8ef4a5620a3d6eb9544f696835a259450e7f429)
+- Clean up imports [(16b2b94)](https://github.com/iwishiwasaneagle/jdrones/commit/16b2b9422dbc4825cb590528bdce9b5317cade70)
+- Update changelog for v0.7.0 [skip pre-commit.ci] [(f9b1512)](https://github.com/iwishiwasaneagle/jdrones/commit/f9b15122f325d62c99053fc606a11ca75910b80e)
 
 ### Refactor
 
@@ -48,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Add proper doctests into files [(9e134dc)](https://github.com/iwishiwasaneagle/jdrones/commit/9e134dcc4ba488f1d8984fdcdd2f94792a886cc6)
 - Add proper doctests into files [(063c55e)](https://github.com/iwishiwasaneagle/jdrones/commit/063c55ef35a80a9b4f4d05fe972dda36f1a1715a)
 - Fifth order polynomial with look-ahead drone env [(3aa4e30)](https://github.com/iwishiwasaneagle/jdrones/commit/3aa4e306f0666db273bf79cd42d4d408175603d9)
+- Fifth order polynomial with look-ahead drone env [(ccdf8eb)](https://github.com/iwishiwasaneagle/jdrones/commit/ccdf8ebc00708f0e8a5a11b1b60ef1dbf12c3528)
 
 ## [0.6.0] - 2023-03-16
 
