@@ -23,7 +23,8 @@ The environment documentation can be found [here](https://jdrones.janhendrikewer
 
 ### Position
 1. `FirstOrderPolyPositionDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#firstorderpolypositiondroneenv)
-2`FifthOrderPolyPositionDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#fifthorderpolypositiondroneenv)
+2. `FifthOrderPolyPositionDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#fifthorderpolypositiondroneenv)
+3. `FifthOrderPolyPositionWithLookAheadDroneEnv-v0` [:link:](https://jdrones.janhendrikewers.uk/envs.html#fifthorderpolypositionwithlookaheaddroneenv)
 
 ## Development
 
