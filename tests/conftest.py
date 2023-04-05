@@ -16,6 +16,7 @@ from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
+from jdrones.envs.position import FifthOrderPolyPositionWithLookAheadDroneEnv
 from jdrones.transforms import euler_to_quat
 
 
@@ -212,10 +213,11 @@ def lqrdroneenv(env_default_kwargs):
     d.close()
 
 
-@pytest.fixture(params=[[[-0.1, 0.1], [-0.1, 0.1], [0, 0.2]]])
+@pytest.fixture(params=[[[-0.1, -0.1, 0], [0.1, 0.1, 0.2]]])
 def position_drone_action_space(request):
     a = np.array(request.param)
-    return spaces.Box(low=a[:, 0], high=a[:, 1])
+    low, high = a
+    return spaces.Box(low=low, high=high, shape=np.asarray(low).shape)
 
 
 def custom_position_action_space_wrapper(action_space, obj: type[BasePositionDroneEnv]):
@@ -240,6 +242,17 @@ def firstorderploypositiondroneenv(position_drone_action_space, env_default_kwar
 def fifthorderpolypositiondroneenv(position_drone_action_space, env_default_kwargs):
     d = custom_position_action_space_wrapper(
         position_drone_action_space, FifthOrderPolyPositionDroneEnv
+    )(**env_default_kwargs)
+    yield d
+    d.close()
+
+
+@pytest.fixture
+def fifthorderpolypositionlookaheaddroneenv(
+    position_drone_action_space, env_default_kwargs
+):
+    d = custom_position_action_space_wrapper(
+        position_drone_action_space, FifthOrderPolyPositionWithLookAheadDroneEnv
     )(**env_default_kwargs)
     yield d
     d.close()
