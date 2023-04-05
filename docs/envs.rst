@@ -73,3 +73,10 @@ FifthOrderPolyPositionDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:
+
+FifthOrderPolyPositionDroneEnvWithLookAheadDroneEnv
+---------------------------------------------------
+.. autoclass:: jdrones.envs.FifthOrderPolyPositionDroneEnvWithLookAheadDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:

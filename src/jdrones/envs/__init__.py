@@ -7,6 +7,7 @@ from .base.basecontrolledenv import BaseControlledEnv
 from .dronemodels import DronePlus
 from .lqr import LQRDroneEnv
 from .position import FifthOrderPolyPositionDroneEnv
+from .position import FifthOrderPolyPositionWithLookAheadDroneEnv
 from .position import FirstOrderPolyPositionDroneEnv
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "FirstOrderPolyPositionDroneEnv",
     "DronePlus",
     "FifthOrderPolyPositionDroneEnv",
+    "FifthOrderPolyPositionWithLookAheadDroneEnv",
     "BaseControlledEnv",
 ]

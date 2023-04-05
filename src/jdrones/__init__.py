@@ -24,6 +24,10 @@ register(
     "FifthOrderPolyPositionDroneEnv-v0",
     entry_point="jdrones.envs:FifthOrderPolyPositionDroneEnv",
 )
+register(
+    "FifthOrderPolyPositionWithLookAheadDroneEnv-v0",
+    entry_point="jdrones.envs:FifthOrderPolyPositionWithLookAheadDroneEnv",
+)
 
 
 __version__ = "unknown"

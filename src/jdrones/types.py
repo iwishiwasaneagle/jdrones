@@ -19,3 +19,5 @@ PropellerAction = VEC4
 """:math:`(P_1,P_2,P_3,P_4)` propeller inputs"""
 PositionAction = VEC3
 """:math:`(x,y,z)` position inputs"""
+PositionVelocityAction = tuple[VEC3, VEC3]
+""":math:`(x,y,z)` position inputs, and :math:`(v_x,v_y,v_z)` velocity inputs"""
