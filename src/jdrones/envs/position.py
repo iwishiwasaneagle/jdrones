@@ -18,6 +18,7 @@ from jdrones.trajectory import BasePolynomialTrajectory
 from jdrones.trajectory import FifthOrderPolynomialTrajectory
 from jdrones.trajectory import FirstOrderPolynomialTrajectory
 from jdrones.types import PositionAction
+from jdrones.types import PositionVelocityAction
 
 
 class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
@@ -60,31 +61,6 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         obs, _ = self.env.reset(seed=seed, options=options)
 
         return States([np.copy(obs)]), {}
-
-    @abc.abstractmethod
-    def step(
-        self, action: PositionAction
-    ) -> tuple[States, float, bool, bool, dict[str, Any]]:
-        """
-        A step from the viewpoint of a
-        :class:`~jdrones.envs.position.BasePositionDroneEnv` is making the drone
-        fly from its current position :math:`A` to the target position :math:`B`.
-
-
-        Parameters
-        ----------
-        action : float,float,float
-            Target coordinates :math:`(x,y,z)`
-
-        Returns
-        -------
-            states: jdrones.data_models.States
-            reward: float
-            term: bool
-            trunc: bool
-            info: dict
-        """
-        pass
 
     @staticmethod
     def get_reward(states: States) -> float:
@@ -148,11 +124,66 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
             u.vel = traj.velocity(t)
         return u
 
-    def step(
-        self, action: PositionAction
-    ) -> tuple[States, float, bool, bool, dict[str, Any]]:
+    @staticmethod
+    def _validate_action_input(
+        action: PositionAction | PositionVelocityAction,
+    ) -> State:
+        """
+        Validate the action input. Has to either be only position, or position and
+        velocity
+
+        Parameters
+        ----------
+        action : VEC3 | tuple[VEC3, VEC3]
+            Target coordinates :math:`(x,y,z)` or target coordinates and velocity (
+            :math:`(v_x,v_y,v_z)`)
+
+        Returns
+        -------
+        State
+            The valid and converted action as a :class:`~jdrones.data_models.State`
+
+        """
         action_as_state = State()
-        action_as_state.pos = action
+        action_np = np.asarray(action).squeeze()
+        if action_np.shape == (3,):
+            action_as_state.pos = action_np
+        elif action_np.shape == (2, 3):
+            action_as_state.pos = action_np[0]
+            action_as_state.vel = action_np[1]
+        elif action_np.shape == (6,):
+            action_as_state.pos = action_np[:3]
+            action_as_state.vel = action_np[3:]
+        else:
+            raise ValueError(
+                f"Incorrect shape {action_np.shape}. Expected either " f"(3,) or (2,3)"
+            )
+        return action_as_state
+
+    def step(
+        self, action: PositionAction | PositionVelocityAction
+    ) -> tuple[States, float, bool, bool, dict[str, Any]]:
+        """
+        A step from the viewpoint of a
+        :class:`~jdrones.envs.position.BasePositionDroneEnv` is making the drone
+        fly from its current position :math:`A` to the target position :math:`B`.
+
+
+        Parameters
+        ----------
+        action : VEC3 | tuple[VEC3, VEC3]
+            Target coordinates :math:`(x,y,z)` or target coordinates and velocity (
+            :math:`(v_x,v_y,v_z)`)
+
+        Returns
+        -------
+            states: jdrones.data_models.States
+            reward: float
+            term: bool
+            trunc: bool
+            info: dict
+        """
+        action_as_state = self._validate_action_input(action)
 
         term, trunc, info = False, False, {}
         if np.allclose(action, self.env.state.pos):
