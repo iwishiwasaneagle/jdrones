@@ -6,6 +6,7 @@ import pytest
 def run(T, dt, env):
     trunc = False
     t, c = 0, 0
+    env.reset()
     while not trunc and t <= T:
         setpoint = env.action_space.sample()
         obs, _, term, trunc, _ = env.step(setpoint)

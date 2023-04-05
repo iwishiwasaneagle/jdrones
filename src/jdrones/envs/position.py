@@ -51,18 +51,6 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
             low=np.array([0, 0, 1]), high=np.array([10, 10, 10])
         )
 
-    def reset(
-        self,
-        *,
-        seed: int | None = None,
-        options: dict[str, Any] | None = None,
-    ) -> tuple[States, dict[str, Any]]:
-        super().reset(seed=seed, options=options)
-
-        obs, _ = self.env.reset(seed=seed, options=options)
-
-        return States([np.copy(obs)]), {}
-
     @staticmethod
     def get_reward(states: States) -> float:
         """
@@ -160,6 +148,18 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
                 f"Incorrect shape {action_np.shape}. Expected either " f"(3,) or (2,3)"
             )
         return action_as_state
+
+    def reset(
+        self,
+        *,
+        seed: int | None = None,
+        options: dict[str, Any] | None = None,
+    ) -> tuple[States, dict[str, Any]]:
+        super().reset(seed=seed, options=options)
+
+        obs, _ = self.env.reset(seed=seed, options=options)
+
+        return States([np.copy(obs)]), {}
 
     def step(
         self, action: PositionAction | PositionVelocityAction
@@ -364,6 +364,18 @@ class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
         self.action_space = spaces.Box(
             low=np.array([[0, 0, 1], [0, 0, 1]]), high=10, shape=(2, 3)
         )
+
+    def reset(
+        self,
+        *,
+        seed: int | None = None,
+        options: dict[str, Any] | None = None,
+    ) -> tuple[States, dict[str, Any]]:
+        super().reset(seed=seed, options=options)
+
+        obs, _ = self.env.reset(seed=seed, options=options)
+
+        return obs, {}
 
     @staticmethod
     def calc_v_at_B(A: VEC3, B: VEC3, C: VEC3, *, V: float, N: float = 3):
