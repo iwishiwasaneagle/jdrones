@@ -19,6 +19,7 @@ from jdrones.trajectory import FifthOrderPolynomialTrajectory
 from jdrones.trajectory import FirstOrderPolynomialTrajectory
 from jdrones.types import PositionAction
 from jdrones.types import PositionVelocityAction
+from jdrones.types import VEC3
 
 
 class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
@@ -204,7 +205,7 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
         while not (term or trunc):
             t = next(counter) * self.dt
             if t > traj.T:
-                u.pos = action
+                u.pos = action_as_state.pos
                 u.vel = (0, 0, 0)
             else:
                 u = self.update_u_from_traj(u, traj, t)
@@ -334,3 +335,124 @@ class FirstOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
             T=T,
         )
         return t
+
+
+class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
+    """
+    Supplements the :class:`jdrones.env.FifthOrderPolyPositionDroneEnv` by including
+    the next waypoints position in the trajectory generation calculation.
+
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("FifthOrderPolyPositionWithLookAheadDroneEnv-v0")
+    <OrderEnforcing<PassiveEnvChecker<FifthOrderPolyPositionWithLookAheadDroneEnv<FifthOrderPolyPositionWithLookAheadDroneEnv-v0>>>>
+    """
+
+    def __init__(
+        self,
+        model: URDFModel = DronePlus,
+        initial_state: State = None,
+        dt: float = 1 / 240,
+        env: LQRDroneEnv = None,
+    ):
+        if env is None:
+            env = FifthOrderPolyPositionDroneEnv(
+                model=model, initial_state=initial_state, dt=dt, env=env
+            )
+        super().__init__(model=model, initial_state=initial_state, dt=dt, env=env)
+
+        self.action_space = spaces.Box(
+            low=np.array([[0, 0, 1], [0, 0, 1]]), high=10, shape=(2, 3)
+        )
+
+    @staticmethod
+    def calc_v_at_B(A: VEC3, B: VEC3, C: VEC3, *, V: float, N: float = 3):
+        """
+        For the velocity vector at :math:`B`, it is ideal to create a smooth
+        transition between the segments. One solution is to reduce velocity to 0.
+        However, this is very inefficient and not representative of real-world flight,
+        especially for the case where there are multiple waypoints in a straight line.
+        The preferred, albeit slightly more computationally expensive, solution is to
+        use the waypoints before and after to calculate a smooth velocity at :math:`B`.
+        This is calculated by
+
+        .. math::
+            \\begin{gather}
+                \\theta =
+                    \\frac{(-\\vec r_{AB}) \\cdot \\vec r_{BC}}
+                    {|\\vec r_{AB}| |\\vec r_{BC}|}, \\\\
+                \\chi = \\frac{(1-\\theta)}{2}, \\\\
+                \\vec v_{B,-} = \\vec v_{B,+} = V \\cdot
+                    \\frac{\\vec r_{AC}}
+                    {| \\vec r_{AC} |}
+                    \\cdot \\chi^N,
+            \\end{gather}
+
+
+        Parameters
+        ----------
+        A : VEC3
+            Current position
+        B : VEC3
+            Target position
+        C : VEC3
+            Position after going through :math:`B`
+        V : float
+            Scaling factor for the magnitude of :math:`\\vec v_B`
+        N : float
+            Scaling factor for the magnitude of :math:`\\chi`.
+            :math:`N = 3` for an aggressive reduction in velocity for non-straight line
+            waypoints to closely follow the path. :math:`N = 1` would be more suitable
+            for cases where following the path is not as important.
+            (Default = 3)
+
+        Returns
+        -------
+        VEC3
+            The velocity at :math:`B`
+        """
+
+        rAC = C - A
+        rBA = A - B
+        rBC = C - B
+        rAC_unit = rAC / np.clip(np.linalg.norm(rAC), 1e-6, np.inf)
+        theta = rBA.dot(rBC) / (np.linalg.norm(rBA) * np.linalg.norm(rBC))
+        chi = np.power((1 - theta) / 2, N)
+        return V * rAC_unit * chi
+
+    def step(
+        self, action: tuple[PositionAction, PositionAction]
+    ) -> tuple[States, float, bool, bool, dict[str, Any]]:
+        """
+        A step from the viewpoint of a
+        :class:`~jdrones.envs.position.
+        FifthOrderPolyPositionWithLookAheadDroneEnv` is making the drone
+        fly from its current position :math:`A` to the target position :math:`C` via
+        :math:`B`.
+
+        .. seealso::
+            :meth:`~jdrones.envs.position.
+            FifthOrderPolyPositionDroneEnvWithLookAheadDroneEnv.calc_v_at_B`
+
+        Parameters
+        ----------
+        action : tuple[VEC3, VEC3]
+            Target coordinates :math:`B=(x_1,y_1,z_1)` and next target coordinates
+            :math:`C=(x_2,y_2,z_2)`
+
+        Returns
+        -------
+            states: jdrones.data_models.States
+            reward: float
+            term: bool
+            trunc: bool
+            info: dict
+        """
+        A, B, C = np.array([self.env.env.state.pos, *action])
+        if np.allclose(B, C):
+            v_at_B = (0, 0, 0)
+        else:
+            v_at_B = self.calc_v_at_B(A, B, C, V=self.model.max_vel_ms * 0.3)
+        tgt_pos = B
+        tgt_vel = v_at_B
+        return self.env.step((tgt_pos, tgt_vel))
