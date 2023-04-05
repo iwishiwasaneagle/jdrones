@@ -69,8 +69,8 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
                 \\vec I \\vec \\phi'' &=
                 \\begin{bmatrix}
                     l k_T (P_4^2-P_2^2) \\\\
-                    l k_T (P_1^2-P_3^2) \\\\
-                    k_Q (-P_1^2+P_2^2-P_3^2+P_4^2)
+                    l k_T (P_3^2-P_1^2) \\\\
+                    k_Q (P_1^2-P_2^2+P_3^2-P_4^2)
                 \\end{bmatrix}
             \\end{align}
 

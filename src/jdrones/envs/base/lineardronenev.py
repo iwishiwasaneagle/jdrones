@@ -106,8 +106,8 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
                 0& 0& 0& 1& 0& 0& 0& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 1& 0& 0& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 0& 1& 0& 0& 0& 0& 0& 0\\\\
-                0& 0& 0& 0& 0& 0& 0& -g& 0& 0& 0& 0\\\\
-                0& 0& 0& 0& 0& 0& g& 0& 0& 0& 0& 0\\\\
+                0& 0& 0& 0& 0& 0& 0& g& 0& 0& 0& 0\\\\
+                0& 0& 0& 0& 0& 0& -g& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 0& 0& 0& 0& 0& 1& 0& 0\\\\
                 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 1& 0\\\\
@@ -126,7 +126,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
-                0 & 0 & 0 & -1 / m\\\\
+                0 & 0 & 0 & 1 / m\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
@@ -139,7 +139,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
             \\end{bmatrix}
             +
             \\begin{bmatrix}
-                0\\\\0\\\\0\\\\0\\\\0\\\\g\\\\0\\\\0\\\\0\\\\0\\\\0\\\\0
+                0\\\\0\\\\0\\\\0\\\\0\\\\-g\\\\0\\\\0\\\\0\\\\0\\\\0\\\\0
             \\end{bmatrix}
 
         .. math::
@@ -149,8 +149,8 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
             \\end{bmatrix}
              &= \\begin{bmatrix}
             0& -l k_T& 0& l k_T \\\\
-            l k_T& 0& -l k_T& 0\\\\
-            -k_Q&k_Q& -k_Q& k_Q \\\\
+            -l k_T& 0& l k_T& 0\\\\
+            k_Q&-k_Q& k_Q& -k_Q \\\\
             k_T & k_T & k_T & k_T
             \\end{bmatrix}
             \\begin{bmatrix}
