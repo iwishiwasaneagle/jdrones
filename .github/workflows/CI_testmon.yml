@@ -48,10 +48,11 @@ jobs:
       - name: Install dependencies
         if: ${{ (!github.event.act) || (steps.cache-virtualenv.outputs.cache-hit != 'true') }}
         run: |
-          pip install . -r requirements.txt hypothesis pytest pytest-mock
+          pip install . -r requirements.txt hypothesis pytest pytest-mock pytest-testmon
 
       - name: Run tests
         run: |
+          TMNET_DEV_API_KEY=test_E9I8IsDh5Z6yySxBWQ7AHfiGKmB7SpVl2QK7NO9bD0Tzj4NcRbBT6fOYtGk6LTN3 \
           PYTHONPATH=tests \
-          pytest tests \
+          pytest --tmnet tests \
           ${{ matrix.pytest-flags }}
