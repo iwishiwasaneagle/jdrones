@@ -11,7 +11,11 @@ import pybullet_data
 from gymnasium.core import ActType
 from gymnasium.core import ObsType
 from gymnasium.core import RenderFrame
+from jdrones.data_models import PyBulletDefaultGroundPlaneConfig
+from jdrones.data_models import PyBulletFnGroundPlaneConfig
+from jdrones.data_models import PyBulletGroundPlaneConfig
 from jdrones.data_models import PyBulletIds
+from jdrones.data_models import PyBulletImgGroundPlaneConfig
 from jdrones.data_models import SimulationType
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
@@ -42,10 +46,13 @@ class PyBulletDroneEnv(BaseDroneEnv):
     simulation_type: SimulationType
     """Simulation type to run"""
 
+    ground_plane_config: PyBulletGroundPlaneConfig
+
     def __init__(
         self,
         model: URDFModel = DronePlus,
         initial_state: State = None,
+        ground_plane_config: PyBulletGroundPlaneConfig = None,
         simulation_type: SimulationType = SimulationType.DIRECT,
         dt: float = 1 / 240,
     ):
@@ -53,6 +60,7 @@ class PyBulletDroneEnv(BaseDroneEnv):
         self.ids = PyBulletIds()
         self.simulation_type = simulation_type
         self._init_simulation()
+        self._init_ground_plane(ground_plane_config)
 
     def _init_simulation(self):
         """
@@ -70,8 +78,6 @@ class PyBulletDroneEnv(BaseDroneEnv):
             pybullet_data.getDataPath(), physicsClientId=self.ids.client
         )
         p.setRealTimeSimulation(0, physicsClientId=self.ids.client)
-        # Load ground plane
-        self.ids.plane = p.loadURDF("plane.urdf", physicsClientId=self.ids.client)
 
         self.state.quat = euler_to_quat(self.state.rpy)
         self.ids.drone = p.loadURDF(
@@ -87,6 +93,111 @@ class PyBulletDroneEnv(BaseDroneEnv):
             angularVelocity=self.state.ang_vel,
             physicsClientId=self.ids.client,
         )
+
+    def _init_ground_plane(self, config: PyBulletGroundPlaneConfig):
+        """
+        Initialise the ground plane
+
+        Parameters
+        ----------
+        config : PyBulletGroundPlaneConfig
+            Configuration class. Behaviour depends on the subtype passed
+
+        Returns
+        -------
+        int
+            The terrain ID within the simulation
+        """
+        if config is None or isinstance(config, PyBulletDefaultGroundPlaneConfig):
+            self.ids.plane = p.loadURDF("plane.urdf", physicsClientId=self.ids.client)
+        elif isinstance(config, PyBulletFnGroundPlaneConfig):
+            self.ids.plane = self._add_terrain_by_fn(config)
+        elif isinstance(config, PyBulletImgGroundPlaneConfig):
+            raise NotImplementedError
+        else:
+            raise TypeError(
+                f"Expected config to be a subclass of "
+                f"{PyBulletGroundPlaneConfig} but got {type(config)}"
+            )
+
+    def _add_terrain_by_fn(
+        self,
+        config: PyBulletFnGroundPlaneConfig,
+        colour: VEC4 = (0.2, 0.6, 0, 1),
+    ) -> int:
+        """
+        Add the terrain from a pure function :code:`fn`
+
+        Parameters
+        ----------
+        config : PyBulletFnGroundPlaneConfig
+        colour : tuple[float,float,float,float]
+            RGBA colour of the terrain
+
+        Returns
+        -------
+        int
+            Terrain ID
+        """
+        MINX, MAXX, MINY, MAXY = config.limits.as_list()
+        XSCALE = (MAXX - MINX) / config.N
+        YSCALE = (MAXY - MINY) / config.N
+
+        x, y = np.meshgrid(
+            np.arange(MINX, MAXX, XSCALE),
+            np.arange(MINY, MAXY, YSCALE),
+        )
+        z = config.fn(x, y)
+
+        terrainShape = p.createCollisionShape(
+            shapeType=p.GEOM_HEIGHTFIELD,
+            flags=p.GEOM_FORCE_CONCAVE_TRIMESH,
+            meshScale=[
+                XSCALE,
+                YSCALE,
+                1,
+            ],
+            heightfieldTextureScaling=(config.N - 1) / 2,
+            heightfieldData=z.flatten(),
+            numHeightfieldRows=config.N,
+            numHeightfieldColumns=config.N,
+            physicsClientId=self.ids.client,
+        )
+        terrain = p.createMultiBody(0, terrainShape, physicsClientId=self.ids.client)
+
+        FROM = (0, 0, 1000)
+        for i in range(100):
+            results = p.rayTest(FROM, (0, 0, -1000), physicsClientId=self.ids.client)
+            result = results[0]
+            objectID, linkInd, fraction, pos, *_ = result
+            if objectID != terrain:
+                aabb = p.getAABB(objectID, physicsClientId=self.ids.client)
+
+                min_object_z = aabb[0][2]
+
+                if abs(min_object_z - pos[2]) > 0.1:
+                    min_object_z = pos[2] - 0.1
+
+                FROM = (pos[0], pos[1], min_object_z)
+            else:
+                break
+        else:
+            raise Exception("Custom terrain not found")
+        terrainResult = result
+        terrainZAtWorldOrigin = terrainResult[3][-1]
+
+        p.resetBasePositionAndOrientation(
+            terrain,
+            [
+                (MINX + MAXX) / 2,
+                (MINY + MAXY) / 2,
+                config.fn(0, 0) - terrainZAtWorldOrigin,
+            ],
+            [0, 0, 0, 1],
+            physicsClientId=self.ids.client,
+        )
+        p.changeVisualShape(terrain, -1, rgbaColor=colour)
+        return terrain
 
     def reset(
         self,

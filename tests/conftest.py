@@ -138,7 +138,7 @@ def action(vec_omega, np_ndarray_factory):
     return np_ndarray_factory(vec_omega)
 
 
-@pytest.fixture(params=[SimulationType.DIRECT])
+@pytest.fixture(params=[SimulationType.GUI])
 def simulation_type(request):
     return request.param
 

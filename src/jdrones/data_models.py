@@ -5,6 +5,7 @@ from typing import Callable
 from typing import Tuple
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import pybullet as p
 import pydantic
@@ -352,3 +353,75 @@ class PyBulletIds(pydantic.BaseModel):
     """The ground plane ID"""
     drone: int = None
     """The drone ID"""
+
+
+class Limits(pydantic.BaseModel):
+    MINX: float
+    """Minimum x"""
+    MAXX: float
+    """Maximum x"""
+    MINY: float
+    """Minimum y"""
+    MAXY: float
+    """Maximum y"""
+
+    @classmethod
+    def from_list(cls, limits: tuple[float, float, float, float]):
+        """
+        Instantiate from a list
+
+        Parameters
+        ----------
+        limits : tuple[float,float,float,float]
+        """
+        a, b, c, d = limits
+        return cls(MINX=a, MAXX=b, MINY=c, MAXY=d)
+
+    def as_list(self) -> tuple[float, float, float, float]:
+        """
+        Convert to a list
+
+        Returns
+        ----------
+        tuple[float,float,float,float]
+        """
+        return self.MINX, self.MAXX, self.MINY, self.MAXY
+
+
+class PyBulletGroundPlaneConfig(pydantic.BaseModel):
+    pass
+
+
+class PyBulletDefaultGroundPlaneConfig(PyBulletGroundPlaneConfig):
+    """
+    Passing this to :class:`jdrones.envs.base.pbdronenev.PyBulletDroneEnv` will use the
+    default pybullet plane
+    """
+
+    pass
+
+
+class PyBulletFnGroundPlaneConfig(PyBulletGroundPlaneConfig):
+    """
+    Passing this to :class:`jdrones.envs.base.pbdronenev.PyBulletDroneEnv` will use a
+    custom plane calculated by the supplied function
+    """
+
+    fn: Callable[[npt.NDArray, npt.NDArray], npt.NDArray]
+    """Pure function calculating the heightfield"""
+    limits: Limits
+    """Bounding box"""
+    N: int
+    """(N,N) points"""
+
+
+class PyBulletImgGroundPlaneConfig(PyBulletGroundPlaneConfig):
+    """
+    Passing this to :class:`jdrones.envs.base.pbdronenev.PyBulletDroneEnv` will use a
+    custom plane from image format
+    """
+
+    path: pydantic.FilePath
+    """Path to the image"""
+    limits: Limits
+    """Bounding box"""
