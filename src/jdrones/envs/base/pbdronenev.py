@@ -151,7 +151,7 @@ class PyBulletDroneEnv(BaseDroneEnv):
 
         terrainShape = p.createCollisionShape(
             shapeType=p.GEOM_HEIGHTFIELD,
-            flags=p.GEOM_FORCE_CONCAVE_TRIMESH,
+            # flags=p.GEOM_FORCE_CONCAVE_TRIMESH,
             meshScale=[
                 XSCALE,
                 YSCALE,

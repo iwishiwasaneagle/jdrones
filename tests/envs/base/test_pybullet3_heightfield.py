@@ -8,7 +8,7 @@ from jdrones.envs import PyBulletDroneEnv
 
 
 def fn1(x, y):
-    return 0.1 * (x**2 + y**2)
+    return np.abs(x) + np.abs(y)
 
 
 def fn2(x, y):
@@ -59,8 +59,8 @@ def test_add_terrain_by_fn(
     )
     RAYS = np.column_stack([xtest.flatten(), ytest.flatten()])
     BASE_Z = np.ones((RAYS.shape[0], 1))
-    TO_Z = BASE_Z * -10
-    FROM_Z = BASE_Z * 10
+    TO_Z = BASE_Z * -10000
+    FROM_Z = BASE_Z * 10000
     TO_RAYS = np.hstack([RAYS, TO_Z])
     FROM_RAYS = np.hstack([RAYS, FROM_Z])
 
@@ -91,7 +91,7 @@ def show_debug(results, expzs, RAYS, terrainid):
     for result, expz, ray in zip(results, expzs, RAYS):
         objectUniqueId, hitx, hity, hitz = result
         hitPosition = (hitx, hity, hitz)
-        isclose = np.isclose(hitz, expz)
+        isclose = np.isclose(hitz, expz, 0.1)
         TO = (*ray, expzs.min() - 5)
         if objectUniqueId == -1:
             colour = [0, 0, 1]
