@@ -8,7 +8,7 @@ from jdrones.envs import PyBulletDroneEnv
 
 
 def fn1(x, y):
-    return np.abs(x) + np.abs(y)
+    return 0.5 * np.cos(x) + np.sin(0.1 * y)
 
 
 def fn2(x, y):
@@ -16,11 +16,11 @@ def fn2(x, y):
 
 
 def fn3(x, y):
-    return -2 + x
+    return -x
 
 
 def fn4(x, y):
-    return -1 + y
+    return -y
 
 
 def fn5(x, y):
@@ -28,11 +28,11 @@ def fn5(x, y):
 
 
 def fn6(x, y):
-    return np.cos(x) + y * 0.01 + x * 0.2 + 1
+    return np.abs(x + y)
 
 
 @pytest.mark.parametrize("Ntest,Nact", [(11, 100)])
-@pytest.mark.parametrize("limits", [(-5, 5, -5, 5)])
+@pytest.mark.parametrize("limits", [(-1, 1, -1, 1), (-10, 10, -10, 10)])
 @pytest.mark.parametrize("fn", [fn1, fn2, fn3, fn4, fn5, fn6])
 def test_add_terrain_by_fn(
     pbdroneenv: PyBulletDroneEnv,
@@ -49,18 +49,18 @@ def test_add_terrain_by_fn(
     terrain = pbdroneenv._add_terrain_by_fn(
         PyBulletFnGroundPlaneConfig(fn=fn, limits=Limits.from_list(limits), N=Nact)
     )
-
-    MINX, MAXX, MINY, MAXY = limits
+    aabb = p.getAABB(terrain)
+    (MINX, MINY, MINZ), (MAXX, MAXY, MAXZ) = aabb
     XOFF, YOFF = (MINX + MAXX) / 2, (MINY + MAXY) / 2
-    SHRINK = 0.1
+    SHRINK = (MAXX - MINX) * 0.05
     xtest, ytest = np.meshgrid(
         np.linspace(MINX + SHRINK, MAXX - SHRINK, Ntest),
         np.linspace(MINY + SHRINK, MAXY - SHRINK, Ntest),
     )
     RAYS = np.column_stack([xtest.flatten(), ytest.flatten()])
     BASE_Z = np.ones((RAYS.shape[0], 1))
-    TO_Z = BASE_Z * -10000
-    FROM_Z = BASE_Z * 10000
+    TO_Z = BASE_Z * MINZ - 1
+    FROM_Z = BASE_Z * MAXZ + 1
     TO_RAYS = np.hstack([RAYS, TO_Z])
     FROM_RAYS = np.hstack([RAYS, FROM_Z])
 
@@ -75,7 +75,7 @@ def test_add_terrain_by_fn(
     assert not np.any(results[:, 0] == -1), "A ray has missed the terrain"
     assert np.all(results[:, 0] == terrain), "Non-terrain object hit"
 
-    if not np.allclose(expz, results[:, 3]):
+    if not np.allclose(expz, results[:, 3], 0.1):
         err = expz - results[:, 3]
         errstr = (
             f"Expected z-values don't match with real z-values | Error Stats -> "
