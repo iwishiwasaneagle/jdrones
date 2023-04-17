@@ -99,7 +99,7 @@ def test_input_to_rot(seed, lineardroneenv, action, k_Q, ang_vel_sign):
     as expected
     """
     lineardroneenv.reset(seed=seed)
-    for _ in range(5):
+    for _ in range(6):
         obs, *_ = lineardroneenv.step(action * 100)
     # Drone landed within 10cm of where we expected it
     assert np.allclose(np.sign(obs.ang_vel), ang_vel_sign)
