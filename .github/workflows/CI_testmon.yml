@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         if: ${{ (!github.event.act) || (steps.cache-virtualenv.outputs.cache-hit != 'true') }}
         run: |
-          pip install . -r requirements.txt hypothesis pytest pytest-mock pytest-testmon
+          pip install . -r requirements.txt hypothesis pytest pytest-mock pytest-testmon-2.0.666.tar.gz
 
       - name: Run tests
         run: |
