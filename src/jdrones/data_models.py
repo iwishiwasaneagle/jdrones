@@ -11,6 +11,7 @@ import pydantic
 from jdrones.maths import quat_mul
 from jdrones.transforms import quat_to_euler
 from jdrones.transforms import quat_to_rotmat
+from jdrones.types import DType
 from jdrones.types import LinearXAction
 from jdrones.types import VEC3
 from jdrones.types import VEC4
@@ -29,8 +30,9 @@ class KLengthArray(np.ndarray):
             if obj.shape != (cls.k,):
                 raise ValueError(f"Incorrect shape {obj.shape}")
 
-        if not isinstance(obj[0], (np.floating, float)):
+        if not np.can_cast(obj[0], DType):
             raise ValueError(f"Incorrect dtype={obj.dtype}")
+        obj = obj.astype(DType)
 
         return obj.view(cls)
 
@@ -149,7 +151,8 @@ class State(KLengthArray):
                     x[3:6],
                     x[9:12],
                     (0, 0, 0, 0),
-                ]
+                ],
+                dtype=DType,
             )
         )
 

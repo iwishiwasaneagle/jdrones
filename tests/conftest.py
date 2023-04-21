@@ -18,6 +18,7 @@ from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
 from jdrones.transforms import euler_to_quat
+from jdrones.types import DType
 
 
 @pytest.fixture
@@ -215,9 +216,9 @@ def lqrdroneenv(env_default_kwargs):
 
 @pytest.fixture(params=[[[-0.1, -0.1, 0], [0.1, 0.1, 0.2]]])
 def position_drone_action_space(request):
-    a = np.array(request.param)
+    a = np.array(request.param, dtype=DType)
     low, high = a
-    return spaces.Box(low=low, high=high, shape=np.asarray(low).shape)
+    return spaces.Box(low=low, high=high, shape=np.asarray(low).shape, dtype=DType)
 
 
 def custom_position_action_space_wrapper(action_space, obj: type[BasePositionDroneEnv]):
