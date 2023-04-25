@@ -13,6 +13,7 @@ from jdrones.envs.base import BaseControlledEnv
 from jdrones.envs.base import LinearDynamicModelDroneEnv
 from jdrones.envs.base import NonlinearDynamicModelDroneEnv
 from jdrones.envs.dronemodels import DronePlus
+from jdrones.types import DType
 from jdrones.types import LinearXAction
 
 
@@ -105,10 +106,9 @@ class LQRDroneEnv(BaseControlledEnv):
 
     @property
     def action_space(self):
-        bounds = np.ones((12, 2)) * np.inf
+        bounds = np.ones((12, 2), dtype=DType) * np.inf
         bounds[:, 0] *= -1
-
-        return spaces.Box(low=bounds[:, 0], high=bounds[:, 1])
+        return spaces.Box(low=bounds[:, 0], high=bounds[:, 1], dtype=DType)
 
 
 if __name__ == "__main__":

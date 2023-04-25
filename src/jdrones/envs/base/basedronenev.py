@@ -12,6 +12,7 @@ from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.transforms import euler_to_quat
+from jdrones.types import DType
 
 
 class BaseDroneEnv(gymnasium.Env):
@@ -61,13 +62,10 @@ class BaseDroneEnv(gymnasium.Env):
                 (0.0, 1e6),  # R2
                 (0.0, 1e6),  # R3
                 (0.0, 1e6),  # R4
-            ]
+            ],
+            dtype=DType,
         )
-        return spaces.Box(
-            low=act_bounds[:, 0],
-            high=act_bounds[:, 1],
-            dtype=float,
-        )
+        return spaces.Box(low=act_bounds[:, 0], high=act_bounds[:, 1], dtype=DType)
 
     @property
     def observation_space(self):
@@ -77,7 +75,7 @@ class BaseDroneEnv(gymnasium.Env):
                 # Position
                 (-np.inf, np.inf),
                 (-np.inf, np.inf),
-                (0.0, np.inf),
+                (-np.inf, np.inf),
                 # Q 1-4
                 # Quarternion rotation
                 (-1.0, 1.0),
@@ -105,6 +103,7 @@ class BaseDroneEnv(gymnasium.Env):
                 (0.0, np.inf),
                 (0.0, np.inf),
                 (0.0, np.inf),
-            ]
+            ],
+            dtype=DType,
         )
-        return spaces.Box(low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=float)
+        return spaces.Box(low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=DType)

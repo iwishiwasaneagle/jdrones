@@ -17,6 +17,7 @@ from jdrones.envs.lqr import LQRDroneEnv
 from jdrones.trajectory import BasePolynomialTrajectory
 from jdrones.trajectory import FifthOrderPolynomialTrajectory
 from jdrones.trajectory import FirstOrderPolynomialTrajectory
+from jdrones.types import DType
 from jdrones.types import PositionAction
 from jdrones.types import PositionVelocityAction
 from jdrones.types import VEC3
@@ -47,9 +48,8 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         self.dt = dt
         self.model = model
         self.observation_space = spaces.Sequence(self.env.observation_space)
-        self.action_space = spaces.Box(
-            low=np.array([0, 0, 1]), high=np.array([10, 10, 10])
-        )
+        BOUNDS = np.array([[0, 10], [0, 10], [1, 10]], dtype=DType)
+        self.action_space = spaces.Box(low=BOUNDS[:, 0], high=BOUNDS[:, 1], dtype=DType)
 
     @staticmethod
     def get_reward(states: States) -> float:
@@ -348,12 +348,14 @@ class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
     <OrderEnforcing<PassiveEnvChecker<FifthOrderPolyPositionWithLookAheadDroneEnv<FifthOrderPolyPositionWithLookAheadDroneEnv-v0>>>>
     """
 
+    env: FifthOrderPolyPositionDroneEnv
+
     def __init__(
         self,
         model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
-        env: LQRDroneEnv = None,
+        env: FifthOrderPolyPositionDroneEnv = None,
     ):
         if env is None:
             env = FifthOrderPolyPositionDroneEnv(
@@ -362,7 +364,10 @@ class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
         super().__init__(model=model, initial_state=initial_state, dt=dt, env=env)
 
         self.action_space = spaces.Box(
-            low=np.array([[0, 0, 1], [0, 0, 1]]), high=10, shape=(2, 3)
+            low=np.array([[0, 0, 1], [0, 0, 1]], dtype=DType),
+            high=np.float32(10),
+            shape=(2, 3),
+            dtype=DType,
         )
 
     def reset(

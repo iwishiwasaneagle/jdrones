@@ -174,7 +174,19 @@ def test_fifth_o_traj_coeffs_only_pos(fifth_o_trajectory, exp):
     [
         [
             (0, 0, 0),
+            (0, 0, 0),
+        ],
+        [
+            (0, 0, 0),
             (1, 0, 0),
+        ],
+        [
+            (0, 0, 0),
+            (0, 1, 0),
+        ],
+        [
+            (0, 0, 0),
+            (0, 0, 1),
         ],
         [
             (-3, -2, -1),
@@ -247,7 +259,19 @@ def test_first_o_traj_coeffs_only_pos(first_o_trajectory, exp):
     [
         [
             (0, 0, 0),
+            (0, 0, 0),
+        ],
+        [
+            (0, 0, 0),
             (1, 0, 0),
+        ],
+        [
+            (0, 0, 0),
+            (0, 1, 0),
+        ],
+        [
+            (0, 0, 0),
+            (0, 0, 1),
         ],
         [
             (-3, -2, -1),
@@ -260,6 +284,8 @@ def test_first_o_traj_coeffs_only_pos(first_o_trajectory, exp):
 @pytest.mark.parametrize("T", [5, 10], indirect=True)
 def test_first_o_traj_bounds(first_o_trajectory, T, start_pos, dest_pos):
     act_start_pos = first_o_trajectory.position(0)
+    first_o_trajectory.position(T / 2)
+    first_o_trajectory.position(T * 2)
     act_dest_pos = first_o_trajectory.position(T)
     assert np.allclose(act_start_pos, start_pos)
     assert np.allclose(act_dest_pos, dest_pos)

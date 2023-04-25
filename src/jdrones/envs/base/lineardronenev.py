@@ -10,6 +10,7 @@ from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.transforms import euler_to_quat
+from jdrones.types import DType
 from jdrones.types import PropellerAction
 
 
@@ -178,7 +179,8 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
 
     @cached_property
     def action_space(self):
-        return spaces.Box(
-            low=np.array([-np.inf, -np.inf, -np.inf, -np.inf]),
-            high=np.array([np.inf, np.inf, np.inf, np.inf]),
+        BOUNDS = np.array(
+            [[-np.inf, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, np.inf, np.inf]],
+            dtype=DType,
         )
+        return spaces.Box(low=BOUNDS[0], high=BOUNDS[1], dtype=DType)

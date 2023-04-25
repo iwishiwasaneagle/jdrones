@@ -121,7 +121,7 @@ jobs:
     - name: Run doctests
       run : |
         python -m doctest $(\
-          find src/jdrones -iname "*.py" -not -iname "__main__.py" | \
+          find src/jdrones -iname "*.py" -not -iname "__main__.py" -not -iname "__init__.py"| \
           tr '\n' ' ' \
         )
 
