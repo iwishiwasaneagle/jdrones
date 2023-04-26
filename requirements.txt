@@ -1,4 +1,4 @@
-gymnasium==0.27.1
+gymnasium==0.28.1
 loguru==0.6.0
 matplotlib==3.7.1
 nptyping==2.5.0
