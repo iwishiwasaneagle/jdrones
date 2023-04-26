@@ -332,3 +332,14 @@ def test_as_str_list_fail():
             "P3",
         )[::-1]
     )
+
+
+def test_URDFModel_hashing(urdfmodel):
+    assert hash(urdfmodel) is not None
+    assert hash(urdfmodel) == hash(urdfmodel)
+
+    urdfmodel.g = 0
+    hash1 = hash(urdfmodel)
+    urdfmodel.g += 1
+    hash2 = hash(urdfmodel)
+    assert hash1 != hash2

@@ -290,7 +290,31 @@ class URDFModel(pydantic.BaseModel):
     mixing_matrix: Callable
     """Mixing matrix describing RPY + T to propeller RPM"""
 
-    @property
+    def __hash__(self):
+        """
+        Custom __hash__ function to make it hashable. Required for caching.
+
+        Returns
+        -------
+        int
+            Unique hash of the object
+        """
+        return hash(
+            (
+                self.g,
+                self.mass,
+                *self.I,
+                self.k_T,
+                self.k_Q,
+                self.tau_Q,
+                self.tau_T,
+                *self.drag_coeffs,
+                self.max_vel_ms,
+                self.filepath,
+                self.mixing_matrix,
+            )
+        )
+
     def weight(self) -> float:
         """
         Weight of the drone

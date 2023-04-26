@@ -42,20 +42,6 @@ class BaseDroneEnv(gymnasium.Env):
         self.dt = dt
         self.info = {}
 
-    def reset(
-        self,
-        *,
-        seed: Optional[int] = None,
-        options: Optional[dict] = None,
-    ) -> Tuple[State, dict]:
-        super().reset(seed=seed, options=options)
-        self.info = {}
-        self.state = copy(self.initial_state)
-        self.state.quat = euler_to_quat(self.state.rpy)
-        return self.state, self.info
-
-    @property
-    def action_space(self):
         act_bounds = np.array(
             [
                 (0.0, 1e6),  # R1
@@ -65,10 +51,9 @@ class BaseDroneEnv(gymnasium.Env):
             ],
             dtype=DType,
         )
-        return spaces.Box(low=act_bounds[:, 0], high=act_bounds[:, 1], dtype=DType)
-
-    @property
-    def observation_space(self):
+        self.action_space = spaces.Box(
+            low=act_bounds[:, 0], high=act_bounds[:, 1], dtype=DType
+        )
         obs_bounds = np.array(
             [
                 # XYZ
@@ -106,4 +91,18 @@ class BaseDroneEnv(gymnasium.Env):
             ],
             dtype=DType,
         )
-        return spaces.Box(low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=DType)
+        self.observation_space = spaces.Box(
+            low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=DType
+        )
+
+    def reset(
+        self,
+        *,
+        seed: Optional[int] = None,
+        options: Optional[dict] = None,
+    ) -> Tuple[State, dict]:
+        super().reset(seed=seed, options=options)
+        self.info = {}
+        self.state = copy(self.initial_state)
+        self.state.quat = euler_to_quat(self.state.rpy)
+        return self.state, self.info
