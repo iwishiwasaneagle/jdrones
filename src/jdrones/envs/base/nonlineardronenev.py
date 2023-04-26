@@ -1,5 +1,6 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import functools
 from typing import Tuple
 
 import numpy as np
@@ -22,12 +23,23 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
     """
 
     @staticmethod
-    def calc_dstate(action: PropellerAction, state: State, model: URDFModel):
-        inertias = np.diag(model.I)
-        inv_intertias = np.linalg.inv(inertias)
+    @functools.cache
+    def _get_cached_time_invariant_params(model: URDFModel):
+        inertias = np.diag(np.array(model.I))
         m = model.mass
         drag_coeffs = model.drag_coeffs
         g = model.g
+        return inertias, np.linalg.inv(inertias), m, np.array(drag_coeffs), g
+
+    @classmethod
+    def calc_dstate(cls, action: PropellerAction, state: State, model: URDFModel):
+        (
+            inertias,
+            inv_intertias,
+            m,
+            drag_coeffs,
+            g,
+        ) = cls._get_cached_time_invariant_params(model)
         u_star = model.rpm2rpyT(np.square(action))
 
         R_W_Q = euler_to_rotmat(state.rpy)
