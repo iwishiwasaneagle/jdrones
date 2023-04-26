@@ -9,7 +9,9 @@ from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.transforms import euler_to_quat
 from jdrones.transforms import euler_to_rotmat
+from jdrones.types import MAT3X3
 from jdrones.types import PropellerAction
+from jdrones.types import VEC3
 
 UZ = np.array([0, 0, 1]).reshape((-1, 1))
 
@@ -24,7 +26,29 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
 
     @staticmethod
     @functools.cache
-    def _get_cached_time_invariant_params(model: URDFModel):
+    def _get_cached_time_invariant_params(
+        model: URDFModel,
+    ) -> tuple[MAT3X3, MAT3X3, float, VEC3, float]:
+        """
+        Cache the time invariant parameters in order to save runtime execution costs
+
+        Parameters
+        ----------
+        model : URDFModel
+
+        Returns
+        -------
+        inertias : MAT3X3
+            3x3 inertia matrix
+        inv_inertias: MAT3X3
+            3x3 inverted inertia matrix
+        m: float
+            mass
+        drag_coeffs: VEC3
+            3D drag coefficient vector
+        g: float
+            acceleration due to gravity
+        """
         inertias = np.diag(np.array(model.I))
         m = model.mass
         drag_coeffs = model.drag_coeffs
@@ -33,6 +57,21 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
 
     @classmethod
     def calc_dstate(cls, action: PropellerAction, state: State, model: URDFModel):
+        """
+        Calculate the state derivative as outlined in
+        :meth:`~jdrones.envs.base.nonlineardronenev.NonlinearDynamicModelDroneEnv.step`
+
+        Parameters
+        ----------
+        action : ProperllerAction
+        state :  State
+        model :  URDFModel
+
+        Returns
+        -------
+        State
+            The state derivative
+        """
         (
             inertias,
             inv_intertias,
