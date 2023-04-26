@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trajectory Generation &mdash; jdrones 0.7.1 documentation</title>
+  <title>Trajectory Generation &mdash; jdrones 0.7.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,8 +17,6 @@
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "macros": {"vec": ["{\\mathbf #1}", 1], "m": "\\text{m}", "ms": "\\text{m}\\text{s}^-1", "mss": "\\text{m}\\text{s}^-2"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -39,7 +37,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.1
+                0.7.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -69,22 +67,7 @@
 <li class="toctree-l1"><a class="reference internal" href="envs.html">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_models.html">Data Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controllers.html">Controllers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Trajectory Generation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#jdrones.trajectory.BasePolynomialTrajectory"><code class="docutils literal notranslate"><span class="pre">BasePolynomialTrajectory</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory"><code class="docutils literal notranslate"><span class="pre">FifthOrderPolynomialTrajectory</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.acceleration"><code class="docutils literal notranslate"><span class="pre">FifthOrderPolynomialTrajectory.acceleration()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.coeffs"><code class="docutils literal notranslate"><span class="pre">FifthOrderPolynomialTrajectory.coeffs</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.position"><code class="docutils literal notranslate"><span class="pre">FifthOrderPolynomialTrajectory.position()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.velocity"><code class="docutils literal notranslate"><span class="pre">FifthOrderPolynomialTrajectory.velocity()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#jdrones.trajectory.FirstOrderPolynomialTrajectory"><code class="docutils literal notranslate"><span class="pre">FirstOrderPolynomialTrajectory</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.trajectory.FirstOrderPolynomialTrajectory.coeffs"><code class="docutils literal notranslate"><span class="pre">FirstOrderPolynomialTrajectory.coeffs</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jdrones.trajectory.FirstOrderPolynomialTrajectory.position"><code class="docutils literal notranslate"><span class="pre">FirstOrderPolynomialTrajectory.position()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Trajectory Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
@@ -116,195 +99,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-jdrones.trajectory">
-<span id="trajectory-generation"></span><h1>Trajectory Generation<a class="headerlink" href="#module-jdrones.trajectory" title="Permalink to this heading"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="jdrones.trajectory.BasePolynomialTrajectory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.trajectory.</span></span><span class="sig-name descname"><span class="pre">BasePolynomialTrajectory</span></span><a class="reference internal" href="_modules/jdrones/trajectory.html#BasePolynomialTrajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.trajectory.BasePolynomialTrajectory" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Parent class for all Polynomial Trajectory classes.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="jdrones.trajectory.FifthOrderPolynomialTrajectory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.trajectory.</span></span><span class="sig-name descname"><span class="pre">FifthOrderPolynomialTrajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_acc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_acc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/trajectory.html#FifthOrderPolynomialTrajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jdrones.trajectory.BasePolynomialTrajectory" title="jdrones.trajectory.BasePolynomialTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolynomialTrajectory</span></code></a></p>
-<p>A helper class to solve the quintic polynomial given a start and end criterion.</p>
-<p>Define the problem as</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-x &amp;= c_0 t ^5 + c_1 t^4 + c_2 t ^3 + c_3 t ^2 + c_4 t + c_5,\\
-\dot x &amp;= 5 c_0 t ^ 4 + 4 c_1 t^3 + 3 c_2 t ^2 + 2 c_3 t + c_4,\\
-\ddot x &amp;= 20 c_0 t ^ 3 + 12 c_1 t^2 + 6 c_2 t + 2 c_3
-\end{align}\end{split}\]</div>
-<p>Which is then solved by</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{bmatrix}
-     0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
-     T^5 &amp; T^4 &amp; T^3 &amp; T^2 &amp; T &amp; 1 \\
-     0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
-     5T^4 &amp; 4T^3 &amp; 3T^2 &amp; 2T &amp; 1 &amp; 0 \\
-     0 &amp; 0 &amp; 0 &amp; 2 &amp; 0 &amp; 0 \\
-     20T^3 &amp; 12T^2 &amp; 6T &amp; 2 &amp; 0 &amp; 0
- \end{bmatrix}
- \begin{bmatrix}
-     x_{t=0}\\
-     x_{t=T}\\
-     \dot x_{t=0}\\
-     \dot x_{t=T}\\
-     \ddot x_{t=0}\\
-     \ddot x_{t=T}
- \end{bmatrix}
- =
- \begin{bmatrix}
-     c_0\\
-     c_1\\
-     c_2\\
-     c_3\\
-     c_4\\
-     c_5\\
- \end{bmatrix}\end{split}\]</div>
-<p>Where <span class="math notranslate nohighlight">\(T\)</span> is the total time to traverse the polynomial.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="envs.html#jdrones.envs.FifthOrderPolyPositionDroneEnv.calc_traj" title="jdrones.envs.FifthOrderPolyPositionDroneEnv.calc_traj"><code class="xref py py-meth docutils literal notranslate"><span class="pre">jdrones.envs.FifthOrderPolyPositionDroneEnv.calc_traj()</span></code></a></p>
-</div>
-<p>The coefficients are then saved in <code class="code docutils literal notranslate"><span class="pre">coeffs</span></code> and accessed by
-<a class="reference internal" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.acceleration" title="jdrones.trajectory.FifthOrderPolynomialTrajectory.acceleration"><code class="xref py py-meth docutils literal notranslate"><span class="pre">acceleration()</span></code></a>,:meth:<cite>velocity</cite>, and <a class="reference internal" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.position" title="jdrones.trajectory.FifthOrderPolynomialTrajectory.position"><code class="xref py py-meth docutils literal notranslate"><span class="pre">position()</span></code></a> as required.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The trajectory is solved individually for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(z\)</span>.</p>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="jdrones.trajectory.FifthOrderPolynomialTrajectory.acceleration">
-<span class="sig-name descname"><span class="pre">acceleration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/jdrones/trajectory.html#FifthOrderPolynomialTrajectory.acceleration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.acceleration" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the acceleration at time <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>,
-and <span class="math notranslate nohighlight">\(z\)</span> using</p>
-<div class="math notranslate nohighlight">
-\[\ddot x = 20 c_0 t ^ 3 + 12 c_1 t^2 + 6 c_2 t + 2 c_3\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Time to evaluate</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="math notranslate nohighlight">\(\ddot x, \ddot y, \ddot z\)</span></p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="jdrones.trajectory.FifthOrderPolynomialTrajectory.coeffs">
-<span class="sig-name descname"><span class="pre">coeffs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.coeffs" title="Permalink to this definition"></a></dt>
-<dd><p>Storage for the polynomial coefficients</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="jdrones.trajectory.FifthOrderPolynomialTrajectory.position">
-<span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/jdrones/trajectory.html#FifthOrderPolynomialTrajectory.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.position" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the position at time <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>,
-and <span class="math notranslate nohighlight">\(z\)</span> using</p>
-<div class="math notranslate nohighlight">
-\[x = c_0 t ^5 + c_1 t^4 + c_2 t ^3 + c_3 t ^2 + c_4 t + c_5\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Time to evaluate</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="math notranslate nohighlight">\(x, y, z\)</span></p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="jdrones.trajectory.FifthOrderPolynomialTrajectory.velocity">
-<span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/jdrones/trajectory.html#FifthOrderPolynomialTrajectory.velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.trajectory.FifthOrderPolynomialTrajectory.velocity" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the velocity at time <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>,
-and <span class="math notranslate nohighlight">\(z\)</span> using</p>
-<div class="math notranslate nohighlight">
-\[\dot x = 5 c_0 t ^ 4 + 4 c_1 t^3 + 3 c_2 t ^2 + 2 c_3 t + c_4\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Time to evaluate</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="math notranslate nohighlight">\(\dot x, \dot y, \dot z\)</span></p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="jdrones.trajectory.FirstOrderPolynomialTrajectory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jdrones.trajectory.</span></span><span class="sig-name descname"><span class="pre">FirstOrderPolynomialTrajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdrones/trajectory.html#FirstOrderPolynomialTrajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.trajectory.FirstOrderPolynomialTrajectory" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jdrones.trajectory.BasePolynomialTrajectory" title="jdrones.trajectory.BasePolynomialTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolynomialTrajectory</span></code></a></p>
-<p>A helper class to solve the first-order polynomial given a start and end criterion.</p>
-<p>Define the problem as</p>
-<div class="math notranslate nohighlight">
-\[x = c_0 t + c_1\]</div>
-<p>Which is then solved by</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{bmatrix}
-     0 &amp; 1 \\
-     T &amp; 1
- \end{bmatrix}
- \begin{bmatrix}
-     x_{t=0}\\
-     x_{t=T}
- \end{bmatrix}
- =
- \begin{bmatrix}
-     c_0\\
-     c_1
- \end{bmatrix}\end{split}\]</div>
-<p>Where <span class="math notranslate nohighlight">\(T\)</span> is the total time to traverse the polynomial.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="envs.html#jdrones.envs.FirstOrderPolyPositionDroneEnv.calc_traj" title="jdrones.envs.FirstOrderPolyPositionDroneEnv.calc_traj"><code class="xref py py-meth docutils literal notranslate"><span class="pre">jdrones.envs.FirstOrderPolyPositionDroneEnv.calc_traj()</span></code></a></p>
-</div>
-<p>The coefficients are then saved in <code class="code docutils literal notranslate"><span class="pre">coeffs</span></code> and accessed by
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">acceleration()</span></code>,:meth:<cite>velocity</cite>, and <a class="reference internal" href="#jdrones.trajectory.FirstOrderPolynomialTrajectory.position" title="jdrones.trajectory.FirstOrderPolynomialTrajectory.position"><code class="xref py py-meth docutils literal notranslate"><span class="pre">position()</span></code></a> as required.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The trajectory is solved individually for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(z\)</span>.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="jdrones.trajectory.FirstOrderPolynomialTrajectory.coeffs">
-<span class="sig-name descname"><span class="pre">coeffs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jdrones.trajectory.FirstOrderPolynomialTrajectory.coeffs" title="Permalink to this definition"></a></dt>
-<dd><p>Storage for the polynomial coefficients</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="jdrones.trajectory.FirstOrderPolynomialTrajectory.position">
-<span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/jdrones/trajectory.html#FirstOrderPolynomialTrajectory.position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdrones.trajectory.FirstOrderPolynomialTrajectory.position" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the position at time <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>,
-and <span class="math notranslate nohighlight">\(z\)</span> using</p>
-<div class="math notranslate nohighlight">
-\[x = c_0 t + c_1\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Time to evaluate</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="math notranslate nohighlight">\(x, y, z\)</span></p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+  <section id="trajectory-generation">
+<h1>Trajectory Generation<a class="headerlink" href="#trajectory-generation" title="Permalink to this heading"></a></h1>
 </section>
 
 
