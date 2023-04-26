@@ -364,8 +364,8 @@ class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
         super().__init__(model=model, initial_state=initial_state, dt=dt, env=env)
 
         self.action_space = spaces.Box(
-            low=np.array([[0, 0, 1], [0, 0, 1]], dtype=DType),
-            high=np.float32(10),
+            low=np.array((self.env.action_space.low,) * 2, dtype=DType),
+            high=np.array((self.env.action_space.high,) * 2, dtype=DType),
             shape=(2, 3),
             dtype=DType,
         )
