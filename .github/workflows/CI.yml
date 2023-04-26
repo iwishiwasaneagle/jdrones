@@ -76,7 +76,7 @@ jobs:
 
     - name: Upload code test coverage report
       uses: codecov/codecov-action@v3.1.1
-      if: ${{ (github.actor != 'dependabot[bot]') && ( matrix.codecov ) && ( !env.ACT ) }}
+      if: ${{ ! contains(github.actor, '[bot]') && ( matrix.codecov ) && ( !env.ACT ) }}
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml,./coverage.info
@@ -127,6 +127,7 @@ jobs:
 
   docstr-cov:
     runs-on: ubuntu-latest
+    if: ${{ ! contains(github.actor, '[bot]') }}
     steps:
       - uses: actions/checkout@v3
         with:
