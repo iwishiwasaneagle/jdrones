@@ -73,6 +73,10 @@ class LQRDroneEnv(BaseControlledEnv):
 
         super().__init__(env, dt)
 
+        bounds = np.ones((12, 2), dtype=DType) * np.inf
+        bounds[:, 0] *= -1
+        self.action_space = spaces.Box(low=bounds[:, 0], high=bounds[:, 1], dtype=DType)
+
     def _init_controllers(self) -> dict[str, Controller]:
         A, B, _ = LinearDynamicModelDroneEnv.get_matrices(self.env.model)
         return dict(lqr=LQR(A, B, self.Q, self.R))
@@ -103,12 +107,6 @@ class LQRDroneEnv(BaseControlledEnv):
         obs, _, trunc, term, _ = self.env.step(action_with_linearization_assumptions)
 
         return obs, 0, trunc, term, {}
-
-    @property
-    def action_space(self):
-        bounds = np.ones((12, 2), dtype=DType) * np.inf
-        bounds[:, 0] *= -1
-        return spaces.Box(low=bounds[:, 0], high=bounds[:, 1], dtype=DType)
 
 
 if __name__ == "__main__":
