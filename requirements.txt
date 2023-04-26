@@ -1,5 +1,5 @@
 gymnasium==0.27.1
-loguru==0.6.0
+loguru==0.7.0
 matplotlib==3.7.1
 nptyping==2.5.0
 numpy==1.24.2
