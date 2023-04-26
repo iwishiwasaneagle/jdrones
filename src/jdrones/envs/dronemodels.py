@@ -1,11 +1,13 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import functools
 from importlib.resources import files
 
 import numpy as np
 from jdrones.data_models import URDFModel
 
 
+@functools.cache
 def droneplus_mixing_matrix(*, length, k_Q, k_T):
     return np.array(
         [

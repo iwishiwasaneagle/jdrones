@@ -3,7 +3,9 @@
 import numpy as np
 
 DType = np.float64
+"""Default data type of 64-bit float"""
 FloatLike = DType | float
+"""Wrapper for multiple float-like types"""
 
 VEC3 = tuple[FloatLike, FloatLike, FloatLike]
 """:math:`(a,b,c)` vector"""

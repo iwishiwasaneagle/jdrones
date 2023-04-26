@@ -1,6 +1,5 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-from functools import cached_property
 from typing import Tuple
 
 import numpy as np
@@ -31,6 +30,14 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
         super().__init__(model, initial_state, dt)
 
         self.A, self.B, self.C = self.get_matrices(model)
+
+        act_bounds = np.array(
+            [[-np.inf, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, np.inf, np.inf]],
+            dtype=DType,
+        )
+        self.action_space = spaces.Box(
+            low=act_bounds[0], high=act_bounds[1], dtype=DType
+        )
 
     @staticmethod
     def get_matrices(model: URDFModel):
@@ -176,11 +183,3 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
 
         # Return
         return self.state, 0, False, False, self.info
-
-    @cached_property
-    def action_space(self):
-        BOUNDS = np.array(
-            [[-np.inf, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, np.inf, np.inf]],
-            dtype=DType,
-        )
-        return spaces.Box(low=BOUNDS[0], high=BOUNDS[1], dtype=DType)

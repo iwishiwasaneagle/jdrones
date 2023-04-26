@@ -113,3 +113,12 @@ def test_input_to_rot(seed, nonlineardroneenv, action, k_Q, ang_vel_sign):
         obs, *_ = nonlineardroneenv.step(action * 100)
     # Drone landed within 10cm of where we expected it
     assert np.allclose(np.sign(obs.ang_vel), ang_vel_sign)
+
+
+def test_cached_time_invar_params_helper(urdfmodel, nonlineardroneenv):
+    # Not much to test here. The helper function just access the data and converts it
+    # to numpy data. The only calculation to test is the inverting of the inertia
+    # array.
+    I, inv_I, m, Cds, g = nonlineardroneenv._get_cached_time_invariant_params(urdfmodel)
+
+    assert np.allclose(I @ inv_I, np.eye(3))
