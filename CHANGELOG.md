@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.2] - 2023-04-26
+
+### Bug Fixes
+
+- Proper type casting to np.float64 [(0b2b805)](https://github.com/iwishiwasaneagle/jdrones/commit/0b2b80546ebc26b2512b9c4e5d570d807931327c)
+- Ignore __init__ for doctests due to circular import errors [(3cfb121)](https://github.com/iwishiwasaneagle/jdrones/commit/3cfb12149868565745f357113b9d0570f46be0a8)
+- Inherit the action space from the base clase [(423ce55)](https://github.com/iwishiwasaneagle/jdrones/commit/423ce55979a24e77df10373bbf6210bf561ba539)
+- Skip CI jobs/steps that interact with outside resources if triggered by bot [(6e5c357)](https://github.com/iwishiwasaneagle/jdrones/commit/6e5c357f1eddb7d1881403fe133f839464d6dd95)
+- Set stack=True to ensure state observations are stacked [(edf45d5)](https://github.com/iwishiwasaneagle/jdrones/commit/edf45d59788763a60d301c973c570e27bd262bb9)
+
+### Documentation
+
+- Docstring for new DType and FloatLike types [(dd9551a)](https://github.com/iwishiwasaneagle/jdrones/commit/dd9551afa9cdccfd12830dfdf1d0848da7e865d6)
+- Describe the reason behind the util functions for step [(25ffe00)](https://github.com/iwishiwasaneagle/jdrones/commit/25ffe00d1fc05f582535f31aff03495feddc4116)
+
+### Miscellaneous Tasks
+
+- Replace np.matrix with np.array [(5ab2a94)](https://github.com/iwishiwasaneagle/jdrones/commit/5ab2a9442530d0166880d548404c6824fcce5dc9)
+- Bump loguru from 0.6.0 to 0.7.0 [(edfb2ca)](https://github.com/iwishiwasaneagle/jdrones/commit/edfb2ca4793cf8ebd13432daf924af6c759e3863)
+- Bump gymnasium from 0.27.1 to 0.28.1 [(7068122)](https://github.com/iwishiwasaneagle/jdrones/commit/70681221e5078ab0a7768096ca057dda5a80c4c5)
+- More sensible dependabot settings to prevent the PR spam [(29e781e)](https://github.com/iwishiwasaneagle/jdrones/commit/29e781e5fcd3e914287b90c300b40c2b13ad175e)
+
+### Performance
+
+- Optimize numpy state update code for non-linear drone model [(7de713f)](https://github.com/iwishiwasaneagle/jdrones/commit/7de713feff3f46e7f0563ff669097f498ae68b43)
+- Use caching to pre-calculate time invariant params [(154f3af)](https://github.com/iwishiwasaneagle/jdrones/commit/154f3afb22f2d29a430c62a9bd345fc99db2c30f)
+- Use caching to pre-calculate mixing matrix for drone plus [(a0a207f)](https://github.com/iwishiwasaneagle/jdrones/commit/a0a207f7b582ac0357f9ff919c7b6886e709cd8c)
+
+### Refactor
+
+- Stop using @property for action and observation spaces [(3b89837)](https://github.com/iwishiwasaneagle/jdrones/commit/3b89837facbd1a9795eee8571d4fb2b865356f1e)
+
+### Testing
+
+- More testing for trajectories [(b66d7ca)](https://github.com/iwishiwasaneagle/jdrones/commit/b66d7ca33720676fd9bda3d0ae8e72165e58fa04)
+- Test URDFModel hashing capabilities [(ebfbcba)](https://github.com/iwishiwasaneagle/jdrones/commit/ebfbcbaa23dbd1f93b4e91b17107a001b4dc827f)
+- Test the cached model data accessing method [(c4b92c5)](https://github.com/iwishiwasaneagle/jdrones/commit/c4b92c537a740e7d42d8f491d0e9a85da1982c09)
+
+## [0.7.1] - 2023-04-05
+
+### Miscellaneous Tasks
+
+- Update changelog for v0.7.1 [skip pre-commit.ci] [(8926597)](https://github.com/iwishiwasaneagle/jdrones/commit/892659781deae73fb1cd938df48c68aecbe3704a)
+
 ## [0.7.0] - 2023-04-05
 
 ### Bug Fixes
