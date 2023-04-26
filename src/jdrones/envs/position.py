@@ -47,9 +47,11 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         self.env = env
         self.dt = dt
         self.model = model
-        self.observation_space = spaces.Sequence(self.env.observation_space)
-        BOUNDS = np.array([[0, 10], [0, 10], [1, 10]], dtype=DType)
-        self.action_space = spaces.Box(low=BOUNDS[:, 0], high=BOUNDS[:, 1], dtype=DType)
+        self.observation_space = spaces.Sequence(self.env.observation_space, stack=True)
+        act_bounds = np.array([[0, 10], [0, 10], [1, 10]], dtype=DType)
+        self.action_space = spaces.Box(
+            low=act_bounds[:, 0], high=act_bounds[:, 1], dtype=DType
+        )
 
     @staticmethod
     def get_reward(states: States) -> float:
