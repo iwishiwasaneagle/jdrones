@@ -5,7 +5,7 @@ name: CI (testmon)
 
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ master, dev, dev-testmon-job, dev-testmon-2 ]
   pull_request:
   workflow_dispatch:
 
@@ -22,10 +22,8 @@ jobs:
       matrix:
         platform: [ "ubuntu-latest" ]
         python-version: [ "3.11" ]
-        pytest-flags:
-          - "-m 'not (integration or slow_integration)'"
-          - "-m 'integration'"
-          - "-m 'slow_integration'"
+        pytest-args:
+          - ""
 
     steps:
       - name: Checkout repo
@@ -48,10 +46,13 @@ jobs:
       - name: Install dependencies
         if: ${{ (!github.event.act) || (steps.cache-virtualenv.outputs.cache-hit != 'true') }}
         run: |
-          pip install . -r requirements.txt hypothesis pytest pytest-mock
+          pip install . -r requirements.txt -r tests/requirements.txt
+          pip install git+https://github.com/tarpas/pytest-testmon@main
 
       - name: Run tests
+        env:
+          TMNET_API_KEY: ${{ secrets.TMNET_API_KEY }}
         run: |
           PYTHONPATH=tests \
-          pytest tests \
-          ${{ matrix.pytest-flags }}
+          pytest tests --tmnet --testmon-noselect --with-integration --with-slow-integration\
+          ${{ matrix.pytest-args }}
