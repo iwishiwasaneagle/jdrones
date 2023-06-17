@@ -60,6 +60,13 @@ BasePositionDroneEnv
    :undoc-members:
    :show-inheritance:
 
+PolynomialPositionBaseDronEnv
+-----------------------------
+.. autoclass:: jdrones.envs.position.PolynomialPositionBaseDronEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 FirstOrderPolyPositionDroneEnv
 ------------------------------
 .. autoclass:: jdrones.envs.FirstOrderPolyPositionDroneEnv
@@ -70,6 +77,13 @@ FirstOrderPolyPositionDroneEnv
 FifthOrderPolyPositionDroneEnv
 ------------------------------
 .. autoclass:: jdrones.envs.FifthOrderPolyPositionDroneEnv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+FifthOrderPolyPositionWithLookAheadDroneEnv
+---------------------------------------------------
+.. autoclass:: jdrones.envs.FifthOrderPolyPositionWithLookAheadDroneEnv
    :members:
    :undoc-members:
    :show-inheritance:

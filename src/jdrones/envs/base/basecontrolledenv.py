@@ -6,7 +6,6 @@ from typing import Optional
 from typing import Tuple
 
 import gymnasium
-from gymnasium.core import ActType
 from jdrones.controllers import Controller
 from jdrones.controllers import PID
 from jdrones.data_models import State
@@ -24,19 +23,6 @@ class BaseControlledEnv(gymnasium.Env, abc.ABC):
         self.controllers = self._init_controllers()
 
         self.observation_space = self.env.observation_space
-
-    @property
-    @abc.abstractmethod
-    def action_space(self) -> ActType:
-        """
-        Returns the action space required by gymnasium
-
-        Returns
-        -------
-        gymnasium.core.ActType
-            Action type describing the action space
-        """
-        pass
 
     @property
     def state(self):

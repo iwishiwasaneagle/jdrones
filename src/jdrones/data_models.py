@@ -11,6 +11,7 @@ import pydantic
 from jdrones.maths import quat_mul
 from jdrones.transforms import quat_to_euler
 from jdrones.transforms import quat_to_rotmat
+from jdrones.types import DType
 from jdrones.types import LinearXAction
 from jdrones.types import VEC3
 from jdrones.types import VEC4
@@ -29,8 +30,9 @@ class KLengthArray(np.ndarray):
             if obj.shape != (cls.k,):
                 raise ValueError(f"Incorrect shape {obj.shape}")
 
-        if not isinstance(obj[0], (np.floating, float)):
+        if not np.can_cast(obj[0], DType):
             raise ValueError(f"Incorrect dtype={obj.dtype}")
+        obj = obj.astype(DType)
 
         return obj.view(cls)
 
@@ -149,7 +151,8 @@ class State(KLengthArray):
                     x[3:6],
                     x[9:12],
                     (0, 0, 0, 0),
-                ]
+                ],
+                dtype=DType,
             )
         )
 
@@ -192,6 +195,40 @@ class Conversions:
         return df_long
 
 
+class STATE_ENUM(str, enum.Enum):
+    X = "x"
+    Y = "y"
+    Z = "z"
+    QX = "qx"
+    QY = "qy"
+    QZ = "qz"
+    QW = "qw"
+    PHI = "phi"
+    THETA = "theta"
+    PSI = "psi"
+    VX = "vx"
+    VY = "vy"
+    VZ = "vz"
+    P = "p"
+    Q = "q"
+    R = "r"
+    P0 = "P0"
+    P1 = "P1"
+    P2 = "P2"
+    P3 = "P3"
+
+    @classmethod
+    def as_list(cls) -> list[str]:
+        """
+        Convert the enum to a list of strings
+
+        Returns
+        -------
+        list[str]
+        """
+        return list(map(lambda i: i.value, cls))
+
+
 class States(np.ndarray):
     def __new__(cls, input_array=None):
         if input_array is None:
@@ -208,28 +245,7 @@ class States(np.ndarray):
             tag=tag,
             dt=dt,
             N=N,
-            cols=[
-                "x",
-                "y",
-                "z",
-                "qx",
-                "qy",
-                "qz",
-                "qw",
-                "phi",
-                "theta",
-                "psi",
-                "vx",
-                "vy",
-                "vz",
-                "p",
-                "q",
-                "r",
-                "P0",
-                "P1",
-                "P2",
-                "P3",
-            ],
+            cols=[STATE_ENUM.as_list()],
         )
         return df
 
@@ -274,7 +290,31 @@ class URDFModel(pydantic.BaseModel):
     mixing_matrix: Callable
     """Mixing matrix describing RPY + T to propeller RPM"""
 
-    @property
+    def __hash__(self):
+        """
+        Custom __hash__ function to make it hashable. Required for caching.
+
+        Returns
+        -------
+        int
+            Unique hash of the object
+        """
+        return hash(
+            (
+                self.g,
+                self.mass,
+                *self.I,
+                self.k_T,
+                self.k_Q,
+                self.tau_Q,
+                self.tau_T,
+                *self.drag_coeffs,
+                self.max_vel_ms,
+                self.filepath,
+                self.mixing_matrix,
+            )
+        )
+
     def weight(self) -> float:
         """
         Weight of the drone

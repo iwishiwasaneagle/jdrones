@@ -1,6 +1,5 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-from functools import cached_property
 from typing import Tuple
 
 import numpy as np
@@ -10,6 +9,7 @@ from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.transforms import euler_to_quat
+from jdrones.types import DType
 from jdrones.types import PropellerAction
 
 
@@ -30,6 +30,14 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
         super().__init__(model, initial_state, dt)
 
         self.A, self.B, self.C = self.get_matrices(model)
+
+        act_bounds = np.array(
+            [[-np.inf, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, np.inf, np.inf]],
+            dtype=DType,
+        )
+        self.action_space = spaces.Box(
+            low=act_bounds[0], high=act_bounds[1], dtype=DType
+        )
 
     @staticmethod
     def get_matrices(model: URDFModel):
@@ -106,8 +114,8 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
                 0& 0& 0& 1& 0& 0& 0& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 1& 0& 0& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 0& 1& 0& 0& 0& 0& 0& 0\\\\
-                0& 0& 0& 0& 0& 0& 0& -g& 0& 0& 0& 0\\\\
-                0& 0& 0& 0& 0& 0& g& 0& 0& 0& 0& 0\\\\
+                0& 0& 0& 0& 0& 0& 0& g& 0& 0& 0& 0\\\\
+                0& 0& 0& 0& 0& 0& -g& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0\\\\
                 0& 0& 0& 0& 0& 0& 0& 0& 0& 1& 0& 0\\\\
                 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 1& 0\\\\
@@ -126,7 +134,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
-                0 & 0 & 0 & -1 / m\\\\
+                0 & 0 & 0 & 1 / m\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
                 0 & 0 & 0 & 0\\\\
@@ -139,7 +147,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
             \\end{bmatrix}
             +
             \\begin{bmatrix}
-                0\\\\0\\\\0\\\\0\\\\0\\\\g\\\\0\\\\0\\\\0\\\\0\\\\0\\\\0
+                0\\\\0\\\\0\\\\0\\\\0\\\\-g\\\\0\\\\0\\\\0\\\\0\\\\0\\\\0
             \\end{bmatrix}
 
         .. math::
@@ -149,8 +157,8 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
             \\end{bmatrix}
              &= \\begin{bmatrix}
             0& -l k_T& 0& l k_T \\\\
-            l k_T& 0& -l k_T& 0\\\\
-            -k_Q&k_Q& -k_Q& k_Q \\\\
+            -l k_T& 0& l k_T& 0\\\\
+            k_Q&-k_Q& k_Q& -k_Q \\\\
             k_T & k_T & k_T & k_T
             \\end{bmatrix}
             \\begin{bmatrix}
@@ -175,10 +183,3 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
 
         # Return
         return self.state, 0, False, False, self.info
-
-    @cached_property
-    def action_space(self):
-        return spaces.Box(
-            low=np.array([-np.inf, -np.inf, -np.inf, -np.inf]),
-            high=np.array([np.inf, np.inf, np.inf, np.inf]),
-        )

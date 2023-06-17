@@ -16,6 +16,7 @@ import gymnasium
 print(f"\tImported gymnasium version {gymnasium.__version__}")
 import jdrones
 from jdrones.data_models import *
+import jdrones.plotting as jplot
 
 print(f"\tImported jdrones version {jdrones.__version__}")
 

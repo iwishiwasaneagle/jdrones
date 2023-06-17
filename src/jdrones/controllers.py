@@ -230,12 +230,12 @@ class LQR(Controller):
         """
 
         # first, try to solve the ricatti equation
-        X = np.matrix(scipy.linalg.solve_continuous_are(A, B, Q, R))
+        X = scipy.linalg.solve_continuous_are(A, B, Q, R)
 
         # compute the LQR gain
-        K = np.matrix(scipy.linalg.inv(R) * (B.T * X))
+        K = scipy.linalg.inv(R) @ (B.T @ X)
 
-        return np.asarray(K)
+        return K
 
     def reset(self):
         """
