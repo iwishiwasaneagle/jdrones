@@ -1,8 +1,6 @@
 import gymnasium
 import numpy as np
 import pytest
-
-from jdrones.envs import DronePlus
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.wrappers import EnergyCalculationWrapper
 
