@@ -1,10 +1,7 @@
 import numpy as np
 import pytest
-
-from jdrones.energy_model import (
-    BaseEnergyModel,
-    StaticPropellerVariableVelocityEnergyModel,
-)
+from jdrones.energy_model import BaseEnergyModel
+from jdrones.energy_model import StaticPropellerVariableVelocityEnergyModel
 
 
 @pytest.fixture

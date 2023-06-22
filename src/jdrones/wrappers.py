@@ -1,14 +1,13 @@
-from typing import SupportsFloat, Any
+from typing import Any
+from typing import SupportsFloat
 
 import gymnasium
 import numpy as np
-from gymnasium.core import WrapperActType, WrapperObsType
-
+from gymnasium.core import WrapperActType
+from gymnasium.core import WrapperObsType
+from jdrones.energy_model import BaseEnergyModel
+from jdrones.energy_model import StaticPropellerVariableVelocityEnergyModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.energy_model import (
-    StaticPropellerVariableVelocityEnergyModel,
-    BaseEnergyModel,
-)
 
 
 class EnergyCalculationWrapper(gymnasium.Wrapper):
@@ -29,8 +28,9 @@ class EnergyCalculationWrapper(gymnasium.Wrapper):
         elif hasattr(self.env, "env"):
             model = self.env.env.model
         else:
-            raise ValueError("Could not find model information within the wrapped "
-                             "environment")
+            raise ValueError(
+                "Could not find model information within the wrapped " "environment"
+            )
         self.energy_calculation = energy_model(env.dt, model)
 
     def step(
@@ -43,8 +43,9 @@ class EnergyCalculationWrapper(gymnasium.Wrapper):
         elif hasattr(self.env, "env"):
             vel = self.env.env.state.vel
         else:
-            raise ValueError("Could not find velocity information within the wrapped "
-                             "environment")
+            raise ValueError(
+                "Could not find velocity information within the wrapped " "environment"
+            )
         speed = np.linalg.norm(vel)
         info["energy"] = self.energy_calculation.energy(speed)
 

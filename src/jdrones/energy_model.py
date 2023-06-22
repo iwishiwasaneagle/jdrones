@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import numpy.typing as npt
-
 from jdrones.data_models import URDFModel
 from jdrones.envs.dronemodels import DronePlus
 
@@ -188,9 +187,9 @@ class StaticPropellerVariableVelocityEnergyModel(BaseEnergyModel):
     def power(self, v: npt.ArrayLike):
         """
         Total power required at the system velocity
-        
+
         .. math::
-        
+
             P_{total} = P_{blade} + P_{parasite} + P_{induced}
 
 
