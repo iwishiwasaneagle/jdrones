@@ -83,6 +83,11 @@ def tau_Q(request):
 def drag_coeffs(request):
     return request.param
 
+@pytest.fixture(params=[1.225])
+def rho(request):
+    return request.param
+
+
 
 @pytest.fixture(params=["droneplus.urdf"])
 def filepath(request):
@@ -162,6 +167,7 @@ def urdfmodel(
     tau_Q,
     drag_coeffs,
     mass,
+        rho,
     filepath,
     mixing_matrix,
 ):
@@ -178,6 +184,7 @@ def urdfmodel(
         filepath=str(filepath),
         mixing_matrix=mixing_matrix,
         max_vel_ms=1,
+        rho=rho
     )
 
 

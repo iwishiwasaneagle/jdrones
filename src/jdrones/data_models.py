@@ -263,6 +263,9 @@ class URDFModel(pydantic.BaseModel):
     g: float = 9.81
     """Acceleration due to gravity (m/s^2)"""
 
+    rho: float = 1.225
+    """Density of air at sea level (kg/m^3)"""
+
     l: float
     """Arm length (m)"""
 
