@@ -7,4 +7,4 @@ pandas==2.1.0
 pybullet==3.2.5
 pydantic==2.3.0
 scipy==1.10.1
-seaborn==0.12.2
+seaborn==0.13.0
