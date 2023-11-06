@@ -1,6 +1,6 @@
 gymnasium==0.29.1
 loguru==0.7.0
-matplotlib==3.7.1
+matplotlib==3.8.1
 nptyping==2.5.0
 numpy==1.24.2
 pandas==2.1.0
