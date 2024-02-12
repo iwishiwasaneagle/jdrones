@@ -223,12 +223,7 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
 
         def calc(c, t):
             return (
-                c[0] * t**5
-                + c[1] * t**4
-                + c[2] * t**3
-                + c[3] * t**2
-                + c[4] * t
-                + c[5]
+                c[0] * t**5 + c[1] * t**4 + c[2] * t**3 + c[3] * t**2 + c[4] * t + c[5]
             )
 
         x = calc(self.coeffs["x"], t)
