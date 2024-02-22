@@ -56,5 +56,5 @@ ignore_messages = "([dD]uplicate implicit|not referenced)"
 version.source = "vcs"
 build.hooks.vcs.version-file = "src/jdrones/_version.py"
 build.targets.wheel.artifacts = [
-    "**._version.py"
+    "**/_version.py"
 ]
