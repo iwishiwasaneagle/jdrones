@@ -39,7 +39,9 @@ class HoverMSERewardWrapperNonlinearDynamicModelDroneEnv(NonlinearDynamicModelDr
             low=low, high=high, dtype=self.observation_space.dtype
         )
         self.action_space = gymnasium.spaces.Box(
-            low=np.zeros(4), high=np.full(4, 1.0), dtype=self.action_space.dtype
+            low=np.array((0, 0, 0, 0, 1)),
+            high=np.array((1, 1, 1, 1, 1000)),
+            dtype=self.action_space.dtype,
         )
 
     def reset(
@@ -52,6 +54,7 @@ class HoverMSERewardWrapperNonlinearDynamicModelDroneEnv(NonlinearDynamicModelDr
         return super().reset(seed=seed, options=options)
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
+        action = action[:4] * action[4]
         obs, _, trunc, term, info = super().step(action)
         distance_from_tgt = np.linalg.norm(self.hover_tgt - self.state.pos)
         reward = -np.square(distance_from_tgt)
@@ -61,6 +64,7 @@ class HoverMSERewardWrapperNonlinearDynamicModelDroneEnv(NonlinearDynamicModelDr
 
 def make_env():
     env = HoverMSERewardWrapperNonlinearDynamicModelDroneEnv()
+    env = gymnasium.wrappers.NormalizeObservation(env)
     env = TimeLimit(env, int(10 / env.dt))
     env = Monitor(env)
     return env
