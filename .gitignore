@@ -371,3 +371,6 @@ pip-selfcheck.json
 
 # Ignore dynaconf secret files
 .secrets.*
+
+# Generated files
+**/__version__.py
