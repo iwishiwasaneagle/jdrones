@@ -55,3 +55,5 @@ ignore_messages = "([dD]uplicate implicit|not referenced)"
 [tool.hatch]
 version.source = "vcs"
 build.hooks.vcs.version-file = "src/jdrones/__version__.py"
+
+[tool.fla]

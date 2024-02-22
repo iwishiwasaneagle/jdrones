@@ -2,6 +2,9 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 from gymnasium.envs.registration import register
 
+from .__version__ import __version__
+from .__version__ import __version_tuple__
+
 
 register("PyBulletDroneEnv-v0", entry_point="jdrones.envs:PyBulletDroneEnv")
 register(
@@ -28,7 +31,3 @@ register(
     "FifthOrderPolyPositionWithLookAheadDroneEnv-v0",
     entry_point="jdrones.envs:FifthOrderPolyPositionWithLookAheadDroneEnv",
 )
-
-
-from .__version__ import __version__, __version_tuple__
-
