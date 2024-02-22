@@ -137,9 +137,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.x"
+          cache: "pip"
+          cache-dependency-path: |
+            .github/workflows/requirements.docstr-cov.txt
 
       - name: Install docstr-coverage
-        run: pip install docstr-coverage==2.2.0
+        run: pip install -r .github/workflows/requirements.docstr-cov.txt
 
       - name: Get SHAs
         run: |
