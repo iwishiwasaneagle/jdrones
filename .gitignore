@@ -373,4 +373,4 @@ pip-selfcheck.json
 .secrets.*
 
 # Generated files
-**/__version__.py
+**/_version.py
