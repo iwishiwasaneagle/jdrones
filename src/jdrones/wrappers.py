@@ -18,7 +18,7 @@ class EnergyCalculationWrapper(gymnasium.Wrapper):
 
     def __init__(
         self,
-        env: BaseDroneEnv,
+        env: BaseDroneEnv | BaseControlledEnv,
         energy_model: type[
             BaseEnergyModel
         ] = StaticPropellerVariableVelocityEnergyModel,
