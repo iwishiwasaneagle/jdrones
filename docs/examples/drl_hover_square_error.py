@@ -10,6 +10,7 @@ Run
     PYTHONPATH=src python docs/examples/drl_hover_square_error.py
 
 """
+
 from collections import deque
 from typing import Optional
 from typing import Tuple
