@@ -44,7 +44,7 @@ jobs:
             platform: "ubuntu-latest"
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -78,7 +78,7 @@ jobs:
         ${{ matrix.pytest-flags }}
 
     - name: Upload code test coverage report
-      uses: codecov/codecov-action@v3.1.1
+      uses: codecov/codecov-action@v4.0.2
       if: ${{ ! contains(github.actor, '[bot]') && ( matrix.codecov ) && ( !env.ACT ) }}
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -132,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ ! contains(github.actor, '[bot]') }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
