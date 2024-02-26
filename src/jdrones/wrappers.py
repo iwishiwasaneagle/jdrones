@@ -9,7 +9,6 @@ from jdrones.energy_model import BaseEnergyModel
 from jdrones.energy_model import StaticPropellerVariableVelocityEnergyModel
 from jdrones.envs import BaseControlledEnv
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.envs.position import BasePositionDroneEnv
 
 
 class EnergyCalculationWrapper(gymnasium.Wrapper):
@@ -26,10 +25,14 @@ class EnergyCalculationWrapper(gymnasium.Wrapper):
     ):
         super().__init__(env)
 
-        if isinstance(self.unwrapped, (BasePositionDroneEnv)):
+        if not isinstance(self.unwrapped, (BaseDroneEnv, BaseControlledEnv)):
             raise ValueError(f"Type {type(self.unwrapped)} is not allowed.")
 
-        model = self.unwrapped.model
+        if isinstance(self.unwrapped, BaseControlledEnv):
+            model = self.unwrapped.env.model
+        else:
+            model = self.unwrapped.model
+
         self.energy_calculation = energy_model(env.dt, model)
 
     def step(
