@@ -28,7 +28,7 @@ from jdrones.energy_model import StaticPropellerVariableVelocityEnergyModel
 from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.types import PropellerAction
 from loguru import logger
-from stable_baselines3 import PPO
+from sbx import PPO
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.env_util import make_vec_env

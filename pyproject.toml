@@ -6,8 +6,8 @@ build-backend = "hatchling.build"
 name = "jdrones"
 description = "PyBullet models prepared for usage via the gymnasium environment"
 readme = "README.md"
-authors = [{name = "iwishiwasaneagle", email = "jh.ewers@gmail.com"}]
-license = {text = "GPL-3.0-or-later"}
+authors = [{ name = "iwishiwasaneagle", email = "jh.ewers@gmail.com" }]
+license = { text = "GPL-3.0-or-later" }
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3 :: Only",
@@ -43,6 +43,9 @@ test = [
     "pytest-mock",
     "pytest-xdist",
     "pytest-extra-markers",
+]
+examples = [
+    "sbx-rl"
 ]
 
 [tool.rstcheck]
