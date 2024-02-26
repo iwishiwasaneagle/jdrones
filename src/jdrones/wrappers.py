@@ -38,14 +38,7 @@ class EnergyCalculationWrapper(gymnasium.Wrapper):
     ) -> tuple[WrapperObsType, SupportsFloat, bool, bool, dict[str, Any]]:
         obs, reward, term, trunc, info = super().step(action)
 
-        if hasattr(self.env, "state"):
-            vel = self.env.state.vel
-        elif hasattr(self.env, "env"):
-            vel = self.env.env.state.vel
-        else:
-            raise ValueError(
-                "Could not find velocity information within the wrapped " "environment"
-            )
+        vel = self.env.unwrapped.state.vel
         speed = np.linalg.norm(vel)
         info["energy"] = self.energy_calculation.energy(speed)
 

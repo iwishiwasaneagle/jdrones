@@ -40,5 +40,5 @@ def test_energycalcwrapper_fail_in_step():
 
     env = EnergyCalculationWrapper(TestEnv())
 
-    with pytest.raises(ValueError):
+    with pytest.raises(AttributeError):
         env.step(env.action_space.sample())
