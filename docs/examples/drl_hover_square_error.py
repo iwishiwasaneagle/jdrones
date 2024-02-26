@@ -10,22 +10,30 @@ Run
     PYTHONPATH=src python docs/examples/drl_hover_square_error.py
 
 """
-
+from collections import deque
 from typing import Optional
 from typing import Tuple
 
 import gymnasium
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+from gymnasium.wrappers import TimeAwareObservation
 from gymnasium.wrappers import TimeLimit
 from jdrones.data_models import State
+from jdrones.energy_model import StaticPropellerVariableVelocityEnergyModel
 from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.types import PropellerAction
 from loguru import logger
 from stable_baselines3 import PPO
+from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.logger import Figure
 from stable_baselines3.common.monitor import Monitor
 
+matplotlib.use("Agg")
 logger.info(f"Starting {__file__}")
 
 
