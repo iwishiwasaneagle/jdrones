@@ -7,7 +7,9 @@ from gymnasium.core import WrapperActType
 from gymnasium.core import WrapperObsType
 from jdrones.energy_model import BaseEnergyModel
 from jdrones.energy_model import StaticPropellerVariableVelocityEnergyModel
+from jdrones.envs import BaseControlledEnv
 from jdrones.envs.base.basedronenev import BaseDroneEnv
+from jdrones.envs.position import BasePositionDroneEnv
 
 
 class EnergyCalculationWrapper(gymnasium.Wrapper):
@@ -23,14 +25,11 @@ class EnergyCalculationWrapper(gymnasium.Wrapper):
         ] = StaticPropellerVariableVelocityEnergyModel,
     ):
         super().__init__(env)
-        if hasattr(self.env, "model"):
-            model = self.env.model
-        elif hasattr(self.env, "env"):
-            model = self.env.env.model
-        else:
-            raise ValueError(
-                "Could not find model information within the wrapped " "environment"
-            )
+
+        if isinstance(self.unwrapped, (BasePositionDroneEnv)):
+            raise ValueError(f"Type {type(self.unwrapped)} is not allowed.")
+
+        model = self.unwrapped.model
         self.energy_calculation = energy_model(env.dt, model)
 
     def step(
@@ -38,7 +37,11 @@ class EnergyCalculationWrapper(gymnasium.Wrapper):
     ) -> tuple[WrapperObsType, SupportsFloat, bool, bool, dict[str, Any]]:
         obs, reward, term, trunc, info = super().step(action)
 
-        vel = self.env.unwrapped.state.vel
+        if isinstance(self.unwrapped, BaseControlledEnv):
+            vel = self.unwrapped.env.state.vel
+        else:
+            vel = self.unwrapped.state.vel
+
         speed = np.linalg.norm(vel)
         info["energy"] = self.energy_calculation.energy(speed)
 
