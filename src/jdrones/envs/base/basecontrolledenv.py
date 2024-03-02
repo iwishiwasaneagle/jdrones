@@ -37,7 +37,7 @@ class BaseControlledEnv(gymnasium.Env, abc.ABC):
         super().reset(seed=seed, options=options)
         for ctrl in self.controllers.values():
             ctrl.reset()
-        return self.env.reset()
+        return self.env.reset(options=options)
 
     @abc.abstractmethod
     def _init_controllers(self) -> dict[str, Controller]:
