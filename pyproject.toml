@@ -45,7 +45,9 @@ test = [
     "pytest-extra-markers",
 ]
 examples = [
-    "sbx-rl"
+    "sbx-rl",
+    "optuna",
+    "sb3-contrib"
 ]
 
 [tool.rstcheck]

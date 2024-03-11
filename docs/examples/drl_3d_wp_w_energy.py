@@ -20,7 +20,9 @@ import gymnasium
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import optuna
 import pandas as pd
+import torch as th
 from gymnasium.wrappers import TimeAwareObservation
 from gymnasium.wrappers import TimeLimit
 from jdrones.data_models import State as _State
@@ -28,17 +30,26 @@ from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.types import PropellerAction
 from jdrones.wrappers import EnergyCalculationWrapper
 from loguru import logger
-from sbx import PPO
+from optuna.pruners import MedianPruner
+from optuna.samplers import RandomSampler
+from sb3_contrib import RecurrentPPO
+from sbx import PPO as PPO_SBX
+from stable_baselines3 import PPO as PPO_SB3
 from stable_baselines3.common.callbacks import BaseCallback
-from stable_baselines3.common.callbacks import CallbackList
-from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.logger import Figure
 from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.policies import ActorCriticPolicy
+from stable_baselines3.common.utils import get_device
+from stable_baselines3.common.vec_env import VecEnv
 
 matplotlib.use("Agg")
 logger.info(f"Starting {__file__}")
+
+TOTAL_TIMESTEP = int(5e6)
+N_EVAL = 1000
 
 POS_LIM = (-10, 10)
 TGT_SUB_LIM = (-5, 5)
@@ -164,7 +175,7 @@ class HoverEnv(gymnasium.Env):
         self.reset_target()
         self.previous_prop_omega = 0
         self.target_error = self.integral_target_error = np.zeros_like(self.target)
-        self.info = {"is_success": False}
+        self.info = {"is_success": False, "targets": 0}
         return self.get_observation(), info
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
@@ -190,18 +201,19 @@ class HoverEnv(gymnasium.Env):
         self.info["distance_from_target"] = distance_from_tgt
 
         reward = (
-            2  # alive bonus
+            4  # alive bonus
             + -5e-1 * distance_from_tgt
-            + -1e-6 * info["energy"]
-            + -1e-4 * control_action
+            + 0 * info["energy"]
+            + 0 * control_action
             + 0 * dcontrol_action
-            + -1e-6 * np.linalg.norm(self.integral_target_error)
+            + 0 * np.linalg.norm(self.integral_target_error)
         )
-        if distance_from_tgt < 0.5:
+        if distance_from_tgt < 1.5:
             self.target_counter += 1
             reward += 1
             if self.target_counter > int(1 / self.env.dt):
                 self.info["is_success"] = True
+                self.info["targets"] += 1
                 self.reset_target()
         elif np.any((POS_LIM[0] > obs[:3]) | (POS_LIM[1] < obs[:3])):
             self.info["is_success"] = False
@@ -389,6 +401,115 @@ class GraphingCallback(BaseCallback):
         return True
 
 
+class DenseNetModule(th.nn.Module):
+    def __init__(self, in_dim, activation_fn):
+        super().__init__()
+        self.linear = th.nn.Linear(in_dim, in_dim)
+        self.activation = activation_fn()
+
+    def forward(self, feature):
+        x = self.linear(feature)
+        x = self.activation(x)
+        return th.cat((x, feature), 1)
+
+
+class DenseNetExtractor(th.nn.Module):
+
+    def __init__(
+        self,
+        feature_dim: int,
+        net_arch: int,
+        activation_fn,
+        device="auto",
+    ) -> None:
+        super().__init__()
+        device = get_device(device)
+        policy_net = []
+        value_net = []
+
+        # Iterate through the policy layers and build the policy net
+        for n in range(net_arch):
+            d = feature_dim * (2**n)
+            policy_net.append(DenseNetModule(d, activation_fn))
+            value_net.append(DenseNetModule(d, activation_fn))
+
+        self.latent_dim_vf = self.latent_dim_pi = 2 * d
+
+        self.policy_net = th.nn.Sequential(*policy_net).to(device)
+        self.value_net = th.nn.Sequential(*value_net).to(device)
+
+    def forward(self, features: th.Tensor) -> Tuple[th.Tensor, th.Tensor]:
+        """
+        :return: latent_policy, latent_value of the specified network.
+            If all layers are shared, then ``latent_policy == latent_value``
+        """
+        return self.forward_actor(features), self.forward_critic(features)
+
+    def forward_actor(self, features: th.Tensor) -> th.Tensor:
+        return self.policy_net(features)
+
+    def forward_critic(self, features: th.Tensor) -> th.Tensor:
+        return self.value_net(features)
+
+
+class ActorCriticDenseNetPolicy(ActorCriticPolicy):
+    def __init__(
+        self,
+        *args,
+        net_arch: Optional[int] = None,
+        **kwargs,
+    ):
+        if net_arch is None:
+            net_arch = 2
+        super().__init__(*args, net_arch=net_arch, **kwargs)
+
+    def _build_mlp_extractor(self) -> None:
+        self.mlp_extractor = DenseNetExtractor(
+            self.features_dim,
+            net_arch=self.net_arch,
+            activation_fn=self.activation_fn,
+            device=self.device,
+        )
+
+
+class TrialEvalCallback(EvalCallback):
+    """Callback used for evaluating and reporting a trial."""
+
+    def __init__(
+        self,
+        eval_env: gymnasium.Env | VecEnv,
+        trial: optuna.Trial,
+        n_eval_episodes: int = 5,
+        eval_freq: int = 10000,
+        deterministic: bool = True,
+        verbose: int = 0,
+        callback_on_new_best: Optional[BaseCallback] = None,
+    ):
+        super().__init__(
+            eval_env=eval_env,
+            n_eval_episodes=n_eval_episodes,
+            eval_freq=eval_freq,
+            deterministic=deterministic,
+            verbose=verbose,
+            callback_on_new_best=callback_on_new_best,
+        )
+        self.trial = trial
+        self.is_pruned = False
+
+    def _on_step(self) -> bool:
+        if (
+            self.eval_freq > 0
+            and self.n_calls > 0
+            and self.n_calls % self.eval_freq == 0
+        ):
+            super()._on_step()
+            self.trial.report(self.last_mean_reward, self.n_calls // self.model.n_envs)
+            if self.trial.should_prune():
+                self.is_pruned = True
+                return False
+        return True
+
+
 def make_env(dt):
     env = HoverEnv(dt=dt)
     env = TimeAwareObservation(env)
@@ -397,28 +518,127 @@ def make_env(dt):
     return env
 
 
-dt = 1 / 100
-env = make_vec_env(make_env, n_envs=16, env_kwargs=dict(dt=dt))
-eval_env = make_vec_env(make_env, n_envs=10, env_kwargs=dict(dt=dt))
-model = PPO(
-    "MlpPolicy",
-    env=env,
-    verbose=0,
-    tensorboard_log="log/tensorboard",
+def objective(trial):
+    dt = 1 / 100
+    net_arch_name = trial.suggest_categorical(
+        "net_arch", ["dense", "mlp"]
+    )  # , "recurrent"])
+    n_envs = trial.suggest_int("n_envs", 1, 16)
+    env = make_vec_env(make_env, n_envs=n_envs, env_kwargs=dict(dt=dt))
+    lr = trial.suggest_float("learning_rate", 1e-6, 1e-3)
+    batch_size = trial.suggest_int("batch_size", 2, 512)
+    n_steps = trial.suggest_int("n_steps", 512, 4192)
+    use_sde = bool(trial.suggest_int("use_sde", 0, 1))
+    match net_arch_name:
+        case "mlp":
+            net_arch_depth = trial.suggest_int("net_arch_mlp_depth", 2, 4)
+            net_arch_width = trial.suggest_int("net_arch_mlp_width", 8, 2048)
+            model = PPO_SBX(
+                "MlpPolicy",
+                learning_rate=lr,
+                batch_size=batch_size,
+                use_sde=use_sde,
+                n_steps=n_steps,
+                policy_kwargs=dict(
+                    net_arch=[
+                        net_arch_width,
+                    ]
+                    * net_arch_depth
+                ),
+                env=env,
+                verbose=0,
+                tensorboard_log="logs/tensorboard",
+            )
+        case "dense":
+            net_arch_layers = trial.suggest_int("net_arch_dense_net_layers", 1, 4)
+            model = PPO_SB3(
+                ActorCriticDenseNetPolicy,
+                learning_rate=lr,
+                batch_size=batch_size,
+                use_sde=use_sde,
+                n_steps=n_steps,
+                policy_kwargs=dict(net_arch=net_arch_layers),
+                env=env,
+                verbose=0,
+                tensorboard_log="logs/tensorboard",
+            )
+        case "recurrent":
+            net_arch_lstm_layers = trial.suggest_int("net_arch_lstm_net_layers", 1, 3)
+            net_arch_lstm_hidden_size = trial.suggest_int(
+                "net_arch_lstm_width", 64, 512
+            )
+            model = RecurrentPPO(
+                "MlpLstmPolicy",
+                policy_kwargs=dict(
+                    lstm_hidden_size=net_arch_lstm_layers,
+                    n_lstm_layers=net_arch_lstm_hidden_size,
+                ),
+                learning_rate=lr,
+                batch_size=batch_size,
+                use_sde=use_sde,
+                n_steps=n_steps,
+                env=env,
+                verbose=0,
+                tensorboard_log="logs/tensorboard",
+            )
+        case _:
+            raise Exception()
+    eval_env = make_vec_env(make_env, n_envs=10, env_kwargs=dict(dt=dt))
+    eval_callback = TrialEvalCallback(
+        eval_env,
+        trial,
+        eval_freq=TOTAL_TIMESTEP // (N_EVAL * n_envs),
+        n_eval_episodes=100,
+        deterministic=True,
+        verbose=0,
+    )
+    model.learn(
+        total_timesteps=TOTAL_TIMESTEP, progress_bar=True, callback=eval_callback
+    )
+    if eval_callback.is_pruned:
+        raise optuna.exceptions.TrialPruned()
+    mean_reward, _ = evaluate_policy(model, eval_env, n_eval_episodes=1000)
+
+    return mean_reward
+
+
+study_name = "drl_3d_w_energy"
+study = optuna.create_study(
+    study_name=study_name,
+    direction="maximize",
+    storage=f"sqlite:///logs/optuna/{study_name}.db",
+    load_if_exists=True,
+    sampler=RandomSampler(),
+    pruner=MedianPruner(n_startup_trials=int(0.01 * N_EVAL)),
+)  # Create a new study.
+study.enqueue_trial(
+    dict(
+        net_arch="mlp",
+        net_arch_mlp_depth=2,
+        net_arch_mlp_width=8,
+        n_envs=16,
+        batch_size=512,
+    )
 )
-eval_callback = EvalCallback(
-    eval_env,
-    eval_freq=500000 // 16,
-    n_eval_episodes=10,
-    deterministic=True,
-    render=False,
-    callback_on_new_best=CallbackList(
-        [
-            GraphingCallback(),
-            CheckpointCallback(
-                save_freq=1, save_path="log/model", save_replay_buffer=True
-            ),
-        ]
-    ),
+study.enqueue_trial(
+    dict(
+        net_arch="mlp",
+        net_arch_mlp_depth=3,
+        net_arch_mlp_width=10,
+        n_envs=15,
+        batch_size=400,
+    )
 )
-model.learn(total_timesteps=1e8, progress_bar=True, callback=eval_callback)
+study.enqueue_trial(
+    dict(net_arch="dense", net_arch_dense_net_layers=1, n_envs=16, batch_size=256)
+)
+study.enqueue_trial(
+    dict(
+        net_arch="mlp",
+        net_arch_mlp_depth=4,
+        net_arch_mlp_width=8,
+        n_envs=14,
+        batch_size=300,
+    )
+)
+study.optimize(objective, n_trials=300)
