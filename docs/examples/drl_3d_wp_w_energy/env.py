@@ -5,21 +5,55 @@ from typing import Tuple
 
 import gymnasium
 import numpy as np
-from jdrones.data_models import State as _State
+from drl_3d_wp_w_energy.consts import ANG_VEL_LIM
+from drl_3d_wp_w_energy.consts import PITCH_LIM
+from drl_3d_wp_w_energy.consts import POS_LIM
+from drl_3d_wp_w_energy.consts import PROP_OMEGA_LIM
+from drl_3d_wp_w_energy.consts import ROLL_LIM
+from drl_3d_wp_w_energy.consts import TGT_SUB_LIM
+from drl_3d_wp_w_energy.consts import VEL_LIM
+from drl_3d_wp_w_energy.consts import YAW_LIM
+from drl_3d_wp_w_energy.state import State
 from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.types import PropellerAction
 from jdrones.wrappers import EnergyCalculationWrapper
 
-from .consts import ANG_VEL_LIM
-from .consts import POS_LIM
-from .consts import PROP_OMEGA_LIM
-from .consts import RPY_LIM
-from .consts import TGT_SUB_LIM
-from .consts import VEL_LIM
-from .state import State
-
 
 class HoverEnv(gymnasium.Env):
+    LIMITS = np.array(
+        [
+            POS_LIM,
+            POS_LIM,
+            POS_LIM,
+            (-1, 1),
+            (-1, 1),
+            (-1, 1),
+            (-1, 1),
+            ROLL_LIM,
+            PITCH_LIM,
+            YAW_LIM,
+            VEL_LIM,
+            VEL_LIM,
+            VEL_LIM,
+            ANG_VEL_LIM,
+            ANG_VEL_LIM,
+            ANG_VEL_LIM,
+            PROP_OMEGA_LIM,
+            PROP_OMEGA_LIM,
+            PROP_OMEGA_LIM,
+            PROP_OMEGA_LIM,
+            POS_LIM,
+            POS_LIM,
+            POS_LIM,
+            (-20, 20),
+            (-20, 20),
+            (-20, 20),
+            (-100, 100),
+            (-100, 100),
+            (-100, 100),
+        ]
+    )
+
     def __init__(self, dt):
         super().__init__()
         self.dt = dt
@@ -40,40 +74,9 @@ class HoverEnv(gymnasium.Env):
         state.target = self.target
         state.target_error = self.target_error
         state.target_error_integral = self.integral_target_error
+        state.rpy[2] %= 2 * np.pi
 
-        normed_state = state.normed(
-            [
-                POS_LIM,
-                POS_LIM,
-                POS_LIM,
-                (-1, 1),
-                (-1, 1),
-                (-1, 1),
-                (-1, 1),
-                RPY_LIM,
-                RPY_LIM,
-                RPY_LIM,
-                VEL_LIM,
-                VEL_LIM,
-                VEL_LIM,
-                ANG_VEL_LIM,
-                ANG_VEL_LIM,
-                ANG_VEL_LIM,
-                PROP_OMEGA_LIM,
-                PROP_OMEGA_LIM,
-                PROP_OMEGA_LIM,
-                PROP_OMEGA_LIM,
-                POS_LIM,
-                POS_LIM,
-                POS_LIM,
-                (-20, 20),
-                (-20, 20),
-                (-20, 20),
-                (-100, 100),
-                (-100, 100),
-                (-100, 100),
-            ]
-        )
+        normed_state = state.normed(self.LIMITS)
         return normed_state
 
     def reset_target(self):
@@ -90,19 +93,25 @@ class HoverEnv(gymnasium.Env):
         options: Optional[dict] = None,
     ) -> Tuple[State, dict]:
         super().reset(seed=seed, options=options)
-
-        reset_state = _State()
-        reset_state.pos = np.random.uniform(*TGT_SUB_LIM, 3)
-        reset_state.vel = np.random.uniform(-1, 1, 3)
-        reset_state.rpy = np.random.uniform(-0.2, 0.2, 3)
-        reset_state.ang_vel = np.random.uniform(-0.1, 0.1, 3)
-
-        _, info = self.env.reset(options=dict(reset_state=reset_state))
+        _, info = self.env.reset()
         self.reset_target()
         self.previous_prop_omega = 0
         self.target_error = self.integral_target_error = np.zeros_like(self.target)
         self.info = {"is_success": False, "targets": 0}
         return self.get_observation(), info
+
+    def check_is_oob(self):
+        pos = self.env.state.pos
+        return bool(np.any((POS_LIM[0] > pos) | (pos > POS_LIM[1])))
+
+    def check_is_unstable(self):
+        r, p, _ = self.env.state.rpy
+        _, _, dy = self.env.state.ang_vel
+
+        roll_within_lims = (ROLL_LIM[0] < r) & (r < ROLL_LIM[1])
+        pitch_within_lims = (PITCH_LIM[0] < p) & (p < PITCH_LIM[1])
+        yaw_rate_within_lims = (ANG_VEL_LIM[0] < dy) & (dy < ANG_VEL_LIM[1])
+        return bool(~(roll_within_lims & pitch_within_lims & yaw_rate_within_lims))
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
         trunc = False
@@ -127,23 +136,27 @@ class HoverEnv(gymnasium.Env):
         self.info["distance_from_target"] = distance_from_tgt
 
         reward = (
-            4  # alive bonus
-            + -5e-1 * distance_from_tgt
+            0  # alive bonus
+            + -1 * distance_from_tgt**2
             + 0 * info["energy"]
             + 0 * control_action
             + 0 * dcontrol_action
             + 0 * np.linalg.norm(self.integral_target_error)
         )
-        if distance_from_tgt < 1.5:
-            self.target_counter += 1
-            reward += 1
-            if self.target_counter > int(1 / self.env.dt):
-                self.info["is_success"] = True
-                self.info["targets"] += 1
-                self.reset_target()
-        elif np.any((POS_LIM[0] > obs[:3]) | (POS_LIM[1] < obs[:3])):
+
+        if distance_from_tgt < 1:
+            reward += 100
+            self.info["is_success"] = True
+            self.info["targets"] += 1
+            self.reset_target()
+
+        is_oob = self.check_is_oob()
+        self.info["is_oob"] = is_oob
+        is_unstable = self.check_is_unstable()
+        self.info["is_unstable"] = is_unstable
+        if is_oob or is_unstable:
             self.info["is_success"] = False
             trunc = True
-            reward -= 10
+            reward = -100
 
         return self.get_observation(), float(reward), term, trunc, self.info | info

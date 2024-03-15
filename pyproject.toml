@@ -47,7 +47,9 @@ test = [
 examples = [
     "sbx-rl",
     "optuna",
-    "sb3-contrib"
+    "sb3-contrib",
+    "tensorboard",
+    "click"
 ]
 
 [tool.rstcheck]

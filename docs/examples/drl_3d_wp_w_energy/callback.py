@@ -7,13 +7,12 @@ import gymnasium
 import numpy as np
 import optuna
 import pandas as pd
+from drl_3d_wp_w_energy.state import State
 from matplotlib import pyplot as plt
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.logger import Figure
 from stable_baselines3.common.vec_env import VecEnv
-
-from .state import State
 
 
 class GraphingCallback(BaseCallback):
@@ -23,9 +22,13 @@ class GraphingCallback(BaseCallback):
         obs = env.reset()
         states = None
         t = 0
+        episode_starts = np.ones((env.num_envs,), dtype=bool)
         while True:
-            action, states = self.model.predict(obs, deterministic=True, state=states)
+            action, states = self.model.predict(
+                obs, deterministic=True, episode_start=episode_starts, state=states
+            )
             obs, reward, done, info = env.step(action)
+            episode_starts = done
             if np.any(done):
                 break
             info_ = info[0]
@@ -34,10 +37,11 @@ class GraphingCallback(BaseCallback):
             t += env.get_attr("dt")[0]
             a1, a2, a3, a4 = info_.pop("action")
             x, y, z = obs_.pos
+            roll, pitch, yaw = obs_.rpy
+            droll, dpitch, dyaw = obs_.ang_vel
             vx, vy, vz = obs_.vel
             p1, p2, p3, p4 = obs_.prop_omega
             tx, ty, tz = obs_.target
-            iX, iY, iZ = obs_.target_error_integral
             log.append(
                 info_
                 | dict(
@@ -49,6 +53,9 @@ class GraphingCallback(BaseCallback):
                     vx=vx,
                     vy=vy,
                     vz=vz,
+                    roll=roll,
+                    pitch=pitch,
+                    yaw=yaw,
                     p1=p1,
                     p2=p2,
                     p3=p3,
@@ -60,9 +67,9 @@ class GraphingCallback(BaseCallback):
                     a2=a2,
                     a3=a3,
                     a4=a4,
-                    iX=iX,
-                    iY=iY,
-                    iZ=iZ,
+                    droll=droll,
+                    dpitch=dpitch,
+                    dyaw=dyaw,
                 )
             )
 
@@ -149,6 +156,36 @@ class GraphingCallback(BaseCallback):
         plt.close(fig)
 
         fig, ax = plt.subplots()
+        ax.plot(df.time, df.roll, label="roll")
+        ax.plot(df.time, df.pitch, label="pitch")
+        ax.plot(df.time, df.yaw, label="yaw")
+        ax2 = ax.twinx()
+        ax2.plot(df.time, df.reward, c="y")
+        ax2.set_ylabel("reward", color="y")
+        ax.legend()
+        self.logger.record(
+            "data/rpy",
+            Figure(fig, close=True),
+            exclude=("stdout", "log", "json", "csv"),
+        )
+        plt.close(fig)
+
+        fig, ax = plt.subplots()
+        ax.plot(df.time, df.droll, label="droll")
+        ax.plot(df.time, df.dpitch, label="dpitch")
+        ax.plot(df.time, df.dyaw, label="dyaw")
+        ax2 = ax.twinx()
+        ax2.plot(df.time, df.reward, c="y")
+        ax2.set_ylabel("reward", color="y")
+        ax.legend()
+        self.logger.record(
+            "data/ang_vel",
+            Figure(fig, close=True),
+            exclude=("stdout", "log", "json", "csv"),
+        )
+        plt.close(fig)
+
+        fig, ax = plt.subplots()
         for i in range(4):
             ax.plot(df.time, df[f"p{i + 1}"], label=f"P{i + 1}")
         ax.legend()
@@ -171,21 +208,6 @@ class GraphingCallback(BaseCallback):
         ax2.set_ylabel("reward", color="y")
         self.logger.record(
             "data/action",
-            Figure(fig, close=True),
-            exclude=("stdout", "log", "json", "csv"),
-        )
-        plt.close(fig)
-
-        fig, ax = plt.subplots()
-        ax.plot(df.time, df.iX, c="g", label="x")
-        ax.plot(df.time, df.iY, c="r", label="y")
-        ax.plot(df.time, df.iZ, c="b", label="z")
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
-        ax.legend()
-        self.logger.record(
-            "data/integral_error",
             Figure(fig, close=True),
             exclude=("stdout", "log", "json", "csv"),
         )
