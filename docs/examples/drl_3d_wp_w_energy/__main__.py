@@ -77,6 +77,7 @@ def build_callback(
 
 def build_trial_callback(total_timesteps: int, trial: optuna.Trial):
     eval_callback = build_callback(
+        total_timesteps,
         eval_callback_cls=TrialEvalCallback,
         eval_callback_kwargs=dict(verbose=0, trial=trial),
     )
@@ -225,7 +226,8 @@ def learn(wandb_project, **kwargs):
     env = make_env()
     model = build_model(env=env, **kwargs)
     callback = build_callback(
-        kwargs.get("num_steps"), eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs)
+        N,
+        eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs),
     )
 
     if wandb_project is not None:
