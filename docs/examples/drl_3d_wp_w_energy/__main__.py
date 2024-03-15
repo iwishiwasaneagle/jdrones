@@ -53,13 +53,15 @@ def make_env():
     return env
 
 
-def build_callback(eval_callback_cls=EvalCallback, eval_callback_kwargs=None):
+def build_callback(
+    total_timesteps: int, eval_callback_cls=EvalCallback, eval_callback_kwargs=None
+):
     if eval_callback_kwargs is None:
         eval_callback_kwargs = {}
     n_eval = eval_callback_kwargs.pop("n_eval", N_EVAL)
     n_envs = eval_callback_kwargs.pop("n_envs", N_ENVS)
     usual_kwargs = dict(
-        eval_freq=TOTAL_TIMESTEP // (n_eval * n_envs),
+        eval_freq=total_timesteps // (n_eval * n_envs),
         n_eval_episodes=100,
         deterministic=True,
         verbose=1,
@@ -73,7 +75,7 @@ def build_callback(eval_callback_cls=EvalCallback, eval_callback_kwargs=None):
     return eval_callback
 
 
-def build_trial_callback(trial: optuna.Trial):
+def build_trial_callback(total_timesteps: int, trial: optuna.Trial):
     eval_callback = build_callback(
         eval_callback_cls=TrialEvalCallback,
         eval_callback_kwargs=dict(verbose=0, trial=trial),
@@ -222,7 +224,9 @@ def learn(wandb_project, **kwargs):
     kwargs["lr"] = get_linear_fn(*kwargs.get("lr"))
     env = make_env()
     model = build_model(env=env, **kwargs)
-    callback = build_callback(eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs))
+    callback = build_callback(
+        kwargs.get("num_steps"), eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs)
+    )
 
     if wandb_project is not None:
         import wandb
