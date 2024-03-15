@@ -33,6 +33,7 @@ from gymnasium.wrappers import TimeAwareObservation
 from gymnasium.wrappers import TimeLimit
 from loguru import logger
 from optuna.pruners import HyperbandPruner
+from stable_baselines3.common.callbacks import CallbackList
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
@@ -213,7 +214,8 @@ def main():
 @click.option("--net_arch_lstm_hidden_size", type=int, default=256)
 @click.option("--n_eval", type=int, default=N_EVAL)
 @click.option("--n_envs", type=int, default=N_ENVS)
-def learn(**kwargs):
+@click.option("--wandb_project", default=None, type=str)
+def learn(wandb_project, **kwargs):
     N = kwargs.pop("num_timesteps")
     n_eval = kwargs.pop("n_eval")
     n_envs = kwargs.pop("n_envs")
@@ -221,6 +223,20 @@ def learn(**kwargs):
     env = make_env()
     model = build_model(env=env, **kwargs)
     callback = build_callback(eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs))
+
+    if wandb_project is not None:
+        import wandb
+        from wandb.integration.sb3 import WandbCallback
+
+        wandb.init(
+            project=wandb_project,
+            dir=LOG_PATH,
+            sync_tensorboard=True,
+            monitor_gym=True,
+            save_code=True,
+        )
+        callback = CallbackList([callback, WandbCallback()])
+
     model.learn(total_timesteps=N, progress_bar=True, callback=callback)
     model.save(LOG_PATH)
 
