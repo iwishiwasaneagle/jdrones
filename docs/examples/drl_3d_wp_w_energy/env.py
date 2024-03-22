@@ -137,15 +137,15 @@ class HoverEnv(gymnasium.Env):
 
         reward = (
             0  # alive bonus
-            + -1 * distance_from_tgt**2
+            + -1 * distance_from_tgt
             + 0 * info["energy"]
             + 0 * control_action
             + 0 * dcontrol_action
             + 0 * np.linalg.norm(self.integral_target_error)
         )
 
-        if distance_from_tgt < 1:
-            reward += 100
+        if distance_from_tgt < 1.5:
+            reward += 50
             self.info["is_success"] = True
             self.info["targets"] += 1
             self.reset_target()
@@ -157,6 +157,9 @@ class HoverEnv(gymnasium.Env):
         if is_oob or is_unstable:
             self.info["is_success"] = False
             trunc = True
-            reward = -100
+            reward -= 50
+        c = 50+np.sqrt (3*20*20)
+        lower,upper = -c,c
+        reward = ((reward-lower)/(upper-lower)-0.5)*2
 
         return self.get_observation(), float(reward), term, trunc, self.info | info
