@@ -39,6 +39,8 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.utils import get_linear_fn
+from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3.common.vec_env import SubprocVecEnv
 
 warnings.filterwarnings("ignore", category=UserWarning)
 matplotlib.use("Agg")
@@ -159,7 +161,11 @@ def objective(trial: optuna.Trial):
         net_arch_name=trial.suggest_categorical(
             "net_arch", ["dense", "mlp", "recurrent"]
         ),
-        env=make_vec_env(make_env, n_envs=N_ENVS),
+        env=make_vec_env(
+            make_env,
+            n_envs=N_ENVS,
+            vec_env_cls=DummyVecEnv if N_ENVS == 1 else SubprocVecEnv,
+        ),
         lr=trial.suggest_float("learning_rate", 1e-6, 1e-3),
         batch_size=trial.suggest_int("batch_size", 2, 512),
         n_steps=trial.suggest_int("n_steps", 512, 4192),
@@ -223,7 +229,11 @@ def learn(wandb_project, **kwargs):
     n_eval = kwargs.pop("n_eval")
     n_envs = kwargs.pop("n_envs")
     kwargs["lr"] = get_linear_fn(*kwargs.get("lr"))
-    env = make_env()
+    env = make_vec_env(
+        make_env,
+        n_envs=n_envs,
+        vec_env_cls=DummyVecEnv if n_envs == 1 else SubprocVecEnv,
+    )
     model = build_model(env=env, **kwargs)
     callback = build_callback(
         N,
