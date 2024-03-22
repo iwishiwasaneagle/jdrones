@@ -158,8 +158,8 @@ class HoverEnv(gymnasium.Env):
             self.info["is_success"] = False
             trunc = True
             reward -= 50
-        c = 50+np.sqrt (3*20*20)
-        lower,upper = -c,c
-        reward = ((reward-lower)/(upper-lower)-0.5)*2
+        c = 50 + np.sqrt(3 * 20 * 20)
+        lower, upper = -c, c
+        reward = ((reward - lower) / (upper - lower) - 0.5) * 2
 
         return self.get_observation(), float(reward), term, trunc, self.info | info
