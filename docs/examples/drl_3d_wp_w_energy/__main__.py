@@ -51,7 +51,7 @@ def make_env():
     env = HoverEnv(dt=DT)
     env = TimeAwareObservation(env)
     env = TimeLimit(env, int(10 / DT))
-    env = Monitor(env)
+    env = Monitor(env, info_keywords=("is_success", "is_oob", "is_unstable", "targets"))
     return env
 
 
