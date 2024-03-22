@@ -5,6 +5,7 @@ from typing import Callable
 from typing import Tuple
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import pybullet as p
 import pydantic
@@ -171,6 +172,10 @@ class State(KLengthArray):
         state.ang_vel = rotmat @ state.ang_vel
 
         return state
+
+    def normed(self, limits: npt.NDArray):
+        lower, upper = np.transpose(limits)
+        return ((self - lower) / (upper - lower) - 0.5) * 2
 
 
 class Conversions:

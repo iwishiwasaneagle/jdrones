@@ -1,6 +1,5 @@
 #  Copyright (c) 2024.  Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-import numpy as np
 from jdrones.data_models import State as _State
 
 
@@ -30,9 +29,3 @@ class State(_State):
     @target_error_integral.setter
     def target_error_integral(self, val):
         self[26:29] = val
-
-    def normed(self, limits: list[tuple[float, float]]):
-        data = State()
-        for i, (value, (lower, upper)) in enumerate(zip(self, limits)):
-            data[i] = np.interp(value, (lower, upper), (-1, 1))
-        return data
