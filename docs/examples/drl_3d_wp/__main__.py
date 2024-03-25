@@ -19,16 +19,16 @@ import matplotlib
 import optuna
 import torch as th
 from callback import GraphingCallback
-from drl_3d_wp_w_energy.callback import TrialEvalCallback
-from drl_3d_wp_w_energy.consts import DT
-from drl_3d_wp_w_energy.consts import LOG_PATH
-from drl_3d_wp_w_energy.consts import N_ENVS
-from drl_3d_wp_w_energy.consts import N_EVAL
-from drl_3d_wp_w_energy.consts import OPTUNA_PATH
-from drl_3d_wp_w_energy.consts import TENSORBOARD_PATH
-from drl_3d_wp_w_energy.consts import TOTAL_TIMESTEP
-from drl_3d_wp_w_energy.env import HoverEnv
-from drl_3d_wp_w_energy.policies import ActorCriticDenseNetPolicy
+from drl_3d_wp.callback import TrialEvalCallback
+from drl_3d_wp.consts import DT
+from drl_3d_wp.consts import LOG_PATH
+from drl_3d_wp.consts import N_ENVS
+from drl_3d_wp.consts import N_EVAL
+from drl_3d_wp.consts import OPTUNA_PATH
+from drl_3d_wp.consts import TENSORBOARD_PATH
+from drl_3d_wp.consts import TOTAL_TIMESTEP
+from drl_3d_wp.env import HoverEnv
+from drl_3d_wp.policies import ActorCriticDenseNetPolicy
 from gymnasium.wrappers import TimeAwareObservation
 from gymnasium.wrappers import TimeLimit
 from loguru import logger
@@ -258,7 +258,7 @@ def learn(wandb_project, **kwargs):
 
 
 @main.command("sweep")
-@click.option("--study_name", type=str, default="drl_3d_wp_w_energy")
+@click.option("--study_name", type=str, default="drl_3d_wp")
 def sweep(study_name):
     storage_path = (OPTUNA_PATH / study_name).with_suffix(".db")
     study = optuna.create_study(
