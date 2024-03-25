@@ -27,7 +27,8 @@ from drl_3d_wp.consts import N_EVAL
 from drl_3d_wp.consts import OPTUNA_PATH
 from drl_3d_wp.consts import TENSORBOARD_PATH
 from drl_3d_wp.consts import TOTAL_TIMESTEP
-from drl_3d_wp.env import HoverEnv
+from drl_3d_wp.env import DRL_WP_Env
+from drl_3d_wp.env import DRL_WP_Env_LQR
 from drl_3d_wp.policies import ActorCriticDenseNetPolicy
 from gymnasium.wrappers import TimeAwareObservation
 from gymnasium.wrappers import TimeLimit
@@ -47,19 +48,29 @@ matplotlib.use("Agg")
 logger.info(f"Starting {__file__}")
 
 
-def make_env():
-    env = HoverEnv(dt=DT)
-    env = TimeAwareObservation(env)
-    env = TimeLimit(env, int(10 / DT))
+def make_env(env_type):
+    match env_type:
+        case "direct":
+            env = DRL_WP_Env(dt=DT)
+            env = TimeAwareObservation(env)
+            env = TimeLimit(env, int(10 / DT))
+        case "LQR":
+            env = DRL_WP_Env_LQR(dt=DT, T=10)
     env = Monitor(env, info_keywords=("is_success", "is_oob", "is_unstable", "targets"))
     return env
 
 
 def build_callback(
-    total_timesteps: int, eval_callback_cls=EvalCallback, eval_callback_kwargs=None
+    total_timesteps: int,
+    eval_callback_cls=EvalCallback,
+    eval_callback_kwargs=None,
+    make_vec_env_kwargs=None,
 ):
     if eval_callback_kwargs is None:
         eval_callback_kwargs = {}
+
+    if make_vec_env_kwargs is None:
+        make_vec_env_kwargs = {}
     n_eval = eval_callback_kwargs.pop("n_eval", N_EVAL)
     n_envs = eval_callback_kwargs.pop("n_envs", N_ENVS)
     usual_kwargs = dict(
@@ -67,12 +78,12 @@ def build_callback(
         n_eval_episodes=100,
         deterministic=True,
         verbose=1,
-        callback_on_new_best=GraphingCallback(),
+        callback_after_eval=GraphingCallback(),
     )
 
     kwargs = eval_callback_kwargs | usual_kwargs
 
-    eval_env = make_vec_env(make_env, n_envs=10)
+    eval_env = make_vec_env(make_env, n_envs=10, **make_vec_env_kwargs)
     eval_callback = eval_callback_cls(eval_env, **kwargs)
     return eval_callback
 
@@ -94,6 +105,7 @@ def build_model(
     batch_size,
     use_sde,
     n_steps,
+    device,
     net_arch_mlp_width=None,
     net_arch_mlp_depth=None,
     net_arch_dense_layers=None,
@@ -106,6 +118,7 @@ def build_model(
 
             model = PPO_SBX(
                 "MlpPolicy",
+                device=device,
                 learning_rate=lr,
                 batch_size=batch_size,
                 use_sde=use_sde,
@@ -125,6 +138,7 @@ def build_model(
 
             model = PPO_SB3(
                 ActorCriticDenseNetPolicy,
+                device=device,
                 learning_rate=lr,
                 batch_size=batch_size,
                 use_sde=use_sde,
@@ -139,6 +153,7 @@ def build_model(
 
             model = RecurrentPPO(
                 "MlpLstmPolicy",
+                device=device,
                 policy_kwargs=dict(
                     lstm_hidden_size=net_arch_lstm_layers,
                     n_lstm_layers=net_arch_lstm_hidden_size,
@@ -210,6 +225,8 @@ def main():
 
 
 @main.command("learn", context_settings={"show_default": True})
+@click.option("--env_type", type=click.Choice(["LQR", "direct"]), default="direct")
+@click.option("--vec_env_cls", type=click.Choice(["dummy", "subproc"]), default="dummy")
 @click.option("--batch_size", type=int, default=128)
 @click.option("--n_steps", type=int, default=4096)
 @click.option("--lr", nargs=3, default=(0.0003, 0.0003, 1))
@@ -224,7 +241,8 @@ def main():
 @click.option("--n_eval", type=int, default=N_EVAL)
 @click.option("--n_envs", type=int, default=N_ENVS)
 @click.option("--wandb_project", default=None, type=str)
-def learn(wandb_project, **kwargs):
+@click.option("--device", type=click.Choice(["cpu", "cuda"]), default="cuda")
+def learn(wandb_project, vec_env_cls, env_type, **kwargs):
     N = kwargs.pop("num_timesteps")
     n_eval = kwargs.pop("n_eval")
     n_envs = kwargs.pop("n_envs")
@@ -232,12 +250,14 @@ def learn(wandb_project, **kwargs):
     env = make_vec_env(
         make_env,
         n_envs=n_envs,
-        vec_env_cls=DummyVecEnv if n_envs == 1 else SubprocVecEnv,
+        vec_env_cls=DummyVecEnv if vec_env_cls == "dummy" else SubprocVecEnv,
+        env_kwargs=dict(env_type=env_type),
     )
     model = build_model(env=env, **kwargs)
     callback = build_callback(
         N,
         eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs),
+        make_vec_env_kwargs=dict(env_kwargs=dict(env_type=env_type)),
     )
 
     if wandb_project is not None:
@@ -248,6 +268,7 @@ def learn(wandb_project, **kwargs):
             project=wandb_project,
             dir=LOG_PATH,
             sync_tensorboard=True,
+            tags=[env_type, vec_env_cls, kwargs.get("net_arch_name")],
             monitor_gym=True,
             save_code=True,
         )

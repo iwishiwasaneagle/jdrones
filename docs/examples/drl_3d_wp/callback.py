@@ -7,7 +7,7 @@ import gymnasium
 import numpy as np
 import optuna
 import pandas as pd
-from drl_3d_wp_w_energy.state import State
+from drl_3d_wp.state import State
 from matplotlib import pyplot as plt
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.callbacks import EvalCallback
@@ -16,6 +16,7 @@ from stable_baselines3.common.vec_env import VecEnv
 
 
 class GraphingCallback(BaseCallback):
+
     def _on_step(self):
         log = deque()
         env = self.model.get_env()
@@ -29,49 +30,52 @@ class GraphingCallback(BaseCallback):
             )
             obs, reward, done, info = env.step(action)
             episode_starts = done
-            if np.any(done):
-                break
+
             info_ = info[0]
             reward_ = reward[0]
-            obs_ = State(obs[0, : State.k])
-            t += env.get_attr("dt")[0]
-            a1, a2, a3, a4 = info_.pop("action")
-            x, y, z = obs_.pos
-            roll, pitch, yaw = obs_.rpy
-            droll, dpitch, dyaw = obs_.ang_vel
-            vx, vy, vz = obs_.vel
-            p1, p2, p3, p4 = obs_.prop_omega
-            tx, ty, tz = obs_.target
-            log.append(
-                info_
-                | dict(
-                    time=t,
-                    reward=reward_,
-                    x=x,
-                    y=y,
-                    z=z,
-                    vx=vx,
-                    vy=vy,
-                    vz=vz,
-                    roll=roll,
-                    pitch=pitch,
-                    yaw=yaw,
-                    p1=p1,
-                    p2=p2,
-                    p3=p3,
-                    p4=p4,
-                    tx=tx,
-                    ty=ty,
-                    tz=tz,
-                    a1=a1,
-                    a2=a2,
-                    a3=a3,
-                    a4=a4,
-                    droll=droll,
-                    dpitch=dpitch,
-                    dyaw=dyaw,
+            obs_ = info_["state"]
+            tx, ty, tz = info_["target"]
+
+            if obs_.shape == 20:
+                obs_ = np.array([obs])
+
+            for x in obs_:
+                obs_i = State()
+                obs_i[:20] = x
+                t += env.get_attr("dt")[0]
+                x, y, z = obs_i.pos
+                roll, pitch, yaw = obs_i.rpy
+                droll, dpitch, dyaw = obs_i.ang_vel
+                vx, vy, vz = obs_i.vel
+                p1, p2, p3, p4 = obs_i.prop_omega
+                log.append(
+                    info_
+                    | dict(
+                        time=t,
+                        reward=reward_,
+                        x=x,
+                        y=y,
+                        z=z,
+                        vx=vx,
+                        vy=vy,
+                        vz=vz,
+                        roll=roll,
+                        pitch=pitch,
+                        yaw=yaw,
+                        p1=p1,
+                        p2=p2,
+                        p3=p3,
+                        p4=p4,
+                        tx=tx,
+                        ty=ty,
+                        tz=tz,
+                        droll=droll,
+                        dpitch=dpitch,
+                        dyaw=dyaw,
+                    )
                 )
-            )
+            if np.any(done):
+                break
 
         df = pd.DataFrame(log)
 
@@ -194,20 +198,6 @@ class GraphingCallback(BaseCallback):
         ax2.set_ylabel("reward", color="y")
         self.logger.record(
             "data/propeller_rpm",
-            Figure(fig, close=True),
-            exclude=("stdout", "log", "json", "csv"),
-        )
-        plt.close(fig)
-
-        fig, ax = plt.subplots()
-        for i in range(4):
-            ax.plot(df.time, df[f"a{i + 1}"], label=f"A{i + 1}")
-        ax.legend()
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
-        self.logger.record(
-            "data/action",
             Figure(fig, close=True),
             exclude=("stdout", "log", "json", "csv"),
         )
