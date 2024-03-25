@@ -225,7 +225,8 @@ class DRL_WP_Env_LQR(BaseEnv):
         term = False
         position_action = action[:3] * POS_LIM[1]
         velocity_action = action[3:6] * VEL_LIM[1]
-        time_action = np.interp(action[6], (-1, 1), (0.1, 1))
+        min_action_t, max_action_t = 0.1, 1
+        time_action = np.interp(action[6], (-1, 1), (min_action_t, max_action_t))
         x = State()
         x.pos = position_action
         x.vel = velocity_action
@@ -257,7 +258,7 @@ class DRL_WP_Env_LQR(BaseEnv):
 
             reward += (
                 0  # alive bonus
-                + -1 * distance_from_tgt
+                + -(max_action_t / self.dt) * distance_from_tgt
                 + 0 * net_energy
                 + 0 * net_control_action
                 + 0 * net_dcontrol_action
@@ -291,7 +292,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.info["control_action"] = net_control_action
         self.info["dcontrol_action"] = net_dcontrol_action
 
-        c = 50 + np.sqrt(3 * 20 * 20)
+        c = 50 + max_action_t * np.sqrt(3 * 20 * 20)
         lower, upper = -c, c
         reward = ((reward - lower) / (upper - lower) - 0.5) * 2
 
