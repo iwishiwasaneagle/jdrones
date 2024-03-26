@@ -46,7 +46,7 @@ class GraphingCallback(BaseCallback):
             for x in obs_:
                 obs_i = State()
                 obs_i[:20] = x
-                t += env.get_attr("dt")[0]
+                t += env.unwrapped.get_attr("dt")[0]
                 x, y, z = obs_i.pos
                 roll, pitch, yaw = obs_i.rpy
                 droll, dpitch, dyaw = obs_i.ang_vel

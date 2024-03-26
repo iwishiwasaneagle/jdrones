@@ -69,12 +69,12 @@ class BaseEnv(gymnasium.Env):
         self.env = EnergyCalculationWrapper(env_cls(dt=self.dt))
 
     def check_is_oob(self):
-        pos = self.env.state.pos
+        pos = self.env.unwrapped.state.pos
         return bool(np.any((POS_LIM[0] > pos) | (pos > POS_LIM[1])))
 
     def check_is_unstable(self):
-        r, p, _ = self.env.state.rpy
-        _, _, dy = self.env.state.ang_vel
+        r, p, _ = self.env.unwrapped.state.rpy
+        _, _, dy = self.env.unwrapped.state.ang_vel
 
         roll_within_lims = (ROLL_LIM[0] < r) & (r < ROLL_LIM[1])
         pitch_within_lims = (PITCH_LIM[0] < p) & (p < PITCH_LIM[1])
@@ -82,9 +82,14 @@ class BaseEnv(gymnasium.Env):
         return bool(~(roll_within_lims & pitch_within_lims & yaw_rate_within_lims))
 
     def reset_target(self):
-        self.target = np.random.uniform(
-            *TGT_SUB_LIM,
-            3,
+        self.target = np.array(
+            [
+                *np.random.uniform(
+                    *TGT_SUB_LIM,
+                    2,
+                ),
+                self.env.unwrapped.state.pos[2],
+            ]
         )
         self.info["target"] = self.target
         self.target_counter = 0
@@ -258,7 +263,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             distance_from_tgt = np.linalg.norm(self.target_error)
             self.info["distance_from_target"] = distance_from_tgt
 
-            states.append(np.copy(self.env.state))
+            states.append(np.copy(self.env.unwrapped.state))
 
             reward += (
                 0  # alive bonus
