@@ -190,7 +190,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             low=-1, high=1, shape=(10,), dtype=np.float32
         )
         self.action_space = gymnasium.spaces.Box(
-            low=-1, high=1, shape=(7,), dtype=np.float32
+            low=-1, high=1, shape=(2,), dtype=np.float32
         )
 
     def get_observation(self):
@@ -223,13 +223,9 @@ class DRL_WP_Env_LQR(BaseEnv):
     def step(self, action) -> Tuple[State, float, bool, bool, dict]:
         trunc = False
         term = False
-        position_action = action[:3] * POS_LIM[1]
-        velocity_action = action[3:6] * VEL_LIM[1]
-        min_action_t, max_action_t = 0.1, 1
-        time_action = np.interp(action[6], (-1, 1), (min_action_t, max_action_t))
+        position_action = action[:2] * POS_LIM[1]
         x = State()
-        x.pos = position_action
-        x.vel = velocity_action
+        x.pos = np.concatenate([position_action, [self.target[2]]])
 
         net_control_action = 0
         net_dcontrol_action = 0
@@ -237,7 +233,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         reward = 0
 
         states = []
-        for _ in range(max(1, int(time_action / self.dt))):
+        for _ in range(int(0.5 / self.dt)):
             obs, _, _, _, info = self.env.step(x.to_x())
             self.time += self.dt
 
@@ -258,13 +254,13 @@ class DRL_WP_Env_LQR(BaseEnv):
 
             reward += (
                 0  # alive bonus
-                + -(self.dt / max_action_t) * distance_from_tgt
+                + -(self.dt / 0.5) * distance_from_tgt
                 + 0 * net_energy
                 + 0 * net_control_action
                 + 0 * net_dcontrol_action
             )
 
-            if distance_from_tgt < 0.5:
+            if distance_from_tgt < 1:
                 reward += 50
                 self.info["is_success"] = True
                 self.info["targets"] += 1
@@ -292,7 +288,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.info["control_action"] = net_control_action
         self.info["dcontrol_action"] = net_dcontrol_action
 
-        c = 50 + max_action_t * np.sqrt(3 * 20 * 20)
+        c = 50 + 0.5 * np.sqrt(3 * 20 * 20)
         lower, upper = -c, c
         reward = ((reward - lower) / (upper - lower) - 0.5) * 2
 
