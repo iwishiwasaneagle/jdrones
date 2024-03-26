@@ -35,6 +35,10 @@ class GraphingCallback(BaseCallback):
             reward_ = reward[0]
             obs_ = info_["state"]
             tx, ty, tz = info_["target"]
+            action_ = action[0]
+
+            if action_.shape == 1:
+                action_ = np.array([action_])
 
             if obs_.shape == 20:
                 obs_ = np.array([obs])
@@ -53,6 +57,7 @@ class GraphingCallback(BaseCallback):
                     | dict(
                         time=t,
                         reward=reward_,
+                        action=action_,
                         x=x,
                         y=y,
                         z=z,
@@ -84,6 +89,7 @@ class GraphingCallback(BaseCallback):
         ax2 = ax.twinx()
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
         self.logger.record(
             "data/energy",
             Figure(fig, close=True),
@@ -96,6 +102,7 @@ class GraphingCallback(BaseCallback):
         ax2 = ax.twinx()
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
         self.logger.record(
             "data/distance_from_target",
             Figure(fig, close=True),
@@ -134,6 +141,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/velocity",
             Figure(fig, close=True),
@@ -152,6 +160,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/position",
             Figure(fig, close=True),
@@ -167,6 +176,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/rpy",
             Figure(fig, close=True),
@@ -182,6 +192,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/ang_vel",
             Figure(fig, close=True),
@@ -196,8 +207,28 @@ class GraphingCallback(BaseCallback):
         ax2 = ax.twinx()
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
         self.logger.record(
             "data/propeller_rpm",
+            Figure(fig, close=True),
+            exclude=("stdout", "log", "json", "csv"),
+        )
+        plt.close(fig)
+
+        fig, ax = plt.subplots()
+        action_df = pd.DataFrame(
+            df.action.to_list(),
+            columns=[f"a{i + 1}" for i in range(len(df.action.iloc[0]))],
+        )
+        for column in action_df.columns:
+            ax.plot(df.time, action_df[column], label=column)
+        ax.legend()
+        ax2 = ax.twinx()
+        ax2.plot(df.time, df.reward, c="y")
+        ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
+        self.logger.record(
+            "data/actions",
             Figure(fig, close=True),
             exclude=("stdout", "log", "json", "csv"),
         )

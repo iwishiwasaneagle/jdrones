@@ -187,7 +187,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.T = T
 
         self.observation_space = gymnasium.spaces.Box(
-            low=-1, high=1, shape=(7,), dtype=np.float32
+            low=-1, high=1, shape=(17,), dtype=np.float32
         )
         self.action_space = gymnasium.spaces.Box(
             low=-1, high=1, shape=(2,), dtype=np.float32
@@ -200,13 +200,16 @@ class DRL_WP_Env_LQR(BaseEnv):
         state.target_error = self.target_error
         state.rpy[2] %= 2 * np.pi
 
-        normed_state = state.normed(self.NORM_LIMITS)
+        normed_state: State = state.normed(self.NORM_LIMITS)
         return np.concatenate(
             [
-                normed_state.pos[:2],
-                normed_state.vel[:2],
-                normed_state.target[:2],
-                [self.time],
+                normed_state.pos[:2],  # x y
+                normed_state.vel[:2],  # vx vy
+                normed_state.target[:2],  # tx ty
+                normed_state.rpy,  # roll pitch yaw
+                normed_state.ang_vel,  # p q r
+                normed_state.prop_omega,  # p1 p2 p3 p4
+                [self.time],  # t
             ]
         )
 
