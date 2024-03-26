@@ -48,14 +48,14 @@ matplotlib.use("Agg")
 logger.info(f"Starting {__file__}")
 
 
-def make_env(env_type):
+def make_env(env_type, T=10):
     match env_type:
         case "direct":
             env = DRL_WP_Env(dt=DT)
             env = TimeAwareObservation(env)
-            env = TimeLimit(env, int(10 / DT))
+            env = TimeLimit(env, int(T / DT))
         case "LQR":
-            env = DRL_WP_Env_LQR(dt=DT, T=10)
+            env = DRL_WP_Env_LQR(dt=DT, T=T)
     env = Monitor(env, info_keywords=("is_success", "is_oob", "is_unstable", "targets"))
     return env
 
@@ -242,7 +242,8 @@ def main():
 @click.option("--n_envs", type=int, default=N_ENVS)
 @click.option("--wandb_project", default=None, type=str)
 @click.option("--device", type=click.Choice(["cpu", "cuda"]), default="cuda")
-def learn(wandb_project, vec_env_cls, env_type, **kwargs):
+@click.option("-T", type=click.IntRange(min=1), default=10)
+def learn(wandb_project, vec_env_cls, env_type, T, **kwargs):
     N = kwargs.pop("num_timesteps")
     n_eval = kwargs.pop("n_eval")
     n_envs = kwargs.pop("n_envs")
@@ -251,13 +252,13 @@ def learn(wandb_project, vec_env_cls, env_type, **kwargs):
         make_env,
         n_envs=n_envs,
         vec_env_cls=DummyVecEnv if vec_env_cls == "dummy" else SubprocVecEnv,
-        env_kwargs=dict(env_type=env_type),
+        env_kwargs=dict(env_type=env_type, T=T),
     )
     model = build_model(env=env, **kwargs)
     callback = build_callback(
         N,
         eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs),
-        make_vec_env_kwargs=dict(env_kwargs=dict(env_type=env_type)),
+        make_vec_env_kwargs=dict(env_kwargs=dict(env_type=env_type, T=T)),
     )
 
     if wandb_project is not None:
