@@ -125,10 +125,10 @@ class DRL_WP_Env(BaseEnv):
     ) -> Tuple[State, dict]:
         super().reset(seed=seed, options=options)
         _, info = self.env.reset()
+        self.reset_target()
         self.previous_prop_omega = 0
         self.target_error = self.integral_target_error = np.zeros_like(self.target)
         self.info = {"is_success": False, "targets": 0}
-        self.reset_target()
         return self.get_observation(), info
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
