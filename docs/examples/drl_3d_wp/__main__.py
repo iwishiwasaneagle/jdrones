@@ -242,8 +242,8 @@ def main():
 @click.option("--n_envs", type=int, default=N_ENVS)
 @click.option("--wandb_project", default=None, type=str)
 @click.option("--device", type=click.Choice(["cpu", "cuda"]), default="cuda")
-@click.option("-T", type=click.IntRange(min=1), default=10)
-def learn(wandb_project, vec_env_cls, env_type, T, **kwargs):
+@click.option("-T", "--max_sim_time", type=click.IntRange(min=1), default=10)
+def learn(wandb_project, vec_env_cls, env_type, max_sim_time, **kwargs):
     N = kwargs.pop("num_timesteps")
     n_eval = kwargs.pop("n_eval")
     n_envs = kwargs.pop("n_envs")
@@ -252,13 +252,13 @@ def learn(wandb_project, vec_env_cls, env_type, T, **kwargs):
         make_env,
         n_envs=n_envs,
         vec_env_cls=DummyVecEnv if vec_env_cls == "dummy" else SubprocVecEnv,
-        env_kwargs=dict(env_type=env_type, T=T),
+        env_kwargs=dict(env_type=env_type, T=max_sim_time),
     )
     model = build_model(env=env, **kwargs)
     callback = build_callback(
         N,
         eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs),
-        make_vec_env_kwargs=dict(env_kwargs=dict(env_type=env_type, T=T)),
+        make_vec_env_kwargs=dict(env_kwargs=dict(env_type=env_type, T=max_sim_time)),
     )
 
     if wandb_project is not None:
