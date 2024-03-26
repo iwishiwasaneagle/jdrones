@@ -89,6 +89,7 @@ class GraphingCallback(BaseCallback):
         ax2 = ax.twinx()
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
         self.logger.record(
             "data/energy",
             Figure(fig, close=True),
@@ -101,6 +102,7 @@ class GraphingCallback(BaseCallback):
         ax2 = ax.twinx()
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
         self.logger.record(
             "data/distance_from_target",
             Figure(fig, close=True),
@@ -139,6 +141,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/velocity",
             Figure(fig, close=True),
@@ -157,6 +160,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/position",
             Figure(fig, close=True),
@@ -172,6 +176,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/rpy",
             Figure(fig, close=True),
@@ -187,6 +192,7 @@ class GraphingCallback(BaseCallback):
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
         ax.legend()
+        fig.tight_layout()
         self.logger.record(
             "data/ang_vel",
             Figure(fig, close=True),
@@ -201,6 +207,7 @@ class GraphingCallback(BaseCallback):
         ax2 = ax.twinx()
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
         self.logger.record(
             "data/propeller_rpm",
             Figure(fig, close=True),
@@ -219,6 +226,7 @@ class GraphingCallback(BaseCallback):
         ax2 = ax.twinx()
         ax2.plot(df.time, df.reward, c="y")
         ax2.set_ylabel("reward", color="y")
+        fig.tight_layout()
         self.logger.record(
             "data/actions",
             Figure(fig, close=True),
