@@ -82,9 +82,14 @@ class BaseEnv(gymnasium.Env):
         return bool(~(roll_within_lims & pitch_within_lims & yaw_rate_within_lims))
 
     def reset_target(self):
-        self.target = np.random.uniform(
-            *TGT_SUB_LIM,
-            3,
+        self.target = np.array(
+            [
+                *np.random.uniform(
+                    *TGT_SUB_LIM,
+                    2,
+                ),
+                self.env.unwrapped.state.pos[2],
+            ]
         )
         self.info["target"] = self.target
         self.target_counter = 0
