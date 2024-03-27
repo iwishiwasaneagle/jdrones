@@ -247,7 +247,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         reward = 0
 
         c = 100
-        sim_T = 3
+        sim_T = 0.25
 
         states = []
         for _ in range(int(sim_T / self.dt)):
