@@ -81,6 +81,7 @@ class GraphingCallback(BaseCallback):
                 )
             if np.any(done):
                 break
+        self.logger.record("eval/total_targets", info_["targets"])
 
         df = pd.DataFrame(log)
 
