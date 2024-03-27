@@ -28,6 +28,10 @@ class BaseControlledEnv(gymnasium.Env, abc.ABC):
     def state(self):
         return self.env.state
 
+    @property
+    def initial_state(self):
+        return self.env.initial_state
+
     def reset(
         self,
         *,
