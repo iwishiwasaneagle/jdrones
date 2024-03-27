@@ -236,7 +236,8 @@ class DRL_WP_Env_LQR(BaseEnv):
     def step(self, action) -> Tuple[State, float, bool, bool, dict]:
         trunc = False
         term = False
-        position_action = action[:2] * POS_LIM[1]
+
+        position_action = self.env.unwrapped.state.pos[:2] + action[:2]
         x = State()
         x.pos = np.concatenate([position_action, [self.target[2]]])
 
@@ -246,7 +247,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         reward = 0
 
         c = 100
-        sim_T = 3
+        sim_T = 0.25
 
         states = []
         for _ in range(int(sim_T / self.dt)):

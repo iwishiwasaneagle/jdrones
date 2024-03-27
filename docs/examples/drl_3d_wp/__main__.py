@@ -75,7 +75,7 @@ def build_callback(
     n_envs = eval_callback_kwargs.pop("n_envs", N_ENVS)
     usual_kwargs = dict(
         eval_freq=total_timesteps // (n_eval * n_envs),
-        n_eval_episodes=100,
+        n_eval_episodes=10,
         deterministic=True,
         verbose=1,
         callback_after_eval=GraphingCallback(),
