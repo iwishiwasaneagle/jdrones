@@ -246,9 +246,10 @@ class DRL_WP_Env_LQR(BaseEnv):
         reward = 0
 
         c = 100
+        sim_T = 3
 
         states = []
-        for _ in range(int(0.5 / self.dt)):
+        for _ in range(int(sim_T / self.dt)):
             obs, _, _, _, info = self.env.step(x.to_x())
             self.time += self.dt
 
@@ -269,7 +270,7 @@ class DRL_WP_Env_LQR(BaseEnv):
 
             reward += (
                 0  # alive bonus
-                + -(self.dt / 0.5) * distance_from_tgt
+                + -(self.dt / sim_T) * distance_from_tgt
                 + 0 * net_energy
                 + 0 * net_control_action
                 + 0 * net_dcontrol_action

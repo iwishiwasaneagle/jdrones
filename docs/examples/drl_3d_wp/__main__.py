@@ -242,7 +242,7 @@ def main():
 @click.option("--n_envs", type=int, default=N_ENVS)
 @click.option("--wandb_project", default=None, type=str)
 @click.option("--device", type=click.Choice(["cpu", "cuda"]), default="cuda")
-@click.option("-T", "--max_sim_time", type=click.IntRange(min=1), default=10)
+@click.option("-T", "--max_sim_time", type=click.IntRange(min=10), default=10)
 def learn(wandb_project, vec_env_cls, env_type, max_sim_time, **kwargs):
     N = kwargs.pop("num_timesteps")
     n_eval = kwargs.pop("n_eval")
