@@ -88,7 +88,7 @@ class BaseEnv(gymnasium.Env):
                     *TGT_SUB_LIM,
                     2,
                 ),
-                self.env.unwrapped.state.pos[2],
+                self.env.unwrapped.initial_state.pos[2],
             ]
         )
         self.info["target"] = self.target
