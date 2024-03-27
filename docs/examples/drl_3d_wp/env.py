@@ -236,7 +236,7 @@ class DRL_WP_Env_LQR(BaseEnv):
     def step(self, action) -> Tuple[State, float, bool, bool, dict]:
         trunc = False
         term = False
-        
+
         position_action = self.env.unwrapped.state.pos[:2] + action[:2]
         x = State()
         x.pos = np.concatenate([position_action, [self.target[2]]])
