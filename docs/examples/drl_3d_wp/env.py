@@ -245,6 +245,8 @@ class DRL_WP_Env_LQR(BaseEnv):
         net_energy = 0
         reward = 0
 
+        c = 100
+
         states = []
         for _ in range(int(0.5 / self.dt)):
             obs, _, _, _, info = self.env.step(x.to_x())
@@ -274,7 +276,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             )
 
             if distance_from_tgt < 1:
-                reward += 50
+                reward += c
                 self.info["is_success"] = True
                 self.info["targets"] += 1
                 self.reset_target()
@@ -292,7 +294,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             if is_oob or is_unstable:
                 self.info["is_success"] = False
                 trunc = True
-                reward -= 50
+                reward -= c
                 break
 
         self.info["action"] = action
@@ -301,7 +303,6 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.info["control_action"] = net_control_action
         self.info["dcontrol_action"] = net_dcontrol_action
 
-        c = 50 + 0.5 * np.sqrt(3 * 20 * 20)
         lower, upper = -c, c
         reward = ((reward - lower) / (upper - lower) - 0.5) * 2
 
