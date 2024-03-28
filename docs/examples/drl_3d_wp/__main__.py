@@ -103,6 +103,7 @@ def build_model(
     net_arch_name,
     lr,
     batch_size,
+    clip_range,
     use_sde,
     n_steps,
     device,
@@ -120,6 +121,7 @@ def build_model(
                 "MlpPolicy",
                 device=device,
                 learning_rate=lr,
+                clip_range=clip_range,
                 batch_size=batch_size,
                 use_sde=use_sde,
                 n_steps=n_steps,
@@ -140,6 +142,7 @@ def build_model(
                 ActorCriticDenseNetPolicy,
                 device=device,
                 learning_rate=lr,
+                clip_range=clip_range,
                 batch_size=batch_size,
                 use_sde=use_sde,
                 n_steps=n_steps,
@@ -159,6 +162,7 @@ def build_model(
                     n_lstm_layers=net_arch_lstm_hidden_size,
                 ),
                 learning_rate=lr,
+                clip_range=clip_range,
                 batch_size=batch_size,
                 use_sde=use_sde,
                 n_steps=n_steps,
@@ -230,6 +234,7 @@ def main():
 @click.option("--batch_size", type=int, default=128)
 @click.option("--n_steps", type=int, default=4096)
 @click.option("--lr", nargs=3, default=(0.0003, 0.0003, 1))
+@click.option("--clip_range", default=0.2, type=click.FloatRange(min=0.01))
 @click.argument("net_arch_name", type=click.Choice(["mlp", "dense", "recurrent"]))
 @click.option("-N", "--num_timesteps", type=int, default=TOTAL_TIMESTEP)
 @click.option("--use_sde", is_flag=True, default=False)
