@@ -271,7 +271,7 @@ class DRL_WP_Env_LQR(BaseEnv):
 
             reward += (
                 0  # alive bonus
-                + - (self.dt / sim_T) * distance_from_tgt
+                + -(self.dt / sim_T) * distance_from_tgt
                 + 0 * net_energy
                 + 0 * net_control_action
                 + 0 * net_dcontrol_action
