@@ -103,6 +103,11 @@ class BaseDroneEnv(gymnasium.Env):
     ) -> Tuple[State, dict]:
         super().reset(seed=seed, options=options)
         self.info = {}
-        self.state = copy(self.initial_state)
+
+        if options is not None:
+            reset_state = options.get("reset_state", self.initial_state)
+        else:
+            reset_state = self.initial_state
+        self.state = copy(reset_state)
         self.state.quat = euler_to_quat(self.state.rpy)
         return self.state, self.info

@@ -343,3 +343,22 @@ def test_URDFModel_hashing(urdfmodel):
     urdfmodel.g += 1
     hash2 = hash(urdfmodel)
     assert hash1 != hash2
+
+
+@pytest.mark.parametrize(
+    "state", [np.full(20, -5), np.full(20, 5), np.zeros(20)], indirect=True
+)
+def test_state_normed(state: State):
+    normed_state = state.normed(np.column_stack([np.full(20, -5), np.full(20, 5)]))
+
+    assert np.all((normed_state >= -1) & (normed_state <= 1))
+
+
+@pytest.mark.parametrize(
+    "state,normalization_lims",
+    [(list(range(20)), [(-1 + i, 1 + i) for i in range(20)])],
+    indirect=["state"],
+)
+def test_state_normed_varying_lims(state: State, normalization_lims):
+    normed_state = state.normed(normalization_lims)
+    assert np.allclose(normed_state, 0)

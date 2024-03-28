@@ -8,6 +8,7 @@ from gymnasium import spaces
 from jdrones.controllers import Controller
 from jdrones.controllers import LQR
 from jdrones.data_models import State
+from jdrones.data_models import States
 from jdrones.data_models import URDFModel
 from jdrones.envs.base import BaseControlledEnv
 from jdrones.envs.base import LinearDynamicModelDroneEnv
@@ -114,7 +115,6 @@ if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
     import seaborn as sns
-    from jdrones.types import State, States
     from tqdm.auto import trange
 
     def _simulate_env(env, T, dt):
