@@ -11,6 +11,7 @@ import numpy as np
 import optuna
 import pandas as pd
 from drl_3d_wp.state import State
+from jdrones.plotting import plot_2d_path
 from loguru import logger
 from matplotlib import pyplot as plt
 from stable_baselines3.common.callbacks import BaseCallback
@@ -28,7 +29,7 @@ class GraphingCallback(BaseCallback):
         env = self.model.get_env()
         obs = env.reset()
         states = None
-        t = 0
+        t = -env.unwrapped.get_attr("dt")[0]
         episode_starts = np.ones((env.num_envs,), dtype=bool)
         while True:
             action, states = self.model.predict(
@@ -42,6 +43,10 @@ class GraphingCallback(BaseCallback):
             obs_ = info_["state"]
             tx, ty, tz = info_["target"]
             action_ = action[0]
+            energy_ = info_["energy"]
+            distance_from_target_ = info_["distance_from_target"]
+            control_action_ = info_["control_action"]
+            dcontrol_action_ = info_["dcontrol_action"]
 
             if action_.shape == 1:
                 action_ = np.array([action_])
@@ -59,11 +64,14 @@ class GraphingCallback(BaseCallback):
                 vx, vy, vz = obs_i.vel
                 p1, p2, p3, p4 = obs_i.prop_omega
                 log.append(
-                    info_
-                    | dict(
+                    dict(
                         time=t,
                         reward=reward_,
                         action=action_,
+                        energy=energy_,
+                        distance_from_target=distance_from_target_,
+                        control_action=control_action_,
+                        dcontrol_action=dcontrol_action_,
                         x=x,
                         y=y,
                         z=z,
@@ -89,6 +97,29 @@ class GraphingCallback(BaseCallback):
                 break
 
         df = pd.DataFrame(log)
+
+        fig, ax = plt.subplots()
+        df_long = (
+            df[["time", "x", "y", "z"]]
+            .melt(
+                var_name="variable",
+                value_name="value",
+                id_vars="time",
+            )
+            .sort_values(by=["time"])
+            .rename({"time": "t"}, axis="columns")
+        )
+        df_long["tag"] = "PPO+LQR"
+        plot_2d_path(df_long, ax)
+        ax.scatter(*df[["x", "y"]].iloc[0].to_list(), zorder=10, c="g")
+        ax.scatter(*df[["x", "y"]].iloc[-1].to_list(), zorder=10, c="r")
+        fig.tight_layout()
+        self.logger.record(
+            "data/position_2d",
+            Figure(fig, close=True),
+            exclude=("stdout", "log", "json", "csv"),
+        )
+        plt.close(fig)
 
         fig, ax = plt.subplots()
         ax.plot(df.time, df.energy)
@@ -280,6 +311,7 @@ class BufferNames(str, enum.Enum):
     TARGETS = "targets"
     IS_OOB = "is_oob"
     IS_UNSTABLE = "is_unstable"
+    IS_SUCCESS = "is_success"
     ENERGY = "energy"
     DISTANCE_FROM_TGT = "distance_from_target"
 
@@ -296,6 +328,7 @@ class EvalCallbackWithMoreLogging(EvalCallback):
             BufferNames.TARGETS,
             BufferNames.IS_OOB,
             BufferNames.IS_UNSTABLE,
+            BufferNames.IS_SUCCESS,
         }
 
         info = locals_["info"]
@@ -391,16 +424,19 @@ class EvalCallbackWithMoreLogging(EvalCallback):
         self.logger.record(key, float(np.mean(buffer)))
 
     def _is_oob_callback(self, buffer):
-        self._generic_mean_callback("eval/is_oob_rate", buffer)
+        self._generic_mean_callback("eval/oob_rate", buffer)
 
     def _is_unstable_callback(self, buffer):
-        self._generic_mean_callback("eval/is_unstable_rate", buffer)
+        self._generic_mean_callback("eval/unstable_rate", buffer)
 
     def _targets_callback(self, buffer):
-        self._generic_mean_callback("eval/ep_targets", buffer)
+        self._generic_mean_callback("eval/mean_ep_targets", buffer)
+
+    def _is_success_callback(self, buffer):
+        self._generic_mean_callback("eval/success_rate", buffer)
 
     def _energy_callback(self, buffer):
         self._generic_mean_callback("eval/step_energy", buffer)
 
     def _distance_from_target_callback(self, buffer):
-        self._generic_mean_callback("eval/step_distance_from_target", buffer)
+        self._generic_mean_callback("eval/mean_step_distance_from_target", buffer)

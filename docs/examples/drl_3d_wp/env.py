@@ -65,11 +65,13 @@ class BaseEnv(gymnasium.Env):
         self,
         dt,
         env_cls: Type[BaseDroneEnv | BaseControlledEnv] = NonlinearDynamicModelDroneEnv,
+        env_cls_kwargs: dict = None,
     ):
         super().__init__()
         self.dt = dt
-
-        self.env = EnergyCalculationWrapper(env_cls(dt=self.dt))
+        if env_cls_kwargs is None:
+            env_cls_kwargs = {}
+        self.env = EnergyCalculationWrapper(env_cls(dt=self.dt, **env_cls_kwargs))
 
         self.target = self.next_target = None
 
@@ -198,9 +200,39 @@ class DRL_WP_Env(BaseEnv):
 
 
 class DRL_WP_Env_LQR(BaseEnv):
+    Q = np.diag(
+        [
+            4.6176861297742446e-08,
+            8.20079210554526e-09,
+            0.002015319613213222,
+            0.0019725098771573558,
+            0.0019729667280019856,
+            0.0017448932320868343,
+            0.00038948848401190175,
+            6.60213968465527e-08,
+            0.0013440112213180333,
+            0.0002558222985053156,
+            7.213974171712665e-08,
+            2.2824520808018255e-07,
+        ]
+    )
+
+    R = np.diag(
+        [
+            0.004613030294333662,
+            0.005277238690122938,
+            0.003479685903363842,
+            0.0004249097075205608,
+        ]
+    )
 
     def __init__(self, *args, T: float = 10, **kwargs):
-        super().__init__(*args, env_cls=LQRDroneEnv, **kwargs)
+        super().__init__(
+            *args,
+            env_cls=LQRDroneEnv,
+            env_cls_kwargs=dict(Q=self.Q, R=self.R),
+            **kwargs,
+        )
 
         self.T = T
 
@@ -251,9 +283,10 @@ class DRL_WP_Env_LQR(BaseEnv):
         trunc = False
         term = False
 
-        position_action = self.env.unwrapped.state.pos[:2] + 2.5 * action[:2]
+        velocity_action = 1.0 * action[:2]
         x = State()
-        x.pos = np.concatenate([position_action, [self.target[2]]])
+        x.pos = [0, 0, self.target[2]]
+        x.vel = [*velocity_action, 0]
 
         net_control_action = 0
         net_dcontrol_action = 0
