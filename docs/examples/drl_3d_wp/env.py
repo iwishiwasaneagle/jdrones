@@ -55,6 +55,9 @@ class BaseEnv(gymnasium.Env):
             (-100, 100),
             (-100, 100),
             (-100, 100),
+            POS_LIM,
+            POS_LIM,
+            POS_LIM,
         ]
     )
 
@@ -67,6 +70,8 @@ class BaseEnv(gymnasium.Env):
         self.dt = dt
 
         self.env = EnergyCalculationWrapper(env_cls(dt=self.dt))
+
+        self.target = self.next_target = None
 
     def check_is_oob(self):
         pos = self.env.unwrapped.state.pos
@@ -81,8 +86,8 @@ class BaseEnv(gymnasium.Env):
         yaw_rate_within_lims = (ANG_VEL_LIM[0] < dy) & (dy < ANG_VEL_LIM[1])
         return bool(~(roll_within_lims & pitch_within_lims & yaw_rate_within_lims))
 
-    def reset_target(self):
-        self.target = np.array(
+    def create_target(self):
+        return np.array(
             [
                 *np.random.uniform(
                     *TGT_SUB_LIM,
@@ -91,8 +96,16 @@ class BaseEnv(gymnasium.Env):
                 self.env.unwrapped.initial_state.pos[2],
             ]
         )
+
+    def reset_target(self):
+        if self.next_target is None:
+            self.target = self.create_target()
+        else:
+            self.target = self.next_target
+        self.next_target = self.create_target()
         self.info["target"] = self.target
         self.target_counter = 0
+        self.target_error = self.integral_target_error = np.zeros_like(self.target)
 
 
 class DRL_WP_Env(BaseEnv):
@@ -110,6 +123,7 @@ class DRL_WP_Env(BaseEnv):
         state = State()
         state[:20] = self.env.unwrapped.state
         state.target = self.target
+        state.next_target = self.next_target
         state.target_error = self.target_error
         state.target_error_integral = self.integral_target_error
         state.rpy[2] %= 2 * np.pi
@@ -127,7 +141,6 @@ class DRL_WP_Env(BaseEnv):
         _, info = self.env.reset()
         self.reset_target()
         self.previous_prop_omega = 0
-        self.target_error = self.integral_target_error = np.zeros_like(self.target)
         self.info = {"is_success": False, "targets": 0}
         return self.get_observation(), info
 
@@ -192,7 +205,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.T = T
 
         self.observation_space = gymnasium.spaces.Box(
-            low=-1, high=1, shape=(20,), dtype=np.float32
+            low=-1, high=1, shape=(23,), dtype=np.float32
         )
         self.action_space = gymnasium.spaces.Box(
             low=-1, high=1, shape=(2,), dtype=np.float32
@@ -202,15 +215,17 @@ class DRL_WP_Env_LQR(BaseEnv):
         state = State()
         state[:20] = self.env.unwrapped.state
         state.target = self.target
+        state.next_target = self.next_target
         state.target_error = self.target_error
         state.rpy[2] %= 2 * np.pi
 
         normed_state: State = state.normed(self.NORM_LIMITS)
         return np.concatenate(
             [
-                normed_state.pos,  # x y z
+                normed_state.pos,  # x y zte
                 normed_state.vel,  # vx vy vz
                 normed_state.target,  # tx ty tz
+                normed_state.next_target,  # tx ty tz
                 normed_state.rpy,  # roll pitch yaw
                 normed_state.ang_vel,  # p q r
                 normed_state.prop_omega,  # p1 p2 p3 p4
@@ -227,7 +242,6 @@ class DRL_WP_Env_LQR(BaseEnv):
         super().reset(seed=seed, options=options)
         _, info = self.env.reset()
         self.previous_prop_omega = 0
-        self.target_error = 0
         self.time = 0
         self.info = {"is_success": False, "targets": 0}
         self.reset_target()
