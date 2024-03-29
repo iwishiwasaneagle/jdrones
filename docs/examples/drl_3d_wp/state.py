@@ -4,7 +4,7 @@ from jdrones.data_models import State as _State
 
 
 class State(_State):
-    k: int = 29
+    k: int = 32
 
     @property
     def target(self):
@@ -13,6 +13,14 @@ class State(_State):
     @target.setter
     def target(self, val):
         self[20:23] = val
+
+    @property
+    def next_target(self):
+        return self[29:32]
+
+    @next_target.setter
+    def next_target(self, val):
+        self[29:32] = val
 
     @property
     def target_error(self):
