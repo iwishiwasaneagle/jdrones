@@ -18,6 +18,7 @@ import click
 import matplotlib
 import optuna
 import torch as th
+from callback import EvalCallbackWithMoreLogging
 from callback import GraphingCallback
 from drl_3d_wp.callback import TrialEvalCallback
 from drl_3d_wp.consts import DT
@@ -35,7 +36,6 @@ from gymnasium.wrappers import TimeLimit
 from loguru import logger
 from optuna.pruners import HyperbandPruner
 from stable_baselines3.common.callbacks import CallbackList
-from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.monitor import Monitor
@@ -62,7 +62,7 @@ def make_env(env_type, T=10):
 
 def build_callback(
     total_timesteps: int,
-    eval_callback_cls=EvalCallback,
+    eval_callback_cls=EvalCallbackWithMoreLogging,
     eval_callback_kwargs=None,
     make_vec_env_kwargs=None,
 ):
