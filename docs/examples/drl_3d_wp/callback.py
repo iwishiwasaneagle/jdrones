@@ -1,6 +1,9 @@
 #  Copyright (c) 2024.  Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import enum
+import os
 from collections import deque
+from operator import attrgetter
 from typing import Optional
 
 import gymnasium
@@ -8,10 +11,13 @@ import numpy as np
 import optuna
 import pandas as pd
 from drl_3d_wp.state import State
+from loguru import logger
 from matplotlib import pyplot as plt
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.callbacks import EvalCallback
+from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.logger import Figure
+from stable_baselines3.common.vec_env import sync_envs_normalization
 from stable_baselines3.common.vec_env import VecEnv
 
 
@@ -81,7 +87,6 @@ class GraphingCallback(BaseCallback):
                 )
             if np.any(done):
                 break
-        self.logger.record("eval/total_targets", info_["targets"])
 
         df = pd.DataFrame(log)
 
@@ -109,9 +114,6 @@ class GraphingCallback(BaseCallback):
             Figure(fig, close=True),
             exclude=("stdout", "log", "json", "csv"),
         )
-        self.logger.record(
-            "eval/sum_distance_from_target", df.distance_from_target.sum()
-        )
         plt.close(fig)
 
         fig, ax = plt.subplots()
@@ -130,8 +132,6 @@ class GraphingCallback(BaseCallback):
             Figure(fig, close=True),
             exclude=("stdout", "log", "json", "csv"),
         )
-        self.logger.record("eval/sum_control_action", df.control_action.sum())
-        self.logger.record("eval/sum_dcontrol_action", df.dcontrol_action.sum())
         plt.close(fig)
 
         fig, ax = plt.subplots()
@@ -274,3 +274,133 @@ class TrialEvalCallback(EvalCallback):
                 self.is_pruned = True
                 return False
         return True
+
+
+class BufferNames(str, enum.Enum):
+    TARGETS = "targets"
+    IS_OOB = "is_oob"
+    IS_UNSTABLE = "is_unstable"
+    ENERGY = "energy"
+    DISTANCE_FROM_TGT = "distance_from_target"
+
+
+class EvalCallbackWithMoreLogging(EvalCallback):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._buffers = {}
+        self._max_trackers = {}
+
+    def _eval_callback(self, locals_, globals_) -> None:
+        requires_done = {
+            BufferNames.TARGETS,
+            BufferNames.IS_OOB,
+            BufferNames.IS_UNSTABLE,
+        }
+
+        info = locals_["info"]
+        for item in list(BufferNames):
+            if item in requires_done and not locals_["done"]:
+                continue
+
+            key = item.value
+            if (value := np.copy(info.get(key))) is not None:
+                self._buffers.setdefault(key, []).append(value)
+
+    def _on_step(self) -> bool:
+        continue_training = True
+
+        if self.eval_freq > 0 and self.n_calls % self.eval_freq == 0:
+            if self.model.get_vec_normalize_env() is not None:
+                try:
+                    sync_envs_normalization(self.training_env, self.eval_env)
+                except AttributeError as e:
+                    raise AssertionError(
+                        "Training and eval env are not wrapped the same way, "
+                        "see https://stable-baselines3.readthedocs.io/en/master/guide/callbacks.html#evalcallback "  # noqa: E501
+                        "and warning above."
+                    ) from e
+
+            # Reset buffer before evaluating
+            self._buffers.clear()
+
+            episode_rewards, episode_lengths = evaluate_policy(
+                self.model,
+                self.eval_env,
+                n_eval_episodes=self.n_eval_episodes,
+                render=self.render,
+                deterministic=self.deterministic,
+                return_episode_rewards=True,
+                warn=self.warn,
+                callback=self._eval_callback,
+            )
+
+            mean_reward, std_reward = np.mean(episode_rewards), np.std(episode_rewards)
+            mean_ep_length, std_ep_length = np.mean(episode_lengths), np.std(
+                episode_lengths
+            )
+            self.last_mean_reward = mean_reward
+
+            if self.verbose >= 1:
+                print(
+                    f"Eval num_timesteps={self.num_timesteps}, "
+                    f"episode_reward={mean_reward:.2f} +/- {std_reward:.2f}"
+                )
+                print(f"Episode length: {mean_ep_length:.2f} +/- {std_ep_length:.2f}")
+            # Add to current Logger
+            self.logger.record("eval/mean_reward", float(mean_reward))
+            self.logger.record("eval/rewards", episode_rewards)
+            self.logger.record("eval/mean_ep_length", mean_ep_length)
+            self.logger.record("eval/ep_lengths", episode_lengths)
+
+            for key in map(attrgetter("value"), BufferNames):
+                buffer = self._buffers.get(key, [])
+                if buffer is not None and len(buffer) > 0:
+                    cb_str = f"_{key}_callback"
+                    cb = getattr(self, cb_str, None)
+                    if cb is None:
+                        logger.error(f"Callback {cb_str} does not exist")
+                        continue
+                    cb(buffer)
+
+            self.logger.dump(self.num_timesteps)
+
+            if mean_reward > self.best_mean_reward:
+                if self.verbose >= 1:
+                    print("New best mean reward!")
+                if self.best_model_save_path is not None:
+                    self.model.save(
+                        os.path.join(self.best_model_save_path, "best_model")
+                    )
+                self.best_mean_reward = mean_reward
+                # Trigger callback on new best model, if needed
+                if self.callback_on_new_best is not None:
+                    continue_training = self.callback_on_new_best.on_step()
+
+            # Trigger callback after every evaluation, if needed
+            if self.callback is not None:
+                continue_training = continue_training and self._on_event()
+
+        return continue_training
+
+    def _path_length_callback(self, buffer):
+        self.logger.record("eval/wps/length_mean", float(np.mean(buffer)))
+        self.logger.record("eval/wps/length_std", float(np.std(buffer)))
+
+    def _generic_mean_callback(self, key, buffer):
+        self.logger.record(key, float(np.mean(buffer)))
+
+    def _is_oob_callback(self, buffer):
+        self._generic_mean_callback("eval/is_oob_rate", buffer)
+
+    def _is_unstable_callback(self, buffer):
+        self._generic_mean_callback("eval/is_unstable_rate", buffer)
+
+    def _targets_callback(self, buffer):
+        self._generic_mean_callback("eval/ep_targets", buffer)
+
+    def _energy_callback(self, buffer):
+        self._generic_mean_callback("eval/step_energy", buffer)
+
+    def _distance_from_target_callback(self, buffer):
+        self._generic_mean_callback("eval/step_distance_from_target", buffer)
