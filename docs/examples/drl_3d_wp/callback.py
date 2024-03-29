@@ -280,6 +280,7 @@ class BufferNames(str, enum.Enum):
     TARGETS = "targets"
     IS_OOB = "is_oob"
     IS_UNSTABLE = "is_unstable"
+    IS_SUCCESS = "is_success"
     ENERGY = "energy"
     DISTANCE_FROM_TGT = "distance_from_target"
 
@@ -296,6 +297,7 @@ class EvalCallbackWithMoreLogging(EvalCallback):
             BufferNames.TARGETS,
             BufferNames.IS_OOB,
             BufferNames.IS_UNSTABLE,
+            BufferNames.IS_SUCCESS,
         }
 
         info = locals_["info"]
@@ -391,16 +393,19 @@ class EvalCallbackWithMoreLogging(EvalCallback):
         self.logger.record(key, float(np.mean(buffer)))
 
     def _is_oob_callback(self, buffer):
-        self._generic_mean_callback("eval/is_oob_rate", buffer)
+        self._generic_mean_callback("eval/oob_rate", buffer)
 
     def _is_unstable_callback(self, buffer):
-        self._generic_mean_callback("eval/is_unstable_rate", buffer)
+        self._generic_mean_callback("eval/unstable_rate", buffer)
 
     def _targets_callback(self, buffer):
-        self._generic_mean_callback("eval/ep_targets", buffer)
+        self._generic_mean_callback("eval/mean_ep_targets", buffer)
+
+    def _is_success_callback(self, buffer):
+        self._generic_mean_callback("eval/success_rate", buffer)
 
     def _energy_callback(self, buffer):
         self._generic_mean_callback("eval/step_energy", buffer)
 
     def _distance_from_target_callback(self, buffer):
-        self._generic_mean_callback("eval/step_distance_from_target", buffer)
+        self._generic_mean_callback("eval/mean+step_distance_from_target", buffer)
