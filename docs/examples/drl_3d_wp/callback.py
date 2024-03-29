@@ -111,6 +111,9 @@ class GraphingCallback(BaseCallback):
         )
         df_long["tag"] = "PPO+LQR"
         plot_2d_path(df_long, ax)
+
+        targets = df[["tx", "ty"]].drop_duplicates()
+        ax.scatter(targets.tx, targets.ty, c="b")
         ax.scatter(*df[["x", "y"]].iloc[0].to_list(), zorder=10, c="g")
         ax.scatter(*df[["x", "y"]].iloc[-1].to_list(), zorder=10, c="r")
         fig.tight_layout()
