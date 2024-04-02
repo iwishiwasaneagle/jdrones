@@ -36,6 +36,8 @@ class GraphingCallback(BaseCallback):
                 obs, deterministic=True, episode_start=episode_starts, state=states
             )
             obs, reward, done, info = env.step(action)
+            if np.any(done):
+                break
             episode_starts = done
 
             info_ = info[0]
@@ -93,8 +95,6 @@ class GraphingCallback(BaseCallback):
                         dyaw=dyaw,
                     )
                 )
-            if np.any(done):
-                break
 
         df = pd.DataFrame(log)
 

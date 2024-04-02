@@ -282,8 +282,10 @@ class DRL_WP_Env_LQR(BaseEnv):
     def step(self, action) -> Tuple[State, float, bool, bool, dict]:
         trunc = False
         term = False
-
-        velocity_action = 1.0 * action[:2]
+        heading, velocity = action
+        heading *= np.pi
+        velocity = (velocity + 1) / 2  # map from (-1,1) to (0,1)
+        velocity_action = velocity * np.array([np.cos(heading), np.sin(heading)])
         x = State()
         x.pos = [0, 0, self.target[2]]
         x.vel = [*velocity_action, 0]
@@ -296,12 +298,15 @@ class DRL_WP_Env_LQR(BaseEnv):
         c = 100
         sim_T = 0.1
 
+        K = self.dt / sim_T
+
         states = []
         for _ in range(int(sim_T / self.dt)):
             obs, _, _, _, info = self.env.step(x.to_x())
             self.time += self.dt
 
-            net_energy += info["energy"]
+            energy = info["energy"]
+            net_energy += energy
 
             prop_omega = obs.prop_omega
             control_action = np.linalg.norm(obs.prop_omega)
@@ -316,12 +321,11 @@ class DRL_WP_Env_LQR(BaseEnv):
 
             states.append(np.copy(self.env.unwrapped.state))
 
-            reward += (
-                0  # alive bonus
-                + -(self.dt / sim_T) * distance_from_tgt
-                + 0 * net_energy
-                + 0 * net_control_action
-                + 0 * net_dcontrol_action
+            reward += K * (
+                -1 * distance_from_tgt
+                # + 0.000001 * energy
+                - 0.00001 * control_action
+                # + 0 * dcontrol_action
             )
 
             if distance_from_tgt < 1:
