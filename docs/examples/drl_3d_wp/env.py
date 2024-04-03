@@ -279,16 +279,42 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.reset_target()
         return self.get_observation(), info
 
+    @staticmethod
+    def calc_omni_velocity(a, b, max_velocity):
+        """
+        This function takes policy outputs (a, b) and maximum velocity
+        and returns linear velocities (vx, vy) for omni-directional movement.
+
+        Args:
+            a: Scaled output from the policy (-1 to 1).
+            b: Scaled output from the policy (-1 to 1).
+            max_velocity: Maximum linear velocity of the agent.
+
+        Returns:
+            vx: Linear velocity in x-direction.
+            vy: Linear velocity in y-direction.
+        """
+        magnitude = np.sqrt(a**2 + b**2)
+        if magnitude <= 1e-6:
+            return 0.0, 0.0
+
+        unit_a = a / magnitude
+        unit_b = b / magnitude
+
+        magnitude_clipped = np.core.umath.minimum(magnitude, 1)
+
+        vx = magnitude_clipped * max_velocity * unit_a
+        vy = magnitude_clipped * max_velocity * unit_b
+
+        return vx, vy
+
     def step(self, action) -> Tuple[State, float, bool, bool, dict]:
         trunc = False
         term = False
-        heading, velocity = action
-        heading *= np.pi
-        velocity = (velocity + 1) / 2  # map from (-1,1) to (0,1)
-        velocity_action = velocity * np.array([np.cos(heading), np.sin(heading)])
+
         x = State()
         x.pos = [0, 0, self.target[2]]
-        x.vel = [*velocity_action, 0]
+        x.vel = [*self.calc_omni_velocity(*action, 1.0), 0]
 
         net_control_action = 0
         net_dcontrol_action = 0
