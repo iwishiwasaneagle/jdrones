@@ -19,7 +19,6 @@ from jdrones.envs import BaseControlledEnv
 from jdrones.envs import LQRDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.types import PropellerAction
 from jdrones.wrappers import EnergyCalculationWrapper
 
 
@@ -108,95 +107,6 @@ class BaseEnv(gymnasium.Env):
         self.info["target"] = self.target
         self.target_counter = 0
         self.target_error = self.integral_target_error = np.zeros_like(self.target)
-
-
-class DRL_WP_Env(BaseEnv):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.observation_space = gymnasium.spaces.Box(
-            low=-1, high=1, shape=(State.k,), dtype=np.float32
-        )
-        self.action_space = gymnasium.spaces.Box(
-            low=-1, high=1, shape=(4,), dtype=np.float32
-        )
-
-    def get_observation(self):
-        state = State()
-        state[:20] = self.env.unwrapped.state
-        state.target = self.target
-        state.next_target = self.next_target
-        state.target_error = self.target_error
-        state.target_error_integral = self.integral_target_error
-        state.rpy[2] %= 2 * np.pi
-
-        normed_state = state.normed(self.NORM_LIMITS)
-        return normed_state
-
-    def reset(
-        self,
-        *,
-        seed: Optional[int] = None,
-        options: Optional[dict] = None,
-    ) -> Tuple[State, dict]:
-        super().reset(seed=seed, options=options)
-        _, info = self.env.reset()
-        self.reset_target()
-        self.previous_prop_omega = 0
-        self.info = {"is_success": False, "targets": 0}
-        return self.get_observation(), info
-
-    def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
-        trunc = False
-        term = False
-        denormed_action = np.interp(action, (-1, 1), PROP_OMEGA_LIM)
-        obs, _, _, _, info = self.env.step(denormed_action)
-        self.info["action"] = action
-
-        prop_omega = obs.prop_omega
-        control_action = np.linalg.norm(obs.prop_omega)
-        dcontrol_action = np.linalg.norm(self.previous_prop_omega - prop_omega)
-        self.previous_prop_omega = np.copy(prop_omega)
-        self.info["control_action"] = control_action
-        self.info["dcontrol_action"] = dcontrol_action
-
-        self.target_error = self.target - obs.pos
-        self.integral_target_error = (
-            self.integral_target_error * 0.9 + self.target_error
-        )
-
-        distance_from_tgt = np.linalg.norm(self.target_error)
-        self.info["distance_from_target"] = distance_from_tgt
-
-        reward = (
-            0  # alive bonus
-            + -1 * distance_from_tgt
-            + 0 * info["energy"]
-            + 0 * control_action
-            + 0 * dcontrol_action
-            + 0 * np.linalg.norm(self.integral_target_error)
-        )
-
-        if distance_from_tgt < 1.5:
-            reward += 50
-            self.info["is_success"] = True
-            self.info["targets"] += 1
-            self.reset_target()
-
-        is_oob = self.check_is_oob()
-        self.info["is_oob"] = is_oob
-        is_unstable = self.check_is_unstable()
-        self.info["is_unstable"] = is_unstable
-        if is_oob or is_unstable:
-            self.info["is_success"] = False
-            trunc = True
-            reward -= 50
-        c = 50 + np.sqrt(3 * 20 * 20)
-        lower, upper = -c, c
-        reward = ((reward - lower) / (upper - lower) - 0.5) * 2
-        self.info["state"] = self.env.unwrapped.state
-
-        return self.get_observation(), float(reward), term, trunc, self.info | info
 
 
 class DRL_WP_Env_LQR(BaseEnv):

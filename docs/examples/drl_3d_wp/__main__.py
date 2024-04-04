@@ -16,28 +16,20 @@ import warnings
 
 import click
 import matplotlib
-import optuna
 import torch as th
 from callback import EvalCallbackWithMoreLogging
 from callback import GraphingCallback
-from drl_3d_wp.callback import TrialEvalCallback
 from drl_3d_wp.consts import DT
 from drl_3d_wp.consts import LOG_PATH
 from drl_3d_wp.consts import N_ENVS
 from drl_3d_wp.consts import N_EVAL
-from drl_3d_wp.consts import OPTUNA_PATH
 from drl_3d_wp.consts import TENSORBOARD_PATH
 from drl_3d_wp.consts import TOTAL_TIMESTEP
-from drl_3d_wp.env import DRL_WP_Env
 from drl_3d_wp.env import DRL_WP_Env_LQR
 from drl_3d_wp.policies import ActorCriticDenseNetPolicy
-from gymnasium.wrappers import TimeAwareObservation
-from gymnasium.wrappers import TimeLimit
 from loguru import logger
-from optuna.pruners import HyperbandPruner
 from stable_baselines3.common.callbacks import CallbackList
 from stable_baselines3.common.env_util import make_vec_env
-from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.utils import get_linear_fn
 from stable_baselines3.common.vec_env import DummyVecEnv
@@ -48,14 +40,8 @@ matplotlib.use("Agg")
 logger.info(f"Starting {__file__}")
 
 
-def make_env(env_type, T=10):
-    match env_type:
-        case "direct":
-            env = DRL_WP_Env(dt=DT)
-            env = TimeAwareObservation(env)
-            env = TimeLimit(env, int(T / DT))
-        case "LQR":
-            env = DRL_WP_Env_LQR(dt=DT, T=T)
+def make_env(T=10):
+    env = DRL_WP_Env_LQR(dt=DT, T=T)
     env = Monitor(env, info_keywords=("is_success", "is_oob", "is_unstable", "targets"))
     return env
 
@@ -88,15 +74,6 @@ def build_callback(
     return eval_callback
 
 
-def build_trial_callback(total_timesteps: int, trial: optuna.Trial):
-    eval_callback = build_callback(
-        total_timesteps,
-        eval_callback_cls=TrialEvalCallback,
-        eval_callback_kwargs=dict(verbose=0, trial=trial),
-    )
-    return eval_callback
-
-
 def build_model(
     *,
     env,
@@ -115,9 +92,9 @@ def build_model(
 ):
     match net_arch_name:
         case "mlp":
-            from sbx import PPO as PPO_SBX
+            from stable_baselines3 import PPO as PPO_SB3
 
-            model = PPO_SBX(
+            model = PPO_SB3(
                 "MlpPolicy",
                 device=device,
                 learning_rate=lr,
@@ -175,61 +152,12 @@ def build_model(
     return model
 
 
-def objective(trial: optuna.Trial):
-    kwargs = dict(
-        net_arch_name=trial.suggest_categorical(
-            "net_arch", ["dense", "mlp", "recurrent"]
-        ),
-        env=make_vec_env(
-            make_env,
-            n_envs=N_ENVS,
-            vec_env_cls=DummyVecEnv if N_ENVS == 1 else SubprocVecEnv,
-        ),
-        lr=trial.suggest_float("learning_rate", 1e-6, 1e-3),
-        batch_size=trial.suggest_int("batch_size", 2, 512),
-        n_steps=trial.suggest_int("n_steps", 512, 4192),
-        use_sde=bool(trial.suggest_int("use_sde", 0, 1)),
-    )
-    match kwargs.get("net_arch_name"):
-        case "mlp":
-            kwargs = kwargs | dict(
-                net_arch_depth=trial.suggest_int("net_arch_mlp_depth", 2, 4),
-                net_arch_width=trial.suggest_int("net_arch_mlp_width", 8, 2048),
-            )
-        case "dense":
-            kwargs = kwargs | dict(
-                net_arch_layers=trial.suggest_int("net_arch_dense_net_layers", 1, 4)
-            )
-        case "recurrent":
-            kwargs = kwargs | dict(
-                net_arch_lstm_layers=trial.suggest_int(
-                    "net_arch_lstm_net_layers", 1, 3
-                ),
-                net_arch_lstm_hidden_size=trial.suggest_int(
-                    "net_arch_lstm_width", 64, 512
-                ),
-            )
-        case _:
-            raise Exception()
-    eval_callback = build_trial_callback(trial)
-    model = build_model(**kwargs)
-    model.learn(
-        total_timesteps=TOTAL_TIMESTEP, progress_bar=True, callback=eval_callback
-    )
-    if eval_callback.is_pruned:
-        raise optuna.exceptions.TrialPruned()
-    mean_reward, _ = evaluate_policy(model, eval_callback.eval_env, n_eval_episodes=500)
-
-    return mean_reward
-
-
 @click.group()
 def main():
     logger.info(f"Is cuda available? {th.cuda.is_available()}")
 
 
 @main.command("learn", context_settings={"show_default": True})
-@click.option("--env_type", type=click.Choice(["LQR", "direct"]), default="direct")
 @click.option("--vec_env_cls", type=click.Choice(["dummy", "subproc"]), default="dummy")
 @click.option("--batch_size", type=int, default=128)
 @click.option("--n_steps", type=int, default=4096)
@@ -248,7 +176,7 @@ def main():
 @click.option("--wandb_project", default=None, type=str)
 @click.option("--device", type=click.Choice(["cpu", "cuda"]), default="cuda")
 @click.option("-T", "--max_sim_time", type=click.IntRange(min=10), default=10)
-def learn(wandb_project, vec_env_cls, env_type, max_sim_time, **kwargs):
+def learn(wandb_project, vec_env_cls, max_sim_time, **kwargs):
     N = kwargs.pop("num_timesteps")
     n_eval = kwargs.pop("n_eval")
     n_envs = kwargs.pop("n_envs")
@@ -257,13 +185,13 @@ def learn(wandb_project, vec_env_cls, env_type, max_sim_time, **kwargs):
         make_env,
         n_envs=n_envs,
         vec_env_cls=DummyVecEnv if vec_env_cls == "dummy" else SubprocVecEnv,
-        env_kwargs=dict(env_type=env_type, T=max_sim_time),
+        env_kwargs=dict(T=max_sim_time),
     )
     model = build_model(env=env, **kwargs)
     callback = build_callback(
         N,
         eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs),
-        make_vec_env_kwargs=dict(env_kwargs=dict(env_type=env_type, T=max_sim_time)),
+        make_vec_env_kwargs=dict(env_kwargs=dict(T=max_sim_time)),
     )
 
     if wandb_project is not None:
@@ -274,7 +202,7 @@ def learn(wandb_project, vec_env_cls, env_type, max_sim_time, **kwargs):
             project=wandb_project,
             dir=LOG_PATH,
             sync_tensorboard=True,
-            tags=[env_type, vec_env_cls, kwargs.get("net_arch_name")],
+            tags=[vec_env_cls, kwargs.get("net_arch_name")],
             monitor_gym=True,
             save_code=True,
         )
@@ -282,20 +210,6 @@ def learn(wandb_project, vec_env_cls, env_type, max_sim_time, **kwargs):
 
     model.learn(total_timesteps=N, progress_bar=True, callback=callback)
     model.save(LOG_PATH)
-
-
-@main.command("sweep")
-@click.option("--study_name", type=str, default="drl_3d_wp")
-def sweep(study_name):
-    storage_path = (OPTUNA_PATH / study_name).with_suffix(".db")
-    study = optuna.create_study(
-        study_name=study_name,
-        direction="maximize",
-        storage=f"sqlite:///{storage_path}",
-        load_if_exists=True,
-        pruner=HyperbandPruner(min_resource=1, max_resource=N_EVAL, reduction_factor=2),
-    )  # Create a new study.
-    study.optimize(objective, n_trials=300)
 
 
 main()
