@@ -106,7 +106,8 @@ def build_model(
                     net_arch=[
                         net_arch_mlp_width,
                     ]
-                    * net_arch_mlp_depth
+                    * net_arch_mlp_depth,
+                    squash_output=use_sde,
                 ),
                 env=env,
                 verbose=0,
@@ -123,7 +124,9 @@ def build_model(
                 batch_size=batch_size,
                 use_sde=use_sde,
                 n_steps=n_steps,
-                policy_kwargs=dict(net_arch=net_arch_dense_layers),
+                policy_kwargs=dict(
+                    net_arch=net_arch_dense_layers, squash_output=use_sde
+                ),
                 env=env,
                 verbose=0,
                 tensorboard_log=TENSORBOARD_PATH,
@@ -141,6 +144,7 @@ def build_model(
                         net_arch_mlp_width,
                     ]
                     * net_arch_mlp_depth,
+                    squash_output=use_sde,
                 ),
                 learning_rate=lr,
                 clip_range=clip_range,
