@@ -113,9 +113,15 @@ class GraphingCallback(BaseCallback):
         plot_2d_path(df_long, ax)
 
         targets = df[["tx", "ty"]].drop_duplicates()
-        ax.scatter(targets.tx, targets.ty, c="b")
-        ax.scatter(*df[["x", "y"]].iloc[0].to_list(), zorder=10, c="g")
-        ax.scatter(*df[["x", "y"]].iloc[-1].to_list(), zorder=10, c="r")
+        cb = ax.scatter(
+            targets.tx, targets.ty, c=list(range(len(targets))), cmap="viridis"
+        )
+        for i, row in targets.iterrows():
+            circle = plt.Circle((row.tx, row.ty), 1.5, color="b", fill=False)
+            ax.add_patch(circle)
+        ax.scatter(*df[["x", "y"]].iloc[0].to_list(), zorder=10, c="g", marker="x")
+        ax.scatter(*df[["x", "y"]].iloc[-1].to_list(), zorder=10, c="r", marker="x")
+        fig.colorbar(cb)
         fig.tight_layout()
         self.logger.record(
             "data/position_2d",
