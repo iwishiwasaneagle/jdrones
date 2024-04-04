@@ -117,7 +117,7 @@ class GraphingCallback(BaseCallback):
             targets.tx, targets.ty, c=list(range(len(targets))), cmap="viridis"
         )
         for i, row in targets.iterrows():
-            circle = plt.Circle((row.tx, row.ty), 1.5, color="b", fill=False)
+            circle = plt.Circle((row.tx, row.ty), 1, color="b", fill=False)
             ax.add_patch(circle)
         ax.scatter(*df[["x", "y"]].iloc[0].to_list(), zorder=10, c="g", marker="x")
         ax.scatter(*df[["x", "y"]].iloc[-1].to_list(), zorder=10, c="r", marker="x")
