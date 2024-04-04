@@ -137,6 +137,10 @@ def build_model(
                 policy_kwargs=dict(
                     lstm_hidden_size=net_arch_lstm_layers,
                     n_lstm_layers=net_arch_lstm_hidden_size,
+                    net_arch=[
+                        net_arch_mlp_width,
+                    ]
+                    * net_arch_mlp_depth,
                 ),
                 learning_rate=lr,
                 clip_range=clip_range,
