@@ -15,6 +15,7 @@ from drl_3d_wp.consts import TGT_SUB_LIM
 from drl_3d_wp.consts import VEL_LIM
 from drl_3d_wp.consts import YAW_LIM
 from drl_3d_wp.state import State
+from jdrones.data_models import State as JState
 from jdrones.envs import BaseControlledEnv
 from jdrones.envs import LQRDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
@@ -73,6 +74,10 @@ class BaseEnv(gymnasium.Env):
         self.env = EnergyCalculationWrapper(env_cls(dt=self.dt, **env_cls_kwargs))
 
         self.target = self.next_target = None
+
+    @property
+    def state(self):
+        return self.env.state
 
     def check_is_oob(self):
         pos = self.env.unwrapped.state.pos
@@ -137,10 +142,11 @@ class DRL_WP_Env_LQR(BaseEnv):
     )
 
     def __init__(self, *args, T: float = 10, **kwargs):
+        env_cls_kwargs = kwargs.pop("env_cls_kwargs", {})
         super().__init__(
             *args,
             env_cls=LQRDroneEnv,
-            env_cls_kwargs=dict(Q=self.Q, R=self.R),
+            env_cls_kwargs=dict(Q=self.Q, R=self.R) | env_cls_kwargs,
             **kwargs,
         )
 
@@ -296,3 +302,97 @@ class DRL_WP_Env_LQR(BaseEnv):
         reward = ((reward - lower) / (upper - lower) - 0.5) * 2
 
         return self.get_observation(), float(reward), term, trunc, self.info | info
+
+
+class Dual_DRL_WP_Env_LQR(gymnasium.Env):
+    def __init__(self, *, T, dt):
+        super().__init__()
+
+        initial_state1 = JState()
+        initial_state1.pos = [1, 0, 0]
+        initial_state2 = JState()
+        initial_state2.pos = [-1, 0, 0]
+        self.env1 = DRL_WP_Env_LQR(
+            T=T, dt=dt, env_cls_kwargs=dict(initial_state=initial_state1)
+        )
+        self.env2 = DRL_WP_Env_LQR(
+            T=T, dt=dt, env_cls_kwargs=dict(initial_state=initial_state2)
+        )
+
+        obs = self.env1.observation_space
+        self.observation_space = gymnasium.spaces.Box(
+            low=np.tile(obs.low, (2, 1)),
+            high=np.tile(obs.high, (2, 1)),
+            shape=(2, *obs.shape),
+        )
+        act = self.env1.action_space
+        self.action_space = gymnasium.spaces.Box(
+            low=np.tile(act.low, (2, 1)),
+            high=np.tile(act.high, (2, 1)),
+            shape=(2, *act.shape),
+        )
+
+    @property
+    def T(self):
+        return self.env1.T
+
+    @property
+    def dt(self):
+        return self.env1.dt
+
+    @staticmethod
+    def merge_infos(*infos):
+        merged_info = {f"env_{i}": info for i, info in enumerate(infos)}
+
+        success = all(f.get("is_success") for f in merged_info.values())
+        oob = any(f.get("is_oob") for f in merged_info.values())
+        unstable = any(f.get("is_unstable") for f in merged_info.values())
+
+        merged_info["is_oob"] = oob
+        merged_info["is_success"] = success
+        merged_info["is_unstable"] = unstable
+
+        return merged_info
+
+    @staticmethod
+    def merge_observations(*observations):
+        return np.stack(observations)
+
+    def reset(
+        self,
+        *,
+        seed: Optional[int] = None,
+        options: Optional[dict] = None,
+    ) -> Tuple[State, dict]:
+        super().reset(seed=seed, options=options)
+        obs1, info1 = self.env1.reset(seed=seed, options=options)
+        obs2, info2 = self.env2.reset(seed=seed, options=options)
+
+        return self.merge_observations(obs1, obs2), self.merge_infos(info1, info2)
+
+    def step(self, action):
+        act1, act2 = action
+
+        obs1, rew1, term1, trunc1, info1 = self.env1.step(act1)
+        obs2, rew2, term2, trunc2, info2 = self.env2.step(act2)
+
+        obs = self.merge_observations(obs1, obs2)
+        trunc = trunc1 or trunc2
+        term = term1 or term2
+        reward = (rew1 + rew2) / 2
+
+        distance_between_envs = np.linalg.norm(
+            self.env1.state.pos - self.env2.state.pos
+        )
+        info1["distance_between_envs"] = info2["distance_between_env"] = (
+            distance_between_envs
+        )
+        if distance_between_envs < 0.5:
+            reward = -100
+            trunc = True
+            info1["collision"] = info2["collision"] = True
+        else:
+            info1["collision"] = info2["collision"] = False
+
+        info = self.merge_infos(info1, info2)
+        return obs, reward, term, trunc, info

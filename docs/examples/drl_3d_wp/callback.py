@@ -10,6 +10,7 @@ import gymnasium
 import numpy as np
 import optuna
 import pandas as pd
+import seaborn as sns
 from drl_3d_wp.state import State
 from jdrones.plotting import plot_2d_path
 from loguru import logger
@@ -42,86 +43,98 @@ class GraphingCallback(BaseCallback):
 
             info_ = info[0]
             reward_ = reward[0]
-            obs_ = info_["state"]
-            tx, ty, tz = info_["target"]
             action_ = action[0]
-            energy_ = info_["energy"]
-            distance_from_target_ = info_["distance_from_target"]
-            control_action_ = info_["control_action"]
-            dcontrol_action_ = info_["dcontrol_action"]
+            t += env.unwrapped.get_attr("dt")[0]
 
-            if action_.shape == 1:
-                action_ = np.array([action_])
+            for i, k in enumerate(filter(lambda f: f.startswith("env_"), info_.keys())):
+                obs_ = info_[k]["state"]
+                tx, ty, tz = info_[k]["target"]
+                energy_ = info_[k]["energy"]
+                distance_from_target_ = info_[k]["distance_from_target"]
+                control_action_ = info_[k]["control_action"]
+                dcontrol_action_ = info_[k]["dcontrol_action"]
 
-            if obs_.shape == 20:
-                obs_ = np.array([obs])
+                if action_.shape == 1:
+                    action_ = np.array([action_])
 
-            for x in obs_:
-                obs_i = State()
-                obs_i[:20] = x
-                t += env.unwrapped.get_attr("dt")[0]
-                x, y, z = obs_i.pos
-                roll, pitch, yaw = obs_i.rpy
-                droll, dpitch, dyaw = obs_i.ang_vel
-                vx, vy, vz = obs_i.vel
-                p1, p2, p3, p4 = obs_i.prop_omega
-                log.append(
-                    dict(
-                        time=t,
-                        reward=reward_,
-                        action=action_,
-                        energy=energy_,
-                        distance_from_target=distance_from_target_,
-                        control_action=control_action_,
-                        dcontrol_action=dcontrol_action_,
-                        x=x,
-                        y=y,
-                        z=z,
-                        vx=vx,
-                        vy=vy,
-                        vz=vz,
-                        roll=roll,
-                        pitch=pitch,
-                        yaw=yaw,
-                        p1=p1,
-                        p2=p2,
-                        p3=p3,
-                        p4=p4,
-                        tx=tx,
-                        ty=ty,
-                        tz=tz,
-                        droll=droll,
-                        dpitch=dpitch,
-                        dyaw=dyaw,
+                if obs_.shape == 20:
+                    obs_ = np.array([obs])
+
+                for x in obs_:
+                    obs_i = State()
+                    obs_i[:20] = x
+                    x, y, z = obs_i.pos
+                    roll, pitch, yaw = obs_i.rpy
+                    droll, dpitch, dyaw = obs_i.ang_vel
+                    vx, vy, vz = obs_i.vel
+                    p1, p2, p3, p4 = obs_i.prop_omega
+                    log.append(
+                        dict(
+                            env=k,
+                            time=t,
+                            reward=reward_,
+                            action=action_[i, :],
+                            energy=energy_,
+                            distance_from_target=distance_from_target_,
+                            control_action=control_action_,
+                            dcontrol_action=dcontrol_action_,
+                            x=x,
+                            y=y,
+                            z=z,
+                            vx=vx,
+                            vy=vy,
+                            vz=vz,
+                            roll=roll,
+                            pitch=pitch,
+                            yaw=yaw,
+                            p1=p1,
+                            p2=p2,
+                            p3=p3,
+                            p4=p4,
+                            tx=tx,
+                            ty=ty,
+                            tz=tz,
+                            droll=droll,
+                            dpitch=dpitch,
+                            dyaw=dyaw,
+                        )
                     )
-                )
 
         df = pd.DataFrame(log)
 
         fig, ax = plt.subplots()
-        df_long = (
-            df[["time", "x", "y", "z"]]
-            .melt(
-                var_name="variable",
-                value_name="value",
-                id_vars="time",
-            )
-            .sort_values(by=["time"])
-            .rename({"time": "t"}, axis="columns")
-        )
-        df_long["tag"] = "PPO+LQR"
-        plot_2d_path(df_long, ax)
 
-        targets = df[["tx", "ty"]].drop_duplicates()
-        cb = ax.scatter(
-            targets.tx, targets.ty, c=list(range(len(targets))), cmap="viridis"
-        )
-        for i, row in targets.iterrows():
-            circle = plt.Circle((row.tx, row.ty), 1, color="b", fill=False)
-            ax.add_patch(circle)
-        ax.scatter(*df[["x", "y"]].iloc[0].to_list(), zorder=10, c="g", marker="x")
-        ax.scatter(*df[["x", "y"]].iloc[-1].to_list(), zorder=10, c="r", marker="x")
-        fig.colorbar(cb)
+        marker_shape = ["x", "o"]
+        for i, env in enumerate(set(df.env)):
+            env_df = df.loc[df.env == env]
+            df_long = (
+                env_df[["time", "x", "y", "z"]]
+                .melt(
+                    var_name="variable",
+                    value_name="value",
+                    id_vars="time",
+                )
+                .sort_values(by=["time"])
+                .rename({"time": "t"}, axis="columns")
+            )
+            df_long["tag"] = "PPO+LQR"
+            plot_2d_path(df_long, ax, label=env)
+
+            targets = env_df[["tx", "ty"]].drop_duplicates()
+            ax.scatter(targets.tx, targets.ty, c="b", marker=marker_shape[i])
+            ax.scatter(
+                *env_df[["x", "y"]].iloc[0].to_list(),
+                zorder=10,
+                c="g",
+                marker=marker_shape[i],
+            )
+            ax.scatter(
+                *env_df[["x", "y"]].iloc[-1].to_list(),
+                zorder=10,
+                c="r",
+                marker=marker_shape[i],
+            )
+
         fig.tight_layout()
         self.logger.record(
             "data/position_2d",
@@ -131,10 +144,7 @@ class GraphingCallback(BaseCallback):
         plt.close(fig)
 
         fig, ax = plt.subplots()
-        ax.plot(df.time, df.energy)
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
+        sns.lineplot(data=df, x="time", y="energy", hue="env", ax=ax)
         fig.tight_layout()
         self.logger.record(
             "data/energy",
@@ -144,10 +154,17 @@ class GraphingCallback(BaseCallback):
         plt.close(fig)
 
         fig, ax = plt.subplots()
-        ax.plot(df.time, df.distance_from_target)
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
+        sns.lineplot(data=df, x="time", y="reward", hue="env", ax=ax)
+        fig.tight_layout()
+        self.logger.record(
+            "data/reward",
+            Figure(fig, close=True),
+            exclude=("stdout", "log", "json", "csv"),
+        )
+        plt.close(fig)
+
+        fig, ax = plt.subplots()
+        sns.lineplot(data=df, x="time", y="distance_from_target", hue="env", ax=ax)
         fig.tight_layout()
         self.logger.record(
             "data/distance_from_target",
@@ -157,31 +174,16 @@ class GraphingCallback(BaseCallback):
         plt.close(fig)
 
         fig, ax = plt.subplots()
-        ax.plot(df.time, df.control_action)
-        ax.set(ylabel="u")
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.dcontrol_action, c="g")
-        ax2.set_ylabel("du", color="g")
-        ax3 = ax.twinx()
-        ax3.plot(df.time, df.reward, c="y")
-        ax3.set_ylabel("reward", color="y")
-        ax3.spines["right"].set_position(("axes", 1.2))
-        fig.tight_layout()
-        self.logger.record(
-            "data/control_action",
-            Figure(fig, close=True),
-            exclude=("stdout", "log", "json", "csv"),
+        _df = (
+            df[["time", "vx", "vy", "vz", "env"]]
+            .melt(
+                var_name="variable",
+                value_name="value",
+                id_vars=["env", "time"],
+            )
+            .sort_values(by=["time"])
         )
-        plt.close(fig)
-
-        fig, ax = plt.subplots()
-        ax.plot(df.time, df.vx, c="g", label="x")
-        ax.plot(df.time, df.vy, c="r", label="y")
-        ax.plot(df.time, df.vz, c="b", label="z")
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
-        ax.legend()
+        sns.lineplot(data=_df, x="time", y="value", hue="env", style="variable", ax=ax)
         fig.tight_layout()
         self.logger.record(
             "data/velocity",
@@ -190,33 +192,49 @@ class GraphingCallback(BaseCallback):
         )
         plt.close(fig)
 
-        fig, ax = plt.subplots()
-        ax.plot(df.time, df.x, c="g", label="x")
-        ax.plot(df.time, df.tx, linestyle="-.", c="g")
-        ax.plot(df.time, df.y, c="r", label="y")
-        ax.plot(df.time, df.ty, linestyle="-.", c="r")
-        ax.plot(df.time, df.z, c="b", label="z")
-        ax.plot(df.time, df.tz, linestyle="-.", c="b")
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
-        ax.legend()
-        fig.tight_layout()
+        _df = (
+            df[["time", "x", "tx", "y", "ty", "z", "tz", "env"]]
+            .melt(
+                var_name="variable",
+                value_name="value",
+                id_vars=["env", "time"],
+            )
+            .sort_values(by=["time"])
+        )
+        _df["is_target"] = _df["variable"].apply(lambda x: x.startswith("t"))
+        g = sns.FacetGrid(
+            _df,
+            row="env",
+            sharey=True,
+            sharex=True,
+        )
+        g.map(
+            sns.lineplot,
+            data=_df,
+            x="time",
+            y="value",
+            hue="is_target",
+            style="variable",
+            legend="auto",
+        )
         self.logger.record(
             "data/position",
-            Figure(fig, close=True),
+            Figure(g.fig, close=True),
             exclude=("stdout", "log", "json", "csv"),
         )
-        plt.close(fig)
+        plt.close(g.fig)
 
         fig, ax = plt.subplots()
-        ax.plot(df.time, df.roll, label="roll")
-        ax.plot(df.time, df.pitch, label="pitch")
-        ax.plot(df.time, df.yaw, label="yaw")
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
-        ax.legend()
+        _df = (
+            df[["time", "env", "roll", "pitch", "yaw"]]
+            .melt(
+                var_name="variable",
+                value_name="value",
+                id_vars=["env", "time"],
+            )
+            .sort_values(by=["time"])
+        )
+        sns.lineplot(data=_df, x="time", y="value", hue="env", style="variable", ax=ax)
         fig.tight_layout()
         self.logger.record(
             "data/rpy",
@@ -226,13 +244,16 @@ class GraphingCallback(BaseCallback):
         plt.close(fig)
 
         fig, ax = plt.subplots()
-        ax.plot(df.time, df.droll, label="droll")
-        ax.plot(df.time, df.dpitch, label="dpitch")
-        ax.plot(df.time, df.dyaw, label="dyaw")
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
-        ax.legend()
+        _df = (
+            df[["time", "env", "droll", "dpitch", "dyaw"]]
+            .melt(
+                var_name="variable",
+                value_name="value",
+                id_vars=["env", "time"],
+            )
+            .sort_values(by=["time"])
+        )
+        sns.lineplot(data=_df, x="time", y="value", hue="env", style="variable", ax=ax)
         fig.tight_layout()
         self.logger.record(
             "data/ang_vel",
@@ -242,12 +263,16 @@ class GraphingCallback(BaseCallback):
         plt.close(fig)
 
         fig, ax = plt.subplots()
-        for i in range(4):
-            ax.plot(df.time, df[f"p{i + 1}"], label=f"P{i + 1}")
-        ax.legend()
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
+        _df = (
+            df[["time", "env", "p1", "p2", "p3", "p4"]]
+            .melt(
+                var_name="variable",
+                value_name="value",
+                id_vars=["env", "time"],
+            )
+            .sort_values(by=["time"])
+        )
+        sns.lineplot(data=_df, x="time", y="value", hue="env", style="variable", ax=ax)
         fig.tight_layout()
         self.logger.record(
             "data/propeller_rpm",
@@ -261,12 +286,14 @@ class GraphingCallback(BaseCallback):
             df.action.to_list(),
             columns=[f"a{i + 1}" for i in range(len(df.action.iloc[0]))],
         )
-        for column in action_df.columns:
-            ax.plot(df.time, action_df[column], label=column)
-        ax.legend()
-        ax2 = ax.twinx()
-        ax2.plot(df.time, df.reward, c="y")
-        ax2.set_ylabel("reward", color="y")
+        action_df["time"] = df["time"]
+        action_df["env"] = df["env"]
+        _df = action_df.melt(
+            var_name="variable",
+            value_name="value",
+            id_vars=["env", "time"],
+        ).sort_values(by=["time"])
+        sns.lineplot(data=_df, x="time", y="value", hue="env", style="variable", ax=ax)
         fig.tight_layout()
         self.logger.record(
             "data/actions",
@@ -323,6 +350,7 @@ class BufferNames(str, enum.Enum):
     IS_SUCCESS = "is_success"
     ENERGY = "energy"
     DISTANCE_FROM_TGT = "distance_from_target"
+    COLLISION = "collision"
 
 
 class EvalCallbackWithMoreLogging(EvalCallback):
@@ -332,22 +360,36 @@ class EvalCallbackWithMoreLogging(EvalCallback):
         self._buffers = {}
         self._max_trackers = {}
 
+        self.is_multi_env = None
+
     def _eval_callback(self, locals_, globals_) -> None:
         requires_done = {
             BufferNames.TARGETS,
             BufferNames.IS_OOB,
             BufferNames.IS_UNSTABLE,
             BufferNames.IS_SUCCESS,
+            BufferNames.COLLISION,
         }
 
         info = locals_["info"]
+
+        if self.is_multi_env is None:
+            self.multi_envs = list(filter(lambda f: f.startswith("env_"), info.keys()))
+            self.is_multi_env = len(self.multi_envs) > 0
+
         for item in list(BufferNames):
             if item in requires_done and not locals_["done"]:
                 continue
 
             key = item.value
-            if (value := np.copy(info.get(key))) is not None:
-                self._buffers.setdefault(key, []).append(value)
+            if self.is_multi_env:
+                for env in self.multi_envs:
+                    env_info = info.get(env)
+                    if (value := np.copy(env_info.get(key))) is not None:
+                        self._buffers.setdefault(key, []).append(value)
+            else:
+                if (value := np.copy(info.get(key))) is not None:
+                    self._buffers.setdefault(key, []).append(value)
 
     def _on_step(self) -> bool:
         continue_training = True
@@ -449,3 +491,6 @@ class EvalCallbackWithMoreLogging(EvalCallback):
 
     def _distance_from_target_callback(self, buffer):
         self._generic_mean_callback("eval/mean_step_distance_from_target", buffer)
+
+    def _collision_callback(self, buffer):
+        self._generic_mean_callback("eval/collision_rate", buffer)
