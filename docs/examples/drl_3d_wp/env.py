@@ -153,7 +153,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.T = T
 
         self.observation_space = gymnasium.spaces.Box(
-            low=-1, high=1, shape=(23,), dtype=np.float32
+            low=-1, high=1, shape=(22,), dtype=np.float32
         )
         self.action_space = gymnasium.spaces.Box(
             low=-1, high=1, shape=(2,), dtype=np.float32
@@ -177,7 +177,6 @@ class DRL_WP_Env_LQR(BaseEnv):
                 normed_state.rpy,  # roll pitch yaw
                 normed_state.ang_vel,  # p q r
                 normed_state.prop_omega,  # p1 p2 p3 p4
-                [self.time],  # t
             ]
         )
 
@@ -275,7 +274,6 @@ class DRL_WP_Env_LQR(BaseEnv):
                 self.info["is_success"] = True
                 self.info["targets"] += 1
                 self.reset_target()
-                break
 
             if self.time > self.T:
                 trunc = True
@@ -347,10 +345,12 @@ class Dual_DRL_WP_Env_LQR(gymnasium.Env):
         success = all(f.get("is_success") for f in merged_info.values())
         oob = any(f.get("is_oob") for f in merged_info.values())
         unstable = any(f.get("is_unstable") for f in merged_info.values())
+        timelimit = any(f.get("TimeLimit.truncated") for f in merged_info.values())
 
         merged_info["is_oob"] = oob
         merged_info["is_success"] = success
         merged_info["is_unstable"] = unstable
+        merged_info["TimeLimit.truncated"] = timelimit
 
         return merged_info
 
@@ -393,6 +393,13 @@ class Dual_DRL_WP_Env_LQR(gymnasium.Env):
             info1["collision"] = info2["collision"] = True
         else:
             info1["collision"] = info2["collision"] = False
+
+        dtime = abs(self.env1.time - self.env2.time)
+        if not (term or trunc) and dtime > 0:
+            raise ValueError(
+                f"Time has become desynchronized across "
+                f"the environments by {dtime:.4s}s"
+            )
 
         info = self.merge_infos(info1, info2)
         return obs, reward, term, trunc, info
