@@ -369,7 +369,9 @@ class Multi_DRL_WP_Env_LQR(gymnasium.Env):
         return np.concatenate(observations)
 
     def get_observation(self, *observations):
-        return np.concatenate([[self.time], self.merge_observations(*observations)])[np.newaxis, :]
+        return np.concatenate([[self.time], self.merge_observations(*observations)])[
+            np.newaxis, :
+        ]
 
     def reset(
         self,
