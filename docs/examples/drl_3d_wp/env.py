@@ -1,5 +1,6 @@
 #  Copyright (c) 2024.  Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import functools
 from typing import Optional
 from typing import Tuple
 from typing import Type
@@ -21,6 +22,7 @@ from jdrones.envs import LQRDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.wrappers import EnergyCalculationWrapper
+from stable_baselines3.common.vec_env import DummyVecEnv
 
 
 class BaseEnv(gymnasium.Env):
@@ -303,40 +305,38 @@ class DRL_WP_Env_LQR(BaseEnv):
 
 
 class Dual_DRL_WP_Env_LQR(gymnasium.Env):
+
+    @staticmethod
+    def make_sub_env(angle: float, T: float, dt: float) -> gymnasium.Env:
+        state = JState()
+        state.pos = [np.cos(angle), np.sin(angle), 0]
+        return DRL_WP_Env_LQR(T=T, dt=dt, env_cls_kwargs=dict(initial_state=state))
+
     def __init__(self, *, T, dt):
         super().__init__()
 
-        initial_state1 = JState()
-        initial_state1.pos = [1, 0, 0]
-        initial_state2 = JState()
-        initial_state2.pos = [-1, 0, 0]
-        self.env1 = DRL_WP_Env_LQR(
-            T=T, dt=dt, env_cls_kwargs=dict(initial_state=initial_state1)
-        )
-        self.env2 = DRL_WP_Env_LQR(
-            T=T, dt=dt, env_cls_kwargs=dict(initial_state=initial_state2)
+        self.T = T
+        self.dt = dt
+
+        self.envs = DummyVecEnv(
+            [
+                functools.partial(self.make_sub_env, f, self.T, self.dt)
+                for f in np.linspace(0, np.pi, 2)
+            ]
         )
 
-        obs = self.env1.observation_space
+        obs = self.envs.observation_space
         self.observation_space = gymnasium.spaces.Box(
             low=np.tile(obs.low, (2, 1)),
             high=np.tile(obs.high, (2, 1)),
             shape=(2, *obs.shape),
         )
-        act = self.env1.action_space
+        act = self.envs.action_space
         self.action_space = gymnasium.spaces.Box(
             low=np.tile(act.low, (2, 1)),
             high=np.tile(act.high, (2, 1)),
             shape=(2, *act.shape),
         )
-
-    @property
-    def T(self):
-        return self.env1.T
-
-    @property
-    def dt(self):
-        return self.env1.dt
 
     @staticmethod
     def merge_infos(*infos):
@@ -365,41 +365,28 @@ class Dual_DRL_WP_Env_LQR(gymnasium.Env):
         options: Optional[dict] = None,
     ) -> Tuple[State, dict]:
         super().reset(seed=seed, options=options)
-        obs1, info1 = self.env1.reset(seed=seed, options=options)
-        obs2, info2 = self.env2.reset(seed=seed, options=options)
+        obs = self.envs.reset()
 
-        return self.merge_observations(obs1, obs2), self.merge_infos(info1, info2)
+        return self.merge_observations(*obs), {}
 
     def step(self, action):
-        act1, act2 = action
 
-        obs1, rew1, term1, trunc1, info1 = self.env1.step(act1)
-        obs2, rew2, term2, trunc2, info2 = self.env2.step(act2)
+        obs, rew, dones, info = self.envs.step(action)
 
-        obs = self.merge_observations(obs1, obs2)
-        trunc = trunc1 or trunc2
-        term = term1 or term2
-        reward = (rew1 + rew2) / 2
+        obs = self.merge_observations(*obs)
+        done = np.any(dones)
+        reward = np.sum(rew) / self.envs.num_envs
 
         distance_between_envs = np.linalg.norm(
-            self.env1.state.pos - self.env2.state.pos
+            np.subtract(*[f.pos for f in self.envs.get_attr("state")])
         )
-        info1["distance_between_envs"] = info2["distance_between_env"] = (
-            distance_between_envs
-        )
+
         if distance_between_envs < 0.5:
             reward = -100
-            trunc = True
-            info1["collision"] = info2["collision"] = True
+            done = True
+            info[0]["collision"] = info[1]["collision"] = True
         else:
-            info1["collision"] = info2["collision"] = False
+            info[0]["collision"] = info[1]["collision"] = False
 
-        dtime = abs(self.env1.time - self.env2.time)
-        if not (term or trunc) and dtime > 0:
-            raise ValueError(
-                f"Time has become desynchronized across "
-                f"the environments by {dtime:.4s}s"
-            )
-
-        info = self.merge_infos(info1, info2)
-        return obs, reward, term, trunc, info
+        info = self.merge_infos(*info)
+        return obs, reward, done, done, info
