@@ -143,7 +143,9 @@ class DRL_WP_Env_LQR(BaseEnv):
         ]
     )
 
-    def __init__(self, *args, T: float = 10, c: float = 50, **kwargs):
+    def __init__(
+        self, *args, T: float = 10, c: float = 50, sim_T: float = 0.1, **kwargs
+    ):
         env_cls_kwargs = kwargs.pop("env_cls_kwargs", {})
         super().__init__(
             *args,
@@ -153,8 +155,9 @@ class DRL_WP_Env_LQR(BaseEnv):
         )
 
         self.T = T
-
+        self.sim_T = sim_T
         self.c = c
+        self.K = self.dt / self.sim_T
 
         self.observation_space = gymnasium.spaces.Box(
             low=-1, high=1, shape=(22,), dtype=np.float32
@@ -180,7 +183,7 @@ class DRL_WP_Env_LQR(BaseEnv):
                 normed_state.next_target,  # tx ty tz
                 normed_state.rpy,  # roll pitch yaw
                 normed_state.ang_vel,  # p q r
-                normed_state.prop_omega,  # p1 p2 p3 p4
+                normed_state.prop_omega,  # p1 p2 p3 p4,
             ]
         )
 
@@ -240,12 +243,8 @@ class DRL_WP_Env_LQR(BaseEnv):
         net_energy = 0
         reward = 0
 
-        sim_T = 0.1
-
-        K = self.dt / sim_T
-
         states = []
-        for _ in range(int(sim_T / self.dt)):
+        for _ in range(int(1 / self.K)):
             obs, _, _, _, info = self.env.step(x.to_x())
             self.time += self.dt
 
@@ -265,7 +264,7 @@ class DRL_WP_Env_LQR(BaseEnv):
 
             states.append(np.copy(self.env.unwrapped.state))
 
-            reward += K * (
+            reward += self.K * (
                 -1 * distance_from_tgt
                 # + 0.000001 * energy
                 - 0.00001 * control_action
@@ -305,30 +304,42 @@ class DRL_WP_Env_LQR(BaseEnv):
 class Multi_DRL_WP_Env_LQR(gymnasium.Env):
 
     @staticmethod
-    def make_sub_env(angle: float, T: float, dt: float, c: float) -> gymnasium.Env:
+    def make_sub_env(
+        *, angle: float, T: float, sim_T: float = 0.1, dt: float, c: float
+    ) -> gymnasium.Env:
         state = JState()
         state.pos = [2.5 * np.cos(angle), 2.5 * np.sin(angle), 0]
-        return DRL_WP_Env_LQR(T=T, dt=dt, c=c, env_cls_kwargs=dict(initial_state=state))
+        return DRL_WP_Env_LQR(
+            T=T, dt=dt, c=c, sim_T=sim_T, env_cls_kwargs=dict(initial_state=state)
+        )
 
-    def __init__(self, *, T, dt, N_envs: int = 2, c: float = 50):
+    def __init__(self, *, T, dt, N_envs: int = 2, c: float = 50, sim_T: float = 0.1):
         super().__init__()
 
         self.T = T
+        self.sim_T = sim_T
         self.dt = dt
         self.c = c
 
         self.envs = DummyVecEnv(
             [
-                functools.partial(self.make_sub_env, f, self.T, self.dt, c)
+                functools.partial(
+                    self.make_sub_env,
+                    angle=f,
+                    T=self.T,
+                    dt=self.dt,
+                    c=self.c,
+                    sim_T=self.sim_T,
+                )
                 for f in np.linspace(0, 2 * np.pi, N_envs + 1)[1:]
             ]
         )
 
         obs = self.envs.observation_space
         self.observation_space = gymnasium.spaces.Box(
-            low=np.tile(obs.low, (N_envs, 1)),
-            high=np.tile(obs.high, (N_envs, 1)),
-            shape=(N_envs, *obs.shape),
+            low=np.hstack([[[0]], np.tile(obs.low, (1, N_envs))]),
+            high=np.hstack([[[self.T]], np.tile(obs.high, (1, N_envs))]),
+            shape=(1, 1 + N_envs * obs.shape[0]),
         )
         act = self.envs.action_space
         self.action_space = gymnasium.spaces.Box(
@@ -355,7 +366,10 @@ class Multi_DRL_WP_Env_LQR(gymnasium.Env):
 
     @staticmethod
     def merge_observations(*observations):
-        return np.stack(observations)
+        return np.concatenate(observations)
+
+    def get_observation(self, *observations):
+        return np.concatenate([[self.time], self.merge_observations(*observations)])
 
     def reset(
         self,
@@ -365,14 +379,15 @@ class Multi_DRL_WP_Env_LQR(gymnasium.Env):
     ) -> Tuple[State, dict]:
         super().reset(seed=seed, options=options)
         obs = self.envs.reset()
+        self.time = 0
 
-        return self.merge_observations(*obs), {}
+        return self.get_observation(*obs), {}
 
     def step(self, action):
-
         obs, rew, dones, info = self.envs.step(action)
+        self.time += self.sim_T / self.dt
 
-        obs = self.merge_observations(*obs)
+        obs = self.get_observation(*obs)
         done = np.any(dones)
 
         if self.envs.num_envs > 1:
