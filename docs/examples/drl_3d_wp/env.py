@@ -273,7 +273,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             )
 
             if distance_from_tgt < 1:
-                reward += self.c
+                reward = self.c
                 self.info["is_success"] = True
                 self.info["targets"] += 1
                 self.reset_target()
@@ -290,7 +290,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             if is_oob or is_unstable:
                 self.info["is_success"] = False
                 trunc = True
-                reward -= self.c
+                reward = -self.c
                 break
 
         self.info["action"] = action
@@ -298,9 +298,6 @@ class DRL_WP_Env_LQR(BaseEnv):
         info["energy"] = net_energy
         self.info["control_action"] = net_control_action
         self.info["dcontrol_action"] = net_dcontrol_action
-
-        lower, upper = -self.c, self.c
-        reward = ((reward - lower) / (upper - lower) - 0.5) * 2
 
         return self.get_observation(), float(reward), term, trunc, self.info | info
 
@@ -378,22 +375,27 @@ class Dual_DRL_WP_Env_LQR(gymnasium.Env):
         obs = self.merge_observations(*obs)
         done = np.any(dones)
 
-        pos = np.array([f.pos for f in self.envs.get_attr("state")])
-        dists = np.linalg.norm(pos[np.newaxis, :, :] - pos[:, np.newaxis, :], axis=2)[
-            ~np.eye(pos.shape[0], dtype=bool)
-        ]
+        if self.envs.num_envs > 1:
+            pos = np.array([f.pos for f in self.envs.get_attr("state")])
+            dists = np.linalg.norm(
+                pos[np.newaxis, :, :] - pos[:, np.newaxis, :], axis=2
+            )[~np.eye(pos.shape[0], dtype=bool)]
 
-        min_distance_between_envs = dists.min()
+            min_distance_between_envs = dists.min()
 
-        collision = min_distance_between_envs < 0.5
-        if collision:
-            rew -= 1
-            done = True
-
-        reward = np.mean(rew)
+            collision = min_distance_between_envs < 0.5
+            if collision:
+                rew = rew * 0 - self.c
+                done = True
+        else:
+            collision = False
 
         for i in range(len(info)):
             info[i]["collision"] = collision
+
+        lower, upper = -self.c, self.c
+        reward = ((rew - lower) / (upper - lower) - 0.5) * 2
+        reward = np.sum(reward)
 
         info = self.merge_infos(*info)
         return obs, reward, done, done, info
