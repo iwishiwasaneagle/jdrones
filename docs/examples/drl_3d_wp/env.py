@@ -143,7 +143,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         ]
     )
 
-    def __init__(self, *args, T: float = 10, **kwargs):
+    def __init__(self, *args, T: float = 10, c: float = 50, **kwargs):
         env_cls_kwargs = kwargs.pop("env_cls_kwargs", {})
         super().__init__(
             *args,
@@ -153,6 +153,8 @@ class DRL_WP_Env_LQR(BaseEnv):
         )
 
         self.T = T
+
+        self.c = c
 
         self.observation_space = gymnasium.spaces.Box(
             low=-1, high=1, shape=(22,), dtype=np.float32
@@ -238,7 +240,6 @@ class DRL_WP_Env_LQR(BaseEnv):
         net_energy = 0
         reward = 0
 
-        c = 100
         sim_T = 0.1
 
         K = self.dt / sim_T
@@ -272,7 +273,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             )
 
             if distance_from_tgt < 1:
-                reward += c
+                reward += self.c
                 self.info["is_success"] = True
                 self.info["targets"] += 1
                 self.reset_target()
@@ -289,7 +290,7 @@ class DRL_WP_Env_LQR(BaseEnv):
             if is_oob or is_unstable:
                 self.info["is_success"] = False
                 trunc = True
-                reward -= c
+                reward -= self.c
                 break
 
         self.info["action"] = action
@@ -298,7 +299,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         self.info["control_action"] = net_control_action
         self.info["dcontrol_action"] = net_dcontrol_action
 
-        lower, upper = -c, c
+        lower, upper = -self.c, self.c
         reward = ((reward - lower) / (upper - lower) - 0.5) * 2
 
         return self.get_observation(), float(reward), term, trunc, self.info | info
@@ -307,20 +308,21 @@ class DRL_WP_Env_LQR(BaseEnv):
 class Dual_DRL_WP_Env_LQR(gymnasium.Env):
 
     @staticmethod
-    def make_sub_env(angle: float, T: float, dt: float) -> gymnasium.Env:
+    def make_sub_env(angle: float, T: float, dt: float, c: float) -> gymnasium.Env:
         state = JState()
         state.pos = [2.5 * np.cos(angle), 2.5 * np.sin(angle), 0]
-        return DRL_WP_Env_LQR(T=T, dt=dt, env_cls_kwargs=dict(initial_state=state))
+        return DRL_WP_Env_LQR(T=T, dt=dt, c=c, env_cls_kwargs=dict(initial_state=state))
 
-    def __init__(self, *, T, dt, N_envs: int = 2):
+    def __init__(self, *, T, dt, N_envs: int = 2, c: float = 50):
         super().__init__()
 
         self.T = T
         self.dt = dt
+        self.c = c
 
         self.envs = DummyVecEnv(
             [
-                functools.partial(self.make_sub_env, f, self.T, self.dt)
+                functools.partial(self.make_sub_env, f, self.T, self.dt, c)
                 for f in np.linspace(0, 2 * np.pi, N_envs + 1)[1:]
             ]
         )
@@ -375,7 +377,6 @@ class Dual_DRL_WP_Env_LQR(gymnasium.Env):
 
         obs = self.merge_observations(*obs)
         done = np.any(dones)
-        reward = np.sum(rew) / self.envs.num_envs
 
         pos = np.array([f.pos for f in self.envs.get_attr("state")])
         dists = np.linalg.norm(pos[np.newaxis, :, :] - pos[:, np.newaxis, :], axis=2)[
@@ -386,8 +387,10 @@ class Dual_DRL_WP_Env_LQR(gymnasium.Env):
 
         collision = min_distance_between_envs < 0.5
         if collision:
-            reward = -100
+            rew -= 1
             done = True
+
+        reward = np.mean(rew)
 
         for i in range(len(info)):
             info[i]["collision"] = collision
