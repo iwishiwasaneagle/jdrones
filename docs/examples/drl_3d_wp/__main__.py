@@ -200,7 +200,7 @@ def learn(
     callback = build_callback(
         N,
         eval_callback_kwargs=dict(n_eval=n_eval, n_envs=n_envs),
-        make_vec_env_kwargs=dict(env_kwargs=dict(T=max_sim_time)),
+        make_vec_env_kwargs=dict(env_kwargs=dict(T=max_sim_time, N_envs=n_sub_envs)),
     )
 
     if wandb_project is not None:
