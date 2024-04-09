@@ -40,8 +40,8 @@ matplotlib.use("Agg")
 logger.info(f"Starting {__file__}")
 
 
-def make_env(T=10):
-    env = Dual_DRL_WP_Env_LQR(dt=DT, T=T)
+def make_env(T: int = 10, N_envs: int = 2):
+    env = Dual_DRL_WP_Env_LQR(dt=DT, T=T, N_envs=N_envs)
     env = Monitor(env)
     return env
 
@@ -169,6 +169,7 @@ def main():
 @click.option("--vec_env_cls", type=click.Choice(["dummy", "subproc"]), default="dummy")
 @click.option("--batch_size", type=int, default=128)
 @click.option("--n_steps", type=int, default=4096)
+@click.option("--n_sub_envs", type=click.IntRange(min=1), default=2)
 @click.option("--lr", nargs=3, default=(0.0003, 0.0003, 1))
 @click.option("--clip_range", default=0.2, type=click.FloatRange(min=0.01))
 @click.argument("net_arch_name", type=click.Choice(["mlp", "dense", "recurrent"]))
@@ -184,16 +185,16 @@ def main():
 @click.option("--wandb_project", default=None, type=str)
 @click.option("--device", type=click.Choice(["cpu", "cuda"]), default="cuda")
 @click.option("-T", "--max_sim_time", type=click.IntRange(min=10), default=10)
-def learn(wandb_project, vec_env_cls, max_sim_time, **kwargs):
+def learn(
+    wandb_project, vec_env_cls, max_sim_time, n_eval, n_envs, n_sub_envs, **kwargs
+):
     N = kwargs.pop("num_timesteps")
-    n_eval = kwargs.pop("n_eval")
-    n_envs = kwargs.pop("n_envs")
     kwargs["lr"] = get_linear_fn(*kwargs.get("lr"))
     env = make_vec_env(
         make_env,
         n_envs=n_envs,
         vec_env_cls=DummyVecEnv if vec_env_cls == "dummy" else SubprocVecEnv,
-        env_kwargs=dict(T=max_sim_time),
+        env_kwargs=dict(T=max_sim_time, N_envs=n_sub_envs),
     )
     model = build_model(env=env, **kwargs)
     callback = build_callback(
