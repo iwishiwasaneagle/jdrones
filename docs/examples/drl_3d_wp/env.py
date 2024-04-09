@@ -302,7 +302,7 @@ class DRL_WP_Env_LQR(BaseEnv):
         return self.get_observation(), float(reward), term, trunc, self.info | info
 
 
-class Dual_DRL_WP_Env_LQR(gymnasium.Env):
+class Multi_DRL_WP_Env_LQR(gymnasium.Env):
 
     @staticmethod
     def make_sub_env(angle: float, T: float, dt: float, c: float) -> gymnasium.Env:

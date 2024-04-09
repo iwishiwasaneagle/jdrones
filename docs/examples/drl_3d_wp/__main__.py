@@ -25,7 +25,7 @@ from drl_3d_wp.consts import N_ENVS
 from drl_3d_wp.consts import N_EVAL
 from drl_3d_wp.consts import TENSORBOARD_PATH
 from drl_3d_wp.consts import TOTAL_TIMESTEP
-from drl_3d_wp.env import Dual_DRL_WP_Env_LQR
+from drl_3d_wp.env import Multi_DRL_WP_Env_LQR
 from drl_3d_wp.policies import ActorCriticDenseNetPolicy
 from loguru import logger
 from stable_baselines3.common.callbacks import CallbackList
@@ -41,7 +41,7 @@ logger.info(f"Starting {__file__}")
 
 
 def make_env(T: int = 10, N_envs: int = 2):
-    env = Dual_DRL_WP_Env_LQR(dt=DT, T=T, N_envs=N_envs)
+    env = Multi_DRL_WP_Env_LQR(dt=DT, T=T, N_envs=N_envs)
     env = Monitor(env)
     return env
 
