@@ -1,0 +1,16 @@
+services:
+    optuna-dashboard:
+        ports:
+            - 8080:8080
+        volumes:
+            - $PWD/logs/optuna:/app
+        working_dir: /app
+        image: ghcr.io/optuna/optuna-dashboard
+        command: sqlite:///drl_3d_w_energy.db
+    tensorflow:
+        ports:
+            - 6006:6006
+        volumes:
+            - $PWD/logs/tensorboard:/logdir
+        image: tensorflow/tensorflow
+        command: tensorboard --logdir /logdir --host 0.0.0.0
