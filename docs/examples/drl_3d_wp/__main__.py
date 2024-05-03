@@ -40,8 +40,8 @@ matplotlib.use("Agg")
 logger.info(f"Starting {__file__}")
 
 
-def make_env(T: int = 10, N_envs: int = 2):
-    env = Multi_DRL_WP_Env_LQR(dt=DT, T=T, N_envs=N_envs)
+def make_env(T: int = 10, N_envs: int = 2, sim_T: float = 10 * DT):
+    env = Multi_DRL_WP_Env_LQR(dt=DT, T=T, N_envs=N_envs, sim_T=sim_T)
     env = Monitor(env)
     return env
 
