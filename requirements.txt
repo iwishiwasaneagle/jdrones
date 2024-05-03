@@ -5,6 +5,6 @@ nptyping==2.5.0
 numpy==1.26.4
 pandas==2.2.1
 pybullet==3.2.5
-pydantic==2.6.2
+pydantic==2.7.1
 scipy==1.13.0
 seaborn==0.13.2
