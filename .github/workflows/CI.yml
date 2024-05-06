@@ -78,7 +78,7 @@ jobs:
         ${{ matrix.pytest-flags }}
 
     - name: Upload code test coverage report
-      uses: codecov/codecov-action@v4.1.0
+      uses: codecov/codecov-action@v4.3.1
       if: ${{ ! contains(github.actor, '[bot]') && ( matrix.codecov ) && ( !env.ACT ) }}
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
