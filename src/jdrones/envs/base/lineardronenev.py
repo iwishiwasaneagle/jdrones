@@ -2,6 +2,7 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 from typing import Tuple
 
+import numba
 import numpy as np
 from gymnasium import spaces
 from jdrones.data_models import State
@@ -84,6 +85,7 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
         return A, B, C
 
     @staticmethod
+    @numba.njit
     def calc_dx(A, B, C, x, u):
         return (A @ x + B @ u + C.T).flatten()
 

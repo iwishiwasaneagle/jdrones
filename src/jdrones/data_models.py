@@ -27,13 +27,14 @@ class KLengthArray(np.ndarray):
         if input_array is None:
             obj = np.zeros(cls.k)
         else:
-            obj = np.asarray(input_array)
+            obj = np.array(input_array)
             if obj.shape != (cls.k,):
                 raise ValueError(f"Incorrect shape {obj.shape}")
 
-        if not np.can_cast(obj[0], DType):
-            raise ValueError(f"Incorrect dtype={obj.dtype}")
-        obj = obj.astype(DType)
+        if obj.dtype != DType:
+            if not np.can_cast(obj[0], DType):
+                raise ValueError(f"Incorrect dtype={obj.dtype}")
+            obj = obj.astype(DType)
 
         return obj.view(cls)
 
@@ -144,21 +145,32 @@ class State(KLengthArray):
     @classmethod
     def from_x(cls, x: LinearXAction):
         return cls(
-            np.concatenate(
-                [
-                    x[:3],
-                    (0, 0, 0, 0),
-                    x[6:9],
-                    x[3:6],
-                    x[9:12],
-                    (0, 0, 0, 0),
-                ],
-                dtype=DType,
-            )
+            [
+                x[0],
+                x[1],
+                x[2],
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                x[6],
+                x[7],
+                x[8],
+                x[3],
+                x[4],
+                x[5],
+                x[9],
+                x[10],
+                x[11],
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            ],
         )
 
     def to_x(self) -> LinearXAction:
-        return np.concatenate([self.pos, self.vel, self.rpy, self.ang_vel])
+        return self[[0, 1, 2, 10, 11, 12, 7, 8, 9, 13, 14, 15]]
 
     def quat_rotation(self, quat: VEC4) -> "State":
         rotmat = quat_to_rotmat(quat)

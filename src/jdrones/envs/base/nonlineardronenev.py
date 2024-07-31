@@ -3,17 +3,17 @@
 import functools
 from typing import Tuple
 
+import numba
 import numpy as np
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
 from jdrones.transforms import euler_to_quat
 from jdrones.transforms import euler_to_rotmat
+from jdrones.types import DType
 from jdrones.types import MAT3X3
 from jdrones.types import PropellerAction
 from jdrones.types import VEC3
-
-UZ = np.array([0, 0, 1]).reshape((-1, 1))
 
 
 class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
@@ -49,11 +49,50 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
         g: float
             acceleration due to gravity
         """
-        inertias = np.diag(np.array(model.I))
+        inertias = np.diag(np.array(model.I, dtype=DType))
         m = model.mass
         drag_coeffs = model.drag_coeffs
         g = model.g
-        return inertias, np.linalg.inv(inertias), m, np.array(drag_coeffs), g
+        return (
+            inertias,
+            np.linalg.inv(inertias),
+            m,
+            np.array(drag_coeffs, dtype=DType),
+            g,
+        )
+
+    @staticmethod
+    @numba.njit(
+        [
+            "float64[:](float64[:],float64[:],float64[:],float64[:],"
+            "float64[:,:],float64[:,:],float64,float64[:],float64)",
+        ]
+    )
+    def _calc_dstate(
+        rpy,
+        vel,
+        ang_vel,
+        u_star,
+        inertias,
+        inv_intertias,
+        m,
+        drag_coeffs,
+        g,
+    ):
+        UZ = np.array([0, 0, 1], dtype=DType).reshape((-1, 1))
+        R_W_Q = euler_to_rotmat(rpy)
+        R_Q_W = np.transpose(R_W_Q)
+
+        body_vel = np.dot(R_W_Q, vel)
+        drag_force = -np.sign(vel) * np.dot(R_Q_W, drag_coeffs * np.square(body_vel))
+        dstate = np.zeros((20,), dtype=DType)
+        dstate[:3] = vel
+        dstate[7:10] = ang_vel
+        dstate[10:13] = (
+            -m * g * UZ.T + (R_W_Q @ UZ).T * u_star[3] + drag_force
+        ).flatten() / m
+        dstate[13:16] = np.dot(inv_intertias, u_star[0:3])
+        return dstate
 
     @classmethod
     def calc_dstate(cls, action: PropellerAction, state: State, model: URDFModel):
@@ -72,33 +111,14 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
         State
             The state derivative
         """
-        (
-            inertias,
-            inv_intertias,
-            m,
-            drag_coeffs,
-            g,
-        ) = cls._get_cached_time_invariant_params(model)
         u_star = model.rpm2rpyT(np.square(action))
-
-        R_W_Q = euler_to_rotmat(state.rpy)
-        R_Q_W = np.transpose(R_W_Q)
-
-        body_vel = np.dot(R_W_Q, state.vel)
-        drag_force = -np.sign(state.vel) * np.dot(
-            R_Q_W, drag_coeffs * np.square(body_vel)
+        return cls._calc_dstate(
+            state.rpy,
+            state.vel,
+            state.ang_vel,
+            u_star,
+            *cls._get_cached_time_invariant_params(model),
         )
-        dstate = np.concatenate(
-            [
-                state.vel,
-                (0, 0, 0, 0),
-                state.ang_vel,
-                (-m * g * UZ.T + (R_W_Q @ UZ).T * u_star[3] + drag_force).flatten() / m,
-                np.dot(inv_intertias, u_star[0:3]),
-                (0, 0, 0, 0),
-            ]
-        )
-        return dstate
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
         """

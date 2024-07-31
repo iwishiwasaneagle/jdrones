@@ -46,6 +46,8 @@ def test_quat_euler_sanity_check(quat, euler):
     assert np.allclose(
         pybullet.getQuaternionFromEuler(pybullet.getEulerFromQuaternion(quat)), quat
     )
+    assert np.allclose(pybullet.getQuaternionFromEuler(euler), quat)
+    assert np.allclose(pybullet.getEulerFromQuaternion(quat), euler)
 
 
 @QUAT_EULER

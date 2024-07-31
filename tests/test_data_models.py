@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 from jdrones.data_models import State
 from jdrones.data_models import STATE_ENUM
+from jdrones.types import DType
 from scipy.spatial.transform import Rotation as R
 
 
@@ -269,7 +270,7 @@ def test_x_to_state():
 )
 def test_state_quat_rotation(quat, act, exp):
     exp = State(exp)
-    rotated = State(act).quat_rotation(quat)
+    rotated = State(act).quat_rotation(np.array(quat, dtype=DType))
     assert np.allclose(rotated.pos, exp.pos)
     assert np.allclose(rotated.quat, exp.quat)
     assert np.allclose(

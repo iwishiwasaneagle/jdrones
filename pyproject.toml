@@ -28,6 +28,7 @@ dependencies = [
     "pybullet",
     "pydantic",
     "nptyping",
+    "numba"
 ]
 dynamic = ["version"]
 
