@@ -7,23 +7,7 @@ from jdrones.types import VEC3
 from jdrones.types import VEC4
 
 
-def _quat_to_euler(quat: VEC4) -> VEC3:
-    x, y, z, w = quat
-    sinr_cosp = 2 * (w * x + y * z)
-    cosr_cosp = 1 - 2 * (x * x + y * y)
-    roll = np.arctan2(sinr_cosp, cosr_cosp)
-    sinp = np.sqrt(1 + 2 * (w * y - x * z))
-    cosp = np.sqrt(1 - 2 * (w * y - x * z))
-    pitch = 2 * np.arctan2(sinp, cosp) - np.pi / 2
-    siny_cosp = 2 * (w * z + x * y)
-    cosy_cosp = 1 - 2 * (y * y + z * z)
-    yaw = np.arctan2(siny_cosp, cosy_cosp)
-    return roll, pitch, yaw
-
-
-_quat_to_euler_fast = numba.jit(_quat_to_euler)
-
-
+@numba.njit
 def quat_to_euler(quat: VEC4) -> VEC3:
     """
     PyBullet does a Body 3-2-1 sequence:
@@ -70,30 +54,20 @@ def quat_to_euler(quat: VEC4) -> VEC3:
         Euler angle (roll,pitch,yaw)
 
     """
-    return _quat_to_euler_fast(quat)
+    x, y, z, w = quat
+    sinr_cosp = 2 * (w * x + y * z)
+    cosr_cosp = 1 - 2 * (x * x + y * y)
+    roll = np.arctan2(sinr_cosp, cosr_cosp)
+    sinp = np.sqrt(1 + 2 * (w * y - x * z))
+    cosp = np.sqrt(1 - 2 * (w * y - x * z))
+    pitch = 2 * np.arctan2(sinp, cosp) - np.pi / 2
+    siny_cosp = 2 * (w * z + x * y)
+    cosy_cosp = 1 - 2 * (y * y + z * z)
+    yaw = np.arctan2(siny_cosp, cosy_cosp)
+    return roll, pitch, yaw
 
 
-def _euler_to_quat(euler: VEC3) -> VEC4:
-    roll, pitch, yaw = euler
-
-    cy = np.cos(yaw * 0.5)
-    sy = np.sin(yaw * 0.5)
-    cp = np.cos(pitch * 0.5)
-    sp = np.sin(pitch * 0.5)
-    cr = np.cos(roll * 0.5)
-    sr = np.sin(roll * 0.5)
-
-    w = cr * cp * cy + sr * sp * sy
-    x = sr * cp * cy - cr * sp * sy
-    y = cr * sp * cy + sr * cp * sy
-    z = cr * cp * sy - sr * sp * cy
-
-    return np.array([x, y, z, w])
-
-
-_euler_to_quat_fast = numba.jit(_euler_to_quat)
-
-
+@numba.njit
 def euler_to_quat(euler: VEC3) -> VEC4:
     """PyBullet does a Body 3-2-1 sequence:
 
@@ -133,10 +107,25 @@ def euler_to_quat(euler: VEC3) -> VEC4:
         Quaternion (x,y,z,w)
 
     """
-    return _euler_to_quat_fast(euler)
+    roll, pitch, yaw = euler
+
+    cy = np.cos(yaw * 0.5)
+    sy = np.sin(yaw * 0.5)
+    cp = np.cos(pitch * 0.5)
+    sp = np.sin(pitch * 0.5)
+    cr = np.cos(roll * 0.5)
+    sr = np.sin(roll * 0.5)
+
+    w = cr * cp * cy + sr * sp * sy
+    x = sr * cp * cy - cr * sp * sy
+    y = cr * sp * cy + sr * cp * sy
+    z = cr * cp * sy - sr * sp * cy
+
+    return np.array([x, y, z, w])
 
 
-def _quat_to_rotmat(quat: VEC4) -> MAT3X3:
+@numba.njit
+def quat_to_rotmat(quat: VEC4) -> MAT3X3:
     x, y, z, w = quat
     x2, y2, z2, w2 = quat * quat
     xy, xz, xw, yz, yw, zw = (
@@ -158,12 +147,6 @@ def _quat_to_rotmat(quat: VEC4) -> MAT3X3:
     return rot_mat
 
 
-_quat_to_rotmat_fast = numba.jit(_quat_to_rotmat)
-
-
-def quat_to_rotmat(quat: VEC4) -> MAT3X3:
-    return _quat_to_rotmat_fast(quat)
-
-
+@numba.njit
 def euler_to_rotmat(euler: VEC3) -> MAT3X3:
     return quat_to_rotmat(euler_to_quat(euler))

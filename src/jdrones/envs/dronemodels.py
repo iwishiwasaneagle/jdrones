@@ -1,13 +1,14 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-import functools
 from importlib.resources import files
 
+import numba
 import numpy as np
 from jdrones.data_models import URDFModel
+from jdrones.types import DType
 
 
-@functools.cache
+@numba.njit
 def droneplus_mixing_matrix(*, length, k_Q, k_T):
     return np.array(
         [
@@ -15,7 +16,8 @@ def droneplus_mixing_matrix(*, length, k_Q, k_T):
             [-k_T * length, 0, k_T * length, 0],
             [k_Q, -k_Q, k_Q, -k_Q],
             [k_T, k_T, k_T, k_T],
-        ]
+        ],
+        dtype=DType,
     )
 
 
