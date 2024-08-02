@@ -28,6 +28,14 @@ register(
     entry_point="jdrones.envs:FifthOrderPolyPositionDroneEnv",
 )
 register(
+    "OptimalFifthOrderPolyPositionDroneEnv-v0",
+    entry_point="jdrones.envs:OptimalFifthOrderPolyPositionDroneEnv",
+)
+register(
     "FifthOrderPolyPositionWithLookAheadDroneEnv-v0",
     entry_point="jdrones.envs:FifthOrderPolyPositionWithLookAheadDroneEnv",
+)
+register(
+    "OptimalFifthOrderPolyPositionWithLookAheadDroneEnv-v0",
+    entry_point="jdrones.envs:OptimalFifthOrderPolyPositionWithLookAheadDroneEnv",
 )

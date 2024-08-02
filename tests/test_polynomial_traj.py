@@ -4,12 +4,13 @@ import numpy as np
 import pytest
 from jdrones.trajectory import FifthOrderPolynomialTrajectory
 from jdrones.trajectory import FirstOrderPolynomialTrajectory
+from jdrones.trajectory import OptimalFifthOrderPolynomialTrajectory
 
 
 @pytest.fixture
 def vec3_factory():
     def fn(x, y, z):
-        return x, y, z
+        return np.array([x, y, z], dtype=np.float64)
 
     return fn
 
@@ -44,9 +45,18 @@ def dest_acc(request, vec3_factory):
     return vec3_factory(*request.param)
 
 
-@pytest.fixture(params=[5])
+@pytest.fixture(params=[5, 10])
 def T(request):
     return request.param
+
+
+@pytest.fixture(autouse=True)
+def mark_skip(start_pos, start_vel, start_acc, dest_pos, dest_vel, dest_acc):
+    start = np.array([start_pos, start_vel, start_acc])
+    dest = np.array([dest_pos, dest_vel, dest_acc])
+
+    if np.allclose(start, dest):
+        pytest.skip("Start and dest poses are identical")
 
 
 @pytest.fixture()
@@ -65,6 +75,22 @@ def fifth_o_trajectory(
 
 
 @pytest.fixture()
+def optimal_fifth_o_trajectory(
+    start_pos, start_vel, start_acc, dest_pos, dest_vel, dest_acc
+):
+    traj = OptimalFifthOrderPolynomialTrajectory(
+        start_pos=start_pos,
+        start_vel=start_vel,
+        start_acc=start_acc,
+        dest_pos=dest_pos,
+        dest_vel=dest_vel,
+        dest_acc=dest_acc,
+        adaptive_acceleration=True,
+    )
+    yield traj
+
+
+@pytest.fixture()
 def first_o_trajectory(start_pos, dest_pos, T):
     return FirstOrderPolynomialTrajectory(
         start_pos=start_pos,
@@ -73,129 +99,43 @@ def first_o_trajectory(start_pos, dest_pos, T):
     )
 
 
-@pytest.mark.parametrize(
-    "start_pos,dest_pos,exp",
+DATA = [
     [
-        [
-            (0, 0, 0),
-            (1, 0, 0),
-            dict(
-                x=[
-                    0.00192,
-                    -0.024,
-                    0.08,
-                    0,
-                    0,
-                    0,
-                ],
-                y=np.zeros(6),
-                z=np.zeros(6),
-            ),
-        ],
-        [
-            (0, 0, 0),
-            (0, 1, 0),
-            dict(
-                y=[
-                    0.00192,
-                    -0.024,
-                    0.08,
-                    0,
-                    0,
-                    0,
-                ],
-                x=np.zeros(6),
-                z=np.zeros(6),
-            ),
-        ],
-        [
-            (0, 0, 0),
-            (0, 0, 1),
-            dict(
-                z=[
-                    0.00192,
-                    -0.024,
-                    0.08,
-                    0,
-                    0,
-                    0,
-                ],
-                y=np.zeros(6),
-                x=np.zeros(6),
-            ),
-        ],
+        (0, 0, 0),
+        (0, 0, 0),
     ],
-    indirect=["start_pos", "dest_pos"],
-)
-def test_fifth_o_traj_coeffs_only_pos(fifth_o_trajectory, exp):
-    act = fifth_o_trajectory.coeffs
+    [
+        (0, 0, 0),
+        (1, 0, 0),
+    ],
+    [
+        (-3, -2, -1),
+        (1, 2, 3),
+    ],
+    [(10, -20, 34), (6, 89, -20)],
+    [(1000, 1000, 1000), (0, 0, 0)],
+]
 
-    assert all(np.allclose(exp[f], act[f]) for f in ("x", "y", "z"))
-
-
-@pytest.mark.parametrize(
+ACC = pytest.mark.parametrize(
     "start_acc,dest_acc",
-    [
-        [
-            (0, 0, 0),
-            (0, 0, 0),
-        ],
-        [
-            (0, 0, 0),
-            (1, 0, 0),
-        ],
-        [
-            (-3, -2, -1),
-            (1, 2, 3),
-        ],
-    ],
+    DATA,
     indirect=True,
 )
-@pytest.mark.parametrize(
+VEL = pytest.mark.parametrize(
     "start_vel,dest_vel",
-    [
-        [
-            (0, 0, 0),
-            (0, 0, 0),
-        ],
-        [
-            (0, 0, 0),
-            (1, 0, 0),
-        ],
-        [
-            (-3, -2, -1),
-            (1, 2, 3),
-        ],
-    ],
+    DATA,
     indirect=True,
 )
-@pytest.mark.parametrize(
+POS = pytest.mark.parametrize(
     "start_pos,dest_pos",
-    [
-        [
-            (0, 0, 0),
-            (0, 0, 0),
-        ],
-        [
-            (0, 0, 0),
-            (1, 0, 0),
-        ],
-        [
-            (0, 0, 0),
-            (0, 1, 0),
-        ],
-        [
-            (0, 0, 0),
-            (0, 0, 1),
-        ],
-        [
-            (-3, -2, -1),
-            (1, 2, 3),
-        ],
-    ],
+    DATA,
     indirect=True,
 )
-@pytest.mark.parametrize("T", [5, 10], indirect=True)
+
+
+@ACC
+@VEL
+@POS
 def test_fifth_o_traj_bounds(
     fifth_o_trajectory, T, start_pos, dest_pos, start_vel, dest_vel, start_acc, dest_acc
 ):
@@ -215,73 +155,36 @@ def test_fifth_o_traj_bounds(
     assert np.allclose(act_dest_acc, dest_acc)
 
 
-@pytest.mark.parametrize(
-    "start_pos,dest_pos,exp",
-    [
-        [
-            (0, 0, 0),
-            (1, 0, 0),
-            dict(
-                x=[0.2, 0],
-                y=np.zeros(2),
-                z=np.zeros(2),
-            ),
-        ],
-        [
-            (0, 0, 0),
-            (0, 1, 0),
-            dict(
-                y=[0.2, 0],
-                x=np.zeros(2),
-                z=np.zeros(2),
-            ),
-        ],
-        [
-            (0, 0, 0),
-            (0, 0, 1),
-            dict(
-                z=[0.2, 0],
-                y=np.zeros(2),
-                x=np.zeros(2),
-            ),
-        ],
-    ],
-    indirect=["start_pos", "dest_pos"],
-)
-def test_first_o_traj_coeffs_only_pos(first_o_trajectory, exp):
-    act = first_o_trajectory.coeffs
+@ACC
+@VEL
+@POS
+def test_optimal_fifth_o_traj_bounds(
+    optimal_fifth_o_trajectory: OptimalFifthOrderPolynomialTrajectory,
+    start_pos,
+    dest_pos,
+    start_vel,
+    dest_vel,
+    start_acc,
+    dest_acc,
+):
+    t = optimal_fifth_o_trajectory.T
+    act_start_pos = optimal_fifth_o_trajectory.position(0)
+    act_dest_pos = optimal_fifth_o_trajectory.position(t)
+    assert np.allclose(act_start_pos, start_pos)
+    assert np.allclose(act_dest_pos, dest_pos)
 
-    assert all(np.allclose(exp[f], act[f]) for f in ("x", "y", "z"))
+    act_start_vel = optimal_fifth_o_trajectory.velocity(0)
+    act_dest_vel = optimal_fifth_o_trajectory.velocity(t)
+    assert np.allclose(act_start_vel, start_vel)
+    assert np.allclose(act_dest_vel, dest_vel)
+
+    act_start_acc = optimal_fifth_o_trajectory.acceleration(0)
+    act_dest_acc = optimal_fifth_o_trajectory.acceleration(t)
+    assert np.allclose(act_start_acc, start_acc)
+    assert np.allclose(act_dest_acc, dest_acc)
 
 
-@pytest.mark.parametrize(
-    "start_pos,dest_pos",
-    [
-        [
-            (0, 0, 0),
-            (0, 0, 0),
-        ],
-        [
-            (0, 0, 0),
-            (1, 0, 0),
-        ],
-        [
-            (0, 0, 0),
-            (0, 1, 0),
-        ],
-        [
-            (0, 0, 0),
-            (0, 0, 1),
-        ],
-        [
-            (-3, -2, -1),
-            (1, 2, 3),
-        ],
-        np.random.random((2, 3)),
-    ],
-    indirect=True,
-)
-@pytest.mark.parametrize("T", [5, 10], indirect=True)
+@POS
 def test_first_o_traj_bounds(first_o_trajectory, T, start_pos, dest_pos):
     act_start_pos = first_o_trajectory.position(0)
     first_o_trajectory.position(T / 2)

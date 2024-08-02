@@ -17,6 +17,7 @@ from jdrones.envs.lqr import LQRDroneEnv
 from jdrones.trajectory import BasePolynomialTrajectory
 from jdrones.trajectory import FifthOrderPolynomialTrajectory
 from jdrones.trajectory import FirstOrderPolynomialTrajectory
+from jdrones.trajectory import OptimalFifthOrderPolynomialTrajectory
 from jdrones.types import DType
 from jdrones.types import PositionAction
 from jdrones.types import PositionVelocityAction
@@ -220,7 +221,7 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
             if np.any(np.isnan(dist)):
                 trunc = True
 
-            if dist < 0.01:
+            if dist < 0.5:
                 term = True
                 info["error"] = dist
 
@@ -282,6 +283,65 @@ class FifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
             dest_vel=tgt.vel,
             dest_acc=(0, 0, 0),
             T=T,
+        )
+        return t
+
+
+class OptimalFifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
+    """
+    Uses :class:`jdrones.trajectory.OptimalFifthOrderPolynomialTrajectory` to give
+    target position and velocity commands at every time point until the target is
+    reached. If the time taken exceeds :math:`T`, the original target position is
+    given as a raw input. However, if this were to happen, the distance is small
+    enough to ensure stability. A bisection-based optimisation is done to ensure
+    maximum acceleration constraints are respected.
+
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("OptimalFifthOrderPolyPositionDroneEnv-v0")
+    <OrderEnforcing<PassiveEnvChecker<OptimalFifthOrderPolyPositionDroneEnv<OptimalFifthOrderPolyPositionDroneEnv-v0>>>>
+
+    """
+
+    @staticmethod
+    def calc_traj(
+        cur: State, tgt: State, max_acceleration: float = 1
+    ) -> OptimalFifthOrderPolynomialTrajectory:
+        """
+        Calculate the optimal trajectory for the drone to traverse.
+
+        Total time to traverse the polynomial is defined as
+
+        .. math::
+            \\begin{align*}
+                x^*(t) &= \\arg \\underset{t}\\min x(t)\\\\
+                &s.t.\\\\
+                \\left|\\frac{d^2}{dt^2} x(t)\\right|& \\leq a_\\text{max}
+            \\\\end{align*}
+
+        to ensure dynamic compatibility.
+
+        Parameters
+        ----------
+        cur : jdrones.data_models.State
+            Current state
+        tgt : jdrones.data_models.State
+            Target state
+        max_acceleration : float
+            Maximum vehicle acceleration
+
+        Returns
+        -------
+        jdrones.trajectory.OptimalFifthOrderPolynomialTrajectory
+            The solved trajectory
+        """
+
+        t = OptimalFifthOrderPolynomialTrajectory(
+            start_pos=cur.pos,
+            start_vel=cur.vel,
+            dest_pos=tgt.pos,
+            dest_vel=tgt.vel,
+            max_acceleration=max_acceleration,
         )
         return t
 
@@ -471,7 +531,35 @@ class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
         if np.allclose(B, C):
             v_at_B = (0, 0, 0)
         else:
-            v_at_B = self.calc_v_at_B(A, B, C, V=self.model.max_vel_ms * 0.3)
+            v_at_B = self.calc_v_at_B(A, B, C, V=self.model.max_vel_ms)
         tgt_pos = B
         tgt_vel = v_at_B
         return self.env.step((tgt_pos, tgt_vel))
+
+
+class OptimalFifthOrderPolyPositionWithLookAheadDroneEnv(
+    FifthOrderPolyPositionWithLookAheadDroneEnv
+):
+    """
+    Supplements the :class:`jdrones.env.OptimalFifthOrderPolyPositionDroneEnv`
+    by including
+    the next waypoints position in the trajectory generation calculation.
+
+    >>> import jdrones
+    >>> import gymnasium
+    >>> gymnasium.make("OptimalFifthOrderPolyPositionWithLookAheadDroneEnv-v0")
+    <OrderEnforcing<PassiveEnvChecker<OptimalFifthOrderPolyPositionWithLookAheadDroneEnv<OptimalFifthOrderPolyPositionWithLookAheadDroneEnv-v0>>>>
+    """
+
+    env: OptimalFifthOrderPolyPositionDroneEnv
+
+    def __init__(
+        self,
+        model: URDFModel = DronePlus,
+        initial_state: State = None,
+        dt: float = 1 / 240,
+    ):
+        env = OptimalFifthOrderPolyPositionDroneEnv(
+            model=model, initial_state=initial_state, dt=dt
+        )
+        super().__init__(model=model, initial_state=initial_state, dt=dt, env=env)
