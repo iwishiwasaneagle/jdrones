@@ -35,7 +35,7 @@ repos:
       exclude: "(migrations)"
 
 - repo: https://github.com/psf/black
-  rev: 24.4.2
+  rev: 24.8.0
   hooks:
   - id: black
     language_version: python3
@@ -48,7 +48,7 @@ repos:
     additional_dependencies: [black]
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.1.0
+  rev: 7.1.1
   hooks:
   - id: flake8
     args: [
