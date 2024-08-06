@@ -9,6 +9,8 @@ from .lqr import LQRDroneEnv
 from .position import FifthOrderPolyPositionDroneEnv
 from .position import FifthOrderPolyPositionWithLookAheadDroneEnv
 from .position import FirstOrderPolyPositionDroneEnv
+from .position import OptimalFifthOrderPolyPositionDroneEnv
+from .position import OptimalFifthOrderPolyPositionWithLookAheadDroneEnv
 
 __all__ = [
     "PyBulletDroneEnv",
@@ -18,6 +20,8 @@ __all__ = [
     "FirstOrderPolyPositionDroneEnv",
     "DronePlus",
     "FifthOrderPolyPositionDroneEnv",
+    "OptimalFifthOrderPolyPositionDroneEnv",
     "FifthOrderPolyPositionWithLookAheadDroneEnv",
+    "OptimalFifthOrderPolyPositionWithLookAheadDroneEnv",
     "BaseControlledEnv",
 ]
