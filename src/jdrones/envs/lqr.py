@@ -1,5 +1,6 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import typing
 from typing import Any
 from typing import Optional
 
@@ -96,15 +97,15 @@ class LQRDroneEnv(BaseControlledEnv):
         setpoint = State.from_x(action)
 
         action = self.controllers["lqr"](measured=self.env.state, setpoint=setpoint)
-        action_with_linearization_assumptions = np.sqrt(
-            np.clip(
-                self.env.model.rpyT2rpm(
-                    [0, 0, 0, self.env.model.mass * self.env.model.g] + action
-                ),
-                0,
-                np.inf,
-            )
+
+        u = typing.cast(
+            np.ndarray,
+            self.env.model.rpyT2rpm(
+                [0, 0, 0, self.env.model.mass * self.env.model.g] + action
+            ),
         )
+        u[u < 0] = 0
+        action_with_linearization_assumptions = np.sqrt(u)
         obs, _, trunc, term, _ = self.env.step(action_with_linearization_assumptions)
 
         return obs, 0, trunc, term, {}
