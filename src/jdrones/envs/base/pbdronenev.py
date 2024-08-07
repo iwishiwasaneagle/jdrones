@@ -1,12 +1,12 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import contextlib
 from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
 
 import numpy as np
-import pybullet as p
 import pybullet_data
 from gymnasium.core import ActType
 from gymnasium.core import ObsType
@@ -23,6 +23,9 @@ from jdrones.transforms import quat_to_rotmat
 from jdrones.types import PropellerAction
 from jdrones.types import VEC3
 from jdrones.types import VEC4
+
+with contextlib.redirect_stdout(None):
+    import pybullet as p
 
 
 class PyBulletDroneEnv(BaseDroneEnv):
