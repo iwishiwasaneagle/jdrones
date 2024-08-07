@@ -36,12 +36,20 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
 
     model: URDFModel
 
+    should_calc_reward: bool
+    """
+    Whether to calculate the reward or not. Only useful if the environment is
+    being used directly as the calculation can be expensive.
+    Default: False
+    """
+
     def __init__(
         self,
         model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
         env: LQRDroneEnv = None,
+        should_calc_reward: bool = False,
     ):
         if env is None:
             env = LQRDroneEnv(model=model, initial_state=initial_state, dt=dt)
@@ -53,6 +61,7 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         self.action_space = spaces.Box(
             low=act_bounds[:, 0], high=act_bounds[:, 1], dtype=DType
         )
+        self.should_calc_reward = should_calc_reward
 
     @staticmethod
     def get_reward(states: States) -> float:
@@ -226,7 +235,11 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
                 info["error"] = dist
 
         states = States(observations)
-        return states, self.get_reward(states), term, trunc, info
+        if self.should_calc_reward:
+            reward = self.get_reward(states)
+        else:
+            reward = 0
+        return states, reward, term, trunc, info
 
 
 class FifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
