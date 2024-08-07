@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Why &mdash; jdrones 0.7.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Why &mdash; jdrones 0.8.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=486e5634"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -37,7 +39,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -108,17 +110,17 @@
 <a class="reference external" href="https://codecov.io/gh/iwishiwasaneagle/jdrones"><img alt="codecov" src="https://codecov.io/gh/iwishiwasaneagle/jdrones/branch/master/graph/badge.svg?token=ZILBLXACL6" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml"><img alt="CD" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CD.yml/badge.svg" /></a><a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml"><img alt="CI" src="https://github.com/iwishiwasaneagle/jdrones/actions/workflows/CI.yml/badge.svg" /></a>
 <img alt="docstring coverage" src="https://jdrones.janhendrikewers.uk/_static/docstr-cov.svg" /></p>
 <section id="why">
-<h1>Why<a class="headerlink" href="#why" title="Permalink to this heading"></a></h1>
+<h1>Why<a class="headerlink" href="#why" title="Link to this heading"></a></h1>
 <p>Provide a <a class="reference external" href="https://gymnasium.farama.org/">gymnasium</a> style interface using a physics simulation engine (<a class="reference external" href="https://github.com/bulletphysics/bullet3">pybullet</a> in this case) to drone models. This in-turn enables faster prototyping of controllers, and reinforcement models. I’m maintaining this particular repo for my own research which is focused on waypoint generation, hence my priority is the trajectory drone environment. However, any upgrades and updates on the others would be hugely appreciated.</p>
 <blockquote>
 <div><p>:warning: This code is still in alpha and <strong>will</strong> change over time as I use it :warning:</p>
 </div></blockquote>
 </section>
 <section id="environments">
-<h1>Environments<a class="headerlink" href="#environments" title="Permalink to this heading"></a></h1>
+<h1>Environments<a class="headerlink" href="#environments" title="Link to this heading"></a></h1>
 <p>The environment documentation can be found <a class="reference external" href="https://jdrones.janhendrikewers.uk/envs.html">here</a></p>
 <section id="base-dynamics">
-<h2>Base Dynamics<a class="headerlink" href="#base-dynamics" title="Permalink to this heading"></a></h2>
+<h2>Base Dynamics<a class="headerlink" href="#base-dynamics" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">PyBulletDroneEnv-v0</span></code> <a class="reference external" href="https://jdrones.janhendrikewers.uk/envs.html#pybulletdroneenv">:link:</a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">NonLinearDynamicModelDroneEnv-v0</span></code> <a class="reference external" href="https://jdrones.janhendrikewers.uk/envs.html#nonlineardynamicmodeldroneenv">:link:</a></p></li>
@@ -126,13 +128,13 @@
 </ol>
 </section>
 <section id="attitude">
-<h2>Attitude<a class="headerlink" href="#attitude" title="Permalink to this heading"></a></h2>
+<h2>Attitude<a class="headerlink" href="#attitude" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">LQRDroneEnv-v0</span></code> <a class="reference external" href="https://jdrones.janhendrikewers.uk/envs.html#lqrdroneenv">:link:</a></p></li>
 </ol>
 </section>
 <section id="position">
-<h2>Position<a class="headerlink" href="#position" title="Permalink to this heading"></a></h2>
+<h2>Position<a class="headerlink" href="#position" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">FirstOrderPolyPositionDroneEnv-v0</span></code> <a class="reference external" href="https://jdrones.janhendrikewers.uk/envs.html#firstorderpolypositiondroneenv">:link:</a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FifthOrderPolyPositionDroneEnv-v0</span></code> <a class="reference external" href="https://jdrones.janhendrikewers.uk/envs.html#fifthorderpolypositiondroneenv">:link:</a></p></li>
@@ -141,7 +143,7 @@
 </section>
 </section>
 <section id="development">
-<h1>Development<a class="headerlink" href="#development" title="Permalink to this heading"></a></h1>
+<h1>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h1>
 <p>Create the local development environment:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>jdrones<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
 conda<span class="w"> </span>activate<span class="w"> </span>jdrones
@@ -158,14 +160,14 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 </section>
 <section id="citations">
-<h1>Citations<a class="headerlink" href="#citations" title="Permalink to this heading"></a></h1>
+<h1>Citations<a class="headerlink" href="#citations" title="Link to this heading"></a></h1>
 <blockquote>
 <div><p>[1] J. Panerati, H. Zheng, S. Zhou, J. Xu, A. Prorok, and A. P. Schoellig, ‘Learning to Fly – a Gym Environment with PyBullet Physics for Reinforcement Learning of Multi-agent Quadcopter Control’. arXiv, Jul. 25, 2021. doi: 10.48550/arXiv.2103.02142.</p>
 <p>[2] J. Meyer, A. Sendobry, S. Kohlbrecher, U. Klingauf, and O. von Stryk, ‘Comprehensive Simulation of Quadrotor UAVs Using ROS and Gazebo’, in Simulation, Modeling, and Programming for Autonomous Robots, Berlin, Heidelberg, 2012, pp. 400–411. doi: 10.1007/978-3-642-34327-8_36.</p>
 </div></blockquote>
 </section>
 <section id="future-work">
-<h1>Future Work<a class="headerlink" href="#future-work" title="Permalink to this heading"></a></h1>
+<h1>Future Work<a class="headerlink" href="#future-work" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p>[ ] Better sensor modelling and kalman filters</p></li>
 <li><p>[ ] Performance improvements of simulation using either compiled code or a JIT</p></li>

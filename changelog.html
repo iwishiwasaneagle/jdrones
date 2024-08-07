@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; jdrones 0.7.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Changelog &mdash; jdrones 0.8.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=486e5634"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -37,7 +39,7 @@
               <img src="_static/banner_nobg.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -72,97 +74,106 @@
 <p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">[0.7.2] - 2023-04-26</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">[0.8.0] - 2024-08-07</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#miscellaneous-tasks">Miscellaneous Tasks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#performance">Performance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#refactor">Refactor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">[0.7.2] - 2023-04-26</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Refactor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">[0.7.1] - 2023-04-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Miscellaneous Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">[0.7.1] - 2023-04-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Miscellaneous Tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">[0.7.0] - 2023-04-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">Refactor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id9">Testing</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id10">[0.6.0] - 2023-03-16</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id10">[0.7.0] - 2023-04-05</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id11">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id12">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id13">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id14">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id15">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Refactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Testing</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id16">[0.5.2] - 2023-03-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id17">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id18">Miscellaneous Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">[0.6.0] - 2023-03-16</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Testing</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id19">[0.5.0] - 2023-03-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id20">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id21">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#feat">Feat</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id22">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id23">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id24">Refactor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id25">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id23">[0.5.2] - 2023-03-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id25">Miscellaneous Tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id26">[0.4.0] - 2023-02-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id26">[0.5.0] - 2023-03-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id27">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id28">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feat">Feat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id29">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id30">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id31">Refactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id32">Testing</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id31">[0.3.1] - 2023-02-03</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id32">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id33">Miscellaneous Tasks</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id34">[0.3.0] - 2023-02-03</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id35">Bug Fixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id33">[0.4.0] - 2023-02-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id36">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id37">Miscellaneous Tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id38">[0.2.0] - 2023-02-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id38">[0.3.1] - 2023-02-03</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id39">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id40">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id41">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id42">Refactor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id43">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id40">Miscellaneous Tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id44">[0.1.2] - 2023-01-31</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id45">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id46">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id47">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id48">Refactor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id41">[0.3.0] - 2023-02-03</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id42">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id43">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id44">Miscellaneous Tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id49">[0.1.1] - 2023-01-31</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id50">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id51">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id52">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id53">Miscellaneous Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id45">[0.2.0] - 2023-02-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id46">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id47">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id48">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id49">Refactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id50">Testing</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id54">[0.1.0] - 2023-01-27</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id55">Bug Fixes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id56">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id57">Miscellaneous Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id58">Refactor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id59">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id51">[0.1.2] - 2023-01-31</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id52">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id53">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id54">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id55">Refactor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id56">[0.1.1] - 2023-01-31</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id57">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id58">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id59">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id60">Miscellaneous Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id61">[0.1.0] - 2023-01-27</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id62">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id63">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id64">Miscellaneous Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id65">Refactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id66">Testing</a></li>
 </ul>
 </li>
 </ul>
@@ -195,12 +206,167 @@
            <div itemprop="articleBody">
              
   <section id="changelog">
-<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading"></a></h1>
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <section id="id1">
-<h2>[0.7.2] - 2023-04-26<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h2>[0.8.0] - 2024-08-07<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <section id="bug-fixes">
-<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading"></a></h3>
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use py3.11 as it still ships pkg_resources by default which docstr-coverage needs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/25d649f738b6c0d406c56e7cf58505b92a894245">(25d649f)</a></p></li>
+<li><p>Issue was with CI.yml not installing jdrones <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/7898915d91b9be0725743c46f6f4839285f2298f">(7898915)</a></p></li>
+<li><p>Check for different env types <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5aae99229f1fb3cf094d7609eaf30b2da7e9a78f">(5aae992)</a></p></li>
+<li><p>Check for different env types <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d24b7667464ad48d7d2d01fd251c9ea02d5002a7">(d24b766)</a></p></li>
+<li><p>Legacy imports <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f6f196c913385120ae472f31aa746d0b76c6cd89">(f6f196c)</a></p></li>
+<li><p>Tensorflow-probability 0.24.0 not compatible with sbx 0.12.0 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6441dc200fc65463f0b97def3bf12605a0861d49">(6441dc2)</a></p></li>
+<li><p>Reset to initial state z not current z <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5679bf14edaa32eb37f1f0e2a7c93f344d73d6e5">(5679bf1)</a></p></li>
+<li><p>Re-added is_success logging <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f429dd11e0f26409fbbb457b6de19481fc3602a1">(f429dd1)</a></p></li>
+<li><p>Switch to vector-based velocity method <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/04ea7458049a397b400bd863eb9c633e6afdc1c2">(04ea745)</a></p></li>
+<li><p>Enable policy net_arch for RecurrentPPO to be customizable from the CLI <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/dcea513be879073e8e580c62097de35e4c9746e6">(dcea513)</a></p></li>
+<li><p>Success distance is 1 not 1.5 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/32e96bd5241a21ef58b79a56e6567886238a6e65">(32e96bd)</a></p></li>
+<li><p>Don’t break the loop if a target is reached to ensure that time stays synchronized <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/7a2db4af0556687502a21868f84ae36704f9eb77">(7a2db4a)</a></p></li>
+<li><p>Switch to SB3’s DummyVecEnv to handle the multi-env logic <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/29bbe52c9552196f7aa6dde58c2f1d66f3cf3ff6">(29bbe52)</a></p></li>
+<li><p>Properly handle collision reward <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/703274e8bc450048591a791a6d1b91b545714a11">(703274e)</a></p></li>
+<li><p>Ensure eval env is the same as training env <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3a7833f62b3d1f5e260015d405f294da7a77dc58">(3a7833f)</a></p></li>
+<li><p>Re-include time in the observation <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a5c30e436a27e1779220ee70d25d82b7e06e689d">(a5c30e4)</a></p></li>
+<li><p>Ensure observation is (1,X) in shape <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a7ee23c0eeb96866f16c30fb9843c2e643ecaf45">(a7ee23c)</a></p></li>
+<li><p>Disable JIT for codecov, but also run the same setup with jit without codecov <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/4f2e626f2ca4f971ce111d3f8722cac736bf79db">(4f2e626)</a></p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Quick readme for the drl example <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e1cdc816541db762345e2471e791ff014662d71c">(e1cdc81)</a></p></li>
+</ul>
+</section>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Install pytest-testmon from git and run in CI (#61) <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/b54d03bc65efa0a26685b76a0bc3fd71901e9e71">(b54d03b)</a></p></li>
+<li><p>Energy consumption <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5dc0a299d21ebc5e264b67c74ec4f018edd24671">(5dc0a29)</a></p></li>
+<li><p>Energy consumption <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/23ca8841b3a22df96be228695bb56f1b1d490a41">(23ca884)</a></p></li>
+<li><p>Energy consumption <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/75c28be2787ab226c48e568c139a2cdb63a769d5">(75c28be)</a></p></li>
+<li><p>Switch to Hatch from setuptools <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8ce1d1409f30b31c655999ba322f96c667ddbfe4">(8ce1d14)</a></p></li>
+<li><p>DRL controlled drone going from A to hovering at B <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/675947e6ca17b0f7b390535305794e2f60820d63">(675947e)</a></p></li>
+<li><p>A working DRL example with plotting <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2e42527e3dd5e2b8e3fbaf0e4534687ccfc157be">(2e42527)</a></p></li>
+<li><p>Use optuna for hyperparameter sweep in DRL example <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f244822abcf555ce7d336d93d837cc621b1d9388">(f244822)</a></p></li>
+<li><p>A working DRL example with plotting <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/34014e2ab370a0958a6be6eacc0500ec1af636a3">(34014e2)</a></p></li>
+<li><p>Add wandb to example <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a5204d36b5268265e67abde9ecf3cb3a730d13c7">(a5204d3)</a></p></li>
+<li><p>LQR+DRL meta-controller framework <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2be6be64ced0410fe20b12e9839646bff00c4ded">(2be6be6)</a></p></li>
+<li><p>Additional eval logging <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/da18e4677997ce009bd5000da6a8600e98490c57">(da18e46)</a></p></li>
+<li><p>Change LQR tuner to be velocity centric <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/c0f4849e91e947fe257021aa7a317fe9b3787935">(c0f4849)</a></p></li>
+<li><p>Add 2D plot to graphing callback <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/38b4a5e0f94abe2a4dfae67a6889827a817a577d">(38b4a5e)</a></p></li>
+<li><p>Swap to velocity-based action space <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3afe0a2dc6eeb8b95d0f82b65e8bb62cf349a62e">(3afe0a2)</a></p></li>
+<li><p>Add colors and circles to 2D position plot to show the targets, their radius and order <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e8d6e715cec9735162b7b74d4a3acc9f63778103">(e8d6e71)</a></p></li>
+<li><p>Multi-env DRL <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d21b26d0f817a861d39e7d9e461bfe62ddde5ca9">(d21b26d)</a></p></li>
+<li><p>Extend to any n env <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/04d3e721ed6a3a279b1a27897a46090765811fc3">(04d3e72)</a></p></li>
+<li><p>Number of sub-envs from CLI <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/91209c056a80aa255343970abf341b21006ae480">(91209c0)</a></p></li>
+<li><p>Tensorboard and optuna for the 3d drl example <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/73bed0d692b00e72fa28dabd695637e0876bf12d">(73bed0d)</a></p></li>
+<li><p>Optimal quintic poly trajectory generation <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/aa8b488bcb4799ec6b11a4558058b8f4accd31a6">(aa8b488)</a></p></li>
+</ul>
+</section>
+<section id="miscellaneous-tasks">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#miscellaneous-tasks" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Remove the status updater. Was causing more issues than was worth. <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/bd80432b023aef0142b2968d79a04cfd1187d560">(bd80432)</a></p></li>
+<li><p>Bump gymnasium from 0.28.1 to 0.29.1 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/234a5bb535bbdc6854c192d694b85d75f056e381">(234a5bb)</a></p></li>
+<li><p>Bump pydantic from 1.10.6 to 2.3.0 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2f309aa6c038b3fcb4010fa923c5c693f8edab80">(2f309aa)</a></p></li>
+<li><p>Bump pandas from 2.0.0 to 2.1.0 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/51ff0a194114deea4a46e127e04eae0a104dca28">(51ff0a1)</a></p></li>
+<li><p>Bump JamesIves/github-pages-deploy-action <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/71b93c7bcdc310ec0d2a096603b4d6f100ba8907">(71b93c7)</a></p></li>
+<li><p>Bump actions/setup-python from 4 to 5 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d56ff9eff9551ec447fd8f780f41c89009cb35c7">(d56ff9e)</a></p></li>
+<li><p>Bump actions/upload-artifact from 3 to 4 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d406f4559acabd1ae0d3686c199ee5d89180dc9c">(d406f45)</a></p></li>
+<li><p>Bump actions/download-artifact from 3 to 4 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0f3299c98d06b476774a4a84b219daeabd48408b">(0f3299c)</a></p></li>
+<li><p>Bump actions/checkout from 3 to 4 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/465029a6e82ab532226092a3c6f3ae5e211f9cd1">(465029a)</a></p></li>
+<li><p>Flake8 config in .flake8 ini file <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/871c0cade5142c1a7c15c5235816db765cfc59af">(871c0ca)</a></p></li>
+<li><p>Add a fifth action that controls the scaling of the propeller actions <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/17a6e792447bfe52632449e6f158781f65c737c7">(17a6e79)</a></p></li>
+<li><p>Explicitly add gitignored file <strong>version</strong>.py <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/c2d418350a885e796aa0d862e85a618ff1f50ae1">(c2d4183)</a></p></li>
+<li><p>Use requirements.txt file for all so that dependabot can auto-update <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6b68265f3186180cc4325e55a17287f4294c2650">(6b68265)</a></p></li>
+<li><p><strong>version</strong> -&gt; _version to avoid name conflicts <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f93a6df3a62680193d354e809fc3a731081d113a">(f93a6df)</a></p></li>
+<li><p>Bump orhun/git-cliff-action from 2 to 3 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e4c9070f73f0979c5accce95f48cf1dfe7942f26">(e4c9070)</a></p></li>
+<li><p>Bump codecov/codecov-action from 3.1.1 to 4.0.2 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/dd37dc5843b1755ad8e19e3bcef8a9a624dc8a71">(dd37dc5)</a></p></li>
+<li><p>Bump matplotlib from 3.7.1 to 3.8.3 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0f7149f8472a5d3b70c5254a280dfa222402632f">(0f7149f)</a></p></li>
+<li><p>Bump seaborn from 0.12.2 to 0.13.2 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3af4c7b8a858dd056f173c16d51239894a280b07">(3af4c7b)</a></p></li>
+<li><p>Bump scipy from 1.10.1 to 1.12.0 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/386e88328afd7e449f325581e284ac5fc6eeb27c">(386e883)</a></p></li>
+<li><p>Bump numpy from 1.24.2 to 1.26.4 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8a02a35f10ea5b130ba38b20bf88817e3a22f2ec">(8a02a35)</a></p></li>
+<li><p>Bump pydantic from 2.3.0 to 2.6.2 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/ff1f8a64ddeb5b6a6f2d19c1875076f3c0e62539">(ff1f8a6)</a></p></li>
+<li><p>Switch to using “unwrapped” <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a5467e28f7716b467d5cdce533ba8605da8b5e27">(a5467e2)</a></p></li>
+<li><p>Import order <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d6f987957b8c08ceefadc28d9d76f20d0a0b3c4d">(d6f9879)</a></p></li>
+<li><p>Further edits to energy example <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5371a38b3e8fce02d05da157f8718c8af0d5667f">(5371a38)</a></p></li>
+<li><p>Try out sbx <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/556968c2c9386db9ec6d6af8b035cfeab2d996dd">(556968c)</a></p></li>
+<li><p>Update types <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/28f728cbd965d0b5750e06672c4d054d83322cea">(28f728c)</a></p></li>
+<li><p>Allow a reset state to be given within options <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/11bc080cb77f759d4d8d123a2c3eead59955c4ed">(11bc080)</a></p></li>
+<li><p>Bump codecov/codecov-action from 4.0.2 to 4.1.0 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/bb6c90e1c49e7f5b9b24345b6bc174da85c03890">(bb6c90e)</a></p></li>
+<li><p>Bump pandas from 2.1.0 to 2.2.1 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/cd083b16b30d179360759873d93f64f0a9fdac87">(cd083b1)</a></p></li>
+<li><p>Make sure num_timesteps is set properly <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8127e419e516c583e338f434a1563412444e36a2">(8127e41)</a></p></li>
+<li><p>Make sure num_timesteps is set properly <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/83606e4f7688b7ae29c4777f104cdee1ea6b2a48">(83606e4)</a></p></li>
+<li><p>Make sure num_timesteps is set properly <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6a8b4556b121bce7846a46a213f3a38b0c1cc618">(6a8b455)</a></p></li>
+<li><p>Change example rewards scheme to be normalized <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3271621f34f579f091e1e89ee5721c20a36b8509">(3271621)</a></p></li>
+<li><p>Use subprocvecenv when n_envs &gt; 1 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f3b724f9dbbb1139f0757c8a681c50d8a9cf36ac">(f3b724f)</a></p></li>
+<li><p>Make Monitor log other info keywords <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/010ab83abc0fc477affa5917e763e86cc63d5de8">(010ab83)</a></p></li>
+<li><p>Normalize reward by maximum action command T <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f82ffff95e836f6e75992e2c42a8fa799fbfd3f0">(f82ffff)</a></p></li>
+<li><p>Normalize reward by maximum action command T <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/ee96f4a106b77ca82e0ed8dc996059f8cc77b74d">(ee96f4a)</a></p></li>
+<li><p>Normalize reward by maximum action command T <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/fd662682ba3a98f025a30c0d4973a21cf15925ac">(fd66268)</a></p></li>
+<li><p>Play around with how the control is structured. Only let policy define target x and y pos <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e0d7690f0b34bba9442c0bcaa0dd36640b3360c2">(e0d7690)</a></p></li>
+<li><p>Enable maximum time to be specified from CLI <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/294cfbc5356aebde33ce8ebb03b3d627b79db929">(294cfbc)</a></p></li>
+<li><p>Enable maximum time to be specified from CLI <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/844d19b5d9eae1d88fcebb64e83f33f7727c126b">(844d19b)</a></p></li>
+<li><p>Reduce observation space to x-y plane <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/04347f6da193f6c878e06cde0a5f611c5b58eefd">(04347f6)</a></p></li>
+<li><p>Include angular position and velocity in the observation <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f3dcd89be12b6250278b6f47e9fe59ada626eae4">(f3dcd89)</a></p></li>
+<li><p>Plot actions <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0216f3e3a97d7e63443aa849ca9f3be26734b9b6">(0216f3e)</a></p></li>
+<li><p>Adjust observation shape to match observation <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/94cbc0ec23a7e91236da09d7ef14dcb9ec029394">(94cbc0e)</a></p></li>
+<li><p>Ensure fig.tight_layout() is called for plotting during callbacks to avoid weird layouts <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/64903758c79be8fc916588c937d5ff19402a480d">(6490375)</a></p></li>
+<li><p>Set target z to env z <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/769741b0fa7b73a7c9fee436dd65f0c3873cff7a">(769741b)</a></p></li>
+<li><p>Use env.unwrapped pattern <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d8674e3b01c46664dbfb965c35447dd02b14e42b">(d8674e3)</a></p></li>
+<li><p>Ensure target is set before it is used within reset <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8a8e3d515476acc1c2f0eab59c6b1dd8de94dec9">(8a8e3d5)</a></p></li>
+<li><p>Adjust reward normalization <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6d7a036cd5dbcc15ccd4878881644925a973f7fa">(6d7a036)</a></p></li>
+<li><p>Change step simulation time to be 3 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3d79c698b68ad0ae964a24e40229835ffe4c1a1d">(3d79c69)</a></p></li>
+<li><p>Expose initial_state <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/ab834d7e0b1cbf497316ca6b2b78b8f418709a9e">(ab834d7)</a></p></li>
+<li><p>Move to relative control rather than absolute <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/c1df545b7ba788482a2559021962adb0bcdba7d1">(c1df545)</a></p></li>
+<li><p>Reduce step sim time down to 0.25s <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6334782d50242f2840873678cc245a5ce9d9c921">(6334782)</a></p></li>
+<li><p>Reduce eval episodes to 10 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f930698a149014f0b2651279cfb7c071bcace0af">(f930698)</a></p></li>
+<li><p>Log number of targets achieved <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/b07881efdfbf467c46402b445b300c8d490df665">(b07881e)</a></p></li>
+<li><p>Increase dx magnitude <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/915ec5f51c13455af293e9b68e459fc024014ecf">(915ec5f)</a></p></li>
+<li><p>The reward is dependent on the target z as well, so we have to include that data in the observation to make the env fully observable <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3ca0bc3dca6385d1057167488e7fdd3c18887dc9">(3ca0bc3)</a></p></li>
+<li><p>Include clip_range in CLI inputs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/4b2f8a94fe9f837216d77730c86c66da7bbd47f3">(4b2f8a9)</a></p></li>
+<li><p>Reduce sub-env sim time to 0.1s <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0b6d02a5b663d10940a059830c438fa51d3bae36">(0b6d02a)</a></p></li>
+<li><p>Increase dx magnitude <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/eaa10a499fa4086f5f4c53065b1c1ed416781f35">(eaa10a4)</a></p></li>
+<li><p>Include the next target in the observation <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/fd287ce4912ca0a7d13d8fa62afa475bbd5634fc">(fd287ce)</a></p></li>
+<li><p>Reduce sub-env sim time to 0.1s <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d9b97daf6de50113bcc866db79ea17fc67819965">(d9b97da)</a></p></li>
+<li><p>Plot targets <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/783177cbcd7c75aa63fea9e68eb1e118f6a6c6fe">(783177c)</a></p></li>
+<li><p>Switch to a heading-velocity scheme and reintroduce the control action penalty <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e8a4fb7ef3b8767f88d9c4fd2dda7e3ccbaa11c6">(e8a4fb7)</a></p></li>
+<li><p>Set squash_output to true when using SDE <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a265f655d06fca47fef1cb045cb230dda68ff08b">(a265f65)</a></p></li>
+<li><p>Rename env to be more representative of what it is <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/db08c1aea7b25e1f2df58e5863cfd8edba2840a8">(db08c1a)</a></p></li>
+<li><p>Bump pydantic from 2.6.2 to 2.7.1 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a10848d2c768ae900f522091e5359dd86cd76a97">(a10848d)</a></p></li>
+<li><p>Pass total sim time to the mult DRL env <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6040eca92e646ca5823e47641f43e1e15462f8dc">(6040eca)</a></p></li>
+<li><p>Bump pydantic from 2.7.1 to 2.8.2 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2b8b402120ce73a428c9541877cdb6a0436a1ff2">(2b8b402)</a></p></li>
+<li><p>Make reward calculations optional for polynomial envs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6e38d55af7d64f224c8f3c80ebf3674c11fc4174">(6e38d55)</a></p></li>
+<li><p>Silence pybullet messages at import <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1683157b40a2dfcfb52e23a8e546103c5b3cb535">(1683157)</a></p></li>
+</ul>
+</section>
+<section id="performance">
+<h3>Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Improve State.normed and move into main repo <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1afdf858db027fb44f059111e2dad00a66fdcf11">(1afdf85)</a></p></li>
+<li><p>Improve to_x and from_x by up to 2x speeds <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2669d4b8155bb97decf5c04472e9fcf80eb64858">(2669d4b)</a></p></li>
+<li><p>Use numpy+numba in transformation calculations for better performance <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/fe5b95382f7dff2a9cb428061e3e1d107bac0bd7">(fe5b953)</a></p></li>
+<li><p>Use numba jit for core simulation methods <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f9b27cab2a099f5f8ad22b351fb0185c48219342">(f9b27ca)</a></p></li>
+<li><p>Use faster way of checking if any item is nan <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/eb81c107d4898b89dd28eaa9c2f4622a99a9154c">(eb81c10)</a></p></li>
+<li><p>Use a faster method to zero clip than np.clip <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/ea5d3bc66a62b80c898bc214545b05b47130aabd">(ea5d3bc)</a></p></li>
+</ul>
+</section>
+<section id="refactor">
+<h3>Refactor<a class="headerlink" href="#refactor" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Example got too big, so split into sub-modules <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3960e075fe4c96632701b5658253451d6fc7f1f3">(3960e07)</a></p></li>
+<li><p>Rename to be more accurate <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1de2e169bfa719dd0d9c43f6015c5b031a1066aa">(1de2e16)</a></p></li>
+<li><p>Remove old env and optuna sweeps <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/14090b4aa08de0834b1873c0a8e26272c34155ac">(14090b4)</a></p></li>
+<li><p>Handle rewards normalization in the top-level env <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8bfc7a7a85af20f1f571b1871d0eeadd0ba2fa1b">(8bfc7a7)</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.7.2] - 2023-04-26<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Bug Fixes<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Proper type casting to np.float64 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0b2b80546ebc26b2512b9c4e5d570d807931327c">(0b2b805)</a></p></li>
 <li><p>Ignore <strong>init</strong> for doctests due to circular import errors <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3cfb12149868565745f357113b9d0570f46be0a8">(3cfb121)</a></p></li>
@@ -209,38 +375,39 @@
 <li><p>Set stack=True to ensure state observations are stacked <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/edf45d59788763a60d301c973c570e27bd262bb9">(edf45d5)</a></p></li>
 </ul>
 </section>
-<section id="documentation">
-<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<section id="id4">
+<h3>Documentation<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Docstring for new DType and FloatLike types <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/dd9551afa9cdccfd12830dfdf1d0848da7e865d6">(dd9551a)</a></p></li>
 <li><p>Describe the reason behind the util functions for step <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/25ffe00d1fc05f582535f31aff03495feddc4116">(25ffe00)</a></p></li>
 </ul>
 </section>
-<section id="miscellaneous-tasks">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#miscellaneous-tasks" title="Permalink to this heading"></a></h3>
+<section id="id5">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Replace np.matrix with np.array <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5ab2a9442530d0166880d548404c6824fcce5dc9">(5ab2a94)</a></p></li>
 <li><p>Bump loguru from 0.6.0 to 0.7.0 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/edfb2ca4793cf8ebd13432daf924af6c759e3863">(edfb2ca)</a></p></li>
 <li><p>Bump gymnasium from 0.27.1 to 0.28.1 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/70681221e5078ab0a7768096ca057dda5a80c4c5">(7068122)</a></p></li>
 <li><p>More sensible dependabot settings to prevent the PR spam <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/29e781e5fcd3e914287b90c300b40c2b13ad175e">(29e781e)</a></p></li>
+<li><p>Update changelog for v0.7.2 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/b50132b4adb5348e693f317519f7250eeef27a18">(b50132b)</a></p></li>
 </ul>
 </section>
-<section id="performance">
-<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this heading"></a></h3>
+<section id="id6">
+<h3>Performance<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Optimize numpy state update code for non-linear drone model <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/7de713feff3f46e7f0563ff669097f498ae68b43">(7de713f)</a></p></li>
 <li><p>Use caching to pre-calculate time invariant params <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/154f3afb22f2d29a430c62a9bd345fc99db2c30f">(154f3af)</a></p></li>
 <li><p>Use caching to pre-calculate mixing matrix for drone plus <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a0a207f7b582ac0357f9ff919c7b6886e709cd8c">(a0a207f)</a></p></li>
 </ul>
 </section>
-<section id="refactor">
-<h3>Refactor<a class="headerlink" href="#refactor" title="Permalink to this heading"></a></h3>
+<section id="id7">
+<h3>Refactor<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Stop using &#64;property for action and observation spaces <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3b89837facbd1a9795eee8571d4fb2b865356f1e">(3b89837)</a></p></li>
 </ul>
 </section>
 <section id="testing">
-<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h3>
+<h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>More testing for trajectories <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/b66d7ca33720676fd9bda3d0ae8e72165e58fa04">(b66d7ca)</a></p></li>
 <li><p>Test URDFModel hashing capabilities <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/ebfbcbaa23dbd1f93b4e91b17107a001b4dc827f">(ebfbcba)</a></p></li>
@@ -248,19 +415,19 @@
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2>[0.7.1] - 2023-04-05<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<section id="id3">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<section id="id8">
+<h2>[0.7.1] - 2023-04-05<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Update changelog for v0.7.1 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/892659781deae73fb1cd938df48c68aecbe3704a">(8926597)</a></p></li>
 </ul>
 </section>
 </section>
-<section id="id4">
-<h2>[0.7.0] - 2023-04-05<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
-<section id="id5">
-<h3>Bug Fixes<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<section id="id10">
+<h2>[0.7.0] - 2023-04-05<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3>Bug Fixes<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Position drones would crash if target position was the same as current position <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1e97511ce477d863650bb3fcfa59a7a6e0f2eae1">(1e97511)</a></p></li>
 <li><p>White space in doctest for PID <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/ce9ef68d4ea64bcd6fc12d8fd5b6d9818a209a84">(ce9ef68)</a></p></li>
@@ -273,8 +440,8 @@
 <li><p>Improve consistency between docstrings and code (#45) <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2e1a8194fbd9405ac5ec54d021f87af70f75cb70">(2e1a819)</a></p></li>
 </ul>
 </section>
-<section id="id6">
-<h3>Documentation<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<section id="id12">
+<h3>Documentation<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Add gymnasium env names to README <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/42361c1ec0fdd18deba9c2f6e9ebfcd860a7227b">(42361c1)</a></p></li>
 <li><p>Add gymnasium env names to README <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3a1da91885d5f8e16bba000ecfe362e5b4417d80">(3a1da91)</a></p></li>
@@ -284,8 +451,8 @@
 <li><p>Fifth order polynomial with look-ahead drone env <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/bc79fa61e39b4b31dc8e0c22f36c083a5a33f184">(bc79fa6)</a></p></li>
 </ul>
 </section>
-<section id="features">
-<h3>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h3>
+<section id="id13">
+<h3>Features<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Move state labels to an enum to ensure consistency across the codebase <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/c4e5229f3f98264e6e3b5e3c1c241bcd0d2b0a0f">(c4e5229)</a></p></li>
 <li><p>Plotting utility functions <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1da699845553988e209ca3f451caff36e092a11a">(1da6998)</a></p></li>
@@ -293,8 +460,8 @@
 <li><p>Fifth order polynomial with look-ahead drone env <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5f9d8bdb1ff03e76484b2d9ebb6deefd79eebe8e">(5f9d8bd)</a></p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<section id="id14">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Add new plotting module in notebook quick setup <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5cc8fc907fcaf08eb1df8abfbbac3ab127ac45b2">(5cc8fc9)</a></p></li>
 <li><p>Use new plotting utility functions <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/ec60216988de9623348777f9874815346317175c">(ec60216)</a></p></li>
@@ -307,15 +474,15 @@
 <li><p>Update changelog for v0.7.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f9b15122f325d62c99053fc606a11ca75910b80e">(f9b1512)</a></p></li>
 </ul>
 </section>
-<section id="id8">
-<h3>Refactor<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<section id="id15">
+<h3>Refactor<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Change gymnasium env names + doctests <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/74d37a6460e6a6b2f1e27860d46e1c94523bf0c9">(74d37a6)</a></p></li>
 <li><p>Change gymnasium env names + doctests <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3e0d4e62000b9a3e88b800bed53da15cf26ce3c9">(3e0d4e6)</a></p></li>
 </ul>
 </section>
-<section id="id9">
-<h3>Testing<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<section id="id16">
+<h3>Testing<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Add proper doctests into files <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/9e134dcc4ba488f1d8984fdcdd2f94792a886cc6">(9e134dc)</a></p></li>
 <li><p>Add proper doctests into files <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/063c55ef35a80a9b4f4d05fe972dda36f1a1715a">(063c55e)</a></p></li>
@@ -324,10 +491,10 @@
 </ul>
 </section>
 </section>
-<section id="id10">
-<h2>[0.6.0] - 2023-03-16<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h2>
-<section id="id11">
-<h3>Bug Fixes<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<section id="id17">
+<h2>[0.6.0] - 2023-03-16<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<section id="id18">
+<h3>Bug Fixes<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Use \mathbf instead of \textbf to ensure symbols are being rendered correctly <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/96e9376bb0794232030e7104144444993602f60b">(96e9376)</a></p></li>
 <li><p>Python versions (was &gt;3.8, now is &gt;3.10) <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8f5e9f7cbe197665ab69fdb1c5471b4924dafc2c">(8f5e9f7)</a></p></li>
@@ -336,8 +503,8 @@
 <li><p>–no-deps for wheels to only build jdrones and none of the deps <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/7b8599d3608f30a96238099f43d539a7312059b3">(7b8599d)</a></p></li>
 </ul>
 </section>
-<section id="id12">
-<h3>Documentation<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<section id="id19">
+<h3>Documentation<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Docstr for parent poly traj class <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/387440027d81b4759fac87981d65198864666a6c">(3874400)</a></p></li>
 <li><p>Docstring for Controller base class <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0c7c2c68fd55128a673af2ff191fc4c5c51f2701">(0c7c2c6)</a></p></li>
@@ -346,16 +513,16 @@
 <li><p>Docstring for LQR top-level <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/fdaed6acd39b92ce67161fc0d3e2bd2c2e7c7c3d">(fdaed6a)</a></p></li>
 </ul>
 </section>
-<section id="id13">
-<h3>Features<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<section id="id20">
+<h3>Features<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Extract integration test markers to seperate package (pytest-extra-markers) <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f0453b2df78618bc548c080ee4811821af776294">(f0453b2)</a></p></li>
 <li><p>Stabilize the simple position drone by using a straight line trajectory <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/35d3b702a68751661b1e237b96977375f6cd761c">(35d3b70)</a></p></li>
 <li><p>Update check status for docstr-cov <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a3f275c626e03a4cb4f7a4bdee75c59688fa7553">(a3f275c)</a></p></li>
 </ul>
 </section>
-<section id="id14">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<section id="id21">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Update graphics <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d30bb66592f8ae9233eb7442dd78c332d2aafa85">(d30bb66)</a></p></li>
 <li><p>Update changelog for v0.5.3 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/482652c22ab8b9416c118e6099148c5efaaf462d">(482652c)</a></p></li>
@@ -368,8 +535,8 @@
 <li><p>Update changelog for v0.6.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/b714e6981df048b0ec3793bb53c1d6a8962e7613">(b714e69)</a></p></li>
 </ul>
 </section>
-<section id="id15">
-<h3>Testing<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<section id="id22">
+<h3>Testing<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Search for jdrones envs rather than manually specify them <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/4198604ca70b4d79f776777c59e2d1c3502ef30b">(4198604)</a></p></li>
 <li><p>Use syphar/restore-virtualenv&#64;v1 to cache the python venv <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f57d4fc4f9f3f5186c830907012845d037d1971a">(f57d4fc)</a></p></li>
@@ -377,17 +544,17 @@
 </ul>
 </section>
 </section>
-<section id="id16">
-<h2>[0.5.2] - 2023-03-02<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h2>
-<section id="id17">
-<h3>Bug Fixes<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<section id="id23">
+<h2>[0.5.2] - 2023-03-02<a class="headerlink" href="#id23" title="Link to this heading"></a></h2>
+<section id="id24">
+<h3>Bug Fixes<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Rename job to match what’s going on (caching all deps, not just PB) <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/09c1b99135c8d0b8d38143be2f4365af2962f741">(09c1b99)</a></p></li>
 <li><p>Set up git cliff to output proper markdown for prettier releases <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/4a54e72f7aa6ee2e3861e43d2a01ffa222444afb">(4a54e72)</a></p></li>
 </ul>
 </section>
-<section id="id18">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
+<section id="id25">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Bump nptyping from 2.4.1 to 2.5.0 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2d615da17f9e2cd884f073406757d5b84b21bd45">(2d615da)</a></p></li>
 <li><p>Clean up old jpdmgen references <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2647ecaedadc01e43a709c42d3a69f361c5fb03c">(2647eca)</a></p></li>
@@ -395,10 +562,10 @@
 </ul>
 </section>
 </section>
-<section id="id19">
-<h2>[0.5.0] - 2023-03-02<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h2>
-<section id="id20">
-<h3>Bug Fixes<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<section id="id26">
+<h2>[0.5.0] - 2023-03-02<a class="headerlink" href="#id26" title="Link to this heading"></a></h2>
+<section id="id27">
+<h3>Bug Fixes<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Make velocity depend on the yaw error <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/55e3e09fc2aebbfa462d11539db00e5a7a1eb1c4">(55e3e09)</a></p></li>
 <li><p>Update states after step <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e768caf14def4a536484bccbf6bdec6f2fe2b079">(e768caf)</a></p></li>
@@ -423,8 +590,8 @@
 <li><p>Oversight from aa0e1e3 after refactor <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a0111668312e7831d1c4b378f09446b60710dbe5">(a011166)</a></p></li>
 </ul>
 </section>
-<section id="id21">
-<h3>Documentation<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
+<section id="id28">
+<h3>Documentation<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Incude PositionDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f488f7bba9dc883a3eec65bbb762f52076f79852">(f488f7b)</a></p></li>
 <li><p>Docstring for LQR solve <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1730bdf2dff6b8c5fece8412e2852aa000374670">(1730bdf)</a></p></li>
@@ -440,13 +607,13 @@
 </ul>
 </section>
 <section id="feat">
-<h3>Feat<a class="headerlink" href="#feat" title="Permalink to this heading"></a></h3>
+<h3>Feat<a class="headerlink" href="#feat" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>GA-tuned LQR <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d35f8b2766ee1ee336a3a11a6a43863ffa3dda63">(d35f8b2)</a></p></li>
 </ul>
 </section>
-<section id="id22">
-<h3>Features<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
+<section id="id29">
+<h3>Features<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Allow wrappers to be added to the sub-env <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/647cc1f5c9d835493fa0c4c545221e5f68e67652">(647cc1f)</a></p></li>
 <li><p>Implement nonlinear, linear, and nonlinear PB3 models <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d394ad6e1778d2add26d0c792f706db06c0d8ccd">(d394ad6)</a></p></li>
@@ -469,8 +636,8 @@
 <li><p>Stress test the position environments to ensure they don’t crash over time <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/513dcf2c75b61a2cffd88087da00a5d394d19518">(513dcf2)</a></p></li>
 </ul>
 </section>
-<section id="id23">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
+<section id="id30">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Clean up application of forces and torques to use body <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d6b2ed41e550e81e5d8888ddb22e51c98220a07c">(d6b2ed4)</a></p></li>
 <li><p>Commit before deleting, to save the current state of the AttitudeAltitudeDroneEnv <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/54c99a9aed4b2a70a4f10e6ffa08d53f7f7676a5">(54c99a9)</a></p></li>
@@ -499,8 +666,8 @@
 <li><p>Update changelog for v0.5.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/3a7f9a778778869f6b368000581c11da2b8d7856">(3a7f9a7)</a></p></li>
 </ul>
 </section>
-<section id="id24">
-<h3>Refactor<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
+<section id="id31">
+<h3>Refactor<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Remove AttitudeAltitudeDroneEnv to be replaced by LQR controller <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6df31ddb984b6491f71232de6b6676635844ebd4">(6df31dd)</a></p></li>
 <li><p>Remove VelHeadAltDroneEnv to be replaced by LQR controller <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/9de143a64e627d83b00bd34e2ed603be0da3216b">(9de143a)</a></p></li>
@@ -514,8 +681,8 @@
 <li><p>Split true types and data models into seperate files <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f56225d9ea1d646418bcbf004b3822ea02562245">(f56225d)</a></p></li>
 </ul>
 </section>
-<section id="id25">
-<h3>Testing<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h3>
+<section id="id32">
+<h3>Testing<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Unify tests for NL and L models to ensure compatibility when designing controllers <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/606317d349f56c49c1f9eed9dd39d09387d9047e">(606317d)</a></p></li>
 <li><p>Correct input to rotation <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/820540dce216f25dcb2d20ca576e6586361418e1">(820540d)</a></p></li>
@@ -528,30 +695,30 @@
 </ul>
 </section>
 </section>
-<section id="id26">
-<h2>[0.4.0] - 2023-02-09<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h2>
-<section id="id27">
-<h3>Bug Fixes<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
+<section id="id33">
+<h2>[0.4.0] - 2023-02-09<a class="headerlink" href="#id33" title="Link to this heading"></a></h2>
+<section id="id34">
+<h3>Bug Fixes<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Getting versions via setuptools_scm.get_version in docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/93558120b3de774f16cfa618752cc2e1285158f8">(9355812)</a></p></li>
 <li><p>Import errors when getting version for docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0366a1f782f987c2c9ffead3acc81f1ca7b67c95">(0366a1f)</a></p></li>
 </ul>
 </section>
-<section id="id28">
-<h3>Documentation<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
+<section id="id35">
+<h3>Documentation<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>PID trajectory env documentation to explain the control logic <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f9568f09250fc4ed3e027362939cbb07559ab127">(f9568f0)</a></p></li>
 <li><p>Improve envs page readability through headings which now show up in toctree <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/cedc2cc379ce62b41f0f4bfe83d7af42f75ea343">(cedc2cc)</a></p></li>
 </ul>
 </section>
-<section id="id29">
-<h3>Features<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h3>
+<section id="id36">
+<h3>Features<a class="headerlink" href="#id36" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Add GPL3 headers to all project files <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/737214c61f2ee894e2109e9a36032941062253a4">(737214c)</a></p></li>
 </ul>
 </section>
-<section id="id30">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h3>
+<section id="id37">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id37" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Bump numpy from 1.24.1 to 1.24.2 <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/55af72e03ab7d1eb0de8276b607d94dba407ce6c">(55af72e)</a></p></li>
 <li><p>MathJax configurations <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/53fef7e0d971034f0dc7466405cd8179957f9652">(53fef7e)</a></p></li>
@@ -560,38 +727,38 @@
 </ul>
 </section>
 </section>
-<section id="id31">
-<h2>[0.3.1] - 2023-02-03<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h2>
-<section id="id32">
-<h3>Bug Fixes<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h3>
+<section id="id38">
+<h2>[0.3.1] - 2023-02-03<a class="headerlink" href="#id38" title="Link to this heading"></a></h2>
+<section id="id39">
+<h3>Bug Fixes<a class="headerlink" href="#id39" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Install pandoc in CD pipeline <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8ede88665934c84b9854f2a9af9a9bb48be49074">(8ede886)</a></p></li>
 </ul>
 </section>
-<section id="id33">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h3>
+<section id="id40">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id40" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Update changelog for v0.3.1 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/98c35970785ad5942496eec865da5aba022d1de9">(98c3597)</a></p></li>
 </ul>
 </section>
 </section>
-<section id="id34">
-<h2>[0.3.0] - 2023-02-03<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h2>
-<section id="id35">
-<h3>Bug Fixes<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h3>
+<section id="id41">
+<h2>[0.3.0] - 2023-02-03<a class="headerlink" href="#id41" title="Link to this heading"></a></h2>
+<section id="id42">
+<h3>Bug Fixes<a class="headerlink" href="#id42" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Install pandoc which is required by sphinx <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/433b1463907f526bbee2c35b872338ee26770903">(433b146)</a></p></li>
 <li><p>Sudo for apt-get commands <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1ea68ea0bb24ef6b9301874a777556d33dcbd49a">(1ea68ea)</a></p></li>
 </ul>
 </section>
-<section id="id36">
-<h3>Features<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h3>
+<section id="id43">
+<h3>Features<a class="headerlink" href="#id43" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Examples <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/8baabd41d11a2f2e997299b1db5ad19da3cd682f">(8baabd4)</a></p></li>
 </ul>
 </section>
-<section id="id37">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h3>
+<section id="id44">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id44" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Fix building of docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/4b6fffc6358508d7a05e3bb7f29747a5d7535a8b">(4b6fffc)</a></p></li>
 <li><p>Mock nbtyping for docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/9f9f88f8ccbae2c965b502ddeff3f74f10d6c1e7">(9f9f88f)</a></p></li>
@@ -600,16 +767,16 @@
 </ul>
 </section>
 </section>
-<section id="id38">
-<h2>[0.2.0] - 2023-02-02<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h2>
-<section id="id39">
-<h3>Bug Fixes<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h3>
+<section id="id45">
+<h2>[0.2.0] - 2023-02-02<a class="headerlink" href="#id45" title="Link to this heading"></a></h2>
+<section id="id46">
+<h3>Bug Fixes<a class="headerlink" href="#id46" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Unused variable in the URDFModel from refactoring <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/95ae8b184ea1c5779dae65b7b06e3164c2129328">(95ae8b1)</a></p></li>
 </ul>
 </section>
-<section id="id40">
-<h3>Features<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h3>
+<section id="id47">
+<h3>Features<a class="headerlink" href="#id47" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Move yaw and rpy transform calculations into maths module <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/99e65324a517e07a9feff84097b432bb6f2f1950">(99e6532)</a></p></li>
 <li><p>Move poly traj into own module and fully test <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a727658c41fc53ddd20d58b22eb60d868efcf799">(a727658)</a></p></li>
@@ -619,8 +786,8 @@
 <li><p>Properly handle asset paths <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/583c6006dbf07b5f1c6b01b82ba6a4bf6949f92c">(583c600)</a></p></li>
 </ul>
 </section>
-<section id="id41">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h3>
+<section id="id48">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id48" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Use more appropriate clip_scalar <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e288313a97f4818f7644d12cc02bfe5326a2b396">(e288313)</a></p></li>
 <li><p>Deal with refactoring of drone envs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/05fe4c5db17d3e626c4268efe83572d4a5eabdca">(05fe4c5)</a></p></li>
@@ -632,8 +799,8 @@
 <li><p>Update changelog for v0.2.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1a4ccd82bcd5854b3623c5a9da39b81ffabdf152">(1a4ccd8)</a></p></li>
 </ul>
 </section>
-<section id="id42">
-<h3>Refactor<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h3>
+<section id="id49">
+<h3>Refactor<a class="headerlink" href="#id49" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Remove custom action types and remodel them as types <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/025ca4e7bef6a8099d9e1e34f9e3db88eb90a896">(025ca4e)</a></p></li>
 <li><p>Alter way the info dict is manipulated <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a17a9a4adb3c2164658f75cdf9907e0bec6e5413">(a17a9a4)</a></p></li>
@@ -643,40 +810,40 @@
 <li><p>Merged with trajectory env API <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a0c30c3dbd62e2f840ebb443c358d4f27c754e93">(a0c30c3)</a></p></li>
 </ul>
 </section>
-<section id="id43">
-<h3>Testing<a class="headerlink" href="#id43" title="Permalink to this heading"></a></h3>
+<section id="id50">
+<h3>Testing<a class="headerlink" href="#id50" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Fully test PID controllers <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/94862d4d8247dbcf4b13290cfc6a511275126cad">(94862d4)</a></p></li>
 </ul>
 </section>
 </section>
-<section id="id44">
-<h2>[0.1.2] - 2023-01-31<a class="headerlink" href="#id44" title="Permalink to this heading"></a></h2>
-<section id="id45">
-<h3>Bug Fixes<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h3>
+<section id="id51">
+<h2>[0.1.2] - 2023-01-31<a class="headerlink" href="#id51" title="Link to this heading"></a></h2>
+<section id="id52">
+<h3>Bug Fixes<a class="headerlink" href="#id52" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Use different URLs for files that are hosted on gh-pages <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d84ccb37136503aa81f8c1b8ec446dd29b61e6c0">(d84ccb3)</a></p></li>
 <li><p>Docstr-cov was failing whilst trying to get baseline <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/49d207739829f082ba04ad548004884753f0f2fc">(49d2077)</a></p></li>
 <li><p>Hierarchy error in titles <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/21ea9b7546144286fdbc361bf5be74535ebcc350">(21ea9b7)</a></p></li>
 </ul>
 </section>
-<section id="id46">
-<h3>Documentation<a class="headerlink" href="#id46" title="Permalink to this heading"></a></h3>
+<section id="id53">
+<h3>Documentation<a class="headerlink" href="#id53" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Add controllers to docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/856c336ab2a64cc35594d2041ac8114ab0577654">(856c336)</a></p></li>
 <li><p>Improve index.rst to act as the landing page for the hosted docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1091aed4ea211d706283a5affa9643670617a9e5">(1091aed)</a></p></li>
 </ul>
 </section>
-<section id="id47">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id47" title="Permalink to this heading"></a></h3>
+<section id="id54">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id54" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Mock pybullet_data <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d858099acad558b9fe0665b587fa062b6ac07ef9">(d858099)</a></p></li>
 <li><p>Remove -q from checkout <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f5493c671f64fd533d1c04e85c68443de829af79">(f5493c6)</a></p></li>
 <li><p>Update changelog for v0.1.2 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/0495c5663b11d65370a22533b63f43361d7eba51">(0495c56)</a></p></li>
 </ul>
 </section>
-<section id="id48">
-<h3>Refactor<a class="headerlink" href="#id48" title="Permalink to this heading"></a></h3>
+<section id="id55">
+<h3>Refactor<a class="headerlink" href="#id55" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Speed up docstr build by only requireing docs/requirements.txt <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6d6cb6401a33edb7ce3fa1eac218750f0e50e9ef">(6d6cb64)</a></p></li>
 <li><p>Move PyBulletIds to types module <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/b3ad632744045e7f411f6fcf1e10f2d660b8712e">(b3ad632)</a></p></li>
@@ -684,10 +851,10 @@
 </ul>
 </section>
 </section>
-<section id="id49">
-<h2>[0.1.1] - 2023-01-31<a class="headerlink" href="#id49" title="Permalink to this heading"></a></h2>
-<section id="id50">
-<h3>Bug Fixes<a class="headerlink" href="#id50" title="Permalink to this heading"></a></h3>
+<section id="id56">
+<h2>[0.1.1] - 2023-01-31<a class="headerlink" href="#id56" title="Link to this heading"></a></h2>
+<section id="id57">
+<h3>Bug Fixes<a class="headerlink" href="#id57" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Running very slow because of np.asarray <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6e193445972e9aa307bb648cf01d512ffbf3fa16">(6e19344)</a></p></li>
 <li><p>Reused function name <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2690f4ebc6f16445502014dcf6438ed3acccbdb8">(2690f4e)</a></p></li>
@@ -697,8 +864,8 @@
 <li><p>Allow –accept-empty in case there’s no python files <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/1714bbfcbb494225aa0b51b6b3beb353eec4861e">(1714bbf)</a></p></li>
 </ul>
 </section>
-<section id="id51">
-<h3>Documentation<a class="headerlink" href="#id51" title="Permalink to this heading"></a></h3>
+<section id="id58">
+<h3>Documentation<a class="headerlink" href="#id58" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Start of BaseDroneEnv docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/7b9553fe5d68e92fc78e4c9b594c4cac55101db8">(7b9553f)</a></p></li>
 <li><p>Do most of the types docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/c3e3a18e178a60e5f5ee8c85ed141d305b48e2c3">(c3e3a18)</a></p></li>
@@ -706,14 +873,14 @@
 <li><p>Include BaseDroneEnv in generated docs <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/de0f0585d1f734483369e133056703d41fda9812">(de0f058)</a></p></li>
 </ul>
 </section>
-<section id="id52">
-<h3>Features<a class="headerlink" href="#id52" title="Permalink to this heading"></a></h3>
+<section id="id59">
+<h3>Features<a class="headerlink" href="#id59" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Check docstr coverage isn’t being reduced <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/a4be21b1a618060c360cdff4c0f32b828117f1e2">(a4be21b)</a></p></li>
 </ul>
 </section>
-<section id="id53">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id53" title="Permalink to this heading"></a></h3>
+<section id="id60">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id60" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Improve readme <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/f9095111c7fbc999cab9a9a45d2f8d1d3ae4ac4f">(f909511)</a></p></li>
 <li><p>Add future work on motor modelling <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/9307e91da249088486242203515f0ff98a985c58">(9307e91)</a></p></li>
@@ -726,10 +893,10 @@
 </ul>
 </section>
 </section>
-<section id="id54">
-<h2>[0.1.0] - 2023-01-27<a class="headerlink" href="#id54" title="Permalink to this heading"></a></h2>
-<section id="id55">
-<h3>Bug Fixes<a class="headerlink" href="#id55" title="Permalink to this heading"></a></h3>
+<section id="id61">
+<h2>[0.1.0] - 2023-01-27<a class="headerlink" href="#id61" title="Link to this heading"></a></h2>
+<section id="id62">
+<h3>Bug Fixes<a class="headerlink" href="#id62" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Updates to setup since there’s no CPP <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/6e489fb22f5aa2edf54887734eae587d649b61bc">(6e489fb)</a></p></li>
 <li><p>Use pip wheel rather than cibuildwheel as it’s currently a pure python package <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/94a0837ee37f26784de4231afd42b5258e44f09a">(94a0837)</a></p></li>
@@ -743,15 +910,15 @@
 <li><p>Revert permissions, as this is done through settings console <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/07b9198b677288b2a15ef73e1c315fb09af12113">(07b9198)</a></p></li>
 </ul>
 </section>
-<section id="id56">
-<h3>Features<a class="headerlink" href="#id56" title="Permalink to this heading"></a></h3>
+<section id="id63">
+<h3>Features<a class="headerlink" href="#id63" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Initial commit <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2b2928c2901d69e5954e0558ba9e2cd204b2a48c">(2b2928c)</a></p></li>
 <li><p>Move back to pip as conda wasn’t required <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/071ae4b8f5ecb21e82fa4263611e0012c520271a">(071ae4b)</a></p></li>
 </ul>
 </section>
-<section id="id57">
-<h3>Miscellaneous Tasks<a class="headerlink" href="#id57" title="Permalink to this heading"></a></h3>
+<section id="id64">
+<h3>Miscellaneous Tasks<a class="headerlink" href="#id64" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Update changelog for v0.2.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/e4b25d479669a2fa7301dd51f1090d5e378655c2">(e4b25d4)</a></p></li>
 <li><p>Update changelog for v0.1.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/9b402385ae225dca824639154dbdb241394c1592">(9b40238)</a></p></li>
@@ -764,14 +931,14 @@
 <li><p>Update changelog for v0.1.0 [skip pre-commit.ci] <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/d3dc7686ca804b005aa050f14521381a74cae501">(d3dc768)</a></p></li>
 </ul>
 </section>
-<section id="id58">
-<h3>Refactor<a class="headerlink" href="#id58" title="Permalink to this heading"></a></h3>
+<section id="id65">
+<h3>Refactor<a class="headerlink" href="#id65" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Docs filenames and symlink names <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/64aba9a8b773d72df807f4177ca34b068e4de8c0">(64aba9a)</a></p></li>
 </ul>
 </section>
-<section id="id59">
-<h3>Testing<a class="headerlink" href="#id59" title="Permalink to this heading"></a></h3>
+<section id="id66">
+<h3>Testing<a class="headerlink" href="#id66" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Skip integration tests <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/2651c8be53738c47f3c79c7622f1ab0c15621f4b">(2651c8b)</a></p></li>
 <li><p>Fix tests since quats and euler have multiple correct variations <a class="reference external" href="https://github.com/iwishiwasaneagle/jdrones/commit/5a3a96daf1b9374d605fba3f4dae620973b88c8e">(5a3a96d)</a></p></li>
