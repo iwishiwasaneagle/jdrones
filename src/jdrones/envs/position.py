@@ -227,7 +227,7 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
             observations.append(obs.copy())
 
             dist = np.linalg.norm(self.env.state.pos - action_as_state.pos)
-            if np.any(np.isnan(dist)):
+            if np.isnan(np.sum(dist)):
                 trunc = True
 
             if dist < 0.5:
