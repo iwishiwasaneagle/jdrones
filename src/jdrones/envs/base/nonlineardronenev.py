@@ -4,9 +4,7 @@ from typing import Optional
 from typing import Tuple
 
 from jdrones.data_models import State
-from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.envs.dronemodels import DronePlus
 from jdrones.types import PropellerAction
 from libjdrones import NonLinearDynamicModelDroneEnv as _NonLinearDynamicModelDroneEnv
 
@@ -23,7 +21,6 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
 
     def __init__(
         self,
-        model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
     ):

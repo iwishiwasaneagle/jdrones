@@ -9,8 +9,6 @@ import gymnasium
 import numpy as np
 from gymnasium import spaces
 from jdrones.data_models import State
-from jdrones.data_models import URDFModel
-from jdrones.envs.dronemodels import DronePlus
 from jdrones.types import DType
 
 
@@ -21,22 +19,17 @@ class BaseDroneEnv(gymnasium.Env, abc.ABC):
     initial_state: State
     """Initial drone state. Used for resettign the simulation"""
 
-    model: URDFModel
-    """Model parameters"""
-
     info: dict[str, Any]
     """Information dictionary to return"""
 
     def __init__(
         self,
-        model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
     ):
         if initial_state is None:
             initial_state = State()
         self.initial_state = initial_state
-        self.model = model
         self.dt = dt
         self.info = {}
 

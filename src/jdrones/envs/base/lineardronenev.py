@@ -6,9 +6,7 @@ from typing import Tuple
 import numpy as np
 from gymnasium import spaces
 from jdrones.data_models import State
-from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.envs.dronemodels import DronePlus
 from jdrones.types import DType
 from jdrones.types import PropellerAction
 from libjdrones import LinearDynamicModelDroneEnv as _LinearDynamicModelDroneEnv
@@ -26,13 +24,12 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
 
     def __init__(
         self,
-        model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
     ):
         self._env = _LinearDynamicModelDroneEnv(dt)
 
-        super().__init__(model, initial_state, dt)
+        super().__init__(initial_state, dt)
 
         act_bounds = np.array(
             [[-np.inf, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, np.inf, np.inf]],
