@@ -1,6 +1,6 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-from copy import copy
+import abc
 from typing import Any
 from typing import Optional
 from typing import Tuple
@@ -11,11 +11,10 @@ from gymnasium import spaces
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs.dronemodels import DronePlus
-from jdrones.transforms import euler_to_quat
 from jdrones.types import DType
 
 
-class BaseDroneEnv(gymnasium.Env):
+class BaseDroneEnv(gymnasium.Env, abc.ABC):
     state: State
     """Current drone state"""
 
@@ -37,7 +36,6 @@ class BaseDroneEnv(gymnasium.Env):
         if initial_state is None:
             initial_state = State()
         self.initial_state = initial_state
-        self.state = copy(self.initial_state)
         self.model = model
         self.dt = dt
         self.info = {}
@@ -95,6 +93,7 @@ class BaseDroneEnv(gymnasium.Env):
             low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=DType
         )
 
+    @abc.abstractmethod
     def reset(
         self,
         *,
@@ -102,12 +101,4 @@ class BaseDroneEnv(gymnasium.Env):
         options: Optional[dict] = None,
     ) -> Tuple[State, dict]:
         super().reset(seed=seed, options=options)
-        self.info = {}
-
-        if options is not None:
-            reset_state = options.get("reset_state", self.initial_state)
-        else:
-            reset_state = self.initial_state
-        self.state = copy(reset_state)
-        self.state.quat = euler_to_quat(self.state.rpy)
-        return self.state, self.info
+        return self.state, {}

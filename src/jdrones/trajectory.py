@@ -4,10 +4,10 @@ import abc
 from typing import Dict
 from typing import Tuple
 
-import numba
 import numpy as np
-from jdrones.solvers import bisection_with_right_expansion
 from jdrones.types import VEC3
+from libjdrones import FifthOrderPolynomial as _FifthOrderPolynomial
+from libjdrones import OptimalFifthOrderPolynomial as _OptimalFifthOrderPolynomial
 
 
 class IdenticalPoseError(RuntimeError):
@@ -85,8 +85,7 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
 
     """
 
-    coeffs: Dict[str, tuple[float, ...]]
-    """Storage for the polynomial coefficients"""
+    traj: _FifthOrderPolynomial
 
     def __init__(
         self,
@@ -119,114 +118,27 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
         self._T = np.float64(T)
 
         if _solve:
-            self._solve()
+            self.solve()
 
-    @property
-    def T(self):
-        return self._T
-
-    @staticmethod
-    @numba.njit
-    def calc_A(T):
-        T2, T3, T4, T5 = T**2, T**3, T**4, T**5
-        A = np.array(
-            [
-                [0.0, 0.0, 0.0, 0.0, 0.0, 1.0],  # f(t=0)
-                [
-                    T5,
-                    T4,
-                    T3,
-                    T2,
-                    T,
-                    1.0,
-                ],  # f(t=T)
-                [0.0, 0.0, 0.0, 0.0, 1.0, 0.0],  # f'(t=0)
-                [
-                    5 * T4,
-                    4 * T3,
-                    3 * T2,
-                    2 * T,
-                    1.0,
-                    0.0,
-                ],  # f'(t=T)
-                [0.0, 0.0, 0.0, 2.0, 0.0, 0.0],  # f''(t=0)
-                [20 * T3, 12 * T2, 6 * T, 2, 0.0, 0.0],  # f''(t=T)
-            ],
-            dtype=np.float64,
-        )
-        return A
-
-    @staticmethod
-    @numba.njit
-    def calc_b(pos, vel, acc, tgt_pos, tgt_vel, tgt_acc):
-        b = np.empty((6, len(pos)), dtype=np.float64)
-        b[0] = pos
-        b[1] = tgt_pos
-        b[2] = vel
-        b[3] = tgt_vel
-        b[4] = acc
-        b[5] = tgt_acc
-        return b
-
-    @classmethod
-    def calc_traj(cls, pos, vel, acc, tgt_pos, tgt_vel, tgt_acc, T):
-        A = np.array([cls.calc_A(ti) for ti in T])
-        b = cls.calc_b(pos, vel, acc, tgt_pos, tgt_vel, tgt_acc)
-        return np.linalg.solve(A, b.T)
-
-    def _solve(self) -> None:
-        traj = self.calc_traj(
+    def solve(self):
+        self.traj = _FifthOrderPolynomial(
             self.start_pos,
             self.start_vel,
             self.start_acc,
             self.dest_pos,
             self.dest_vel,
             self.dest_acc,
-            [self._T],
+            self._T,
         )
-        self.coeffs = dict(
-            x=tuple(traj[0]),
-            y=tuple(traj[1]),
-            z=tuple(traj[2]),
-        )
+        self.traj.solve()
 
-    @staticmethod
-    @numba.njit
-    def _position(traj, t):
-        return (
-            traj[0] * t**5
-            + traj[1] * t**4
-            + traj[2] * t**3
-            + traj[3] * t**2
-            + traj[4] * t
-            + traj[5]
-        )
+    @property
+    def T(self):
+        return self._T
 
-    @staticmethod
-    @numba.njit
-    def _velocity(traj, t):
-        return (
-            5 * traj[0] * t**4
-            + 4 * traj[1] * t**3
-            + 3 * traj[2] * t**2
-            + 2 * traj[3] * t
-            + traj[4]
-        )
-
-    @staticmethod
-    @numba.njit
-    def _acceleration(traj, t):
-        return 20 * traj[0] * t**3 + 12 * traj[1] * t**2 + 6 * traj[2] * t + 2 * traj[3]
-
-    @staticmethod
-    @numba.njit
-    def _jerk(traj, t):
-        return 60 * traj[0] * t**2 + 24 * traj[1] * t + 6 * traj[2]
-
-    @staticmethod
-    @numba.njit
-    def _snap(traj, t):
-        return 120 * traj[0] * t + 24 * traj[1]
+    @property
+    def coeffs(self):
+        return self.traj.get_coeffs()
 
     def snap(self, t: float) -> Tuple[float, float, float]:
         """
@@ -247,11 +159,7 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
              :math:`\\ddot x, \\ddot y, \\ddot z`
         """
 
-        x4d = self._snap(self.coeffs["x"], t)
-        y4d = self._snap(self.coeffs["y"], t)
-        z4d = self._snap(self.coeffs["z"], t)
-        ret = (x4d, y4d, z4d)
-        return ret
+        return self.traj.snap(t)
 
     def jerk(self, t: float) -> Tuple[float, float, float]:
         """
@@ -272,11 +180,7 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
              :math:`\\ddot x, \\ddot y, \\ddot z`
         """
 
-        xddd = self._jerk(self.coeffs["x"], t)
-        yddd = self._jerk(self.coeffs["y"], t)
-        zddd = self._jerk(self.coeffs["z"], t)
-        ret = (xddd, yddd, zddd)
-        return ret
+        return self.traj.jerk(t)
 
     def acceleration(self, t: float) -> Tuple[float, float, float]:
         """
@@ -297,11 +201,7 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
              :math:`\\ddot x, \\ddot y, \\ddot z`
         """
 
-        xdd = self._acceleration(self.coeffs["x"], t)
-        ydd = self._acceleration(self.coeffs["y"], t)
-        zdd = self._acceleration(self.coeffs["z"], t)
-        ret = (xdd, ydd, zdd)
-        return ret
+        return self.traj.acceleration(t)
 
     def velocity(self, t: float) -> Tuple[float, float, float]:
         """
@@ -322,11 +222,7 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
              :math:`\\dot x, \\dot y, \\dot z`
         """
 
-        xd = self._velocity(self.coeffs["x"], t)
-        yd = self._velocity(self.coeffs["y"], t)
-        zd = self._velocity(self.coeffs["z"], t)
-        ret = (xd, yd, zd)
-        return ret
+        return self.traj.velocity(t)
 
     def position(self, t: float) -> Tuple[float, float, float]:
         """
@@ -347,14 +243,12 @@ class FifthOrderPolynomialTrajectory(BasePolynomialTrajectory):
              :math:`x, y, z`
         """
 
-        x = self._position(self.coeffs["x"], t)
-        y = self._position(self.coeffs["y"], t)
-        z = self._position(self.coeffs["z"], t)
-        ret = (x, y, z)
-        return ret
+        return self.traj.position(t)
 
 
 class OptimalFifthOrderPolynomialTrajectory(FifthOrderPolynomialTrajectory):
+    traj: _OptimalFifthOrderPolynomial
+
     def __init__(
         self,
         start_pos: VEC3,
@@ -366,8 +260,8 @@ class OptimalFifthOrderPolynomialTrajectory(FifthOrderPolynomialTrajectory):
         tmax: float = 1.0,
         max_acceleration: float = 1.0,
         adaptive_acceleration: bool = False,
-        tol: float = 1e-3,
-        N: int = 250,
+        tol: float = 1e-10,
+        N: int = 1000,
         _solve: bool = True,
     ):
         self.tmax = np.float64(tmax)
@@ -403,91 +297,22 @@ class OptimalFifthOrderPolynomialTrajectory(FifthOrderPolynomialTrajectory):
 
     @property
     def T(self):
-        return self.coeffs["t"]
+        return self.traj.get_T()
 
-    @staticmethod
-    @numba.njit
-    def get_acceleration_at_jerk_zero(traj, tmax):
-        jerk_coeffs = traj * np.array(
-            [60.0, 24.0, 6.0, 0.0, 0.0, 0.0], dtype=np.float64
-        )
-        a = np.sqrt(np.power(jerk_coeffs[1], 2) - 4 * jerk_coeffs[0] * jerk_coeffs[2])
-        b = 2 * jerk_coeffs[0]
-
-        if b != 0.0:
-            jerk_0 = np.array(
-                [
-                    (-2 * jerk_coeffs[1] + a) / b,
-                    (-2 * jerk_coeffs[1] - a) / b,
-                    0.0,
-                    tmax,
-                ],
-                dtype=np.float64,
-            )
-            jerk_0[0] = min(max(jerk_0[0], 0.0), tmax)
-            jerk_0[1] = min(max(jerk_0[1], 0.0), tmax)
-        else:
-            jerk_0 = np.array([0, tmax], dtype=np.float64)
-        ddx = (
-            20.0 * traj[0] * np.power(jerk_0, 3)
-            + 12.0 * traj[1] * np.power(jerk_0, 2)
-            + 6.0 * traj[2] * jerk_0
-            + 2.0 * traj[3]
-        )
-        return ddx
-
-    def get_max_acceleration(self, traj, tmax):
-        a = self.get_acceleration_at_jerk_zero(traj, tmax)
-        return a[np.abs(a).argmax()]
-
-    def get_max_abs_acceleration(self, traj, tmax):
-        return np.abs(self.get_max_acceleration(traj, tmax))
-
-    def get_max_abs_accelerations_from_time(
-        self, pos, vel, acc, tgt_pos, tgt_vel, tgt_acc, T
-    ):
-        if T <= 0:
-            return np.float64(np.inf)
-        if np.allclose([pos, vel, acc, tgt_pos, tgt_vel, tgt_acc], 0):
-            return 0
-        traj = self.calc_traj(pos, vel, acc, tgt_pos, tgt_vel, tgt_acc, [T]).squeeze()
-        return self.get_max_abs_acceleration(traj, T)
-
-    def _solve(self) -> None:
-        times = []
-        for i in range(3):
-
-            def f(t):
-                a = self.get_max_abs_accelerations_from_time(
-                    self.start_pos[[i]],
-                    self.start_vel[[i]],
-                    self.start_acc[[i]],
-                    self.dest_pos[[i]],
-                    self.dest_vel[[i]],
-                    self.dest_acc[[i]],
-                    t,
-                )
-                return a - self.max_acceleration
-
-            times.append(
-                bisection_with_right_expansion(f, 0, self.tmax, tol=self.tol, N=self.N)
-            )
-        t = [ti for ti in times if ti is not None]
-        if len(t) == 0:
-            raise RuntimeError("No solution found")
-        t = max(t)
-
-        traj = self.calc_traj(
+    def solve(self):
+        self.traj = _OptimalFifthOrderPolynomial(
             self.start_pos,
             self.start_vel,
             self.start_acc,
             self.dest_pos,
             self.dest_vel,
             self.dest_acc,
-            [t],
+            self._T,
+            self.max_acceleration,
+            self.tol,
+            self.N,
         )
-
-        self.coeffs = dict(x=tuple(traj[0]), y=tuple(traj[1]), z=tuple(traj[2]), t=t)
+        self.traj.solve()
 
 
 class FirstOrderPolynomialTrajectory(BasePolynomialTrajectory):

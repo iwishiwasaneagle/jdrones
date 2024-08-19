@@ -52,7 +52,7 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         should_calc_reward: bool = False,
     ):
         if env is None:
-            env = LQRDroneEnv(model=model, initial_state=initial_state, dt=dt)
+            env = LQRDroneEnv(dt, initial_state)
         self.env = env
         self.dt = dt
         self.model = model
@@ -169,9 +169,9 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
     ) -> tuple[States, dict[str, Any]]:
         super().reset(seed=seed, options=options)
 
-        obs, _ = self.env.reset(seed=seed, options=options)
+        obs, info = self.env.reset(seed=seed, options=options)
 
-        return States([np.copy(obs)]), {}
+        return States([np.copy(obs)]), info
 
     def step(
         self, action: PositionAction | PositionVelocityAction
@@ -199,17 +199,16 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
         action_as_state = self._validate_action_input(action)
 
         term, trunc, info = False, False, {}
-        if np.allclose(action, self.env.state.pos):
+        obs = self.env.state
+        if np.allclose(action, obs.pos):
             # Avoid a singularity since the trajectory is scaled with distance
             term = True
             traj = None
         else:
-            traj = self.calc_traj(
-                self.env.state, action_as_state, self.model.max_vel_ms
-            )
+            traj = self.calc_traj(obs, action_as_state, self.model.max_vel_ms)
 
         observations = collections.deque()
-        observations.append(self.env.state.copy())
+        observations.append(obs.copy())
 
         u: State = action_as_state.copy()
 
@@ -222,12 +221,12 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
             else:
                 u = self.update_u_from_traj(u, traj, t)
 
-            obs, _, term, trunc, info = self.env.step(u.to_x())
+            obs, _, term, trunc, info = self.env.step(u)
 
             observations.append(obs.copy())
 
-            dist = np.linalg.norm(self.env.state.pos - action_as_state.pos)
-            if np.isnan(np.sum(dist)):
+            dist = np.linalg.norm(obs.pos - action_as_state.pos)
+            if np.isnan(dist):
                 trunc = True
 
             if dist < 0.5:
