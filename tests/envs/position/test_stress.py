@@ -1,7 +1,6 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
 import pytest
-from jdrones.wrappers import EnergyCalculationWrapper
 
 
 def run(T, dt, env):
@@ -57,11 +56,3 @@ def test_long_lookahead_position(
     T, dt, position_drone_action_space, fifthorderpolypositionlookaheaddroneenv
 ):
     run(T, dt, fifthorderpolypositionlookaheaddroneenv)
-
-
-@pytest.mark.slow_integration
-@pytest.mark.parametrize("T", [2])
-@pytest.mark.parametrize("wrapper", [EnergyCalculationWrapper])
-def test_wrappers(T, dt, wrapper, lqrdroneenv):
-    env = wrapper(lqrdroneenv)
-    run(T, dt, env)

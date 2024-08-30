@@ -14,7 +14,7 @@ def test_opt_fifth_order_same_start_and_tgt(
     """
     obs, _, term, trunc, _ = optimalfifthorderpolypositiondroneenv.step(pos)
 
-    assert term
-    assert not trunc
+    assert not term
+    assert trunc
     assert len(obs) == 1
     assert np.allclose(state, obs[0])

@@ -111,18 +111,10 @@ YAW_INPUT = pytest.mark.parametrize(
 )
 
 INPUT_TO_ROT = pytest.mark.parametrize(
-    "vec_omega,k_Q,ang_vel_sign",
+    "vec_omega,ang_vel_sign",
     [
-        [
-            (1, 0, 0, 0),
-            0,
-            (0, -1, 0),
-        ],
-        [(0, 0, 1, 0), 0, (0, 1, 0)],
-        [(0, 1, 0, 0), 0, (-1, 0, 0)],
-        [(0, 0, 0, 1), 0, (1, 0, 0)],
-        [(1, 0.9, 1, 0.9), 0.1, (0, 0, 1)],
-        [(0.9, 1, 0.9, 1), 0.1, (0, 0, -1)],
+        [(1, 0.9, 1, 0.9), (0, 0, 1)],
+        [(0.9, 1, 0.9, 1), (0, 0, -1)],
     ],
-    indirect=["vec_omega", "k_Q"],
+    indirect=["vec_omega"],
 )

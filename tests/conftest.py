@@ -190,13 +190,15 @@ def urdfmodel(
 
 
 @pytest.fixture
-def env_default_kwargs(urdfmodel, dt, state):
-    return dict(model=urdfmodel, initial_state=state, dt=dt)
+def env_default_kwargs(dt, state):
+    return dict(initial_state=state, dt=dt)
 
 
 @pytest.fixture
-def pbdroneenv(env_default_kwargs, simulation_type):
-    d = PyBulletDroneEnv(**env_default_kwargs, simulation_type=simulation_type)
+def pbdroneenv(env_default_kwargs, urdfmodel, simulation_type):
+    d = PyBulletDroneEnv(
+        **env_default_kwargs, model=urdfmodel, simulation_type=simulation_type
+    )
     yield d
     d.close()
 

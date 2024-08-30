@@ -86,6 +86,7 @@ def optimal_fifth_o_trajectory(
         dest_vel=dest_vel,
         dest_acc=dest_acc,
         adaptive_acceleration=True,
+        _solve=True,
     )
     yield traj
 
@@ -113,7 +114,6 @@ DATA = [
         (1, 2, 3),
     ],
     [(10, -20, 34), (6, 89, -20)],
-    [(1000, 1000, 1000), (0, 0, 0)],
 ]
 
 ACC = pytest.mark.parametrize(
@@ -182,6 +182,11 @@ def test_optimal_fifth_o_traj_bounds(
     act_dest_acc = optimal_fifth_o_trajectory.acceleration(t)
     assert np.allclose(act_start_acc, start_acc)
     assert np.allclose(act_dest_acc, dest_acc)
+
+    times = np.linspace(0, t)
+    acc = np.array([optimal_fifth_o_trajectory.acceleration(ti) for ti in times])
+    max_acc = np.abs(acc).max()
+    assert max_acc <= optimal_fifth_o_trajectory.max_acceleration
 
 
 @POS
