@@ -3,11 +3,9 @@
 from .basecontrolledenv import BaseControlledEnv
 from .lineardronenev import LinearDynamicModelDroneEnv
 from .nonlineardronenev import NonlinearDynamicModelDroneEnv
-from .pbdronenev import PyBulletDroneEnv
 
 __all__ = [
     "BaseControlledEnv",
-    "PyBulletDroneEnv",
     "LinearDynamicModelDroneEnv",
     "NonlinearDynamicModelDroneEnv",
 ]

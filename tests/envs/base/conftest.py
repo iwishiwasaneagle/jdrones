@@ -23,13 +23,6 @@ POSITION_FROM_VELOCITY_1 = pytest.mark.parametrize(
     ],
     indirect=True,
 )
-POSITION_FROM_VELOCITY_1_PB = pytest.mark.parametrize(
-    "pos",
-    [
-        np.array((0, 0, 1)),
-    ],
-    indirect=True,
-)
 POSITION_FROM_VELOCITY_2 = pytest.mark.parametrize(
     "velocity",
     [

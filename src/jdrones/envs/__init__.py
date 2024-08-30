@@ -2,7 +2,6 @@
 #  SPDX-License-Identifier: GPL-3.0-only
 from .base import LinearDynamicModelDroneEnv
 from .base import NonlinearDynamicModelDroneEnv
-from .base import PyBulletDroneEnv
 from .base.basecontrolledenv import BaseControlledEnv
 from .dronemodels import DronePlus
 from .lqr import LQRDroneEnv
@@ -13,7 +12,6 @@ from .position import OptimalFifthOrderPolyPositionDroneEnv
 from .position import OptimalFifthOrderPolyPositionWithLookAheadDroneEnv
 
 __all__ = [
-    "PyBulletDroneEnv",
     "NonlinearDynamicModelDroneEnv",
     "LinearDynamicModelDroneEnv",
     "LQRDroneEnv",

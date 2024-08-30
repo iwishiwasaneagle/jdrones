@@ -10,7 +10,7 @@ from jdrones.types import VEC4
 @numba.njit
 def quat_to_euler(quat: VEC4) -> VEC3:
     """
-    PyBullet does a Body 3-2-1 sequence:
+    Body 3-2-1 sequence:
 
         1. Body Yaw (X)
         2. Body Pitch (Y)
@@ -20,8 +20,6 @@ def quat_to_euler(quat: VEC4) -> VEC3:
 
         https://stackoverflow.com/a/15050505
 
-    More details can be found here
-    https://github.com/bulletphysics/bullet3/blob/2c204c49e56ed15ec5fcfa71d199ab6d6570b3f5/examples/pybullet/pybullet.c#L10854
 
     Pure python equivalent:
 
@@ -69,14 +67,12 @@ def quat_to_euler(quat: VEC4) -> VEC3:
 
 @numba.njit
 def euler_to_quat(euler: VEC3) -> VEC4:
-    """PyBullet does a Body 3-2-1 sequence:
+    """
+    Body 3-2-1 sequence:
 
         1. Body Yaw (X)
         2. Body Pitch (Y)
         3. Body Roll (Z)
-
-    More details can be found here
-    https://github.com/bulletphysics/bullet3/blob/2c204c49e56ed15ec5fcfa71d199ab6d6570b3f5/examples/pybullet/pybullet.c#L10854
 
     ..warning::
 
@@ -126,7 +122,6 @@ def euler_to_quat(euler: VEC3) -> VEC4:
 
 @numba.njit
 def quat_to_rotmat(quat: VEC4) -> MAT3X3:
-    x, y, z, w = quat
     x2, y2, z2, w2 = quat * quat
     xy, xz, xw, yz, yw, zw = (
         quat[0] * quat[1],

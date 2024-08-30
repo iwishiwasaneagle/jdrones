@@ -10,7 +10,6 @@ from jdrones.data_models import State
 from jdrones.data_models import States
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
-from jdrones.envs import PyBulletDroneEnv
 from tqdm.auto import trange
 
 
@@ -39,14 +38,10 @@ l_env = LinearDynamicModelDroneEnv(
     initial_state=initial_state,
     dt=dt,
 )
-pb_env = PyBulletDroneEnv(
-    initial_state=initial_state,
-    dt=dt,
-)
 df_long = pd.concat(
     [
         States(_simulate_env(f, T, dt)).to_df(tag=type(f).__name__, dt=dt)
-        for f in [nl_env, pb_env, l_env]
+        for f in [nl_env, l_env]
     ]
 ).reset_index()
 
