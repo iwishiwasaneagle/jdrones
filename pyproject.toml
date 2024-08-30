@@ -35,7 +35,7 @@ dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/iwishiwasaneagle/jdrones/"
-Source = '"https://github.com/iwishiwasaneagle/jdrones"'
+Source = "https://github.com/iwishiwasaneagle/jdrones"
 
 [project.optional-dependencies]
 test = [
