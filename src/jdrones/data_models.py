@@ -1,6 +1,5 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-import contextlib
 import enum
 from typing import Callable
 from typing import Tuple
@@ -8,9 +7,6 @@ from typing import Tuple
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
-
-with contextlib.redirect_stdout(None):
-    import pybullet as p
 import pydantic
 from jdrones.maths import quat_mul
 from jdrones.transforms import quat_to_euler
@@ -270,15 +266,6 @@ class States(np.ndarray):
         return df
 
 
-class SimulationType(enum.IntEnum):
-    """Enum to handle the support pybullet simulation types"""
-
-    DIRECT = p.DIRECT
-    """No GUI"""
-    GUI = p.GUI
-    """With GUI"""
-
-
 class URDFModel(pydantic.BaseModel):
     g: float = 9.81
     """Acceleration due to gravity (m/s^2)"""
@@ -389,16 +376,3 @@ class URDFModel(pydantic.BaseModel):
 
     filepath: str
     """File path to URDF model"""
-
-
-class PyBulletIds(pydantic.BaseModel):
-    """
-    Container to hold the IDs of the various pybullet items
-    """
-
-    client: int = None
-    """Physical simulation client ID"""
-    plane: int = None
-    """The ground plane ID"""
-    drone: int = None
-    """The drone ID"""

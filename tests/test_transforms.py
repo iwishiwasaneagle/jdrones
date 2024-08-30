@@ -7,8 +7,8 @@ Tests for transformation helper functions.
     https://stackoverflow.com/a/15050505
 """
 import numpy as np
-import pybullet
 import pytest
+import scipy.spatial as sps
 from jdrones.transforms import euler_to_quat
 from jdrones.transforms import euler_to_rotmat
 from jdrones.transforms import quat_to_euler
@@ -40,14 +40,16 @@ EULER_ROTMAT = pytest.mark.parametrize(
 
 @QUAT_EULER
 def test_quat_euler_sanity_check(quat, euler):
+    seq = "XYZ"
+    canonical = False
     assert np.allclose(
-        pybullet.getEulerFromQuaternion(pybullet.getQuaternionFromEuler(euler)), euler
+        sps.transform.Rotation.from_euler(seq, euler).as_euler(seq), euler
     )
+    assert np.allclose(sps.transform.Rotation.from_quat(quat).as_quat(canonical), quat)
     assert np.allclose(
-        pybullet.getQuaternionFromEuler(pybullet.getEulerFromQuaternion(quat)), quat
+        sps.transform.Rotation.from_euler(seq, euler).as_quat(canonical), quat
     )
-    assert np.allclose(pybullet.getQuaternionFromEuler(euler), quat)
-    assert np.allclose(pybullet.getEulerFromQuaternion(quat), euler)
+    assert np.allclose(sps.transform.Rotation.from_quat(quat).as_euler(seq), euler)
 
 
 @QUAT_EULER

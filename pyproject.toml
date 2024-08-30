@@ -4,9 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jdrones"
-description = "PyBullet models prepared for usage via the gymnasium environment"
+description = "Drones models prepared for use via the gymnasium environment"
 readme = "README.md"
-authors = [{ name = "iwishiwasaneagle", email = "jh.ewers@gmail.com" }]
+authors = [{ name = "iwishiwasaneagle", email = "me@janhendrikewers.uk" }]
 license = { text = "GPL-3.0-or-later" }
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -20,13 +20,11 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    'importlib-metadata; python_version<"3.8"',
     "libjdrones>=0.1.1",
     "loguru",
     "numpy",
     "scipy",
     "gymnasium",
-    "pybullet",
     "pydantic",
     "nptyping",
     "numba"

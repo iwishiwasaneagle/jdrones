@@ -18,11 +18,6 @@ def test_make(env):
 
 
 @pytest.mark.integration
-def test_PB3DroneEnv(pbdroneenv):
-    check_env(pbdroneenv)
-
-
-@pytest.mark.integration
 def test_LinearDynamicsDroneEnv(lineardroneenv):
     check_env(lineardroneenv)
 

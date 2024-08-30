@@ -5,7 +5,6 @@ import pathlib
 import numpy as np
 import pytest
 from gymnasium import spaces
-from jdrones.data_models import SimulationType
 from jdrones.data_models import State
 from jdrones.data_models import URDFModel
 from jdrones.envs import FifthOrderPolyPositionDroneEnv
@@ -14,7 +13,6 @@ from jdrones.envs import FirstOrderPolyPositionDroneEnv
 from jdrones.envs import LinearDynamicModelDroneEnv
 from jdrones.envs import LQRDroneEnv
 from jdrones.envs import NonlinearDynamicModelDroneEnv
-from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
 from jdrones.envs.position import OptimalFifthOrderPolyPositionDroneEnv
@@ -145,11 +143,6 @@ def action(vec_omega, np_ndarray_factory):
     return np_ndarray_factory(vec_omega)
 
 
-@pytest.fixture(params=[SimulationType.DIRECT])
-def simulation_type(request):
-    return request.param
-
-
 @pytest.fixture(params=[None])
 def equilibrium_prop_rpm(request, k_T, mass, g):
     if request.param is None:
@@ -192,15 +185,6 @@ def urdfmodel(
 @pytest.fixture
 def env_default_kwargs(dt, state):
     return dict(initial_state=state, dt=dt)
-
-
-@pytest.fixture
-def pbdroneenv(env_default_kwargs, urdfmodel, simulation_type):
-    d = PyBulletDroneEnv(
-        **env_default_kwargs, model=urdfmodel, simulation_type=simulation_type
-    )
-    yield d
-    d.close()
 
 
 @pytest.fixture
