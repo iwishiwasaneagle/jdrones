@@ -1,10 +1,10 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-import abc
 import collections
 import itertools
 from typing import Any
 from typing import Optional
+from typing import TypeVar
 
 import gymnasium
 import numpy as np
@@ -26,14 +26,16 @@ from libjdrones import (
     OptimalFifthOrderPolyPositionDroneEnv as _OptimalFifthOrderPolyPositionDroneEnv,
 )
 
+BCE = TypeVar("BCE", bound=BaseControlledEnv)
 
-class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
+
+class BasePositionDroneEnv(gymnasium.Env):
     """
     Baseclass for other position drone environments. These are ones where step takes
     a :math:`(x,y,z)` argument and makes a drone fly from its current position to there.
     """
 
-    env: BaseControlledEnv
+    env: BCE
 
     dt: float
 
@@ -67,9 +69,9 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
         self.should_calc_reward = should_calc_reward
 
     @property
-    @abc.abstractmethod
     def state(self) -> State:
-        pass
+        s = State(self.env.state)
+        return s
 
     @staticmethod
     def get_reward(states: States) -> float:
@@ -207,7 +209,7 @@ class PolynomialPositionBaseDronEnv(BasePositionDroneEnv):
         action_as_state = self._validate_action_input(action)
 
         term, trunc, info = False, False, {}
-        obs = self.env.state
+        obs = self.state
         if np.allclose(action, obs.pos):
             # Avoid a singularity since the trajectory is scaled with distance
             term = True
@@ -263,10 +265,6 @@ class FifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
     <OrderEnforcing<PassiveEnvChecker<FifthOrderPolyPositionDroneEnv<FifthOrderPolyPositionDroneEnv-v0>>>>
 
     """
-
-    @property
-    def state(self) -> State:
-        return self.env.env.state
 
     @staticmethod
     def calc_traj(
