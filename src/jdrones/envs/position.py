@@ -4,6 +4,7 @@ import abc
 import collections
 import itertools
 from typing import Any
+from typing import Optional
 
 import gymnasium
 import numpy as np
@@ -17,11 +18,13 @@ from jdrones.envs.lqr import LQRDroneEnv
 from jdrones.trajectory import BasePolynomialTrajectory
 from jdrones.trajectory import FifthOrderPolynomialTrajectory
 from jdrones.trajectory import FirstOrderPolynomialTrajectory
-from jdrones.trajectory import OptimalFifthOrderPolynomialTrajectory
 from jdrones.types import DType
 from jdrones.types import PositionAction
 from jdrones.types import PositionVelocityAction
 from jdrones.types import VEC3
+from libjdrones import (
+    OptimalFifthOrderPolyPositionDroneEnv as _OptimalFifthOrderPolyPositionDroneEnv,
+)
 
 
 class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
@@ -62,6 +65,11 @@ class BasePositionDroneEnv(gymnasium.Env, abc.ABC):
             low=act_bounds[:, 0], high=act_bounds[:, 1], dtype=DType
         )
         self.should_calc_reward = should_calc_reward
+
+    @property
+    @abc.abstractmethod
+    def state(self) -> State:
+        pass
 
     @staticmethod
     def get_reward(states: States) -> float:
@@ -256,6 +264,10 @@ class FifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
 
     """
 
+    @property
+    def state(self) -> State:
+        return self.env.env.state
+
     @staticmethod
     def calc_traj(
         cur: State, tgt: State, max_vel: float = 1
@@ -299,7 +311,7 @@ class FifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
         return t
 
 
-class OptimalFifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
+class OptimalFifthOrderPolyPositionDroneEnv(gymnasium.Env):
     """
     Uses :class:`jdrones.trajectory.OptimalFifthOrderPolynomialTrajectory` to give
     target position and velocity commands at every time point until the target is
@@ -312,50 +324,117 @@ class OptimalFifthOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
     >>> import gymnasium
     >>> gymnasium.make("OptimalFifthOrderPolyPositionDroneEnv-v0")
     <OrderEnforcing<PassiveEnvChecker<OptimalFifthOrderPolyPositionDroneEnv<OptimalFifthOrderPolyPositionDroneEnv-v0>>>>
-
     """
 
-    @staticmethod
-    def calc_traj(
-        cur: State, tgt: State, max_acceleration: float = 1
-    ) -> OptimalFifthOrderPolynomialTrajectory:
+    def __init__(
+        self,
+        model: URDFModel = DronePlus,
+        initial_state: State = None,
+        dt: float = 1 / 240,
+        env: LQRDroneEnv = None,
+        should_calc_reward: bool = False,
+    ):
+        super().__init__()
+
+        self.dt = dt
+        if initial_state is None:
+            initial_state = State()
+        self.initial_state = initial_state
+        self.env = _OptimalFifthOrderPolyPositionDroneEnv(self.dt, self.initial_state)
+        self.info = {}
+        obs_bounds = np.array(
+            [
+                # XYZ
+                # Position
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                # Q 1-4
+                # Quarternion rotation
+                (-1.0, 1.0),
+                (-1.0, 1.0),
+                (-1.0, 1.0),
+                (-1.0, 1.0),
+                # RPY
+                # Roll pitch yaw rotation
+                (-np.pi, np.pi),
+                (-np.pi, np.pi),
+                (-np.pi, np.pi),
+                # V XYZ
+                # Velocity
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                # V RPY
+                # Angular velocity
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                # P 0-4
+                # Propeller speed
+                (0.0, np.inf),
+                (0.0, np.inf),
+                (0.0, np.inf),
+                (0.0, np.inf),
+            ],
+            dtype=DType,
+        )
+        self.observation_space = spaces.Sequence(
+            spaces.Box(low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=DType),
+            stack=True,
+        )
+        act_bounds = np.array([[0, 10], [0, 10], [1, 10]], dtype=DType)
+        self.action_space = spaces.Box(
+            low=act_bounds[:, 0], high=act_bounds[:, 1], dtype=DType
+        )
+
+    @property
+    def state(self) -> State:
+        return State(self.env.env.state)
+
+    def reset(
+        self,
+        *,
+        seed: Optional[int] = None,
+        options: Optional[dict] = None,
+    ) -> tuple[State, dict]:
+        super().reset(seed=seed, options=options)
+        self.info = {}
+
+        if options is not None:
+            reset_state = options.get("reset_state", self.initial_state)
+        else:
+            reset_state = self.initial_state
+        self.env.reset(reset_state)
+        return States([self.state]), self.info
+
+    def step(
+        self, action: PositionAction | PositionVelocityAction
+    ) -> tuple[States, float, bool, bool, dict[str, Any]]:
         """
-        Calculate the optimal trajectory for the drone to traverse.
+        A step from the viewpoint of a
+        :class:`~jdrones.envs.position.BasePositionDroneEnv` is making the drone
+        fly from its current position :math:`A` to the target position :math:`B`.
 
-        Total time to traverse the polynomial is defined as
-
-        .. math::
-            \\begin{align*}
-                x^*(t) &= \\arg \\underset{t}\\min x(t)\\\\
-                &s.t.\\\\
-                \\left|\\frac{d^2}{dt^2} x(t)\\right|& \\leq a_\\text{max}
-            \\\\end{align*}
-
-        to ensure dynamic compatibility.
 
         Parameters
         ----------
-        cur : jdrones.data_models.State
-            Current state
-        tgt : jdrones.data_models.State
-            Target state
-        max_acceleration : float
-            Maximum vehicle acceleration
+        action : VEC3 | tuple[VEC3, VEC3]
+            Target coordinates :math:`(x,y,z)` or target coordinates and velocity (
+            :math:`(v_x,v_y,v_z)`)
 
         Returns
         -------
-        jdrones.trajectory.OptimalFifthOrderPolynomialTrajectory
-            The solved trajectory
+            states: jdrones.data_models.States
+            reward: float
+            term: bool
+            trunc: bool
+            info: dict
         """
 
-        t = OptimalFifthOrderPolynomialTrajectory(
-            start_pos=cur.pos,
-            start_vel=cur.vel,
-            dest_pos=tgt.pos,
-            dest_vel=tgt.vel,
-            max_acceleration=max_acceleration,
-        )
-        return t
+        obs, rew, term, trunc = self.env.step(action)
+        states = States(list(map(State, obs)))
+        return states, rew, term, trunc, {}
 
 
 class FirstOrderPolyPositionDroneEnv(PolynomialPositionBaseDronEnv):
@@ -423,6 +502,10 @@ class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
     """
 
     env: FifthOrderPolyPositionDroneEnv
+
+    @property
+    def state(self) -> State:
+        return self.env.state
 
     def __init__(
         self,
@@ -539,7 +622,7 @@ class FifthOrderPolyPositionWithLookAheadDroneEnv(BasePositionDroneEnv):
             trunc: bool
             info: dict
         """
-        A, B, C = np.array([self.env.env.state.pos, *action])
+        A, B, C = np.array([self.env.state.pos, *action])
         if np.allclose(B, C):
             v_at_B = (0, 0, 0)
         else:
