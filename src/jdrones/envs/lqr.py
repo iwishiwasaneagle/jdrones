@@ -5,16 +5,13 @@ from typing import Optional
 
 import numpy as np
 from gymnasium import spaces
-from jdrones.controllers import Controller
-from jdrones.controllers import LQR
 from jdrones.data_models import State
+from jdrones.data_models import States
 from jdrones.data_models import URDFModel
 from jdrones.envs.base import BaseControlledEnv
-from jdrones.envs.base import LinearDynamicModelDroneEnv
-from jdrones.envs.base import NonlinearDynamicModelDroneEnv
 from jdrones.envs.dronemodels import DronePlus
 from jdrones.types import DType
-from jdrones.types import LinearXAction
+from libjdrones import LQRDroneEnv as _LQRDroneEnv
 
 
 class LQRDroneEnv(BaseControlledEnv):
@@ -30,56 +27,59 @@ class LQRDroneEnv(BaseControlledEnv):
         model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
-        env: NonlinearDynamicModelDroneEnv = None,
-        Q=None,
-        R=None,
     ):
-        if env is None:
-            env = NonlinearDynamicModelDroneEnv(
-                model=model, initial_state=initial_state, dt=dt
-            )
+        if initial_state is None:
+            initial_state = State()
+        self.initial_state = initial_state
+        self.env = _LQRDroneEnv(dt, initial_state)
 
-        if Q is None:
-            self.Q = np.diag(
-                [
-                    0.00013741387768501927,
-                    0.00014918283841067683,
-                    0.0001468558043779094,
-                    7.157737996308742e-05,
-                    0.00012850431641269944,
-                    1.4566003039918306e-06,
-                    3.28709705868307e-05,
-                    4.0376730414403854e-05,
-                    0.00016339255544858106,
-                    6.637551646435567e-05,
-                    0.0001076879654213928,
-                    6.371223841699211e-05,
-                ]
-            )
-        else:
-            self.Q = Q
-
-        if R is None:
-            self.R = np.diag(
-                [
-                    0.1335922092065498,
-                    0.2499451121859131,
-                    35.41422613197229,
-                    4.854927340822368e-05,
-                ]
-            )
-        else:
-            self.R = R
-
-        super().__init__(env, dt)
-
-        bounds = np.ones((12, 2), dtype=DType) * np.inf
+        bounds = np.ones((20, 2), dtype=DType) * np.inf
         bounds[:, 0] *= -1
         self.action_space = spaces.Box(low=bounds[:, 0], high=bounds[:, 1], dtype=DType)
+        obs_bounds = np.array(
+            [
+                # XYZ
+                # Position
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                # Q 1-4
+                # Quarternion rotation
+                (-1.0, 1.0),
+                (-1.0, 1.0),
+                (-1.0, 1.0),
+                (-1.0, 1.0),
+                # RPY
+                # Roll pitch yaw rotation
+                (-np.pi, np.pi),
+                (-np.pi, np.pi),
+                (-np.pi, np.pi),
+                # V XYZ
+                # Velocity
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                # V RPY
+                # Angular velocity
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                (-np.inf, np.inf),
+                # P 0-4
+                # Propeller speed
+                (0.0, np.inf),
+                (0.0, np.inf),
+                (0.0, np.inf),
+                (0.0, np.inf),
+            ],
+            dtype=DType,
+        )
+        self.observation_space = spaces.Box(
+            low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=DType
+        )
 
-    def _init_controllers(self) -> dict[str, Controller]:
-        A, B, _ = LinearDynamicModelDroneEnv.get_matrices(self.env.model)
-        return dict(lqr=LQR(A, B, self.Q, self.R))
+    @property
+    def state(self) -> State:
+        return State(self.env.state)
 
     def reset(
         self,
@@ -87,26 +87,19 @@ class LQRDroneEnv(BaseControlledEnv):
         seed: Optional[int] = None,
         options: Optional[dict] = None,
     ) -> tuple[State, dict]:
-        return super().reset(seed=seed, options=options)
+        super().reset(seed=seed, options=options)
+        self.info = {}
 
-    def step(
-        self, action: LinearXAction
-    ) -> tuple[State, float, bool, bool, dict[str, Any]]:
-        setpoint = State.from_x(action)
+        if options is not None:
+            reset_state = options.get("reset_state", self.initial_state)
+        else:
+            reset_state = self.initial_state
+        self.env.reset(np.copy(reset_state))
+        return self.state, self.info
 
-        action = self.controllers["lqr"](measured=self.env.state, setpoint=setpoint)
-        action_with_linearization_assumptions = np.sqrt(
-            np.clip(
-                self.env.model.rpyT2rpm(
-                    [0, 0, 0, self.env.model.mass * self.env.model.g] + action
-                ),
-                0,
-                np.inf,
-            )
-        )
-        obs, _, trunc, term, _ = self.env.step(action_with_linearization_assumptions)
-
-        return obs, 0, trunc, term, {}
+    def step(self, action: State) -> tuple[State, float, bool, bool, dict[str, Any]]:
+        obs, rew, term, trunc = self.env.step(action)
+        return State(obs), rew, term, trunc, {}
 
 
 if __name__ == "__main__":
@@ -114,7 +107,6 @@ if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
     import seaborn as sns
-    from jdrones.types import State, States
     from tqdm.auto import trange
 
     def _simulate_env(env, T, dt):

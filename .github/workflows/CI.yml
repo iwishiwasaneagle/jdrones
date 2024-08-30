@@ -26,6 +26,10 @@ jobs:
             pytest-flags: ""
             codecov: true
             platform: "ubuntu-latest"
+          - python-version: "3.11"
+            pytest-flags: ""
+            codecov: false
+            platform: "ubuntu-latest"
           - python-version: "3.10"
             pytest-flags: ""
             codecov: false
@@ -69,6 +73,7 @@ jobs:
 
     - name: Run tests
       run: |
+        NUMBA_DISABLE_JIT=${{ matrix.codecov }} \
         PYTHONPATH=tests \
         pytest tests \
         --cov-report=xml \

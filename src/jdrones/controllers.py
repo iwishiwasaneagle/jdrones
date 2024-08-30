@@ -201,7 +201,6 @@ class LQR(Controller):
 
         self.K = self.solve(A, B, Q, R)
 
-    @staticmethod
     def solve(A, B, Q, R):
         """Solve the continuous time lqr controller.
 

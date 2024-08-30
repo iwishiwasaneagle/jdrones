@@ -2,6 +2,148 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2024-08-07
+
+### Bug Fixes
+
+- Use py3.11 as it still ships pkg_resources by default which docstr-coverage needs [(25d649f)](https://github.com/iwishiwasaneagle/jdrones/commit/25d649f738b6c0d406c56e7cf58505b92a894245)
+- Issue was with CI.yml not installing jdrones [(7898915)](https://github.com/iwishiwasaneagle/jdrones/commit/7898915d91b9be0725743c46f6f4839285f2298f)
+- Check for different env types [(5aae992)](https://github.com/iwishiwasaneagle/jdrones/commit/5aae99229f1fb3cf094d7609eaf30b2da7e9a78f)
+- Check for different env types [(d24b766)](https://github.com/iwishiwasaneagle/jdrones/commit/d24b7667464ad48d7d2d01fd251c9ea02d5002a7)
+- Legacy imports [(f6f196c)](https://github.com/iwishiwasaneagle/jdrones/commit/f6f196c913385120ae472f31aa746d0b76c6cd89)
+- Tensorflow-probability 0.24.0 not compatible with sbx 0.12.0 [(6441dc2)](https://github.com/iwishiwasaneagle/jdrones/commit/6441dc200fc65463f0b97def3bf12605a0861d49)
+- Reset to initial state z not current z [(5679bf1)](https://github.com/iwishiwasaneagle/jdrones/commit/5679bf14edaa32eb37f1f0e2a7c93f344d73d6e5)
+- Re-added is_success logging [(f429dd1)](https://github.com/iwishiwasaneagle/jdrones/commit/f429dd11e0f26409fbbb457b6de19481fc3602a1)
+- Switch to vector-based velocity method [(04ea745)](https://github.com/iwishiwasaneagle/jdrones/commit/04ea7458049a397b400bd863eb9c633e6afdc1c2)
+- Enable policy net_arch for RecurrentPPO to be customizable from the CLI [(dcea513)](https://github.com/iwishiwasaneagle/jdrones/commit/dcea513be879073e8e580c62097de35e4c9746e6)
+- Success distance is 1 not 1.5 [(32e96bd)](https://github.com/iwishiwasaneagle/jdrones/commit/32e96bd5241a21ef58b79a56e6567886238a6e65)
+- Don't break the loop if a target is reached to ensure that time stays synchronized [(7a2db4a)](https://github.com/iwishiwasaneagle/jdrones/commit/7a2db4af0556687502a21868f84ae36704f9eb77)
+- Switch to SB3's DummyVecEnv to handle the multi-env logic [(29bbe52)](https://github.com/iwishiwasaneagle/jdrones/commit/29bbe52c9552196f7aa6dde58c2f1d66f3cf3ff6)
+- Properly handle collision reward [(703274e)](https://github.com/iwishiwasaneagle/jdrones/commit/703274e8bc450048591a791a6d1b91b545714a11)
+- Ensure eval env is the same as training env [(3a7833f)](https://github.com/iwishiwasaneagle/jdrones/commit/3a7833f62b3d1f5e260015d405f294da7a77dc58)
+- Re-include time in the observation [(a5c30e4)](https://github.com/iwishiwasaneagle/jdrones/commit/a5c30e436a27e1779220ee70d25d82b7e06e689d)
+- Ensure observation is (1,X) in shape [(a7ee23c)](https://github.com/iwishiwasaneagle/jdrones/commit/a7ee23c0eeb96866f16c30fb9843c2e643ecaf45)
+- Disable JIT for codecov, but also run the same setup with jit without codecov [(4f2e626)](https://github.com/iwishiwasaneagle/jdrones/commit/4f2e626f2ca4f971ce111d3f8722cac736bf79db)
+
+### Documentation
+
+- Quick readme for the drl example [(e1cdc81)](https://github.com/iwishiwasaneagle/jdrones/commit/e1cdc816541db762345e2471e791ff014662d71c)
+
+### Features
+
+- Install pytest-testmon from git and run in CI (#61) [(b54d03b)](https://github.com/iwishiwasaneagle/jdrones/commit/b54d03bc65efa0a26685b76a0bc3fd71901e9e71)
+- Energy consumption [(5dc0a29)](https://github.com/iwishiwasaneagle/jdrones/commit/5dc0a299d21ebc5e264b67c74ec4f018edd24671)
+- Energy consumption [(23ca884)](https://github.com/iwishiwasaneagle/jdrones/commit/23ca8841b3a22df96be228695bb56f1b1d490a41)
+- Energy consumption [(75c28be)](https://github.com/iwishiwasaneagle/jdrones/commit/75c28be2787ab226c48e568c139a2cdb63a769d5)
+- Switch to Hatch from setuptools [(8ce1d14)](https://github.com/iwishiwasaneagle/jdrones/commit/8ce1d1409f30b31c655999ba322f96c667ddbfe4)
+- DRL controlled drone going from A to hovering at B [(675947e)](https://github.com/iwishiwasaneagle/jdrones/commit/675947e6ca17b0f7b390535305794e2f60820d63)
+- A working DRL example with plotting [(2e42527)](https://github.com/iwishiwasaneagle/jdrones/commit/2e42527e3dd5e2b8e3fbaf0e4534687ccfc157be)
+- Use optuna for hyperparameter sweep in DRL example [(f244822)](https://github.com/iwishiwasaneagle/jdrones/commit/f244822abcf555ce7d336d93d837cc621b1d9388)
+- A working DRL example with plotting [(34014e2)](https://github.com/iwishiwasaneagle/jdrones/commit/34014e2ab370a0958a6be6eacc0500ec1af636a3)
+- Add wandb to example [(a5204d3)](https://github.com/iwishiwasaneagle/jdrones/commit/a5204d36b5268265e67abde9ecf3cb3a730d13c7)
+- LQR+DRL meta-controller framework [(2be6be6)](https://github.com/iwishiwasaneagle/jdrones/commit/2be6be64ced0410fe20b12e9839646bff00c4ded)
+- Additional eval logging [(da18e46)](https://github.com/iwishiwasaneagle/jdrones/commit/da18e4677997ce009bd5000da6a8600e98490c57)
+- Change LQR tuner to be velocity centric [(c0f4849)](https://github.com/iwishiwasaneagle/jdrones/commit/c0f4849e91e947fe257021aa7a317fe9b3787935)
+- Add 2D plot to graphing callback [(38b4a5e)](https://github.com/iwishiwasaneagle/jdrones/commit/38b4a5e0f94abe2a4dfae67a6889827a817a577d)
+- Swap to velocity-based action space [(3afe0a2)](https://github.com/iwishiwasaneagle/jdrones/commit/3afe0a2dc6eeb8b95d0f82b65e8bb62cf349a62e)
+- Add colors and circles to 2D position plot to show the targets, their radius and order [(e8d6e71)](https://github.com/iwishiwasaneagle/jdrones/commit/e8d6e715cec9735162b7b74d4a3acc9f63778103)
+- Multi-env DRL [(d21b26d)](https://github.com/iwishiwasaneagle/jdrones/commit/d21b26d0f817a861d39e7d9e461bfe62ddde5ca9)
+- Extend to any n env [(04d3e72)](https://github.com/iwishiwasaneagle/jdrones/commit/04d3e721ed6a3a279b1a27897a46090765811fc3)
+- Number of sub-envs from CLI [(91209c0)](https://github.com/iwishiwasaneagle/jdrones/commit/91209c056a80aa255343970abf341b21006ae480)
+- Tensorboard and optuna for the 3d drl example [(73bed0d)](https://github.com/iwishiwasaneagle/jdrones/commit/73bed0d692b00e72fa28dabd695637e0876bf12d)
+- Optimal quintic poly trajectory generation [(aa8b488)](https://github.com/iwishiwasaneagle/jdrones/commit/aa8b488bcb4799ec6b11a4558058b8f4accd31a6)
+
+### Miscellaneous Tasks
+
+- Remove the status updater. Was causing more issues than was worth. [(bd80432)](https://github.com/iwishiwasaneagle/jdrones/commit/bd80432b023aef0142b2968d79a04cfd1187d560)
+- Bump gymnasium from 0.28.1 to 0.29.1 [(234a5bb)](https://github.com/iwishiwasaneagle/jdrones/commit/234a5bb535bbdc6854c192d694b85d75f056e381)
+- Bump pydantic from 1.10.6 to 2.3.0 [(2f309aa)](https://github.com/iwishiwasaneagle/jdrones/commit/2f309aa6c038b3fcb4010fa923c5c693f8edab80)
+- Bump pandas from 2.0.0 to 2.1.0 [(51ff0a1)](https://github.com/iwishiwasaneagle/jdrones/commit/51ff0a194114deea4a46e127e04eae0a104dca28)
+- Bump JamesIves/github-pages-deploy-action [(71b93c7)](https://github.com/iwishiwasaneagle/jdrones/commit/71b93c7bcdc310ec0d2a096603b4d6f100ba8907)
+- Bump actions/setup-python from 4 to 5 [(d56ff9e)](https://github.com/iwishiwasaneagle/jdrones/commit/d56ff9eff9551ec447fd8f780f41c89009cb35c7)
+- Bump actions/upload-artifact from 3 to 4 [(d406f45)](https://github.com/iwishiwasaneagle/jdrones/commit/d406f4559acabd1ae0d3686c199ee5d89180dc9c)
+- Bump actions/download-artifact from 3 to 4 [(0f3299c)](https://github.com/iwishiwasaneagle/jdrones/commit/0f3299c98d06b476774a4a84b219daeabd48408b)
+- Bump actions/checkout from 3 to 4 [(465029a)](https://github.com/iwishiwasaneagle/jdrones/commit/465029a6e82ab532226092a3c6f3ae5e211f9cd1)
+- Flake8 config in .flake8 ini file [(871c0ca)](https://github.com/iwishiwasaneagle/jdrones/commit/871c0cade5142c1a7c15c5235816db765cfc59af)
+- Add a fifth action that controls the scaling of the propeller actions [(17a6e79)](https://github.com/iwishiwasaneagle/jdrones/commit/17a6e792447bfe52632449e6f158781f65c737c7)
+- Explicitly add gitignored file __version__.py [(c2d4183)](https://github.com/iwishiwasaneagle/jdrones/commit/c2d418350a885e796aa0d862e85a618ff1f50ae1)
+- Use requirements.txt file for all so that dependabot can auto-update [(6b68265)](https://github.com/iwishiwasaneagle/jdrones/commit/6b68265f3186180cc4325e55a17287f4294c2650)
+- __version__ -> _version to avoid name conflicts [(f93a6df)](https://github.com/iwishiwasaneagle/jdrones/commit/f93a6df3a62680193d354e809fc3a731081d113a)
+- Bump orhun/git-cliff-action from 2 to 3 [(e4c9070)](https://github.com/iwishiwasaneagle/jdrones/commit/e4c9070f73f0979c5accce95f48cf1dfe7942f26)
+- Bump codecov/codecov-action from 3.1.1 to 4.0.2 [(dd37dc5)](https://github.com/iwishiwasaneagle/jdrones/commit/dd37dc5843b1755ad8e19e3bcef8a9a624dc8a71)
+- Bump matplotlib from 3.7.1 to 3.8.3 [(0f7149f)](https://github.com/iwishiwasaneagle/jdrones/commit/0f7149f8472a5d3b70c5254a280dfa222402632f)
+- Bump seaborn from 0.12.2 to 0.13.2 [(3af4c7b)](https://github.com/iwishiwasaneagle/jdrones/commit/3af4c7b8a858dd056f173c16d51239894a280b07)
+- Bump scipy from 1.10.1 to 1.12.0 [(386e883)](https://github.com/iwishiwasaneagle/jdrones/commit/386e88328afd7e449f325581e284ac5fc6eeb27c)
+- Bump numpy from 1.24.2 to 1.26.4 [(8a02a35)](https://github.com/iwishiwasaneagle/jdrones/commit/8a02a35f10ea5b130ba38b20bf88817e3a22f2ec)
+- Bump pydantic from 2.3.0 to 2.6.2 [(ff1f8a6)](https://github.com/iwishiwasaneagle/jdrones/commit/ff1f8a64ddeb5b6a6f2d19c1875076f3c0e62539)
+- Switch to using "unwrapped" [(a5467e2)](https://github.com/iwishiwasaneagle/jdrones/commit/a5467e28f7716b467d5cdce533ba8605da8b5e27)
+- Import order [(d6f9879)](https://github.com/iwishiwasaneagle/jdrones/commit/d6f987957b8c08ceefadc28d9d76f20d0a0b3c4d)
+- Further edits to energy example [(5371a38)](https://github.com/iwishiwasaneagle/jdrones/commit/5371a38b3e8fce02d05da157f8718c8af0d5667f)
+- Try out sbx [(556968c)](https://github.com/iwishiwasaneagle/jdrones/commit/556968c2c9386db9ec6d6af8b035cfeab2d996dd)
+- Update types [(28f728c)](https://github.com/iwishiwasaneagle/jdrones/commit/28f728cbd965d0b5750e06672c4d054d83322cea)
+- Allow a reset state to be given within options [(11bc080)](https://github.com/iwishiwasaneagle/jdrones/commit/11bc080cb77f759d4d8d123a2c3eead59955c4ed)
+- Bump codecov/codecov-action from 4.0.2 to 4.1.0 [(bb6c90e)](https://github.com/iwishiwasaneagle/jdrones/commit/bb6c90e1c49e7f5b9b24345b6bc174da85c03890)
+- Bump pandas from 2.1.0 to 2.2.1 [(cd083b1)](https://github.com/iwishiwasaneagle/jdrones/commit/cd083b16b30d179360759873d93f64f0a9fdac87)
+- Make sure num_timesteps is set properly [(8127e41)](https://github.com/iwishiwasaneagle/jdrones/commit/8127e419e516c583e338f434a1563412444e36a2)
+- Make sure num_timesteps is set properly [(83606e4)](https://github.com/iwishiwasaneagle/jdrones/commit/83606e4f7688b7ae29c4777f104cdee1ea6b2a48)
+- Make sure num_timesteps is set properly [(6a8b455)](https://github.com/iwishiwasaneagle/jdrones/commit/6a8b4556b121bce7846a46a213f3a38b0c1cc618)
+- Change example rewards scheme to be normalized [(3271621)](https://github.com/iwishiwasaneagle/jdrones/commit/3271621f34f579f091e1e89ee5721c20a36b8509)
+- Use subprocvecenv when n_envs > 1 [(f3b724f)](https://github.com/iwishiwasaneagle/jdrones/commit/f3b724f9dbbb1139f0757c8a681c50d8a9cf36ac)
+- Make Monitor log other info keywords [(010ab83)](https://github.com/iwishiwasaneagle/jdrones/commit/010ab83abc0fc477affa5917e763e86cc63d5de8)
+- Normalize reward by maximum action command T [(f82ffff)](https://github.com/iwishiwasaneagle/jdrones/commit/f82ffff95e836f6e75992e2c42a8fa799fbfd3f0)
+- Normalize reward by maximum action command T [(ee96f4a)](https://github.com/iwishiwasaneagle/jdrones/commit/ee96f4a106b77ca82e0ed8dc996059f8cc77b74d)
+- Normalize reward by maximum action command T [(fd66268)](https://github.com/iwishiwasaneagle/jdrones/commit/fd662682ba3a98f025a30c0d4973a21cf15925ac)
+- Play around with how the control is structured. Only let policy define target x and y pos [(e0d7690)](https://github.com/iwishiwasaneagle/jdrones/commit/e0d7690f0b34bba9442c0bcaa0dd36640b3360c2)
+- Enable maximum time to be specified from CLI [(294cfbc)](https://github.com/iwishiwasaneagle/jdrones/commit/294cfbc5356aebde33ce8ebb03b3d627b79db929)
+- Enable maximum time to be specified from CLI [(844d19b)](https://github.com/iwishiwasaneagle/jdrones/commit/844d19b5d9eae1d88fcebb64e83f33f7727c126b)
+- Reduce observation space to x-y plane [(04347f6)](https://github.com/iwishiwasaneagle/jdrones/commit/04347f6da193f6c878e06cde0a5f611c5b58eefd)
+- Include angular position and velocity in the observation [(f3dcd89)](https://github.com/iwishiwasaneagle/jdrones/commit/f3dcd89be12b6250278b6f47e9fe59ada626eae4)
+- Plot actions [(0216f3e)](https://github.com/iwishiwasaneagle/jdrones/commit/0216f3e3a97d7e63443aa849ca9f3be26734b9b6)
+- Adjust observation shape to match observation [(94cbc0e)](https://github.com/iwishiwasaneagle/jdrones/commit/94cbc0ec23a7e91236da09d7ef14dcb9ec029394)
+- Ensure fig.tight_layout() is called for plotting during callbacks to avoid weird layouts [(6490375)](https://github.com/iwishiwasaneagle/jdrones/commit/64903758c79be8fc916588c937d5ff19402a480d)
+- Set target z to env z [(769741b)](https://github.com/iwishiwasaneagle/jdrones/commit/769741b0fa7b73a7c9fee436dd65f0c3873cff7a)
+- Use env.unwrapped pattern [(d8674e3)](https://github.com/iwishiwasaneagle/jdrones/commit/d8674e3b01c46664dbfb965c35447dd02b14e42b)
+- Ensure target is set before it is used within reset [(8a8e3d5)](https://github.com/iwishiwasaneagle/jdrones/commit/8a8e3d515476acc1c2f0eab59c6b1dd8de94dec9)
+- Adjust reward normalization [(6d7a036)](https://github.com/iwishiwasaneagle/jdrones/commit/6d7a036cd5dbcc15ccd4878881644925a973f7fa)
+- Change step simulation time to be 3 [(3d79c69)](https://github.com/iwishiwasaneagle/jdrones/commit/3d79c698b68ad0ae964a24e40229835ffe4c1a1d)
+- Expose initial_state [(ab834d7)](https://github.com/iwishiwasaneagle/jdrones/commit/ab834d7e0b1cbf497316ca6b2b78b8f418709a9e)
+- Move to relative control rather than absolute [(c1df545)](https://github.com/iwishiwasaneagle/jdrones/commit/c1df545b7ba788482a2559021962adb0bcdba7d1)
+- Reduce step sim time down to 0.25s [(6334782)](https://github.com/iwishiwasaneagle/jdrones/commit/6334782d50242f2840873678cc245a5ce9d9c921)
+- Reduce eval episodes to 10 [(f930698)](https://github.com/iwishiwasaneagle/jdrones/commit/f930698a149014f0b2651279cfb7c071bcace0af)
+- Log number of targets achieved [(b07881e)](https://github.com/iwishiwasaneagle/jdrones/commit/b07881efdfbf467c46402b445b300c8d490df665)
+- Increase dx magnitude [(915ec5f)](https://github.com/iwishiwasaneagle/jdrones/commit/915ec5f51c13455af293e9b68e459fc024014ecf)
+- The reward is dependent on the target z as well, so we have to include that data in the observation to make the env fully observable [(3ca0bc3)](https://github.com/iwishiwasaneagle/jdrones/commit/3ca0bc3dca6385d1057167488e7fdd3c18887dc9)
+- Include clip_range in CLI inputs [(4b2f8a9)](https://github.com/iwishiwasaneagle/jdrones/commit/4b2f8a94fe9f837216d77730c86c66da7bbd47f3)
+- Reduce sub-env sim time to 0.1s [(0b6d02a)](https://github.com/iwishiwasaneagle/jdrones/commit/0b6d02a5b663d10940a059830c438fa51d3bae36)
+- Increase dx magnitude [(eaa10a4)](https://github.com/iwishiwasaneagle/jdrones/commit/eaa10a499fa4086f5f4c53065b1c1ed416781f35)
+- Include the next target in the observation [(fd287ce)](https://github.com/iwishiwasaneagle/jdrones/commit/fd287ce4912ca0a7d13d8fa62afa475bbd5634fc)
+- Reduce sub-env sim time to 0.1s [(d9b97da)](https://github.com/iwishiwasaneagle/jdrones/commit/d9b97daf6de50113bcc866db79ea17fc67819965)
+- Plot targets [(783177c)](https://github.com/iwishiwasaneagle/jdrones/commit/783177cbcd7c75aa63fea9e68eb1e118f6a6c6fe)
+- Switch to a heading-velocity scheme and reintroduce the control action penalty [(e8a4fb7)](https://github.com/iwishiwasaneagle/jdrones/commit/e8a4fb7ef3b8767f88d9c4fd2dda7e3ccbaa11c6)
+- Set squash_output to true when using SDE [(a265f65)](https://github.com/iwishiwasaneagle/jdrones/commit/a265f655d06fca47fef1cb045cb230dda68ff08b)
+- Rename env to be more representative of what it is [(db08c1a)](https://github.com/iwishiwasaneagle/jdrones/commit/db08c1aea7b25e1f2df58e5863cfd8edba2840a8)
+- Bump pydantic from 2.6.2 to 2.7.1 [(a10848d)](https://github.com/iwishiwasaneagle/jdrones/commit/a10848d2c768ae900f522091e5359dd86cd76a97)
+- Pass total sim time to the mult DRL env [(6040eca)](https://github.com/iwishiwasaneagle/jdrones/commit/6040eca92e646ca5823e47641f43e1e15462f8dc)
+- Bump pydantic from 2.7.1 to 2.8.2 [(2b8b402)](https://github.com/iwishiwasaneagle/jdrones/commit/2b8b402120ce73a428c9541877cdb6a0436a1ff2)
+- Make reward calculations optional for polynomial envs [(6e38d55)](https://github.com/iwishiwasaneagle/jdrones/commit/6e38d55af7d64f224c8f3c80ebf3674c11fc4174)
+- Silence pybullet messages at import [(1683157)](https://github.com/iwishiwasaneagle/jdrones/commit/1683157b40a2dfcfb52e23a8e546103c5b3cb535)
+
+### Performance
+
+- Improve State.normed and move into main repo [(1afdf85)](https://github.com/iwishiwasaneagle/jdrones/commit/1afdf858db027fb44f059111e2dad00a66fdcf11)
+- Improve to_x and from_x by up to 2x speeds [(2669d4b)](https://github.com/iwishiwasaneagle/jdrones/commit/2669d4b8155bb97decf5c04472e9fcf80eb64858)
+- Use numpy+numba in transformation calculations for better performance [(fe5b953)](https://github.com/iwishiwasaneagle/jdrones/commit/fe5b95382f7dff2a9cb428061e3e1d107bac0bd7)
+- Use numba jit for core simulation methods [(f9b27ca)](https://github.com/iwishiwasaneagle/jdrones/commit/f9b27cab2a099f5f8ad22b351fb0185c48219342)
+- Use faster way of checking if any item is nan [(eb81c10)](https://github.com/iwishiwasaneagle/jdrones/commit/eb81c107d4898b89dd28eaa9c2f4622a99a9154c)
+- Use a faster method to zero clip than np.clip [(ea5d3bc)](https://github.com/iwishiwasaneagle/jdrones/commit/ea5d3bc66a62b80c898bc214545b05b47130aabd)
+
+### Refactor
+
+- Example got too big, so split into sub-modules [(3960e07)](https://github.com/iwishiwasaneagle/jdrones/commit/3960e075fe4c96632701b5658253451d6fc7f1f3)
+- Rename to be more accurate [(1de2e16)](https://github.com/iwishiwasaneagle/jdrones/commit/1de2e169bfa719dd0d9c43f6015c5b031a1066aa)
+- Remove old env and optuna sweeps [(14090b4)](https://github.com/iwishiwasaneagle/jdrones/commit/14090b4aa08de0834b1873c0a8e26272c34155ac)
+- Handle rewards normalization in the top-level env [(8bfc7a7)](https://github.com/iwishiwasaneagle/jdrones/commit/8bfc7a7a85af20f1f571b1871d0eeadd0ba2fa1b)
+
 ## [0.7.2] - 2023-04-26
 
 ### Bug Fixes
@@ -23,6 +165,7 @@ All notable changes to this project will be documented in this file.
 - Bump loguru from 0.6.0 to 0.7.0 [(edfb2ca)](https://github.com/iwishiwasaneagle/jdrones/commit/edfb2ca4793cf8ebd13432daf924af6c759e3863)
 - Bump gymnasium from 0.27.1 to 0.28.1 [(7068122)](https://github.com/iwishiwasaneagle/jdrones/commit/70681221e5078ab0a7768096ca057dda5a80c4c5)
 - More sensible dependabot settings to prevent the PR spam [(29e781e)](https://github.com/iwishiwasaneagle/jdrones/commit/29e781e5fcd3e914287b90c300b40c2b13ad175e)
+- Update changelog for v0.7.2 [skip pre-commit.ci] [(b50132b)](https://github.com/iwishiwasaneagle/jdrones/commit/b50132b4adb5348e693f317519f7250eeef27a18)
 
 ### Performance
 

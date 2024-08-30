@@ -17,6 +17,7 @@ from jdrones.envs import NonlinearDynamicModelDroneEnv
 from jdrones.envs import PyBulletDroneEnv
 from jdrones.envs.dronemodels import droneplus_mixing_matrix
 from jdrones.envs.position import BasePositionDroneEnv
+from jdrones.envs.position import OptimalFifthOrderPolyPositionDroneEnv
 from jdrones.transforms import euler_to_quat
 from jdrones.types import DType
 
@@ -81,6 +82,11 @@ def tau_Q(request):
 
 @pytest.fixture(params=[(0.1, 0.1, 0.1)])
 def drag_coeffs(request):
+    return request.param
+
+
+@pytest.fixture(params=[1.225])
+def rho(request):
     return request.param
 
 
@@ -162,6 +168,7 @@ def urdfmodel(
     tau_Q,
     drag_coeffs,
     mass,
+    rho,
     filepath,
     mixing_matrix,
 ):
@@ -178,17 +185,20 @@ def urdfmodel(
         filepath=str(filepath),
         mixing_matrix=mixing_matrix,
         max_vel_ms=1,
+        rho=rho,
     )
 
 
 @pytest.fixture
-def env_default_kwargs(urdfmodel, dt, state):
-    return dict(model=urdfmodel, initial_state=state, dt=dt)
+def env_default_kwargs(dt, state):
+    return dict(initial_state=state, dt=dt)
 
 
 @pytest.fixture
-def pbdroneenv(env_default_kwargs, simulation_type):
-    d = PyBulletDroneEnv(**env_default_kwargs, simulation_type=simulation_type)
+def pbdroneenv(env_default_kwargs, urdfmodel, simulation_type):
+    d = PyBulletDroneEnv(
+        **env_default_kwargs, model=urdfmodel, simulation_type=simulation_type
+    )
     yield d
     d.close()
 
@@ -243,6 +253,17 @@ def firstorderploypositiondroneenv(position_drone_action_space, env_default_kwar
 def fifthorderpolypositiondroneenv(position_drone_action_space, env_default_kwargs):
     d = custom_position_action_space_wrapper(
         position_drone_action_space, FifthOrderPolyPositionDroneEnv
+    )(**env_default_kwargs)
+    yield d
+    d.close()
+
+
+@pytest.fixture
+def optimalfifthorderpolypositiondroneenv(
+    position_drone_action_space, env_default_kwargs
+):
+    d = custom_position_action_space_wrapper(
+        position_drone_action_space, OptimalFifthOrderPolyPositionDroneEnv
     )(**env_default_kwargs)
     yield d
     d.close()

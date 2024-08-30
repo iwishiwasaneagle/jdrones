@@ -1,12 +1,12 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+import contextlib
 from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Union
 
 import numpy as np
-import pybullet as p
 import pybullet_data
 from gymnasium.core import ActType
 from gymnasium.core import ObsType
@@ -24,6 +24,9 @@ from jdrones.types import PropellerAction
 from jdrones.types import VEC3
 from jdrones.types import VEC4
 
+with contextlib.redirect_stdout(None):
+    import pybullet as p
+
 
 class PyBulletDroneEnv(BaseDroneEnv):
     """
@@ -39,6 +42,9 @@ class PyBulletDroneEnv(BaseDroneEnv):
     ids: PyBulletIds
     """PB IDs"""
 
+    model: URDFModel
+    "URDFModel description"
+
     simulation_type: SimulationType
     """Simulation type to run"""
 
@@ -49,9 +55,11 @@ class PyBulletDroneEnv(BaseDroneEnv):
         simulation_type: SimulationType = SimulationType.DIRECT,
         dt: float = 1 / 240,
     ):
-        super().__init__(model, initial_state, dt)
+        super().__init__(initial_state, dt)
+        self.model = model
         self.ids = PyBulletIds()
         self.simulation_type = simulation_type
+        self.state = State(np.copy(self.initial_state))
         self._init_simulation()
 
     def _init_simulation(self):

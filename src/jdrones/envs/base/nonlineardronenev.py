@@ -1,19 +1,12 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-import functools
+from typing import Optional
 from typing import Tuple
 
-import numpy as np
 from jdrones.data_models import State
-from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.transforms import euler_to_quat
-from jdrones.transforms import euler_to_rotmat
-from jdrones.types import MAT3X3
 from jdrones.types import PropellerAction
-from jdrones.types import VEC3
-
-UZ = np.array([0, 0, 1]).reshape((-1, 1))
+from libjdrones import NonLinearDynamicModelDroneEnv as _NonLinearDynamicModelDroneEnv
 
 
 class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
@@ -24,81 +17,35 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
     <OrderEnforcing<PassiveEnvChecker<NonlinearDynamicModelDroneEnv<NonLinearDynamicModelDroneEnv-v0>>>>
     """
 
-    @staticmethod
-    @functools.cache
-    def _get_cached_time_invariant_params(
-        model: URDFModel,
-    ) -> tuple[MAT3X3, MAT3X3, float, VEC3, float]:
-        """
-        Cache the time invariant parameters in order to save runtime execution costs
+    _env: _NonLinearDynamicModelDroneEnv
 
-        Parameters
-        ----------
-        model : URDFModel
+    def __init__(
+        self,
+        initial_state: State = None,
+        dt: float = 1 / 240,
+    ):
+        self._env = _NonLinearDynamicModelDroneEnv(dt)
+        super().__init__(initial_state=initial_state, dt=dt)
 
-        Returns
-        -------
-        inertias : MAT3X3
-            3x3 inertia matrix
-        inv_inertias: MAT3X3
-            3x3 inverted inertia matrix
-        m: float
-            mass
-        drag_coeffs: VEC3
-            3D drag coefficient vector
-        g: float
-            acceleration due to gravity
-        """
-        inertias = np.diag(np.array(model.I))
-        m = model.mass
-        drag_coeffs = model.drag_coeffs
-        g = model.g
-        return inertias, np.linalg.inv(inertias), m, np.array(drag_coeffs), g
+    @property
+    def state(self) -> State:
+        return State(self._env.state)
 
-    @classmethod
-    def calc_dstate(cls, action: PropellerAction, state: State, model: URDFModel):
-        """
-        Calculate the state derivative as outlined in
-        :meth:`~jdrones.envs.base.nonlineardronenev.NonlinearDynamicModelDroneEnv.step`
+    def reset(
+        self,
+        *,
+        seed: Optional[int] = None,
+        options: Optional[dict] = None,
+    ) -> Tuple[State, dict]:
+        super().reset(seed=seed, options=options)
+        self.info = {}
 
-        Parameters
-        ----------
-        action : ProperllerAction
-        state :  State
-        model :  URDFModel
-
-        Returns
-        -------
-        State
-            The state derivative
-        """
-        (
-            inertias,
-            inv_intertias,
-            m,
-            drag_coeffs,
-            g,
-        ) = cls._get_cached_time_invariant_params(model)
-        u_star = model.rpm2rpyT(np.square(action))
-
-        R_W_Q = euler_to_rotmat(state.rpy)
-        R_Q_W = np.transpose(R_W_Q)
-
-        body_vel = np.dot(R_W_Q, state.vel)
-        drag_force = -np.sign(state.vel) * np.dot(
-            R_Q_W, drag_coeffs * np.square(body_vel)
-        )
-        dstate = np.concatenate(
-            [
-                state.vel,
-                (0, 0, 0, 0),
-                state.ang_vel,
-                (-m * g * UZ.T + (R_W_Q @ UZ).T * u_star[3] + drag_force).flatten() / m,
-                np.dot(inv_intertias, u_star[0:3]),
-                (0, 0, 0, 0),
-            ]
-        )
-        return dstate
+        if options is not None:
+            reset_state = options.get("reset_state", self.initial_state)
+        else:
+            reset_state = self.initial_state
+        self._env.reset(reset_state)
+        return self.state, self.info
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
         """
@@ -131,15 +78,5 @@ class NonlinearDynamicModelDroneEnv(BaseDroneEnv):
         -------
 
         """
-        # Get state
-        dstate = self.calc_dstate(action, self.state, self.model)
-
-        # Update step
-        self.state += self.dt * dstate
-
-        # Update derived state items
-        self.state.prop_omega = action
-        self.state.quat = euler_to_quat(self.state.rpy)
-
-        # Return
+        self._env.step(action)
         return self.state, 0, False, False, self.info

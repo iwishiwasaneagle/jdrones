@@ -1,16 +1,15 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
+from typing import Optional
 from typing import Tuple
 
 import numpy as np
 from gymnasium import spaces
 from jdrones.data_models import State
-from jdrones.data_models import URDFModel
 from jdrones.envs.base.basedronenev import BaseDroneEnv
-from jdrones.envs.dronemodels import DronePlus
-from jdrones.transforms import euler_to_quat
 from jdrones.types import DType
 from jdrones.types import PropellerAction
+from libjdrones import LinearDynamicModelDroneEnv as _LinearDynamicModelDroneEnv
 
 
 class LinearDynamicModelDroneEnv(BaseDroneEnv):
@@ -21,15 +20,16 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
     <OrderEnforcing<PassiveEnvChecker<LinearDynamicModelDroneEnv<LinearDynamicModelDroneEnv-v0>>>>
     """
 
+    _env: _LinearDynamicModelDroneEnv
+
     def __init__(
         self,
-        model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
     ):
-        super().__init__(model, initial_state, dt)
+        self._env = _LinearDynamicModelDroneEnv(dt)
 
-        self.A, self.B, self.C = self.get_matrices(model)
+        super().__init__(initial_state, dt)
 
         act_bounds = np.array(
             [[-np.inf, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, np.inf, np.inf]],
@@ -39,58 +39,25 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
             low=act_bounds[0], high=act_bounds[1], dtype=DType
         )
 
-    @staticmethod
-    def get_matrices(model: URDFModel):
-        m = model.mass
-        g = model.g
-        Ix, Iy, Iz = model.I
+    @property
+    def state(self) -> State:
+        return State(self._env.state)
 
-        A = np.array(
-            [
-                (0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0),  # x
-                (0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),  # y
-                (0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),  # z
-                (0, 0, 0, 0, 0, 0, 0, g, 0, 0, 0, 0),  # dx
-                (0, 0, 0, 0, 0, 0, -g, 0, 0, 0, 0, 0),  # dy
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),  # dz
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0),  # phi
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),  # theta
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1),  # psi
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),  # dphi
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),  # dtheta
-                (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),  # dpsi
-            ]
-        )
+    def reset(
+        self,
+        *,
+        seed: Optional[int] = None,
+        options: Optional[dict] = None,
+    ) -> Tuple[State, dict]:
+        super().reset(seed=seed, options=options)
+        self.info = {}
 
-        B = np.array(
-            [
-                (0, 0, 0, 0),  # x
-                (0, 0, 0, 0),  # y
-                (0, 0, 0, 0),  # z
-                (0, 0, 0, 0),  # dx
-                (0, 0, 0, 0),  # dy
-                (0, 0, 0, 1 / m),  # dz
-                (0, 0, 0, 0),  # phi
-                (0, 0, 0, 0),  # theta
-                (0, 0, 0, 0),  # psi
-                (1 / Ix, 0, 0, 0),  # dphi
-                (0, 1 / Iy, 0, 0),  # dtheta
-                (0, 0, 1 / Iz, 0),  # dpsi
-            ]
-        )
-
-        C = np.vstack([0, 0, 0, 0, 0, -g, 0, 0, 0, 0, 0, 0])
-
-        return A, B, C
-
-    @staticmethod
-    def calc_dx(A, B, C, x, u):
-        return (A @ x + B @ u + C.T).flatten()
-
-    def calc_dstate(self, action) -> State:
-        x = self.state.to_x()
-        dstate = self.calc_dx(self.A, self.B, self.C, x, action)
-        return State.from_x(dstate)
+        if options is not None:
+            reset_state = options.get("reset_state", self.initial_state)
+        else:
+            reset_state = self.initial_state
+        self._env.reset(reset_state)
+        return self.state, self.info
 
     def step(self, action: PropellerAction) -> Tuple[State, float, bool, bool, dict]:
         """
@@ -173,13 +140,5 @@ class LinearDynamicModelDroneEnv(BaseDroneEnv):
         -------
 
         """
-        dstate = self.calc_dstate(self.model.rpm2rpyT(action))
-        # Update step
-        self.state += self.dt * dstate
-
-        # Update derived state items
-        self.state.prop_omega = action
-        self.state.quat = euler_to_quat(self.state.rpy)
-
-        # Return
+        self._env.step(action)
         return self.state, 0, False, False, self.info

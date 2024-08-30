@@ -45,3 +45,8 @@ def test_FirstOrderPolyPositionDroneEnv(firstorderploypositiondroneenv):
 @pytest.mark.integration
 def test_FifthOrderPolyPositionDroneEnv(fifthorderpolypositiondroneenv):
     check_env(fifthorderpolypositiondroneenv)
+
+
+@pytest.mark.integration
+def test_OptimalFifthOrderPolyPositionDroneEnv(optimalfifthorderpolypositiondroneenv):
+    check_env(optimalfifthorderpolypositiondroneenv)

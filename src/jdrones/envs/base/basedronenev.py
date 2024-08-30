@@ -1,6 +1,6 @@
 #  Copyright 2023 Jan-Hendrik Ewers
 #  SPDX-License-Identifier: GPL-3.0-only
-from copy import copy
+import abc
 from typing import Any
 from typing import Optional
 from typing import Tuple
@@ -9,36 +9,27 @@ import gymnasium
 import numpy as np
 from gymnasium import spaces
 from jdrones.data_models import State
-from jdrones.data_models import URDFModel
-from jdrones.envs.dronemodels import DronePlus
-from jdrones.transforms import euler_to_quat
 from jdrones.types import DType
 
 
-class BaseDroneEnv(gymnasium.Env):
+class BaseDroneEnv(gymnasium.Env, abc.ABC):
     state: State
     """Current drone state"""
 
     initial_state: State
     """Initial drone state. Used for resettign the simulation"""
 
-    model: URDFModel
-    """Model parameters"""
-
     info: dict[str, Any]
     """Information dictionary to return"""
 
     def __init__(
         self,
-        model: URDFModel = DronePlus,
         initial_state: State = None,
         dt: float = 1 / 240,
     ):
         if initial_state is None:
             initial_state = State()
         self.initial_state = initial_state
-        self.state = copy(self.initial_state)
-        self.model = model
         self.dt = dt
         self.info = {}
 
@@ -95,6 +86,7 @@ class BaseDroneEnv(gymnasium.Env):
             low=obs_bounds[:, 0], high=obs_bounds[:, 1], dtype=DType
         )
 
+    @abc.abstractmethod
     def reset(
         self,
         *,
@@ -102,7 +94,4 @@ class BaseDroneEnv(gymnasium.Env):
         options: Optional[dict] = None,
     ) -> Tuple[State, dict]:
         super().reset(seed=seed, options=options)
-        self.info = {}
-        self.state = copy(self.initial_state)
-        self.state.quat = euler_to_quat(self.state.rpy)
-        return self.state, self.info
+        return self.state, {}

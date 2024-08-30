@@ -1,10 +1,11 @@
 gymnasium==0.29.1
+libjdrones==0.1.1
 loguru==0.7.0
-matplotlib==3.8.3
+matplotlib==3.9.2
 nptyping==2.5.0
 numpy==1.26.4
 pandas==2.2.1
 pybullet==3.2.5
-pydantic==2.7.1
 scipy==1.13.0
+pydantic==2.8.2
 seaborn==0.13.2
