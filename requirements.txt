@@ -3,7 +3,7 @@ libjdrones==0.1.1
 loguru==0.7.0
 matplotlib==3.9.2
 nptyping==2.5.0
-numpy==1.26.4
+numpy==2.1.1
 pandas==2.2.1
 pydantic==2.8.2
 scipy==1.12.0
