@@ -26,7 +26,6 @@ dependencies = [
     "scipy",
     "gymnasium",
     "pydantic",
-    "nptyping",
     "numba"
 ]
 dynamic = ["version"]
