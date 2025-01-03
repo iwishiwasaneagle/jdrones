@@ -26,7 +26,6 @@ dependencies = [
     "scipy",
     "gymnasium",
     "pydantic",
-    "nptyping",
     "numba"
 ]
 dynamic = ["version"]
@@ -49,7 +48,7 @@ examples = [
     "optuna",
     "sb3-contrib",
     "tensorboard",
-    "tensorflow-probability==0.23.0",
+    "tensorflow-probability==0.25.0",
     "click",
     "wandb"
 ]
