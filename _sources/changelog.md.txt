@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.1] - 2025-01-03
+
+### Bug Fixes
+
+- Add numba into requirements.txt [(06d2cb2)](https://github.com/iwishiwasaneagle/jdrones/commit/06d2cb2929c4b0095b73e6967782246c6741bb59)
+- Remove unused nptyping [(1e7675a)](https://github.com/iwishiwasaneagle/jdrones/commit/1e7675a426f991bce503b25bd795647201cfa51b)
+- Pandas 2.2.1 -> 2.2.3 for numpy 2 compatibility [(8cab6cc)](https://github.com/iwishiwasaneagle/jdrones/commit/8cab6cc7a23337c745d5176bfa0665bf1cc22429)
+- Downgrade to numpy 2.0.2 for numba compatibility [(775c02e)](https://github.com/iwishiwasaneagle/jdrones/commit/775c02e2093375b8a389dbe6a254defa3b5a9b4f)
+
+### Miscellaneous Tasks
+
+- Bump orhun/git-cliff-action from 3 to 4 [(09b3116)](https://github.com/iwishiwasaneagle/jdrones/commit/09b311672acd4d485bd4cba0401820f0f042ed49)
+- Bump gymnasium from 0.29.1 to 1.0.0 [(fcc5716)](https://github.com/iwishiwasaneagle/jdrones/commit/fcc5716a9a157f7fde74bf52756cf332431c687e)
+- Bump tensorflow-probability from 0.23.0 to 0.25.0 [(f88cde7)](https://github.com/iwishiwasaneagle/jdrones/commit/f88cde79556064b632f9622c6a7600d00c39ab30)
+- Bump JamesIves/github-pages-deploy-action [(a15d360)](https://github.com/iwishiwasaneagle/jdrones/commit/a15d360fd0dddde68bb6775a948d489a52343a10)
+- Bump codecov/codecov-action from 4.1.0 to 5.0.7 [(156b5e3)](https://github.com/iwishiwasaneagle/jdrones/commit/156b5e35b7de57e005a9da1d5fb82e991abb20b2)
+- Bump numpy from 1.26.4 to 2.2.1 [(27c67c6)](https://github.com/iwishiwasaneagle/jdrones/commit/27c67c6b40d37802e74279c898fbbb9c83765df5)
+
+## [0.10.0] - 2024-08-30
+
+### Miscellaneous Tasks
+
+- Bump matplotlib from 3.8.3 to 3.9.2 [(3ac5a04)](https://github.com/iwishiwasaneagle/jdrones/commit/3ac5a04b9a0fdc790ed6d01af2073192063ce1fa)
+
+### Refactor
+
+- Remove PB3 [(0e157b8)](https://github.com/iwishiwasaneagle/jdrones/commit/0e157b85155506e8482c41958bbe0e2f06136791)
+
+## [0.9.0] - 2024-08-30
+
+### Bug Fixes
+
+- "' '" string [(5db743b)](https://github.com/iwishiwasaneagle/jdrones/commit/5db743bce736b6b4811c3533980f0a48f428fb8a)
+
+### Features
+
+- Adapt jdrones to be mainly run via libjdrones C++ [(baec633)](https://github.com/iwishiwasaneagle/jdrones/commit/baec6333f1d208516efafbbdb12792d63bee77e8)
+- Upload to pypi during release creation [(4af9e44)](https://github.com/iwishiwasaneagle/jdrones/commit/4af9e4460c84190399e7dce37400c484f6d92b5c)
+
+### Miscellaneous Tasks
+
+- Remove URDFModel requirement for linear and nonlinear models [(be297ff)](https://github.com/iwishiwasaneagle/jdrones/commit/be297ff964d0e413d4cb5e55cc95e3ea74cd95b5)
+- Move polynomial based position envs to use libjdrones [(b981c16)](https://github.com/iwishiwasaneagle/jdrones/commit/b981c168b0b1b0a689e43eb8e80d456ad33ee0de)
+- Libjdrones==0.1.1 [(cf65ebe)](https://github.com/iwishiwasaneagle/jdrones/commit/cf65ebe87b9193de6630f2d7f3174a550cff8638)
+- Pure python package doesn't need cibuildwheel [(fdac268)](https://github.com/iwishiwasaneagle/jdrones/commit/fdac268f24691f6ee0b5f9a2cb441f4f04635f87)
+
+### Testing
+
+- Update tests for new libjdrones update [(52c89ee)](https://github.com/iwishiwasaneagle/jdrones/commit/52c89eee8a5213aaa92117625e84cbb50410018b)
+
 ## [0.8.0] - 2024-08-07
 
 ### Bug Fixes
@@ -84,6 +134,7 @@ All notable changes to this project will be documented in this file.
 - Allow a reset state to be given within options [(11bc080)](https://github.com/iwishiwasaneagle/jdrones/commit/11bc080cb77f759d4d8d123a2c3eead59955c4ed)
 - Bump codecov/codecov-action from 4.0.2 to 4.1.0 [(bb6c90e)](https://github.com/iwishiwasaneagle/jdrones/commit/bb6c90e1c49e7f5b9b24345b6bc174da85c03890)
 - Bump pandas from 2.1.0 to 2.2.1 [(cd083b1)](https://github.com/iwishiwasaneagle/jdrones/commit/cd083b16b30d179360759873d93f64f0a9fdac87)
+- Bump softprops/action-gh-release from 1 to 2 [(c160836)](https://github.com/iwishiwasaneagle/jdrones/commit/c16083627972061d922b6619cd5ad19c4243585a)
 - Make sure num_timesteps is set properly [(8127e41)](https://github.com/iwishiwasaneagle/jdrones/commit/8127e419e516c583e338f434a1563412444e36a2)
 - Make sure num_timesteps is set properly [(83606e4)](https://github.com/iwishiwasaneagle/jdrones/commit/83606e4f7688b7ae29c4777f104cdee1ea6b2a48)
 - Make sure num_timesteps is set properly [(6a8b455)](https://github.com/iwishiwasaneagle/jdrones/commit/6a8b4556b121bce7846a46a213f3a38b0c1cc618)
@@ -121,12 +172,14 @@ All notable changes to this project will be documented in this file.
 - Plot targets [(783177c)](https://github.com/iwishiwasaneagle/jdrones/commit/783177cbcd7c75aa63fea9e68eb1e118f6a6c6fe)
 - Switch to a heading-velocity scheme and reintroduce the control action penalty [(e8a4fb7)](https://github.com/iwishiwasaneagle/jdrones/commit/e8a4fb7ef3b8767f88d9c4fd2dda7e3ccbaa11c6)
 - Set squash_output to true when using SDE [(a265f65)](https://github.com/iwishiwasaneagle/jdrones/commit/a265f655d06fca47fef1cb045cb230dda68ff08b)
+- Bump scipy from 1.12.0 to 1.13.0 [(a122a1b)](https://github.com/iwishiwasaneagle/jdrones/commit/a122a1bf697049092aa15da4e0cea0bb340a1cda)
 - Rename env to be more representative of what it is [(db08c1a)](https://github.com/iwishiwasaneagle/jdrones/commit/db08c1aea7b25e1f2df58e5863cfd8edba2840a8)
 - Bump pydantic from 2.6.2 to 2.7.1 [(a10848d)](https://github.com/iwishiwasaneagle/jdrones/commit/a10848d2c768ae900f522091e5359dd86cd76a97)
 - Pass total sim time to the mult DRL env [(6040eca)](https://github.com/iwishiwasaneagle/jdrones/commit/6040eca92e646ca5823e47641f43e1e15462f8dc)
 - Bump pydantic from 2.7.1 to 2.8.2 [(2b8b402)](https://github.com/iwishiwasaneagle/jdrones/commit/2b8b402120ce73a428c9541877cdb6a0436a1ff2)
 - Make reward calculations optional for polynomial envs [(6e38d55)](https://github.com/iwishiwasaneagle/jdrones/commit/6e38d55af7d64f224c8f3c80ebf3674c11fc4174)
 - Silence pybullet messages at import [(1683157)](https://github.com/iwishiwasaneagle/jdrones/commit/1683157b40a2dfcfb52e23a8e546103c5b3cb535)
+- Update changelog for v0.8.0 [skip pre-commit.ci] [(97f35d3)](https://github.com/iwishiwasaneagle/jdrones/commit/97f35d3dab8cb1dc408988fe3f471961dc28fcee)
 
 ### Performance
 
