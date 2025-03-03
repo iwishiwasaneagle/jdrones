@@ -1,4 +1,4 @@
-gymnasium==1.0.0
+gymnasium==1.1.0
 libjdrones==0.1.1
 loguru==0.7.0
 matplotlib==3.10.0
