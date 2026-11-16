@@ -5,7 +5,6 @@ from gymnasium.envs.registration import register
 from ._version import __version__
 from ._version import __version_tuple__
 
-
 register(
     "NonLinearDynamicModelDroneEnv-v0",
     entry_point="jdrones.envs:NonlinearDynamicModelDroneEnv",
