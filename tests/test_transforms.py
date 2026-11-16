@@ -6,6 +6,7 @@ Tests for transformation helper functions.
 .. warning::
     https://stackoverflow.com/a/15050505
 """
+
 import numpy as np
 import pytest
 import scipy.spatial as sps
@@ -13,7 +14,6 @@ from jdrones.transforms import euler_to_quat
 from jdrones.transforms import euler_to_rotmat
 from jdrones.transforms import quat_to_euler
 from jdrones.transforms import quat_to_rotmat
-
 
 QUAT_EULER = pytest.mark.parametrize(
     "quat,euler",
